@@ -1,0 +1,120 @@
+{
+  "common": {
+    "title": "블록체인 플레이그라운드",
+    "subtitle": "인터랙티브 블록체인 교육 플랫폼",
+    "getStarted": "시작하기",
+    "viewAll": "전체 보기",
+    "demo": "데모",
+    "theory": "이론",
+    "beginner": "초급",
+    "intermediate": "중급",
+    "advanced": "고급",
+    "connectWallet": "지갑 연결",
+    "darkMode": "다크 모드",
+    "lightMode": "라이트 모드",
+    "language": "언어"
+  },
+  "home": {
+    "hero": {
+      "title": "실습으로 배우는 블록체인",
+      "description": "인터랙티브 데모, 실시간 시각화, 스마트 컨트랙트 배포를 통해 블록체인 개념을 마스터하세요."
+    },
+    "tracks": {
+      "title": "학습 트랙",
+      "description": "학습 경로를 선택하세요"
+    }
+  },
+  "tracks": {
+    "fundamentals": {
+      "title": "블록체인 기초",
+      "description": "해싱, 블록, 합의, 머클 트리, 트랜잭션, 지갑, 상태 관리",
+      "demos": "11개 인터랙티브 데모",
+      "modules": "7개 교육 모듈"
+    },
+    "defi": {
+      "title": "디파이",
+      "description": "스왑, 유동성 풀, 대출, 스테이킹, 플래시 론, 오라클, 이자 농사",
+      "demos": "11개 인터랙티브 데모",
+      "modules": "준비 중"
+    },
+    "solidity": {
+      "title": "솔리디티",
+      "description": "스토리지 레이아웃, 프록시, 재진입, 가스 최적화, 어셈블리, 접근 제어",
+      "demos": "11개 인터랙티브 데모",
+      "modules": "준비 중"
+    },
+    "tokens": {
+      "title": "토큰 & NFT",
+      "description": "ERC-20, ERC-721, ERC-1155, 마켓플레이스, 경매, 베스팅, 로열티",
+      "demos": "11개 인터랙티브 데모",
+      "modules": "준비 중"
+    },
+    "zk": {
+      "title": "영지식 증명",
+      "description": "영지식 증명, 회로, 온체인 검증, 프라이버시 프로토콜",
+      "demos": "11개 인터랙티브 데모",
+      "modules": "준비 중"
+    }
+  },
+  "fundamentals": {
+    "pageTitle": "블록체인 기초",
+    "pageDescription": "인터랙티브 데모와 이론 모듈을 통해 블록체인 기술의 핵심을 마스터하세요.",
+    "beginner": "초급",
+    "intermediate": "중급",
+    "advanced": "고급",
+    "demos": {
+      "hashExplorer": {
+        "title": "해시 탐색기",
+        "description": "SHA-256, Keccak-256, BLAKE2b 해싱과 눈사태 효과 시각화 탐색"
+      },
+      "signatureStudio": {
+        "title": "디지털 서명 스튜디오",
+        "description": "secp256k1 키 생성, 메시지 서명, 서명 검증"
+      },
+      "blockBuilder": {
+        "title": "블록 빌더",
+        "description": "트랜잭션 생성, 머클 트리 구축, 조정 가능한 PoW로 블록 채굴"
+      },
+      "chainIntegrity": {
+        "title": "체인 무결성",
+        "description": "블록체인을 구축하고 블록이 변조될 때 연쇄 실패 관찰"
+      },
+      "merkleProof": {
+        "title": "머클 증명 검증기",
+        "description": "머클 트리 구축, 증명 생성, 온체인 검증"
+      },
+      "miningSimulator": {
+        "title": "채굴 시뮬레이터",
+        "description": "조정 가능한 난이도, 해시 레이트 메트릭, 웹 워커를 사용한 PoW 채굴"
+      },
+      "transactionBuilder": {
+        "title": "트랜잭션 빌더",
+        "description": "Base Sepolia에서 실제 트랜잭션 구축, 서명, 전송"
+      },
+      "walletWorkshop": {
+        "title": "지갑 워크숍",
+        "description": "BIP39 니모닉 생성, BIP32 HD 파생, BIP44 경로"
+      },
+      "consensusPlayground": {
+        "title": "합의 플레이그라운드",
+        "description": "포크 생성 및 해결을 포함한 다중 노드 PoW/PoS 시뮬레이션"
+      },
+      "stateExplorer": {
+        "title": "상태 탐색기",
+        "description": "이더리움 상태 트라이, 계정 데이터, 스토리지 슬롯, 상태 증명 탐색"
+      },
+      "gasEstimator": {
+        "title": "가스 추정기",
+        "description": "다양한 작업의 가스 추정 및 비용 비교"
+      }
+    }
+  },
+  "nav": {
+    "home": "홈",
+    "fundamentals": "기초",
+    "defi": "디파이",
+    "solidity": "솔리디티",
+    "tokens": "토큰",
+    "zk": "ZK 증명"
+  }
+}

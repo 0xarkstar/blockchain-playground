@@ -1,0 +1,120 @@
+{
+  "common": {
+    "title": "Blockchain Playground",
+    "subtitle": "Interactive blockchain education platform",
+    "getStarted": "Get Started",
+    "viewAll": "View All",
+    "demo": "Demo",
+    "theory": "Theory",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "connectWallet": "Connect Wallet",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "language": "Language"
+  },
+  "home": {
+    "hero": {
+      "title": "Learn Blockchain by Doing",
+      "description": "Master blockchain concepts through interactive demos, live visualizations, and hands-on smart contract deployment."
+    },
+    "tracks": {
+      "title": "Learning Tracks",
+      "description": "Choose your learning path"
+    }
+  },
+  "tracks": {
+    "fundamentals": {
+      "title": "Blockchain Fundamentals",
+      "description": "Hashing, blocks, consensus, Merkle trees, transactions, wallets, and state management",
+      "demos": "11 Interactive Demos",
+      "modules": "7 Education Modules"
+    },
+    "defi": {
+      "title": "DeFi",
+      "description": "Swaps, liquidity pools, lending, staking, flash loans, oracles, and yield farming",
+      "demos": "11 Interactive Demos",
+      "modules": "Coming Soon"
+    },
+    "solidity": {
+      "title": "Solidity",
+      "description": "Storage layout, proxies, reentrancy, gas optimization, assembly, and access control",
+      "demos": "11 Interactive Demos",
+      "modules": "Coming Soon"
+    },
+    "tokens": {
+      "title": "Tokens & NFTs",
+      "description": "ERC-20, ERC-721, ERC-1155, marketplaces, auctions, vesting, and royalties",
+      "demos": "11 Interactive Demos",
+      "modules": "Coming Soon"
+    },
+    "zk": {
+      "title": "ZK Proofs",
+      "description": "Zero-knowledge proofs, circuits, on-chain verification, and privacy protocols",
+      "demos": "11 Interactive Demos",
+      "modules": "Coming Soon"
+    }
+  },
+  "fundamentals": {
+    "pageTitle": "Blockchain Fundamentals",
+    "pageDescription": "Master the building blocks of blockchain technology through interactive demos and theory modules.",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "demos": {
+      "hashExplorer": {
+        "title": "Hash Explorer",
+        "description": "Explore SHA-256, Keccak-256, and BLAKE2b hashing with avalanche effect visualization"
+      },
+      "signatureStudio": {
+        "title": "Digital Signature Studio",
+        "description": "Generate secp256k1 keys, sign messages, and verify signatures"
+      },
+      "blockBuilder": {
+        "title": "Block Builder",
+        "description": "Create transactions, build Merkle trees, and mine blocks with adjustable PoW"
+      },
+      "chainIntegrity": {
+        "title": "Chain Integrity",
+        "description": "Build a blockchain and watch cascade failures when blocks are tampered"
+      },
+      "merkleProof": {
+        "title": "Merkle Proof Verifier",
+        "description": "Build Merkle trees, generate proofs, and verify them on-chain"
+      },
+      "miningSimulator": {
+        "title": "Mining Simulator",
+        "description": "PoW mining with adjustable difficulty, hash rate metrics, and Web Worker"
+      },
+      "transactionBuilder": {
+        "title": "Transaction Builder",
+        "description": "Build, sign, and broadcast real transactions on Base Sepolia"
+      },
+      "walletWorkshop": {
+        "title": "Wallet Workshop",
+        "description": "BIP39 mnemonic generation, BIP32 HD derivation, and BIP44 paths"
+      },
+      "consensusPlayground": {
+        "title": "Consensus Playground",
+        "description": "Multi-node PoW/PoS simulation with fork creation and resolution"
+      },
+      "stateExplorer": {
+        "title": "State Explorer",
+        "description": "Browse Ethereum state trie, account data, storage slots, and state proofs"
+      },
+      "gasEstimator": {
+        "title": "Gas Estimator",
+        "description": "Estimate gas for various operations and compare costs"
+      }
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "fundamentals": "Fundamentals",
+    "defi": "DeFi",
+    "solidity": "Solidity",
+    "tokens": "Tokens",
+    "zk": "ZK Proofs"
+  }
+}

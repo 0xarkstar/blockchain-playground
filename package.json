@@ -1,0 +1,26 @@
+{
+  "name": "blockchain-playground",
+  "private": true,
+  "packageManager": "pnpm@10.28.2",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "test:e2e": "turbo test:e2e",
+    "clean": "turbo clean"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "turbo": "^2",
+    "vitest": "^4.0.18"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "@parcel/watcher",
+      "esbuild",
+      "sharp"
+    ]
+  }
+}

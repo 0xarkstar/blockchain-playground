@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+
+# build
+.next/
+dist/
+out/
+.turbo/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# testing
+coverage/
+playwright-report/
+test-results/
+
+# misc
+.DS_Store
+*.tsbuildinfo
+*.log
+
+# hardhat
+cache/
+artifacts/
+typechain-types/
+
+# ide
+.idea/
+.vscode/

@@ -1,0 +1,48 @@
+{
+  "name": "@blockchain-playground/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@blockchain-playground/ui": "workspace:*",
+    "@blockchain-playground/utils": "workspace:*",
+    "@blockchain-playground/web3-config": "workspace:*",
+    "@mantine/charts": "^7.17",
+    "@mantine/code-highlight": "^7.17",
+    "@mantine/core": "^7.17",
+    "@mantine/hooks": "^7.17",
+    "@rainbow-me/rainbowkit": "^2",
+    "@tabler/icons-react": "^3",
+    "@tanstack/react-query": "^5",
+    "@noble/hashes": "^1",
+    "@noble/secp256k1": "^2",
+    "@scure/bip32": "^1",
+    "@scure/bip39": "^1",
+    "clsx": "^2",
+    "framer-motion": "^12",
+    "next": "^16",
+    "next-intl": "^4",
+    "react": "^19",
+    "react-dom": "^19",
+    "viem": "^2",
+    "wagmi": "^2"
+  },
+  "devDependencies": {
+    "@blockchain-playground/tsconfig": "workspace:*",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "postcss": "^8",
+    "postcss-preset-mantine": "^1",
+    "postcss-simple-vars": "^7",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

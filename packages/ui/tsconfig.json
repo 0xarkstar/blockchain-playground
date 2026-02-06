@@ -1,0 +1,7 @@
+{
+  "extends": "@blockchain-playground/tsconfig/library.json",
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": ["src"]
+}

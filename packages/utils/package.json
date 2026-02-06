@@ -1,0 +1,19 @@
+{
+  "name": "@blockchain-playground/utils",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint src/",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "clsx": "^2",
+    "tailwind-merge": "^3"
+  },
+  "devDependencies": {
+    "@blockchain-playground/tsconfig": "workspace:*",
+    "typescript": "^5"
+  }
+}
