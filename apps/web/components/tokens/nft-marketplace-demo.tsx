@@ -166,8 +166,8 @@ export function NFTMarketplaceDemo() {
                 </Table.Tr>
               </Table.Thead>
               <Table.Tbody>
-                {state.sales.map((s, i) => (
-                  <Table.Tr key={i}>
+                {state.sales.map((s) => (
+                  <Table.Tr key={s.listingId}>
                     <Table.Td>#{s.listingId}</Table.Td>
                     <Table.Td><Code>{s.buyer}</Code></Table.Td>
                     <Table.Td ta="right"><Code>{s.price.toFixed(4)}</Code></Table.Td>

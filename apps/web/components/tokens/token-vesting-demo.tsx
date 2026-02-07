@@ -38,7 +38,7 @@ export function TokenVestingDemo() {
   };
 
   const handleRelease = () => {
-    const { newSchedule, released } = releaseTokens(schedule, currentTime);
+    const { newSchedule } = releaseTokens(schedule, currentTime);
     setSchedule(newSchedule);
   };
 

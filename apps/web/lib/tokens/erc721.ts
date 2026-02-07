@@ -2,6 +2,7 @@ export interface NFTMetadata {
   readonly name: string;
   readonly description: string;
   readonly image: string;
+  readonly externalUrl?: string;
   readonly attributes: readonly { readonly trait_type: string; readonly value: string }[];
 }
 

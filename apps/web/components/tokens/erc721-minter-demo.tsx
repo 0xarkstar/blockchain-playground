@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import {
   Stack, Paper, TextInput, Button, Table, Code, Badge, Group, Text, Alert,
 } from "@mantine/core";

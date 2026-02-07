@@ -55,7 +55,8 @@ export function listNFT(
   seller: string,
   tokenId: number,
   price: number,
-  royaltyPercent: number = 0
+  royaltyPercent: number = 0,
+  timestamp: number = Date.now()
 ): MarketplaceResult {
   if (price <= 0) {
     return { success: false, newState: state, message: "Price must be positive" };
@@ -71,7 +72,7 @@ export function listNFT(
     royaltyPercent,
     platformFeePercent: state.platformFeePercent,
     active: true,
-    createdAt: Date.now(),
+    createdAt: timestamp,
   };
   return {
     success: true,
@@ -114,7 +115,8 @@ export function cancelListing(
 export function buyNFT(
   state: MarketplaceState,
   listingId: number,
-  buyer: string
+  buyer: string,
+  timestamp: number = Date.now()
 ): MarketplaceResult {
   const listing = state.listings.find((l) => l.id === listingId);
   if (!listing) {
@@ -140,7 +142,7 @@ export function buyNFT(
     sellerProceeds: breakdown.sellerProceeds,
     royaltyAmount: breakdown.royaltyAmount,
     platformFee: breakdown.platformFee,
-    timestamp: Date.now(),
+    timestamp,
   };
 
   return {

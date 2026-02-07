@@ -30,13 +30,7 @@ export function ERC1155MultiTokenDemo() {
   }, [state.totalSupply]);
 
   const allAddresses = useMemo(() => {
-    const addrs = new Set<string>();
-    for (const tokenBalances of Object.values(state.balances)) {
-      for (const addr of Object.keys(tokenBalances)) {
-        addrs.add(addr);
-      }
-    }
-    return Array.from(addrs).sort();
+    return Object.keys(state.balances).sort();
   }, [state.balances]);
 
   const handleMint = () => {
