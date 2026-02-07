@@ -38,7 +38,7 @@ const tracks = [
     icon: IconCode,
     color: "orange",
     href: "/solidity",
-    ready: false,
+    ready: true,
   },
   {
     key: "tokens" as const,

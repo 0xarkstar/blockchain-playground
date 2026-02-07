@@ -41,7 +41,7 @@
       "title": "Solidity",
       "description": "Storage layout, proxies, reentrancy, gas optimization, assembly, and access control",
       "demos": "11 Interactive Demos",
-      "modules": "Coming Soon"
+      "modules": "11 Interactive Demos"
     },
     "tokens": {
       "title": "Tokens & NFTs",
@@ -159,6 +159,59 @@
       "yieldCalculator": {
         "title": "Yield Calculator",
         "description": "Compare compounding frequencies, convert APR to APY, and model yield farming strategies"
+      }
+    }
+  },
+  "solidity": {
+    "pageTitle": "Solidity Deep Dive",
+    "pageDescription": "Explore Solidity internals through interactive simulations — storage layout, ABI encoding, proxies, gas optimization, and EVM assembly.",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "demos": {
+      "storageLayout": {
+        "title": "Storage Layout",
+        "description": "Visualize how Solidity packs state variables into 32-byte storage slots with optimal ordering"
+      },
+      "abiEncoder": {
+        "title": "ABI Encoder",
+        "description": "Encode function calls and decode calldata with function selectors and parameter encoding"
+      },
+      "dataTypes": {
+        "title": "Data Types",
+        "description": "Explore Solidity value types — their byte sizes, ranges, and hex representations"
+      },
+      "accessControl": {
+        "title": "Access Control",
+        "description": "Simulate role-based permissions with Ownable and AccessControl patterns"
+      },
+      "gasOptimizer": {
+        "title": "Gas Optimizer",
+        "description": "Compare gas costs of storage vs memory, packed vs unpacked, and other optimization patterns"
+      },
+      "eventLogInspector": {
+        "title": "Event Log Inspector",
+        "description": "Build event definitions and see how topics, indexed params, and data are encoded in logs"
+      },
+      "dataLocations": {
+        "title": "Data Locations",
+        "description": "Compare storage, memory, calldata, and stack — persistence, mutability, and gas costs"
+      },
+      "contractInteractions": {
+        "title": "Contract Interactions",
+        "description": "Simulate call, delegatecall, and staticcall with msg.sender and storage context visualization"
+      },
+      "reentrancyAttack": {
+        "title": "Reentrancy Attack",
+        "description": "Step-by-step visualization of a reentrancy exploit and ReentrancyGuard defense"
+      },
+      "proxyPatterns": {
+        "title": "Proxy Patterns",
+        "description": "Explore Transparent, UUPS, and Diamond proxy patterns with delegatecall visualization"
+      },
+      "assemblyPlayground": {
+        "title": "Assembly Playground",
+        "description": "Execute EVM opcodes on a simulated stack machine with step-by-step visualization"
       }
     }
   },

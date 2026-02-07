@@ -41,7 +41,7 @@
       "title": "솔리디티",
       "description": "스토리지 레이아웃, 프록시, 재진입, 가스 최적화, 어셈블리, 접근 제어",
       "demos": "11개 인터랙티브 데모",
-      "modules": "준비 중"
+      "modules": "11개 인터랙티브 데모"
     },
     "tokens": {
       "title": "토큰 & NFT",
@@ -159,6 +159,59 @@
       "yieldCalculator": {
         "title": "수익률 계산기",
         "description": "복리 주기 비교, APR에서 APY로 변환, 이자 농사 전략 모델링"
+      }
+    }
+  },
+  "solidity": {
+    "pageTitle": "솔리디티 심화",
+    "pageDescription": "스토리지 레이아웃, ABI 인코딩, 프록시, 가스 최적화, EVM 어셈블리 등을 인터랙티브 시뮬레이션으로 탐험하세요.",
+    "beginner": "초급",
+    "intermediate": "중급",
+    "advanced": "고급",
+    "demos": {
+      "storageLayout": {
+        "title": "스토리지 레이아웃",
+        "description": "솔리디티가 상태 변수를 32바이트 스토리지 슬롯에 어떻게 패킹하는지 시각화합니다"
+      },
+      "abiEncoder": {
+        "title": "ABI 인코더",
+        "description": "함수 셀렉터와 파라미터 인코딩으로 함수 호출을 인코딩하고 콜데이터를 디코딩합니다"
+      },
+      "dataTypes": {
+        "title": "데이터 타입",
+        "description": "솔리디티 값 타입의 바이트 크기, 범위, 16진수 표현을 탐색합니다"
+      },
+      "accessControl": {
+        "title": "접근 제어",
+        "description": "Ownable과 AccessControl 패턴으로 역할 기반 권한을 시뮬레이션합니다"
+      },
+      "gasOptimizer": {
+        "title": "가스 최적화",
+        "description": "스토리지 vs 메모리, 패킹 vs 언패킹 등 최적화 패턴의 가스 비용을 비교합니다"
+      },
+      "eventLogInspector": {
+        "title": "이벤트 로그 인스펙터",
+        "description": "이벤트 정의를 구성하고 토픽, 인덱스된 파라미터, 데이터가 로그에 인코딩되는 방식을 확인합니다"
+      },
+      "dataLocations": {
+        "title": "데이터 위치",
+        "description": "스토리지, 메모리, 콜데이터, 스택의 영속성, 가변성, 가스 비용을 비교합니다"
+      },
+      "contractInteractions": {
+        "title": "컨트랙트 상호작용",
+        "description": "call, delegatecall, staticcall의 msg.sender와 스토리지 컨텍스트를 시각화합니다"
+      },
+      "reentrancyAttack": {
+        "title": "재진입 공격",
+        "description": "재진입 익스플로잇과 ReentrancyGuard 방어의 단계별 시각화"
+      },
+      "proxyPatterns": {
+        "title": "프록시 패턴",
+        "description": "Transparent, UUPS, Diamond 프록시 패턴과 delegatecall 시각화를 탐색합니다"
+      },
+      "assemblyPlayground": {
+        "title": "어셈블리 플레이그라운드",
+        "description": "시뮬레이션된 스택 머신에서 EVM 옵코드를 단계별로 실행합니다"
       }
     }
   },
