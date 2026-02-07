@@ -33,11 +33,16 @@ export function GasOptimizerDemo() {
 
   const comparison = useMemo(() => {
     switch (category) {
-      case "storage-memory": return compareStorageVsMemory(count);
-      case "packed": return comparePackedVsUnpacked(count);
-      case "call-types": return compareCallTypes(count);
-      case "mapping-array": return compareMappingVsArray(count);
-      default: return compareStorageVsMemory(count);
+      case "storage-memory":
+        return compareStorageVsMemory(count);
+      case "packed":
+        return comparePackedVsUnpacked(count);
+      case "call-types":
+        return compareCallTypes(count);
+      case "mapping-array":
+        return compareMappingVsArray(count);
+      default:
+        return compareStorageVsMemory(count);
     }
   }, [category, count]);
 
@@ -45,11 +50,16 @@ export function GasOptimizerDemo() {
 
   const countLabel = (() => {
     switch (category) {
-      case "storage-memory": return "Operation Count";
-      case "packed": return "Field Count (uint8)";
-      case "call-types": return "Data Size (bytes)";
-      case "mapping-array": return "Element Count";
-      default: return "Count";
+      case "storage-memory":
+        return "Operation Count";
+      case "packed":
+        return "Field Count (uint8)";
+      case "call-types":
+        return "Data Size (bytes)";
+      case "mapping-array":
+        return "Element Count";
+      default:
+        return "Count";
     }
   })();
 
@@ -57,7 +67,9 @@ export function GasOptimizerDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Pattern Category</Text>
+          <Text size="sm" fw={600}>
+            Pattern Category
+          </Text>
           <SegmentedControl
             data={CATEGORIES}
             value={category}
@@ -76,31 +88,42 @@ export function GasOptimizerDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Gas Comparison</Text>
+          <Text size="sm" fw={600}>
+            Gas Comparison
+          </Text>
           <Group grow>
             <Paper p="sm" withBorder>
               <Stack gap="xs" align="center">
-                <Text size="xs" c="dimmed">{comparison.unoptimized.label}</Text>
+                <Text size="xs" c="dimmed">
+                  {comparison.unoptimized.label}
+                </Text>
                 <Text size="xl" fw={700} c="red">
                   {comparison.unoptimized.totalGas.toLocaleString()}
                 </Text>
-                <Text size="xs" c="dimmed">gas</Text>
+                <Text size="xs" c="dimmed">
+                  gas
+                </Text>
               </Stack>
             </Paper>
             <Paper p="sm" withBorder>
               <Stack gap="xs" align="center">
-                <Text size="xs" c="dimmed">{comparison.optimized.label}</Text>
+                <Text size="xs" c="dimmed">
+                  {comparison.optimized.label}
+                </Text>
                 <Text size="xl" fw={700} c="green">
                   {comparison.optimized.totalGas.toLocaleString()}
                 </Text>
-                <Text size="xs" c="dimmed">gas</Text>
+                <Text size="xs" c="dimmed">
+                  gas
+                </Text>
               </Stack>
             </Paper>
           </Group>
 
           <Group justify="center">
             <Badge size="lg" color="green" variant="light">
-              {comparison.savings.toLocaleString()} gas saved ({comparison.savingsPercent.toFixed(1)}%)
+              {comparison.savings.toLocaleString()} gas saved (
+              {comparison.savingsPercent.toFixed(1)}%)
             </Badge>
           </Group>
 
@@ -109,14 +132,18 @@ export function GasOptimizerDemo() {
             color="green"
             size="xl"
           />
-          <Text size="xs" c="dimmed" ta="center">{comparison.explanation}</Text>
+          <Text size="xs" c="dimmed" ta="center">
+            {comparison.explanation}
+          </Text>
         </Stack>
       </Paper>
 
       <Group grow align="flex-start">
         <Paper p="md" withBorder>
           <Stack gap="xs">
-            <Text size="xs" fw={600} c="red">Unoptimized Breakdown</Text>
+            <Text size="xs" fw={600} c="red">
+              Unoptimized Breakdown
+            </Text>
             <Table>
               <Table.Thead>
                 <Table.Tr>
@@ -129,10 +156,16 @@ export function GasOptimizerDemo() {
               <Table.Tbody>
                 {comparison.unoptimized.breakdown.map((item, i) => (
                   <Table.Tr key={i}>
-                    <Table.Td><Text size="xs">{item.operation}</Text></Table.Td>
-                    <Table.Td ta="right">{item.gasPerOp.toLocaleString()}</Table.Td>
+                    <Table.Td>
+                      <Text size="xs">{item.operation}</Text>
+                    </Table.Td>
+                    <Table.Td ta="right">
+                      {item.gasPerOp.toLocaleString()}
+                    </Table.Td>
                     <Table.Td ta="right">{item.count}</Table.Td>
-                    <Table.Td ta="right">{item.totalGas.toLocaleString()}</Table.Td>
+                    <Table.Td ta="right">
+                      {item.totalGas.toLocaleString()}
+                    </Table.Td>
                   </Table.Tr>
                 ))}
               </Table.Tbody>
@@ -141,7 +174,9 @@ export function GasOptimizerDemo() {
         </Paper>
         <Paper p="md" withBorder>
           <Stack gap="xs">
-            <Text size="xs" fw={600} c="green">Optimized Breakdown</Text>
+            <Text size="xs" fw={600} c="green">
+              Optimized Breakdown
+            </Text>
             <Table>
               <Table.Thead>
                 <Table.Tr>
@@ -154,10 +189,16 @@ export function GasOptimizerDemo() {
               <Table.Tbody>
                 {comparison.optimized.breakdown.map((item, i) => (
                   <Table.Tr key={i}>
-                    <Table.Td><Text size="xs">{item.operation}</Text></Table.Td>
-                    <Table.Td ta="right">{item.gasPerOp.toLocaleString()}</Table.Td>
+                    <Table.Td>
+                      <Text size="xs">{item.operation}</Text>
+                    </Table.Td>
+                    <Table.Td ta="right">
+                      {item.gasPerOp.toLocaleString()}
+                    </Table.Td>
                     <Table.Td ta="right">{item.count}</Table.Td>
-                    <Table.Td ta="right">{item.totalGas.toLocaleString()}</Table.Td>
+                    <Table.Td ta="right">
+                      {item.totalGas.toLocaleString()}
+                    </Table.Td>
                   </Table.Tr>
                 ))}
               </Table.Tbody>
@@ -168,7 +209,9 @@ export function GasOptimizerDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>EVM Gas Constants Reference</Text>
+          <Text size="sm" fw={600}>
+            EVM Gas Constants Reference
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -180,9 +223,15 @@ export function GasOptimizerDemo() {
             <Table.Tbody>
               {gasConstants.map((c) => (
                 <Table.Tr key={c.name}>
-                  <Table.Td><Badge size="xs" variant="outline">{c.name}</Badge></Table.Td>
+                  <Table.Td>
+                    <Badge size="xs" variant="outline">
+                      {c.name}
+                    </Badge>
+                  </Table.Td>
                   <Table.Td ta="right">{c.gas.toLocaleString()}</Table.Td>
-                  <Table.Td><Text size="xs">{c.description}</Text></Table.Td>
+                  <Table.Td>
+                    <Text size="xs">{c.description}</Text>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

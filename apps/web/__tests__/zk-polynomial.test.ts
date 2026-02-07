@@ -10,7 +10,11 @@ import {
   verifyQAP,
   formatPolynomial,
 } from "../lib/zk/polynomial";
-import { parseExpression, gatesToR1CS, computeWitness } from "../lib/zk/circuit";
+import {
+  parseExpression,
+  gatesToR1CS,
+  computeWitness,
+} from "../lib/zk/circuit";
 
 describe("Polynomial Operations + QAP", () => {
   const p = 23n;
@@ -94,7 +98,7 @@ describe("Polynomial Operations + QAP", () => {
           { x: 1n, y: 2n },
           { x: 2n, y: 4n },
         ],
-        p
+        p,
       );
       expect(evaluatePolynomial(poly, 1n, p)).toBe(2n);
       expect(evaluatePolynomial(poly, 2n, p)).toBe(4n);
@@ -107,7 +111,7 @@ describe("Polynomial Operations + QAP", () => {
           { x: 2n, y: 4n },
           { x: 3n, y: 9n },
         ],
-        p
+        p,
       );
       expect(evaluatePolynomial(poly, 1n, p)).toBe(1n);
       expect(evaluatePolynomial(poly, 2n, p)).toBe(4n);
@@ -139,11 +143,7 @@ describe("Polynomial Operations + QAP", () => {
     it("verifies (x+y)*z with valid witness", () => {
       const gates = parseExpression("(x + y) * z");
       const r1cs = gatesToR1CS(gates, p);
-      const witness = computeWitness(
-        gates,
-        { x: 2n, y: 3n, z: 4n },
-        p
-      );
+      const witness = computeWitness(gates, { x: 2n, y: 3n, z: 4n }, p);
       const qap = r1csToQAP(r1cs, p);
       const result = verifyQAP(qap, witness.wireVector, p);
       expect(result.verified).toBe(true);

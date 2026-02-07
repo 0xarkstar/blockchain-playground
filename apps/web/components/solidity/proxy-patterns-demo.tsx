@@ -36,15 +36,20 @@ export function ProxyPatternsDemo() {
   const [newImpl, setNewImpl] = useState("0xImplV2");
   const [caller, setCaller] = useState("0xAdmin");
   const [state, setState] = useState<ProxyState>(
-    createProxyState("transparent", "0xadmin")
+    createProxyState("transparent", "0xadmin"),
   );
 
   const info = useMemo(() => getProxyInfo(proxyType), [proxyType]);
   const slots = useMemo(() => getEIP1967Slots(), []);
 
   const viz = useMemo(
-    () => visualizeDelegatecall("0xUser", "0xProxy", state.implementation || "0xImpl"),
-    [state.implementation]
+    () =>
+      visualizeDelegatecall(
+        "0xUser",
+        "0xProxy",
+        state.implementation || "0xImpl",
+      ),
+    [state.implementation],
   );
 
   const handleTypeChange = (type: ProxyType) => {
@@ -61,7 +66,9 @@ export function ProxyPatternsDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Proxy Type</Text>
+          <Text size="sm" fw={600}>
+            Proxy Type
+          </Text>
           <SegmentedControl
             data={PROXY_TYPES}
             value={proxyType}
@@ -73,19 +80,31 @@ export function ProxyPatternsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>{info.name}</Text>
-          <Text size="sm" c="dimmed">{info.description}</Text>
+          <Text size="sm" fw={600}>
+            {info.name}
+          </Text>
+          <Text size="sm" c="dimmed">
+            {info.description}
+          </Text>
           <Group grow>
             <Stack gap="xs">
-              <Text size="xs" fw={600} c="green">Pros</Text>
+              <Text size="xs" fw={600} c="green">
+                Pros
+              </Text>
               {info.pros.map((pro, i) => (
-                <Text key={i} size="xs">+ {pro}</Text>
+                <Text key={i} size="xs">
+                  + {pro}
+                </Text>
               ))}
             </Stack>
             <Stack gap="xs">
-              <Text size="xs" fw={600} c="red">Cons</Text>
+              <Text size="xs" fw={600} c="red">
+                Cons
+              </Text>
               {info.cons.map((con, i) => (
-                <Text key={i} size="xs">- {con}</Text>
+                <Text key={i} size="xs">
+                  - {con}
+                </Text>
               ))}
             </Stack>
           </Group>
@@ -94,7 +113,9 @@ export function ProxyPatternsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Upgrade Simulation</Text>
+          <Text size="sm" fw={600}>
+            Upgrade Simulation
+          </Text>
           <Group grow>
             <TextInput
               label="Admin"
@@ -124,16 +145,24 @@ export function ProxyPatternsDemo() {
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Admin</Table.Td>
-                <Table.Td ta="right"><Code>{state.admin}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{state.admin}</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Previous Implementations</Table.Td>
                 <Table.Td ta="right">
-                  {state.previousImplementations.length > 0
-                    ? state.previousImplementations.map((impl, i) => (
-                        <Badge key={i} size="xs" variant="outline" mr={4}>{impl}</Badge>
-                      ))
-                    : <Text size="xs" c="dimmed">None</Text>}
+                  {state.previousImplementations.length > 0 ? (
+                    state.previousImplementations.map((impl, i) => (
+                      <Badge key={i} size="xs" variant="outline" mr={4}>
+                        {impl}
+                      </Badge>
+                    ))
+                  ) : (
+                    <Text size="xs" c="dimmed">
+                      None
+                    </Text>
+                  )}
                 </Table.Td>
               </Table.Tr>
             </Table.Tbody>
@@ -143,32 +172,52 @@ export function ProxyPatternsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Delegatecall Flow</Text>
+          <Text size="sm" fw={600}>
+            Delegatecall Flow
+          </Text>
           {viz.steps.map((step) => (
             <Alert
               key={step.step}
-              icon={<Badge size="xs" circle>{step.step}</Badge>}
+              icon={
+                <Badge size="xs" circle>
+                  {step.step}
+                </Badge>
+              }
               variant="light"
               color="blue"
             >
-              <Text size="sm" fw={600}>{step.from} → {step.to}</Text>
+              <Text size="sm" fw={600}>
+                {step.from} → {step.to}
+              </Text>
               <Text size="xs">{step.description}</Text>
-              <Text size="xs" c="dimmed">{step.context}</Text>
+              <Text size="xs" c="dimmed">
+                {step.context}
+              </Text>
             </Alert>
           ))}
           <Table>
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>Storage Owner</Table.Td>
-                <Table.Td ta="right"><Badge variant="light" color="blue">{viz.storageOwner}</Badge></Table.Td>
+                <Table.Td ta="right">
+                  <Badge variant="light" color="blue">
+                    {viz.storageOwner}
+                  </Badge>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Code Source</Table.Td>
-                <Table.Td ta="right"><Badge variant="light" color="violet">{viz.codeSource}</Badge></Table.Td>
+                <Table.Td ta="right">
+                  <Badge variant="light" color="violet">
+                    {viz.codeSource}
+                  </Badge>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>msg.sender</Table.Td>
-                <Table.Td ta="right"><Badge variant="light">{viz.msgSender}</Badge></Table.Td>
+                <Table.Td ta="right">
+                  <Badge variant="light">{viz.msgSender}</Badge>
+                </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>
@@ -177,9 +226,16 @@ export function ProxyPatternsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>EIP-1967 Storage Slots</Text>
-          <Alert icon={<IconInfoCircle size={16} />} color="gray" variant="light">
-            Standardized storage slots prevent collisions between proxy and implementation state.
+          <Text size="sm" fw={600}>
+            EIP-1967 Storage Slots
+          </Text>
+          <Alert
+            icon={<IconInfoCircle size={16} />}
+            color="gray"
+            variant="light"
+          >
+            Standardized storage slots prevent collisions between proxy and
+            implementation state.
           </Alert>
           <Table>
             <Table.Thead>
@@ -191,15 +247,27 @@ export function ProxyPatternsDemo() {
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>Implementation</Table.Td>
-                <Table.Td><Code style={{ fontSize: 10, wordBreak: "break-all" }}>{slots.implementation}</Code></Table.Td>
+                <Table.Td>
+                  <Code style={{ fontSize: 10, wordBreak: "break-all" }}>
+                    {slots.implementation}
+                  </Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Admin</Table.Td>
-                <Table.Td><Code style={{ fontSize: 10, wordBreak: "break-all" }}>{slots.admin}</Code></Table.Td>
+                <Table.Td>
+                  <Code style={{ fontSize: 10, wordBreak: "break-all" }}>
+                    {slots.admin}
+                  </Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Beacon</Table.Td>
-                <Table.Td><Code style={{ fontSize: 10, wordBreak: "break-all" }}>{slots.beacon}</Code></Table.Td>
+                <Table.Td>
+                  <Code style={{ fontSize: 10, wordBreak: "break-all" }}>
+                    {slots.beacon}
+                  </Code>
+                </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>

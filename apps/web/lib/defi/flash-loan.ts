@@ -7,7 +7,7 @@ export interface FlashLoanResult {
 export function simulateFlashLoan(
   borrowAmount: number,
   feeRate: number,
-  arbitrageProfit: number
+  arbitrageProfit: number,
 ): FlashLoanResult {
   if (borrowAmount <= 0) {
     return { success: false, repayAmount: 0, profit: 0 };
@@ -25,7 +25,7 @@ export function calculateArbitrageProfit(
   priceA: number,
   priceB: number,
   amount: number,
-  fees: number
+  fees: number,
 ): number {
   if (priceA <= 0 || priceB <= 0 || amount <= 0) return 0;
 

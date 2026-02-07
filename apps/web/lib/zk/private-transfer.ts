@@ -56,7 +56,7 @@ const SCHEME: HashScheme = "sha256";
 function createNote(
   value: bigint,
   owner: string,
-  ownerSecret: string
+  ownerSecret: string,
 ): ShieldedNote {
   const nonce = generateNonce();
   const commitment = hashToHex(`${value}:${owner}:${nonce}`, SCHEME);
@@ -76,10 +76,15 @@ export function mintShieldedCoin(
   state: PrivateState,
   value: bigint,
   owner: string,
-  ownerSecret: string = "default_secret"
+  ownerSecret: string = "default_secret",
 ): MintResult {
   if (value <= 0n) {
-    return { success: false, note: null, newState: state, message: "Value must be positive" };
+    return {
+      success: false,
+      note: null,
+      newState: state,
+      message: "Value must be positive",
+    };
   }
   const note = createNote(value, owner, ownerSecret);
   const newState: PrivateState = {
@@ -102,7 +107,7 @@ export function privateTransfer(
   recipient: string,
   amount: bigint,
   recipientSecret: string = "recipient_secret",
-  senderSecret: string = "default_secret"
+  senderSecret: string = "default_secret",
 ): TransferResult {
   // Verify note exists in commitment set
   if (!state.commitments.includes(senderNote.commitment)) {
@@ -178,7 +183,7 @@ export function privateTransfer(
 /** Check if a nullifier has already been spent. */
 export function detectDoubleSpend(
   nullifier: string,
-  state: PrivateState
+  state: PrivateState,
 ): boolean {
   return state.nullifiers.includes(nullifier);
 }

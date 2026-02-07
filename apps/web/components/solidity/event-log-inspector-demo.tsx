@@ -31,8 +31,20 @@ export function EventLogInspectorDemo() {
   const [eventName, setEventName] = useState("Transfer");
   const nextId = useRef(3);
   const [params, setParams] = useState<ParamInput[]>([
-    { id: 0, name: "from", type: "address", value: "0x0000000000000000000000000000000000000001", indexed: true },
-    { id: 1, name: "to", type: "address", value: "0x0000000000000000000000000000000000000002", indexed: true },
+    {
+      id: 0,
+      name: "from",
+      type: "address",
+      value: "0x0000000000000000000000000000000000000001",
+      indexed: true,
+    },
+    {
+      id: 1,
+      name: "to",
+      type: "address",
+      value: "0x0000000000000000000000000000000000000002",
+      indexed: true,
+    },
     { id: 2, name: "value", type: "uint256", value: "1000", indexed: false },
   ]);
 
@@ -51,29 +63,44 @@ export function EventLogInspectorDemo() {
   }, [eventName, params]);
 
   const addParam = () => {
-    setParams([...params, { id: nextId.current++, name: "", type: "uint256", value: "0", indexed: false }]);
+    setParams([
+      ...params,
+      {
+        id: nextId.current++,
+        name: "",
+        type: "uint256",
+        value: "0",
+        indexed: false,
+      },
+    ]);
   };
 
   const removeParam = (index: number) => {
     setParams(params.filter((_, i) => i !== index));
   };
 
-  const updateParam = (index: number, field: keyof ParamInput, value: string | boolean) => {
-    setParams(params.map((p, i) =>
-      i === index ? { ...p, [field]: value } : p
-    ));
+  const updateParam = (
+    index: number,
+    field: keyof ParamInput,
+    value: string | boolean,
+  ) => {
+    setParams(
+      params.map((p, i) => (i === index ? { ...p, [field]: value } : p)),
+    );
   };
 
   const indexedCount = useMemo(
     () => params.filter((p) => p.indexed).length,
-    [params]
+    [params],
   );
 
   return (
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Event Definition</Text>
+          <Text size="sm" fw={600}>
+            Event Definition
+          </Text>
           <TextInput
             label="Event Name"
             value={eventName}
@@ -106,15 +133,27 @@ export function EventLogInspectorDemo() {
               <Switch
                 label="Indexed"
                 checked={param.indexed}
-                onChange={(e) => updateParam(i, "indexed", e.currentTarget.checked)}
+                onChange={(e) =>
+                  updateParam(i, "indexed", e.currentTarget.checked)
+                }
                 disabled={!param.indexed && indexedCount >= 3}
               />
-              <Button size="sm" variant="subtle" color="red" onClick={() => removeParam(i)}>
+              <Button
+                size="sm"
+                variant="subtle"
+                color="red"
+                onClick={() => removeParam(i)}
+              >
                 <IconTrash size={14} />
               </Button>
             </Group>
           ))}
-          <Button leftSection={<IconPlus size={16} />} variant="outline" onClick={addParam} size="xs">
+          <Button
+            leftSection={<IconPlus size={16} />}
+            variant="outline"
+            onClick={addParam}
+            size="xs"
+          >
             Add Parameter
           </Button>
         </Stack>
@@ -124,10 +163,14 @@ export function EventLogInspectorDemo() {
         <>
           <Paper p="md" withBorder>
             <Stack gap="md">
-              <Text size="sm" fw={600}>Topics</Text>
+              <Text size="sm" fw={600}>
+                Topics
+              </Text>
               {log.topics.map((topic, i) => (
                 <Stack key={i} gap={2}>
-                  <Text size="xs" c="dimmed">{log.topicDescriptions[i]}</Text>
+                  <Text size="xs" c="dimmed">
+                    {log.topicDescriptions[i]}
+                  </Text>
                   <Code style={{ fontSize: 11, wordBreak: "break-all" }}>
                     {topic}
                   </Code>
@@ -138,7 +181,9 @@ export function EventLogInspectorDemo() {
 
           <Paper p="md" withBorder>
             <Stack gap="md">
-              <Text size="sm" fw={600}>Data (non-indexed ABI-encoded)</Text>
+              <Text size="sm" fw={600}>
+                Data (non-indexed ABI-encoded)
+              </Text>
               <Code block style={{ fontSize: 11, wordBreak: "break-all" }}>
                 {log.data || "0x (empty — all params are indexed)"}
               </Code>
@@ -147,7 +192,9 @@ export function EventLogInspectorDemo() {
 
           <Paper p="md" withBorder>
             <Stack gap="md">
-              <Text size="sm" fw={600}>Log Structure Summary</Text>
+              <Text size="sm" fw={600}>
+                Log Structure Summary
+              </Text>
               <Table>
                 <Table.Thead>
                   <Table.Tr>
@@ -161,14 +208,22 @@ export function EventLogInspectorDemo() {
                   {params.map((p, i) => (
                     <Table.Tr key={i}>
                       <Table.Td>{p.name}</Table.Td>
-                      <Table.Td><Badge size="xs" variant="light">{p.type}</Badge></Table.Td>
+                      <Table.Td>
+                        <Badge size="xs" variant="light">
+                          {p.type}
+                        </Badge>
+                      </Table.Td>
                       <Table.Td>
                         <Badge size="xs" color={p.indexed ? "blue" : "gray"}>
                           {p.indexed ? "topic" : "data"}
                         </Badge>
                       </Table.Td>
                       <Table.Td>
-                        <Badge size="xs" color={p.indexed ? "green" : "red"} variant="light">
+                        <Badge
+                          size="xs"
+                          color={p.indexed ? "green" : "red"}
+                          variant="light"
+                        >
                           {p.indexed ? "Yes" : "No"}
                         </Badge>
                       </Table.Td>

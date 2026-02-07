@@ -1,5 +1,15 @@
 import { useTranslations } from "next-intl";
-import { Container, Title, Text, Stack, Badge, Group, Breadcrumbs, Anchor, Paper } from "@mantine/core";
+import {
+  Container,
+  Title,
+  Text,
+  Stack,
+  Badge,
+  Group,
+  Breadcrumbs,
+  Anchor,
+  Paper,
+} from "@mantine/core";
 import { PedersenCommitmentDemo } from "../../../../../../components/zk/pedersen-commitment-demo";
 
 export default function PedersenCommitmentPage() {
@@ -13,10 +23,14 @@ export default function PedersenCommitmentPage() {
         </Breadcrumbs>
         <div>
           <Group gap="xs" mb="xs">
-            <Badge variant="light" color="yellow">Intermediate</Badge>
+            <Badge variant="light" color="yellow">
+              Intermediate
+            </Badge>
           </Group>
           <Title order={1}>{t("title")}</Title>
-          <Text size="lg" c="dimmed" mt="xs">{t("description")}</Text>
+          <Text size="lg" c="dimmed" mt="xs">
+            {t("description")}
+          </Text>
         </div>
         <Paper p="lg" radius="md" withBorder>
           <PedersenCommitmentDemo />

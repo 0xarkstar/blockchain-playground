@@ -20,11 +20,22 @@ export function ArbitrageSimulatorDemo() {
   const [gasCost, setGasCost] = useState<number>(15);
 
   const result = useMemo(() => {
-    const profitBeforeGas = calculateArbitrageProfit(priceA, priceB, tradeAmount, 0);
-    const profitAfterGas = calculateArbitrageProfit(priceA, priceB, tradeAmount, gasCost);
-    const spreadPercent = priceA > 0 && priceB > 0
-      ? Math.abs(priceA - priceB) / Math.min(priceA, priceB) * 100
-      : 0;
+    const profitBeforeGas = calculateArbitrageProfit(
+      priceA,
+      priceB,
+      tradeAmount,
+      0,
+    );
+    const profitAfterGas = calculateArbitrageProfit(
+      priceA,
+      priceB,
+      tradeAmount,
+      gasCost,
+    );
+    const spreadPercent =
+      priceA > 0 && priceB > 0
+        ? (Math.abs(priceA - priceB) / Math.min(priceA, priceB)) * 100
+        : 0;
 
     return {
       profitBeforeGas,
@@ -42,12 +53,18 @@ export function ArbitrageSimulatorDemo() {
         <Paper p="md" withBorder>
           <Stack gap="md">
             <Group justify="space-between">
-              <Text size="sm" fw={600}>Pool A</Text>
+              <Text size="sm" fw={600}>
+                Pool A
+              </Text>
               {result.buyPool === "A" && (
-                <Badge color="green" variant="light" size="sm">Buy Here</Badge>
+                <Badge color="green" variant="light" size="sm">
+                  Buy Here
+                </Badge>
               )}
               {result.sellPool === "A" && (
-                <Badge color="blue" variant="light" size="sm">Sell Here</Badge>
+                <Badge color="blue" variant="light" size="sm">
+                  Sell Here
+                </Badge>
               )}
             </Group>
             <NumberInput
@@ -65,12 +82,18 @@ export function ArbitrageSimulatorDemo() {
         <Paper p="md" withBorder>
           <Stack gap="md">
             <Group justify="space-between">
-              <Text size="sm" fw={600}>Pool B</Text>
+              <Text size="sm" fw={600}>
+                Pool B
+              </Text>
               {result.buyPool === "B" && (
-                <Badge color="green" variant="light" size="sm">Buy Here</Badge>
+                <Badge color="green" variant="light" size="sm">
+                  Buy Here
+                </Badge>
               )}
               {result.sellPool === "B" && (
-                <Badge color="blue" variant="light" size="sm">Sell Here</Badge>
+                <Badge color="blue" variant="light" size="sm">
+                  Sell Here
+                </Badge>
               )}
             </Group>
             <NumberInput
@@ -88,7 +111,9 @@ export function ArbitrageSimulatorDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Trade Parameters</Text>
+          <Text size="sm" fw={600}>
+            Trade Parameters
+          </Text>
           <Group grow>
             <NumberInput
               label="Trade Amount (USD)"
@@ -113,7 +138,9 @@ export function ArbitrageSimulatorDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Result</Text>
+            <Text size="sm" fw={600}>
+              Result
+            </Text>
             <Badge
               size="lg"
               variant="light"
@@ -126,7 +153,9 @@ export function ArbitrageSimulatorDemo() {
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>Price Spread</Table.Td>
-                <Table.Td ta="right">{result.spreadPercent.toFixed(3)}%</Table.Td>
+                <Table.Td ta="right">
+                  {result.spreadPercent.toFixed(3)}%
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Strategy</Table.Td>

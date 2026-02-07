@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { hash, toBinaryString, computeAvalancheEffect } from "../lib/blockchain/hash";
+import {
+  hash,
+  toBinaryString,
+  computeAvalancheEffect,
+} from "../lib/blockchain/hash";
 
 describe("hash", () => {
   it("produces consistent SHA-256 output", () => {

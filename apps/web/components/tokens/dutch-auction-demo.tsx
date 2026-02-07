@@ -2,11 +2,25 @@
 
 import { useState, useMemo } from "react";
 import {
-  Stack, Paper, TextInput, NumberInput, Button, Table, Code, Badge, Group, Text, Alert, Progress,
+  Stack,
+  Paper,
+  TextInput,
+  NumberInput,
+  Button,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Alert,
+  Progress,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
-  createDutchAuction, getAuctionPriceInfo, settleDutchAuction, generatePriceCurve,
+  createDutchAuction,
+  getAuctionPriceInfo,
+  settleDutchAuction,
+  generatePriceCurve,
   type DutchAuctionState,
 } from "../../lib/tokens/auction";
 
@@ -22,21 +36,37 @@ export function DutchAuctionDemo() {
   const [lastMessage, setLastMessage] = useState("");
 
   const [state, setState] = useState<DutchAuctionState>(() =>
-    createDutchAuction({ seller: "alice", tokenId: 1, startPrice: 100, endPrice: 10, startTime: 0, duration: 100 })
+    createDutchAuction({
+      seller: "alice",
+      tokenId: 1,
+      startPrice: 100,
+      endPrice: 10,
+      startTime: 0,
+      duration: 100,
+    }),
   );
 
   const priceInfo = useMemo(
     () => getAuctionPriceInfo(state.config, currentTime),
-    [state.config, currentTime]
+    [state.config, currentTime],
   );
 
   const curve = useMemo(
     () => generatePriceCurve(state.config, 10),
-    [state.config]
+    [state.config],
   );
 
   const handleCreate = () => {
-    setState(createDutchAuction({ seller, tokenId, startPrice, endPrice, startTime, duration }));
+    setState(
+      createDutchAuction({
+        seller,
+        tokenId,
+        startPrice,
+        endPrice,
+        startTime,
+        duration,
+      }),
+    );
     setLastMessage("Auction created");
   };
 
@@ -50,31 +80,80 @@ export function DutchAuctionDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Auction Configuration</Text>
+          <Text size="sm" fw={600}>
+            Auction Configuration
+          </Text>
           <Group grow>
-            <TextInput label="Seller" value={seller} onChange={(e) => setSeller(e.currentTarget.value)} />
-            <NumberInput label="Token ID" value={tokenId} onChange={(v) => setTokenId(Number(v) || 0)} min={1} />
+            <TextInput
+              label="Seller"
+              value={seller}
+              onChange={(e) => setSeller(e.currentTarget.value)}
+            />
+            <NumberInput
+              label="Token ID"
+              value={tokenId}
+              onChange={(v) => setTokenId(Number(v) || 0)}
+              min={1}
+            />
           </Group>
           <Group grow>
-            <NumberInput label="Start Price" value={startPrice} onChange={(v) => setStartPrice(Number(v) || 0)} min={1} decimalScale={4} />
-            <NumberInput label="End Price" value={endPrice} onChange={(v) => setEndPrice(Number(v) || 0)} min={0} decimalScale={4} />
+            <NumberInput
+              label="Start Price"
+              value={startPrice}
+              onChange={(v) => setStartPrice(Number(v) || 0)}
+              min={1}
+              decimalScale={4}
+            />
+            <NumberInput
+              label="End Price"
+              value={endPrice}
+              onChange={(v) => setEndPrice(Number(v) || 0)}
+              min={0}
+              decimalScale={4}
+            />
           </Group>
           <Group grow>
-            <NumberInput label="Start Time" value={startTime} onChange={(v) => setStartTime(Number(v) || 0)} />
-            <NumberInput label="Duration" value={duration} onChange={(v) => setDuration(Number(v) || 0)} min={1} />
+            <NumberInput
+              label="Start Time"
+              value={startTime}
+              onChange={(v) => setStartTime(Number(v) || 0)}
+            />
+            <NumberInput
+              label="Duration"
+              value={duration}
+              onChange={(v) => setDuration(Number(v) || 0)}
+              min={1}
+            />
           </Group>
-          <Button onClick={handleCreate} variant="light">Create Auction</Button>
+          <Button onClick={handleCreate} variant="light">
+            Create Auction
+          </Button>
         </Stack>
       </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Bid</Text>
+          <Text size="sm" fw={600}>
+            Bid
+          </Text>
           <Group grow>
-            <NumberInput label="Current Time" value={currentTime} onChange={(v) => setCurrentTime(Number(v) || 0)} />
-            <TextInput label="Buyer" value={buyer} onChange={(e) => setBuyer(e.currentTarget.value)} />
+            <NumberInput
+              label="Current Time"
+              value={currentTime}
+              onChange={(v) => setCurrentTime(Number(v) || 0)}
+            />
+            <TextInput
+              label="Buyer"
+              value={buyer}
+              onChange={(e) => setBuyer(e.currentTarget.value)}
+            />
           </Group>
-          <Button onClick={handleSettle} variant="light" color="green" disabled={state.settled}>
+          <Button
+            onClick={handleSettle}
+            variant="light"
+            color="green"
+            disabled={state.settled}
+          >
             {state.settled ? "Auction Settled" : "Buy Now"}
           </Button>
         </Stack>
@@ -89,9 +168,22 @@ export function DutchAuctionDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Current Status</Text>
-            <Badge variant="light" color={state.settled ? "green" : priceInfo.isActive ? "blue" : "red"}>
-              {state.settled ? "Settled" : priceInfo.isActive ? "Active" : priceInfo.hasEnded ? "Ended" : "Not Started"}
+            <Text size="sm" fw={600}>
+              Current Status
+            </Text>
+            <Badge
+              variant="light"
+              color={
+                state.settled ? "green" : priceInfo.isActive ? "blue" : "red"
+              }
+            >
+              {state.settled
+                ? "Settled"
+                : priceInfo.isActive
+                  ? "Active"
+                  : priceInfo.hasEnded
+                    ? "Ended"
+                    : "Not Started"}
             </Badge>
           </Group>
           <Progress value={priceInfo.percentDecayed} color="orange" size="lg" />
@@ -99,29 +191,41 @@ export function DutchAuctionDemo() {
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>Current Price</Table.Td>
-                <Table.Td ta="right"><Code>{priceInfo.currentPrice.toFixed(4)} ETH</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{priceInfo.currentPrice.toFixed(4)} ETH</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Price Decay</Table.Td>
-                <Table.Td ta="right"><Code>{priceInfo.percentDecayed.toFixed(1)}%</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{priceInfo.percentDecayed.toFixed(1)}%</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Time Elapsed</Table.Td>
-                <Table.Td ta="right"><Code>{priceInfo.timeElapsed}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{priceInfo.timeElapsed}</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Time Remaining</Table.Td>
-                <Table.Td ta="right"><Code>{priceInfo.timeRemaining}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{priceInfo.timeRemaining}</Code>
+                </Table.Td>
               </Table.Tr>
               {state.settled && (
                 <>
                   <Table.Tr>
                     <Table.Td>Winner</Table.Td>
-                    <Table.Td ta="right"><Code>{state.winner}</Code></Table.Td>
+                    <Table.Td ta="right">
+                      <Code>{state.winner}</Code>
+                    </Table.Td>
                   </Table.Tr>
                   <Table.Tr>
                     <Table.Td>Settled Price</Table.Td>
-                    <Table.Td ta="right"><Code>{state.settledPrice?.toFixed(4)} ETH</Code></Table.Td>
+                    <Table.Td ta="right">
+                      <Code>{state.settledPrice?.toFixed(4)} ETH</Code>
+                    </Table.Td>
                   </Table.Tr>
                 </>
               )}
@@ -132,7 +236,9 @@ export function DutchAuctionDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Price Curve</Text>
+          <Text size="sm" fw={600}>
+            Price Curve
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -144,7 +250,9 @@ export function DutchAuctionDemo() {
               {curve.map((point, i) => (
                 <Table.Tr key={i}>
                   <Table.Td>{point.time.toFixed(0)}</Table.Td>
-                  <Table.Td ta="right"><Code>{point.price.toFixed(4)}</Code></Table.Td>
+                  <Table.Td ta="right">
+                    <Code>{point.price.toFixed(4)}</Code>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

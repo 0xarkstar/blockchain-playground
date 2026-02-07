@@ -2,7 +2,17 @@
 
 import { useState, useMemo } from "react";
 import {
-  Stack, Paper, Button, Table, Code, Badge, Group, Text, Alert, NumberInput, TextInput,
+  Stack,
+  Paper,
+  Button,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Alert,
+  NumberInput,
+  TextInput,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
@@ -21,7 +31,7 @@ const INITIAL_ACCOUNTS = [
 
 export function ZKRollupDemo() {
   const [state, setState] = useState<RollupState>(() =>
-    createRollupState(INITIAL_ACCOUNTS)
+    createRollupState(INITIAL_ACCOUNTS),
   );
   const [batches, setBatches] = useState<BatchResult[]>([]);
   const [txFrom, setTxFrom] = useState("alice");
@@ -34,7 +44,7 @@ export function ZKRollupDemo() {
 
   const compression = useMemo(
     () => calculateCompression(batchSize),
-    [batchSize]
+    [batchSize],
   );
 
   const handleAddTx = () => {
@@ -61,19 +71,29 @@ export function ZKRollupDemo() {
   return (
     <Stack gap="lg">
       <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        ZK Rollups batch transactions off-chain and post a validity proof on-chain.
-        This simulator shows the mechanics: state roots, batch proofs, and gas savings.
+        ZK Rollups batch transactions off-chain and post a validity proof
+        on-chain. This simulator shows the mechanics: state roots, batch proofs,
+        and gas savings.
       </Alert>
 
       <Paper p="md" withBorder>
         <Stack gap="sm">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>L2 State (Block #{state.blockNumber})</Text>
-            <Button onClick={handleReset} variant="light" color="gray" size="xs">
+            <Text size="sm" fw={600}>
+              L2 State (Block #{state.blockNumber})
+            </Text>
+            <Button
+              onClick={handleReset}
+              variant="light"
+              color="gray"
+              size="xs"
+            >
               Reset
             </Button>
           </Group>
-          <Text size="xs" c="dimmed">Root: <Code>{state.stateRoot.slice(0, 20)}...</Code></Text>
+          <Text size="xs" c="dimmed">
+            Root: <Code>{state.stateRoot.slice(0, 20)}...</Code>
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -85,8 +105,12 @@ export function ZKRollupDemo() {
             <Table.Tbody>
               {state.accounts.map((a) => (
                 <Table.Tr key={a.address}>
-                  <Table.Td><Code>{a.address}</Code></Table.Td>
-                  <Table.Td ta="right"><Code>{a.balance.toString()}</Code></Table.Td>
+                  <Table.Td>
+                    <Code>{a.address}</Code>
+                  </Table.Td>
+                  <Table.Td ta="right">
+                    <Code>{a.balance.toString()}</Code>
+                  </Table.Td>
                   <Table.Td ta="right">{a.nonce}</Table.Td>
                 </Table.Tr>
               ))}
@@ -97,14 +121,31 @@ export function ZKRollupDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Add Transaction</Text>
+          <Text size="sm" fw={600}>
+            Add Transaction
+          </Text>
           <Group grow>
-            <TextInput label="From" value={txFrom} onChange={(e) => setTxFrom(e.currentTarget.value)} />
-            <TextInput label="To" value={txTo} onChange={(e) => setTxTo(e.currentTarget.value)} />
-            <NumberInput label="Amount" value={txAmount} onChange={(v) => setTxAmount(Number(v) || 0)} min={1} />
+            <TextInput
+              label="From"
+              value={txFrom}
+              onChange={(e) => setTxFrom(e.currentTarget.value)}
+            />
+            <TextInput
+              label="To"
+              value={txTo}
+              onChange={(e) => setTxTo(e.currentTarget.value)}
+            />
+            <NumberInput
+              label="Amount"
+              value={txAmount}
+              onChange={(v) => setTxAmount(Number(v) || 0)}
+              min={1}
+            />
           </Group>
           <Group>
-            <Button onClick={handleAddTx} variant="light">Add to Batch</Button>
+            <Button onClick={handleAddTx} variant="light">
+              Add to Batch
+            </Button>
             <Button
               onClick={handleProcessBatch}
               variant="light"
@@ -140,7 +181,9 @@ export function ZKRollupDemo() {
       {batches.length > 0 && (
         <Paper p="md" withBorder>
           <Stack gap="sm">
-            <Text size="sm" fw={600}>Processed Batches</Text>
+            <Text size="sm" fw={600}>
+              Processed Batches
+            </Text>
             {batches.map((batch) => (
               <Paper key={batch.batchNumber} p="sm" withBorder>
                 <Stack gap="xs">
@@ -157,7 +200,9 @@ export function ZKRollupDemo() {
                       )}
                     </Group>
                   </Group>
-                  <Text size="xs">Proof: <Code>{batch.proofHash.slice(0, 20)}...</Code></Text>
+                  <Text size="xs">
+                    Proof: <Code>{batch.proofHash.slice(0, 20)}...</Code>
+                  </Text>
                 </Stack>
               </Paper>
             ))}
@@ -167,7 +212,9 @@ export function ZKRollupDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Gas Compression Analysis</Text>
+          <Text size="sm" fw={600}>
+            Gas Compression Analysis
+          </Text>
           <NumberInput
             label="Batch size (transactions)"
             value={batchSize}
@@ -179,15 +226,21 @@ export function ZKRollupDemo() {
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>L1 gas (individual txs)</Table.Td>
-                <Table.Td ta="right"><Code>{compression.l1TotalGas.toLocaleString()}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{compression.l1TotalGas.toLocaleString()}</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>L2 gas (rollup)</Table.Td>
-                <Table.Td ta="right"><Code>{compression.l2TotalGas.toLocaleString()}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{compression.l2TotalGas.toLocaleString()}</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Proof verification cost</Table.Td>
-                <Table.Td ta="right"><Code>{compression.l2ProofGas.toLocaleString()}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{compression.l2ProofGas.toLocaleString()}</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Gas savings</Table.Td>
@@ -202,7 +255,9 @@ export function ZKRollupDemo() {
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Compression ratio</Table.Td>
-                <Table.Td ta="right"><Code>{compression.compressionRatio}x</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{compression.compressionRatio}x</Code>
+                </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>

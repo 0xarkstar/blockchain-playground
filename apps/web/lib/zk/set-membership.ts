@@ -58,7 +58,7 @@ function nextPow2(n: number): number {
 
 function buildMerkleTree(
   leaves: readonly string[],
-  scheme: HashScheme = "sha256"
+  scheme: HashScheme = "sha256",
 ): readonly string[] {
   const n = nextPow2(leaves.length);
   const tree: string[] = new Array(2 * n).fill("");
@@ -84,7 +84,7 @@ function buildMerkleTree(
 export function createMemberGroup(
   members: readonly string[],
   secrets?: readonly string[],
-  scheme: HashScheme = "sha256"
+  scheme: HashScheme = "sha256",
 ): MemberGroup {
   const commitments: MemberCommitment[] = members.map((id, i) => {
     const secret = secrets?.[i] ?? `secret_${i}`;
@@ -103,7 +103,7 @@ export function proveZKMembership(
   group: MemberGroup,
   memberIndex: number,
   secret: string,
-  scheme: HashScheme = "sha256"
+  scheme: HashScheme = "sha256",
 ): ZKMembershipProof {
   const n = nextPow2(group.members.length);
   const commitment = group.members[memberIndex].commitment;
@@ -130,14 +130,19 @@ export function proveZKMembership(
   }
   const verified = current === group.root;
 
-  return { memberCommitment: commitment, merklePath: path, root: group.root, verified };
+  return {
+    memberCommitment: commitment,
+    merklePath: path,
+    root: group.root,
+    verified,
+  };
 }
 
 /** Verify a membership proof against a known root. */
 export function verifyZKMembership(
   root: string,
   proof: ZKMembershipProof,
-  scheme: HashScheme = "sha256"
+  scheme: HashScheme = "sha256",
 ): boolean {
   let current = proof.memberCommitment;
   for (const node of proof.merklePath) {

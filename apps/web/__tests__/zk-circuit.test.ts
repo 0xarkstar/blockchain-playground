@@ -115,11 +115,7 @@ describe("Arithmetic Circuits + R1CS", () => {
     it("returns per-constraint check results", () => {
       const gates = parseExpression("x * y + y * z");
       const r1cs = gatesToR1CS(gates, p);
-      const witness = computeWitness(
-        gates,
-        { x: 2n, y: 3n, z: 4n },
-        p
-      );
+      const witness = computeWitness(gates, { x: 2n, y: 3n, z: 4n }, p);
       const checks = verifySatisfaction(r1cs, witness.wireVector, p);
       expect(checks.length).toBe(r1cs.numConstraints);
       for (const check of checks) {

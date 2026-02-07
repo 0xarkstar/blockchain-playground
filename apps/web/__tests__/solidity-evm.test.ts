@@ -23,7 +23,10 @@ describe("createInitialEvmState", () => {
 describe("executeInstruction", () => {
   it("PUSH1 pushes value onto stack", () => {
     const state = createInitialEvmState();
-    const result = executeInstruction(state, { opcode: "PUSH1", operand: "42" });
+    const result = executeInstruction(state, {
+      opcode: "PUSH1",
+      operand: "42",
+    });
     expect(result.stack).toHaveLength(1);
     expect(result.stack[0]).toBe(BigInt(42));
   });
@@ -172,7 +175,10 @@ describe("executeInstruction", () => {
 
   it("does nothing on halted state", () => {
     const halted = { ...createInitialEvmState(), halted: true };
-    const result = executeInstruction(halted, { opcode: "PUSH1", operand: "1" });
+    const result = executeInstruction(halted, {
+      opcode: "PUSH1",
+      operand: "1",
+    });
     expect(result.stack).toHaveLength(0);
   });
 });
@@ -248,7 +254,12 @@ describe("getAllOpcodes", () => {
 
 describe("simulateCall", () => {
   it("CALL: msg.sender is from, storage is to", () => {
-    const result = simulateCall({ callType: "call", from: "A", to: "B", value: 100 });
+    const result = simulateCall({
+      callType: "call",
+      from: "A",
+      to: "B",
+      value: 100,
+    });
     expect(result.msgSender).toBe("A");
     expect(result.storageContext).toBe("B");
     expect(result.codeSource).toBe("B");
@@ -257,7 +268,12 @@ describe("simulateCall", () => {
   });
 
   it("DELEGATECALL: storage is caller's, no value", () => {
-    const result = simulateCall({ callType: "delegatecall", from: "A", to: "B", value: 0 });
+    const result = simulateCall({
+      callType: "delegatecall",
+      from: "A",
+      to: "B",
+      value: 0,
+    });
     expect(result.msgSender).toBe("A");
     expect(result.storageContext).toBe("A");
     expect(result.codeSource).toBe("B");
@@ -265,7 +281,12 @@ describe("simulateCall", () => {
   });
 
   it("STATICCALL: read-only, no value", () => {
-    const result = simulateCall({ callType: "staticcall", from: "A", to: "B", value: 0 });
+    const result = simulateCall({
+      callType: "staticcall",
+      from: "A",
+      to: "B",
+      value: 0,
+    });
     expect(result.canModifyState).toBe(false);
     expect(result.valueTransferred).toBe(0);
   });

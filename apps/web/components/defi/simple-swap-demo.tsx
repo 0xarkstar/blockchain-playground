@@ -40,7 +40,9 @@ export function SimpleSwapDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Pool Reserves</Text>
+          <Text size="sm" fw={600}>
+            Pool Reserves
+          </Text>
           <Group grow>
             <NumberInput
               label="Token A Reserve"
@@ -65,7 +67,9 @@ export function SimpleSwapDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Swap</Text>
+          <Text size="sm" fw={600}>
+            Swap
+          </Text>
           <SegmentedControl
             value={direction}
             onChange={setDirection}
@@ -97,7 +101,9 @@ export function SimpleSwapDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Result</Text>
+          <Text size="sm" fw={600}>
+            Result
+          </Text>
           <Table>
             <Table.Tbody>
               <Table.Tr>
@@ -112,7 +118,9 @@ export function SimpleSwapDemo() {
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Effective Price</Table.Td>
-                <Table.Td ta="right">{result.effectivePrice.toFixed(6)}</Table.Td>
+                <Table.Td ta="right">
+                  {result.effectivePrice.toFixed(6)}
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Price Impact</Table.Td>
@@ -130,9 +138,14 @@ export function SimpleSwapDemo() {
           </Table>
 
           {highImpact && (
-            <Alert icon={<IconInfoCircle size={16} />} color="red" title="High Price Impact">
+            <Alert
+              icon={<IconInfoCircle size={16} />}
+              color="red"
+              title="High Price Impact"
+            >
               This trade has a price impact of {result.priceImpact.toFixed(2)}%.
-              Consider reducing your trade size or using a pool with deeper liquidity.
+              Consider reducing your trade size or using a pool with deeper
+              liquidity.
             </Alert>
           )}
         </Stack>

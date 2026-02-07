@@ -34,12 +34,12 @@ export function LiquidationSimulatorDemo() {
     const healthFactor = calculateHealthFactor(
       collateralValue,
       debtAmount,
-      liquidationThreshold
+      liquidationThreshold,
     );
     const liqPrice = calculateLiquidationPrice(
       debtAmount,
       collateralAmount,
-      liquidationThreshold
+      liquidationThreshold,
     );
     const liquidatable = isFinite(healthFactor) && healthFactor < 1;
 
@@ -47,9 +47,8 @@ export function LiquidationSimulatorDemo() {
       ? collateralValue * (liquidationBonus / 100)
       : 0;
 
-    const priceDropToLiquidation = initialPrice > 0
-      ? ((initialPrice - liqPrice) / initialPrice) * 100
-      : 0;
+    const priceDropToLiquidation =
+      initialPrice > 0 ? ((initialPrice - liqPrice) / initialPrice) * 100 : 0;
 
     return {
       collateralValue,
@@ -59,7 +58,14 @@ export function LiquidationSimulatorDemo() {
       bonusValue,
       priceDropToLiquidation,
     };
-  }, [collateralAmount, currentPrice, debtAmount, liquidationThreshold, liquidationBonus, initialPrice]);
+  }, [
+    collateralAmount,
+    currentPrice,
+    debtAmount,
+    liquidationThreshold,
+    liquidationBonus,
+    initialPrice,
+  ]);
 
   const hfDisplay = isFinite(result.healthFactor)
     ? result.healthFactor.toFixed(3)
@@ -77,7 +83,9 @@ export function LiquidationSimulatorDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Position Setup</Text>
+          <Text size="sm" fw={600}>
+            Position Setup
+          </Text>
           <Group grow>
             <NumberInput
               label="Initial Collateral Price"
@@ -129,7 +137,8 @@ export function LiquidationSimulatorDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
-            Simulate Price Crash: ${currentPrice.toFixed(2)} ({currentPricePercent}% of initial)
+            Simulate Price Crash: ${currentPrice.toFixed(2)} (
+            {currentPricePercent}% of initial)
           </Text>
           <Slider
             value={currentPricePercent}
@@ -153,16 +162,23 @@ export function LiquidationSimulatorDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Position Status</Text>
+            <Text size="sm" fw={600}>
+              Position Status
+            </Text>
             <Badge size="lg" variant="light" color={hfColor}>
               {result.liquidatable ? "Liquidatable" : "Safe"}
             </Badge>
           </Group>
 
           <div>
-            <Text size="xs" c="dimmed" mb={4}>Health Factor: {hfDisplay}</Text>
+            <Text size="xs" c="dimmed" mb={4}>
+              Health Factor: {hfDisplay}
+            </Text>
             <Progress
-              value={Math.min(isFinite(result.healthFactor) ? result.healthFactor * 50 : 100, 100)}
+              value={Math.min(
+                isFinite(result.healthFactor) ? result.healthFactor * 50 : 100,
+                100,
+              )}
               color={hfColor}
               size="lg"
             />
@@ -173,24 +189,33 @@ export function LiquidationSimulatorDemo() {
               <Table.Tr>
                 <Table.Td>Collateral Value</Table.Td>
                 <Table.Td ta="right">
-                  ${result.collateralValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                  $
+                  {result.collateralValue.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  })}
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Health Factor</Table.Td>
                 <Table.Td ta="right">
-                  <Text fw={600} c={hfColor}>{hfDisplay}</Text>
+                  <Text fw={600} c={hfColor}>
+                    {hfDisplay}
+                  </Text>
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Liquidation Trigger Price</Table.Td>
                 <Table.Td ta="right">
-                  <Text fw={600} c="red">${result.liqPrice.toFixed(2)}</Text>
+                  <Text fw={600} c="red">
+                    ${result.liqPrice.toFixed(2)}
+                  </Text>
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Price Drop to Liquidation</Table.Td>
-                <Table.Td ta="right">{result.priceDropToLiquidation.toFixed(1)}%</Table.Td>
+                <Table.Td ta="right">
+                  {result.priceDropToLiquidation.toFixed(1)}%
+                </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>
@@ -202,8 +227,8 @@ export function LiquidationSimulatorDemo() {
                 color="red"
                 title="Position Liquidatable"
               >
-                Health factor is below 1.0. A liquidator can repay part of the debt
-                and claim collateral at a {liquidationBonus}% bonus.
+                Health factor is below 1.0. A liquidator can repay part of the
+                debt and claim collateral at a {liquidationBonus}% bonus.
               </Alert>
               <Table>
                 <Table.Thead>

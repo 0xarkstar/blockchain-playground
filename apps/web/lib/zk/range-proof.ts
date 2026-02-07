@@ -55,7 +55,7 @@ export function decomposeToBits(value: bigint, numBits: number): number[] {
 export function constructRangeProof(
   params: PedersenParams | null,
   value: bigint,
-  numBits: number
+  numBits: number,
 ): RangeProof {
   const pp = params ?? createPedersenParams();
   const bits = decomposeToBits(value, numBits);
@@ -88,11 +88,7 @@ export function constructRangeProof(
   let reconstructed = 1n;
   for (let i = 0; i < numBits; i++) {
     const power = modPow(2n, BigInt(i), pp.q);
-    const term = modPow(
-      bitCommitments[i].commitment.commitment,
-      power,
-      pp.p
-    );
+    const term = modPow(bitCommitments[i].commitment.commitment, power, pp.p);
     reconstructed = modMul(reconstructed, term, pp.p);
   }
 

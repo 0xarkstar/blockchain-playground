@@ -1,5 +1,15 @@
 import { useTranslations } from "next-intl";
-import { Container, Title, Text, Stack, Badge, Group, Breadcrumbs, Anchor, Paper } from "@mantine/core";
+import {
+  Container,
+  Title,
+  Text,
+  Stack,
+  Badge,
+  Group,
+  Breadcrumbs,
+  Anchor,
+  Paper,
+} from "@mantine/core";
 import { R1CSQAPDemo } from "../../../../../../components/zk/r1cs-qap-demo";
 
 export default function R1CSQAPPage() {
@@ -13,10 +23,14 @@ export default function R1CSQAPPage() {
         </Breadcrumbs>
         <div>
           <Group gap="xs" mb="xs">
-            <Badge variant="light" color="red">Advanced</Badge>
+            <Badge variant="light" color="red">
+              Advanced
+            </Badge>
           </Group>
           <Title order={1}>{t("title")}</Title>
-          <Text size="lg" c="dimmed" mt="xs">{t("description")}</Text>
+          <Text size="lg" c="dimmed" mt="xs">
+            {t("description")}
+          </Text>
         </div>
         <Paper p="lg" radius="md" withBorder>
           <R1CSQAPDemo />

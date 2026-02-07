@@ -1,7 +1,13 @@
 import { describe, it, expect } from "vitest";
 import {
-  createGovernance, setVotingPower, delegate, getEffectiveVotingPower,
-  getTotalVotingPower, createProposal, vote, finalizeProposal,
+  createGovernance,
+  setVotingPower,
+  delegate,
+  getEffectiveVotingPower,
+  getTotalVotingPower,
+  createProposal,
+  vote,
+  finalizeProposal,
 } from "../lib/tokens/governance";
 
 describe("createGovernance", () => {
@@ -64,7 +70,13 @@ describe("createProposal", () => {
   it("creates proposal with quorum", () => {
     let state = createGovernance(10, 100);
     state = setVotingPower(state, "alice", 100);
-    const result = createProposal(state, "Test Proposal", "A description", "alice", 1000);
+    const result = createProposal(
+      state,
+      "Test Proposal",
+      "A description",
+      "alice",
+      1000,
+    );
     expect(result.success).toBe(true);
     const proposal = result.newState.proposals[0]!;
     expect(proposal.title).toBe("Test Proposal");
@@ -75,7 +87,9 @@ describe("createProposal", () => {
 
   it("rejects empty title", () => {
     const state = createGovernance();
-    expect(createProposal(state, "", "desc", "alice", 1000).success).toBe(false);
+    expect(createProposal(state, "", "desc", "alice", 1000).success).toBe(
+      false,
+    );
   });
 
   it("increments proposal ID", () => {

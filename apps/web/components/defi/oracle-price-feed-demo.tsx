@@ -33,34 +33,42 @@ export function OraclePriceFeedDemo() {
   const [heartbeatInterval, setHeartbeatInterval] = useState<number>(300);
 
   const addSnapshot = useCallback(() => {
-    const lastTimestamp = snapshots.length > 0
-      ? snapshots[snapshots.length - 1].timestamp
-      : 0;
-    setSnapshots([...snapshots, { price: newPrice, timestamp: lastTimestamp + 60 }]);
+    const lastTimestamp =
+      snapshots.length > 0 ? snapshots[snapshots.length - 1].timestamp : 0;
+    setSnapshots([
+      ...snapshots,
+      { price: newPrice, timestamp: lastTimestamp + 60 },
+    ]);
   }, [snapshots, newPrice]);
 
-  const removeSnapshot = useCallback((index: number) => {
-    setSnapshots(snapshots.filter((_, i) => i !== index));
-  }, [snapshots]);
+  const removeSnapshot = useCallback(
+    (index: number) => {
+      setSnapshots(snapshots.filter((_, i) => i !== index));
+    },
+    [snapshots],
+  );
 
   const analysis = useMemo(() => {
     const twap = calculateTWAP(snapshots);
-    const currentPrice = snapshots.length > 0
-      ? snapshots[snapshots.length - 1].price
-      : 0;
-    const lastUpdate = snapshots.length > 0
-      ? snapshots[snapshots.length - 1].timestamp
-      : 0;
-    const totalTime = snapshots.length > 1
-      ? snapshots[snapshots.length - 1].timestamp - snapshots[0].timestamp
-      : 0;
+    const currentPrice =
+      snapshots.length > 0 ? snapshots[snapshots.length - 1].price : 0;
+    const lastUpdate =
+      snapshots.length > 0 ? snapshots[snapshots.length - 1].timestamp : 0;
+    const totalTime =
+      snapshots.length > 1
+        ? snapshots[snapshots.length - 1].timestamp - snapshots[0].timestamp
+        : 0;
 
     const deviation = detectPriceDeviation(
       currentPrice,
       twap,
-      deviationThreshold / 100
+      deviationThreshold / 100,
     );
-    const stale = isHeartbeatStale(lastUpdate, heartbeatInterval, totalTime + 120);
+    const stale = isHeartbeatStale(
+      lastUpdate,
+      heartbeatInterval,
+      totalTime + 120,
+    );
 
     return { twap, currentPrice, deviation, stale, lastUpdate, totalTime };
   }, [snapshots, deviationThreshold, heartbeatInterval]);
@@ -69,7 +77,9 @@ export function OraclePriceFeedDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Price History</Text>
+          <Text size="sm" fw={600}>
+            Price History
+          </Text>
           <Table>
             <Table.Thead>
               <Table.Tr>
@@ -123,7 +133,9 @@ export function OraclePriceFeedDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Configuration</Text>
+          <Text size="sm" fw={600}>
+            Configuration
+          </Text>
           <Group grow>
             <NumberInput
               label="Deviation Threshold (%)"
@@ -147,7 +159,9 @@ export function OraclePriceFeedDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Analysis</Text>
+          <Text size="sm" fw={600}>
+            Analysis
+          </Text>
           <Group gap="sm">
             <Badge
               variant="light"
@@ -155,10 +169,7 @@ export function OraclePriceFeedDemo() {
             >
               {analysis.deviation.deviated ? "Price Deviated" : "Price Normal"}
             </Badge>
-            <Badge
-              variant="light"
-              color={analysis.stale ? "red" : "green"}
-            >
+            <Badge variant="light" color={analysis.stale ? "red" : "green"}>
               {analysis.stale ? "Heartbeat Stale" : "Heartbeat Fresh"}
             </Badge>
           </Group>
@@ -166,7 +177,9 @@ export function OraclePriceFeedDemo() {
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>Current Price</Table.Td>
-                <Table.Td ta="right">${analysis.currentPrice.toFixed(2)}</Table.Td>
+                <Table.Td ta="right">
+                  ${analysis.currentPrice.toFixed(2)}
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>TWAP</Table.Td>
@@ -188,17 +201,26 @@ export function OraclePriceFeedDemo() {
           </Table>
 
           {analysis.deviation.deviated && (
-            <Alert icon={<IconInfoCircle size={16} />} color="red" title="Price Deviation Detected">
-              Current price deviates {(analysis.deviation.deviation * 100).toFixed(3)}%
-              from TWAP, exceeding the {deviationThreshold}% threshold.
-              This may indicate price manipulation or extreme volatility.
+            <Alert
+              icon={<IconInfoCircle size={16} />}
+              color="red"
+              title="Price Deviation Detected"
+            >
+              Current price deviates{" "}
+              {(analysis.deviation.deviation * 100).toFixed(3)}% from TWAP,
+              exceeding the {deviationThreshold}% threshold. This may indicate
+              price manipulation or extreme volatility.
             </Alert>
           )}
 
           {analysis.stale && (
-            <Alert icon={<IconInfoCircle size={16} />} color="orange" title="Stale Heartbeat">
-              The oracle has not updated within the {heartbeatInterval}s heartbeat interval.
-              Price data may be unreliable.
+            <Alert
+              icon={<IconInfoCircle size={16} />}
+              color="orange"
+              title="Stale Heartbeat"
+            >
+              The oracle has not updated within the {heartbeatInterval}s
+              heartbeat interval. Price data may be unreliable.
             </Alert>
           )}
         </Stack>

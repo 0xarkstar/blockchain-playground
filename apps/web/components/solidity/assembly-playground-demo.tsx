@@ -13,7 +13,13 @@ import {
   Group,
   Text,
 } from "@mantine/core";
-import { IconPlus, IconTrash, IconPlayerPlay, IconPlayerSkipForward, IconRefresh } from "@tabler/icons-react";
+import {
+  IconPlus,
+  IconTrash,
+  IconPlayerPlay,
+  IconPlayerSkipForward,
+  IconRefresh,
+} from "@tabler/icons-react";
 import {
   createInitialEvmState,
   executeInstruction,
@@ -75,7 +81,7 @@ const needsOperand = (opcode: string) =>
 export function AssemblyPlaygroundDemo() {
   const nextInstrId = useRef(EXAMPLE_PROGRAMS[0]!.instructions.length);
   const [instructions, setInstructions] = useState<InstructionWithId[]>(
-    EXAMPLE_PROGRAMS[0]!.instructions.map((instr, i) => ({ ...instr, id: i }))
+    EXAMPLE_PROGRAMS[0]!.instructions.map((instr, i) => ({ ...instr, id: i })),
   );
   const [newOpcode, setNewOpcode] = useState("PUSH1");
   const [newOperand, setNewOperand] = useState("0");
@@ -84,7 +90,7 @@ export function AssemblyPlaygroundDemo() {
 
   const fullResult = useMemo(
     () => executeProgram(instructions),
-    [instructions]
+    [instructions],
   );
 
   const addInstruction = () => {
@@ -136,11 +142,18 @@ export function AssemblyPlaygroundDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Templates</Text>
+            <Text size="sm" fw={600}>
+              Templates
+            </Text>
           </Group>
           <Group>
             {EXAMPLE_PROGRAMS.map((prog, i) => (
-              <Button key={i} size="xs" variant="outline" onClick={() => loadExample(i)}>
+              <Button
+                key={i}
+                size="xs"
+                variant="outline"
+                onClick={() => loadExample(i)}
+              >
                 {prog.label}
               </Button>
             ))}
@@ -150,7 +163,9 @@ export function AssemblyPlaygroundDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Instructions</Text>
+          <Text size="sm" fw={600}>
+            Instructions
+          </Text>
           <Group>
             <Select
               data={opcodeList}
@@ -167,7 +182,10 @@ export function AssemblyPlaygroundDemo() {
                 style={{ width: 120 }}
               />
             )}
-            <Button leftSection={<IconPlus size={16} />} onClick={addInstruction}>
+            <Button
+              leftSection={<IconPlus size={16} />}
+              onClick={addInstruction}
+            >
               Add
             </Button>
           </Group>
@@ -186,18 +204,36 @@ export function AssemblyPlaygroundDemo() {
                 <Table.Tr
                   key={instr.id}
                   style={{
-                    backgroundColor: i === currentStep
-                      ? "var(--mantine-color-blue-light)"
-                      : i < currentStep ? "var(--mantine-color-green-light)" : undefined,
+                    backgroundColor:
+                      i === currentStep
+                        ? "var(--mantine-color-blue-light)"
+                        : i < currentStep
+                          ? "var(--mantine-color-green-light)"
+                          : undefined,
                   }}
                 >
                   <Table.Td>{i}</Table.Td>
-                  <Table.Td><Badge size="sm" variant="light">{instr.opcode}</Badge></Table.Td>
                   <Table.Td>
-                    {instr.operand ? <Code>{instr.operand}</Code> : <Text size="xs" c="dimmed">—</Text>}
+                    <Badge size="sm" variant="light">
+                      {instr.opcode}
+                    </Badge>
                   </Table.Td>
                   <Table.Td>
-                    <Button size="xs" variant="subtle" color="red" onClick={() => removeInstruction(i)}>
+                    {instr.operand ? (
+                      <Code>{instr.operand}</Code>
+                    ) : (
+                      <Text size="xs" c="dimmed">
+                        —
+                      </Text>
+                    )}
+                  </Table.Td>
+                  <Table.Td>
+                    <Button
+                      size="xs"
+                      variant="subtle"
+                      color="red"
+                      onClick={() => removeInstruction(i)}
+                    >
                       <IconTrash size={14} />
                     </Button>
                   </Table.Td>
@@ -234,9 +270,7 @@ export function AssemblyPlaygroundDemo() {
             <Badge variant="light" color="gray">
               Gas: {state.gasUsed}
             </Badge>
-            {state.error && (
-              <Badge color="red">{state.error}</Badge>
-            )}
+            {state.error && <Badge color="red">{state.error}</Badge>}
           </Group>
         </Stack>
       </Paper>
@@ -244,13 +278,19 @@ export function AssemblyPlaygroundDemo() {
       <Group grow align="flex-start">
         <Paper p="md" withBorder>
           <Stack gap="xs">
-            <Text size="xs" fw={600}>Stack (top → bottom)</Text>
+            <Text size="xs" fw={600}>
+              Stack (top → bottom)
+            </Text>
             {stackEntries.length === 0 ? (
-              <Text size="xs" c="dimmed">Empty</Text>
+              <Text size="xs" c="dimmed">
+                Empty
+              </Text>
             ) : (
               stackEntries.map((val, i) => (
                 <Group key={i} gap="xs">
-                  <Badge size="xs" variant="outline">{stackEntries.length - 1 - i}</Badge>
+                  <Badge size="xs" variant="outline">
+                    {stackEntries.length - 1 - i}
+                  </Badge>
                   <Code style={{ fontSize: 11 }}>{val.toString()}</Code>
                 </Group>
               ))
@@ -260,9 +300,13 @@ export function AssemblyPlaygroundDemo() {
 
         <Paper p="md" withBorder>
           <Stack gap="xs">
-            <Text size="xs" fw={600}>Memory</Text>
+            <Text size="xs" fw={600}>
+              Memory
+            </Text>
             {memoryEntries.length === 0 ? (
-              <Text size="xs" c="dimmed">Empty</Text>
+              <Text size="xs" c="dimmed">
+                Empty
+              </Text>
             ) : (
               <Table>
                 <Table.Thead>
@@ -274,8 +318,12 @@ export function AssemblyPlaygroundDemo() {
                 <Table.Tbody>
                   {memoryEntries.map(([offset, val]) => (
                     <Table.Tr key={offset}>
-                      <Table.Td><Code>{offset}</Code></Table.Td>
-                      <Table.Td><Code style={{ fontSize: 10 }}>{val}</Code></Table.Td>
+                      <Table.Td>
+                        <Code>{offset}</Code>
+                      </Table.Td>
+                      <Table.Td>
+                        <Code style={{ fontSize: 10 }}>{val}</Code>
+                      </Table.Td>
                     </Table.Tr>
                   ))}
                 </Table.Tbody>
@@ -286,9 +334,13 @@ export function AssemblyPlaygroundDemo() {
 
         <Paper p="md" withBorder>
           <Stack gap="xs">
-            <Text size="xs" fw={600}>Storage</Text>
+            <Text size="xs" fw={600}>
+              Storage
+            </Text>
             {storageEntries.length === 0 ? (
-              <Text size="xs" c="dimmed">Empty</Text>
+              <Text size="xs" c="dimmed">
+                Empty
+              </Text>
             ) : (
               <Table>
                 <Table.Thead>
@@ -300,8 +352,12 @@ export function AssemblyPlaygroundDemo() {
                 <Table.Tbody>
                   {storageEntries.map(([key, val]) => (
                     <Table.Tr key={key}>
-                      <Table.Td><Code>{key}</Code></Table.Td>
-                      <Table.Td><Code style={{ fontSize: 10 }}>{val}</Code></Table.Td>
+                      <Table.Td>
+                        <Code>{key}</Code>
+                      </Table.Td>
+                      <Table.Td>
+                        <Code style={{ fontSize: 10 }}>{val}</Code>
+                      </Table.Td>
                     </Table.Tr>
                   ))}
                 </Table.Tbody>

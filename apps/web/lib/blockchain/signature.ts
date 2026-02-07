@@ -29,11 +29,12 @@ export function publicKeyToAddress(publicKey: Uint8Array): string {
 
 export function signMessage(
   message: string,
-  privateKey: string
+  privateKey: string,
 ): { signature: string; recovery: number } {
   const msgHash = keccak_256(new TextEncoder().encode(message));
   const privKeyBytes = hexToBytes(privateKey);
-  const key = privKeyBytes.length > 32 ? privKeyBytes.slice(0, 32) : privKeyBytes;
+  const key =
+    privKeyBytes.length > 32 ? privKeyBytes.slice(0, 32) : privKeyBytes;
   const sig = sign(msgHash, key);
   return {
     signature: bytesToHex(sig.toCompactRawBytes()),
@@ -44,7 +45,7 @@ export function signMessage(
 export function verifySignature(
   message: string,
   signature: string,
-  publicKey: string
+  publicKey: string,
 ): boolean {
   const msgHash = keccak_256(new TextEncoder().encode(message));
   return verify(hexToBytes(signature), msgHash, hexToBytes(publicKey));

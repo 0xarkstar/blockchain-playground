@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import {
-  Stack, Paper, Button, Table, Code, Badge, Group, Text, Alert, NumberInput,
+  Stack,
+  Paper,
+  Button,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Alert,
+  NumberInput,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { createPedersenParams } from "../../lib/zk/pedersen";
@@ -24,19 +33,25 @@ export function RangeProofDemo() {
   };
 
   const maxValue = (1 << numBits) - 1;
-  const bits = decomposeToBits(BigInt(Math.max(0, Math.min(value, maxValue))), numBits);
+  const bits = decomposeToBits(
+    BigInt(Math.max(0, Math.min(value, maxValue))),
+    numBits,
+  );
 
   return (
     <Stack gap="lg">
       <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        Range proof: prove a committed value is in [0, 2^n) without revealing it.
-        The value is decomposed into bits, each committed separately. The verifier
-        checks each bit is 0 or 1, and the product reconstructs the original commitment.
+        Range proof: prove a committed value is in [0, 2^n) without revealing
+        it. The value is decomposed into bits, each committed separately. The
+        verifier checks each bit is 0 or 1, and the product reconstructs the
+        original commitment.
       </Alert>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Configure</Text>
+          <Text size="sm" fw={600}>
+            Configure
+          </Text>
           <Group grow>
             <NumberInput
               label={`Value (range: 0 to ${maxValue})`}
@@ -54,7 +69,8 @@ export function RangeProofDemo() {
             />
           </Group>
           <Text size="sm" c="dimmed">
-            Binary: {bits.slice().reverse().join("")} (value {value}, {numBits}-bit)
+            Binary: {bits.slice().reverse().join("")} (value {value}, {numBits}
+            -bit)
           </Text>
           <Button onClick={handleProve} variant="light">
             Generate Range Proof
@@ -67,9 +83,13 @@ export function RangeProofDemo() {
           <Paper p="md" withBorder>
             <Stack gap="sm">
               <Group justify="space-between">
-                <Text size="sm" fw={600}>Proof Result</Text>
+                <Text size="sm" fw={600}>
+                  Proof Result
+                </Text>
                 <Badge variant="light" color={proof.valid ? "green" : "red"}>
-                  {proof.valid ? "Valid — value in range" : "Invalid — value out of range"}
+                  {proof.valid
+                    ? "Valid — value in range"
+                    : "Invalid — value out of range"}
                 </Badge>
               </Group>
               {proof.valid && (
@@ -86,11 +106,17 @@ export function RangeProofDemo() {
                       <Table.Tr key={bc.bitPosition}>
                         <Table.Td>2^{bc.bitPosition}</Table.Td>
                         <Table.Td>
-                          <Badge size="sm" variant="light" color={bc.bit === 1 ? "blue" : "gray"}>
+                          <Badge
+                            size="sm"
+                            variant="light"
+                            color={bc.bit === 1 ? "blue" : "gray"}
+                          >
                             {bc.bit}
                           </Badge>
                         </Table.Td>
-                        <Table.Td><Code>{bc.commitment.commitment.toString()}</Code></Table.Td>
+                        <Table.Td>
+                          <Code>{bc.commitment.commitment.toString()}</Code>
+                        </Table.Td>
                       </Table.Tr>
                     ))}
                   </Table.Tbody>
@@ -102,21 +128,30 @@ export function RangeProofDemo() {
           {proof.valid && (
             <Paper p="md" withBorder>
               <Stack gap="sm">
-                <Text size="sm" fw={600}>Verification</Text>
+                <Text size="sm" fw={600}>
+                  Verification
+                </Text>
                 <Table>
                   <Table.Tbody>
                     <Table.Tr>
                       <Table.Td>Total commitment</Table.Td>
-                      <Table.Td><Code>{proof.totalCommitment.toString()}</Code></Table.Td>
+                      <Table.Td>
+                        <Code>{proof.totalCommitment.toString()}</Code>
+                      </Table.Td>
                     </Table.Tr>
                     <Table.Tr>
                       <Table.Td>Reconstructed from bits</Table.Td>
-                      <Table.Td><Code>{proof.reconstructed.toString()}</Code></Table.Td>
+                      <Table.Td>
+                        <Code>{proof.reconstructed.toString()}</Code>
+                      </Table.Td>
                     </Table.Tr>
                     <Table.Tr>
                       <Table.Td>Match</Table.Td>
                       <Table.Td>
-                        <Badge variant="light" color={verifyRangeProof(proof) ? "green" : "red"}>
+                        <Badge
+                          variant="light"
+                          color={verifyRangeProof(proof) ? "green" : "red"}
+                        >
                           {verifyRangeProof(proof) ? "Yes" : "No"}
                         </Badge>
                       </Table.Td>

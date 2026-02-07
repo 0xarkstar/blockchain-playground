@@ -55,7 +55,7 @@ export function ConsensusPlaygroundDemo() {
       }
       return currentNodes[Math.floor(Math.random() * currentNodes.length)].id;
     },
-    [mechanism]
+    [mechanism],
   );
 
   const handleRunRound = useCallback(() => {
@@ -72,7 +72,7 @@ export function ConsensusPlaygroundDemo() {
       votes[leaderId] = true;
 
       const acceptCount = Object.values(votes).filter(Boolean).length;
-      const accepted = acceptCount >= Math.ceil(nodes.length * 2 / 3);
+      const accepted = acceptCount >= Math.ceil((nodes.length * 2) / 3);
 
       const newRound: ConsensusRound = {
         round: rounds.length + 1,
@@ -94,7 +94,7 @@ export function ConsensusPlaygroundDemo() {
                 : node.blocks,
             isLeader: node.id === leaderId,
             status: votes[node.id] ? "accepted" : "rejected",
-          }))
+          })),
         );
       } else {
         setNodes((prev) =>
@@ -102,7 +102,7 @@ export function ConsensusPlaygroundDemo() {
             ...node,
             isLeader: node.id === leaderId,
             status: "rejected",
-          }))
+          })),
         );
       }
 
@@ -112,7 +112,7 @@ export function ConsensusPlaygroundDemo() {
 
   const handleReset = useCallback(() => {
     setNodes((prev) =>
-      prev.map((n) => ({ ...n, blocks: [], isLeader: false, status: "idle" }))
+      prev.map((n) => ({ ...n, blocks: [], isLeader: false, status: "idle" })),
     );
     setRounds([]);
   }, []);

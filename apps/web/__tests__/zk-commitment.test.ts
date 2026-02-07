@@ -22,7 +22,7 @@ describe("Hash Commitment", () => {
     });
     it("SHA-256 and Keccak produce different hashes", () => {
       expect(hashToHex("test", "sha256")).not.toBe(
-        hashToHex("test", "keccak256")
+        hashToHex("test", "keccak256"),
       );
     });
     it("different inputs produce different hashes", () => {

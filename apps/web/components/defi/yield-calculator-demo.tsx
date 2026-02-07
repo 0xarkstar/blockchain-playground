@@ -41,7 +41,12 @@ export function YieldCalculatorDemo() {
     const aprDecimal = apr / 100;
     return COMPOUNDING_OPTIONS.map(({ label, freq }) => {
       const apy = aprToApy(aprDecimal, freq);
-      const finalValue = calculateCompoundedValue(principal, aprDecimal, freq, duration);
+      const finalValue = calculateCompoundedValue(
+        principal,
+        aprDecimal,
+        freq,
+        duration,
+      );
       const totalReturn = finalValue - principal;
       const returnPercent = principal > 0 ? (totalReturn / principal) * 100 : 0;
 
@@ -57,17 +62,20 @@ export function YieldCalculatorDemo() {
   }, [principal, apr, duration]);
 
   const bestRow = useMemo(
-    () => rows.reduce((best, row) =>
-      row.finalValue > best.finalValue ? row : best
-    ),
-    [rows]
+    () =>
+      rows.reduce((best, row) =>
+        row.finalValue > best.finalValue ? row : best,
+      ),
+    [rows],
   );
 
   return (
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Parameters</Text>
+          <Text size="sm" fw={600}>
+            Parameters
+          </Text>
           <Group grow>
             <NumberInput
               label="Principal"
@@ -88,7 +96,9 @@ export function YieldCalculatorDemo() {
             />
           </Group>
           <div>
-            <Text size="xs" c="dimmed" mb={4}>Duration</Text>
+            <Text size="xs" c="dimmed" mb={4}>
+              Duration
+            </Text>
             <SegmentedControl
               value={durationKey}
               onChange={setDurationKey}
@@ -101,7 +111,9 @@ export function YieldCalculatorDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>APR → APY Conversion</Text>
+          <Text size="sm" fw={600}>
+            APR → APY Conversion
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -123,7 +135,9 @@ export function YieldCalculatorDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Final Values ({durationKey})</Text>
+          <Text size="sm" fw={600}>
+            Final Values ({durationKey})
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -147,14 +161,22 @@ export function YieldCalculatorDemo() {
                 >
                   <Table.Td>{row.label}</Table.Td>
                   <Table.Td ta="right">
-                    ${row.finalValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                    $
+                    {row.finalValue.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
                   </Table.Td>
                   <Table.Td ta="right">
                     <Text c="green">
-                      +${row.totalReturn.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      +$
+                      {row.totalReturn.toLocaleString(undefined, {
+                        maximumFractionDigits: 2,
+                      })}
                     </Text>
                   </Table.Td>
-                  <Table.Td ta="right">{row.returnPercent.toFixed(2)}%</Table.Td>
+                  <Table.Td ta="right">
+                    {row.returnPercent.toFixed(2)}%
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

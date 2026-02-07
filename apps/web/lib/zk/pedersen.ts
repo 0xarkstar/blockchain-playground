@@ -46,9 +46,7 @@ export interface HomomorphicDemo {
  * here we choose h = 9 (which is 2^(unknown) in the subgroup) for
  * pedagogical purposes.
  */
-export function createPedersenParams(
-  field?: FieldParams
-): PedersenParams {
+export function createPedersenParams(field?: FieldParams): PedersenParams {
   const p = field?.p ?? 23n;
   const q = field?.q ?? 11n;
   return { p, g: 2n, h: 9n, q };
@@ -58,7 +56,7 @@ export function createPedersenParams(
 export function pedersenCommit(
   params: PedersenParams,
   value: bigint,
-  randomness: bigint
+  randomness: bigint,
 ): PedersenCommitmentResult {
   const gPart = modPow(params.g, value, params.p);
   const hPart = modPow(params.h, randomness, params.p);
@@ -71,7 +69,7 @@ export function verifyPedersen(
   params: PedersenParams,
   value: bigint,
   randomness: bigint,
-  commitment: bigint
+  commitment: bigint,
 ): boolean {
   const recomputed = pedersenCommit(params, value, randomness);
   return recomputed.commitment === commitment;
@@ -83,13 +81,17 @@ export function demonstrateHomomorphic(
   v1: bigint,
   r1: bigint,
   v2: bigint,
-  r2: bigint
+  r2: bigint,
 ): HomomorphicDemo {
   const c1 = pedersenCommit(params, v1, r1);
   const c2 = pedersenCommit(params, v2, r2);
   const product = modMul(c1.commitment, c2.commitment, params.p);
   const combinedValue = modAdd(v1, v2, params.q);
   const combinedRand = modAdd(r1, r2, params.q);
-  const combined = pedersenCommit(params, combinedValue, combinedRand).commitment;
+  const combined = pedersenCommit(
+    params,
+    combinedValue,
+    combinedRand,
+  ).commitment;
   return { c1, c2, product, combined, matches: product === combined };
 }

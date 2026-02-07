@@ -43,7 +43,12 @@ export function buildMerkleRoot(transactions: Transaction[]): string {
     return hash("empty", "sha256");
   }
   const txHashes = transactions.map((tx) =>
-    JSON.stringify({ from: tx.from, to: tx.to, amount: tx.amount, data: tx.data })
+    JSON.stringify({
+      from: tx.from,
+      to: tx.to,
+      amount: tx.amount,
+      data: tx.data,
+    }),
   );
   const tree = new MerkleTree(txHashes, "sha256");
   return tree.root.hash;
@@ -70,7 +75,7 @@ export function createGenesisBlock(): Block {
 export function createBlock(
   previousBlock: Block,
   transactions: Transaction[],
-  difficulty: number
+  difficulty: number,
 ): Block {
   const merkleRoot = buildMerkleRoot(transactions);
   const header: BlockHeader = {
@@ -103,7 +108,10 @@ export interface MiningResult {
   timeMs: number;
 }
 
-export function mineBlock(block: Block, maxIterations = 1_000_000): MiningResult {
+export function mineBlock(
+  block: Block,
+  maxIterations = 1_000_000,
+): MiningResult {
   const start = performance.now();
   let hashesComputed = 0;
 
@@ -137,10 +145,13 @@ export function createTransaction(
   from: string,
   to: string,
   amount: number,
-  data?: string
+  data?: string,
 ): Transaction {
   return {
-    id: hash(`${from}${to}${amount}${Date.now()}${Math.random()}`, "sha256").slice(0, 18),
+    id: hash(
+      `${from}${to}${amount}${Date.now()}${Math.random()}`,
+      "sha256",
+    ).slice(0, 18),
     from,
     to,
     amount,

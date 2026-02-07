@@ -28,8 +28,10 @@ const EXAMPLE_ACCOUNTS: AccountState[] = [
     address: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
     balance: "1,234.56 ETH",
     nonce: "892",
-    codeHash: "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
-    storageRoot: "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+    codeHash:
+      "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+    storageRoot:
+      "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
   },
   {
     address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -49,7 +51,7 @@ export function StateExplorerDemo() {
     setLoading(true);
     setTimeout(() => {
       const found = EXAMPLE_ACCOUNTS.find(
-        (a) => a.address.toLowerCase() === address.toLowerCase()
+        (a) => a.address.toLowerCase() === address.toLowerCase(),
       );
       setAccount(
         found ?? {
@@ -60,7 +62,7 @@ export function StateExplorerDemo() {
             "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
           storageRoot:
             "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
-        }
+        },
       );
       setLoading(false);
     }, 300);
@@ -143,7 +145,10 @@ export function StateExplorerDemo() {
               <Text size="xs" c="dimmed">
                 Code Hash (keccak256 of contract bytecode)
               </Text>
-              <Code block style={{ wordBreak: "break-all", fontSize: "0.7rem" }}>
+              <Code
+                block
+                style={{ wordBreak: "break-all", fontSize: "0.7rem" }}
+              >
                 {account.codeHash}
               </Code>
             </div>
@@ -152,12 +157,19 @@ export function StateExplorerDemo() {
               <Text size="xs" c="dimmed">
                 Storage Root (Merkle Patricia Trie root of contract storage)
               </Text>
-              <Code block style={{ wordBreak: "break-all", fontSize: "0.7rem" }}>
+              <Code
+                block
+                style={{ wordBreak: "break-all", fontSize: "0.7rem" }}
+              >
                 {account.storageRoot}
               </Code>
             </div>
 
-            <Alert icon={<IconDatabase size={16} />} color="gray" variant="light">
+            <Alert
+              icon={<IconDatabase size={16} />}
+              color="gray"
+              variant="light"
+            >
               Each Ethereum account is stored as an RLP-encoded node in the
               global state trie, identified by keccak256(address). The state
               consists of: nonce, balance, storageRoot, and codeHash.

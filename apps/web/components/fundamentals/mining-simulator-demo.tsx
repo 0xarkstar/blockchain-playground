@@ -222,8 +222,7 @@ export function MiningSimulatorDemo() {
             </div>
 
             <Text size="xs" c="dimmed">
-              Target: hash must start with{" "}
-              <Code>{"0".repeat(difficulty)}</Code>
+              Target: hash must start with <Code>{"0".repeat(difficulty)}</Code>
             </Text>
           </Stack>
         </Paper>

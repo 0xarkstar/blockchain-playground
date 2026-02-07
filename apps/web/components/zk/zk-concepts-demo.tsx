@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import {
-  Stack, Paper, Button, Table, Badge, Group, Text, Alert, NumberInput, Progress,
+  Stack,
+  Paper,
+  Button,
+  Table,
+  Badge,
+  Group,
+  Text,
+  Alert,
+  NumberInput,
+  Progress,
 } from "@mantine/core";
 import { IconInfoCircle, IconCheck, IconX } from "@tabler/icons-react";
 import {
@@ -24,21 +33,21 @@ export function ZKConceptsDemo() {
   };
 
   const soundness = calculateSoundness(numRounds);
-  const cheatingProb = (soundness * 100).toFixed(
-    soundness < 0.01 ? 4 : 2
-  );
+  const cheatingProb = (soundness * 100).toFixed(soundness < 0.01 ? 4 : 2);
 
   return (
     <Stack gap="lg">
       <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        The Ali Baba Cave analogy explains ZK proofs without math.
-        A cave has two paths (A and B) connected by a magic door.
-        The prover enters one side; the verifier asks them to exit from a specific side.
+        The Ali Baba Cave analogy explains ZK proofs without math. A cave has
+        two paths (A and B) connected by a magic door. The prover enters one
+        side; the verifier asks them to exit from a specific side.
       </Alert>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Three Properties of ZK Proofs</Text>
+          <Text size="sm" fw={600}>
+            Three Properties of ZK Proofs
+          </Text>
           <Table>
             <Table.Thead>
               <Table.Tr>
@@ -53,8 +62,14 @@ export function ZKConceptsDemo() {
                   <Table.Td>
                     <Badge variant="light">{prop.name}</Badge>
                   </Table.Td>
-                  <Table.Td><Text size="sm">{prop.description}</Text></Table.Td>
-                  <Table.Td><Text size="xs" c="dimmed">{prop.example}</Text></Table.Td>
+                  <Table.Td>
+                    <Text size="sm">{prop.description}</Text>
+                  </Table.Td>
+                  <Table.Td>
+                    <Text size="xs" c="dimmed">
+                      {prop.example}
+                    </Text>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -64,7 +79,9 @@ export function ZKConceptsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Ali Baba Cave Simulation</Text>
+          <Text size="sm" fw={600}>
+            Ali Baba Cave Simulation
+          </Text>
           <Group grow>
             <NumberInput
               label="Rounds"
@@ -76,14 +93,20 @@ export function ZKConceptsDemo() {
           </Group>
           <Group>
             <Button
-              onClick={() => { setHasSecret(true); setSimulation(simulateAliBabaCave(true, numRounds)); }}
+              onClick={() => {
+                setHasSecret(true);
+                setSimulation(simulateAliBabaCave(true, numRounds));
+              }}
               variant={hasSecret ? "filled" : "light"}
               color="green"
             >
               Prover Knows Secret
             </Button>
             <Button
-              onClick={() => { setHasSecret(false); setSimulation(simulateAliBabaCave(false, numRounds)); }}
+              onClick={() => {
+                setHasSecret(false);
+                setSimulation(simulateAliBabaCave(false, numRounds));
+              }}
               variant={!hasSecret ? "filled" : "light"}
               color="red"
             >
@@ -93,11 +116,7 @@ export function ZKConceptsDemo() {
           <Text size="sm" c="dimmed">
             Cheating probability after {numRounds} round(s): {cheatingProb}%
           </Text>
-          <Progress
-            value={100 - soundness * 100}
-            color="green"
-            size="lg"
-          />
+          <Progress value={100 - soundness * 100} color="green" size="lg" />
         </Stack>
       </Paper>
 
@@ -105,7 +124,9 @@ export function ZKConceptsDemo() {
         <Paper p="md" withBorder>
           <Stack gap="md">
             <Group justify="space-between">
-              <Text size="sm" fw={600}>Results</Text>
+              <Text size="sm" fw={600}>
+                Results
+              </Text>
               <Badge
                 variant="light"
                 color={simulation.allPassed ? "green" : "red"}

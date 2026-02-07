@@ -14,7 +14,7 @@ export function calculateSwapOutput(
   reserveIn: number,
   reserveOut: number,
   amountIn: number,
-  feeRate: number = 0.003
+  feeRate: number = 0.003,
 ): SwapResult {
   if (reserveIn <= 0 || reserveOut <= 0 || amountIn <= 0) {
     return { amountOut: 0, priceImpact: 0, fee: 0, effectivePrice: 0 };
@@ -41,7 +41,7 @@ export function calculateSwapOutput(
 export function calculatePriceImpact(
   reserveIn: number,
   reserveOut: number,
-  amountIn: number
+  amountIn: number,
 ): number {
   if (reserveIn <= 0 || reserveOut <= 0 || amountIn <= 0) return 0;
 
@@ -52,10 +52,7 @@ export function calculatePriceImpact(
   return Math.abs(1 - executionPrice / spotPrice) * 100;
 }
 
-export function calculateSpotPrice(
-  reserveA: number,
-  reserveB: number
-): number {
+export function calculateSpotPrice(reserveA: number, reserveB: number): number {
   if (reserveA <= 0) return 0;
   return reserveB / reserveA;
 }
@@ -65,7 +62,7 @@ export function calculateLPTokens(
   reserveB: number,
   amountA: number,
   amountB: number,
-  totalSupply: number
+  totalSupply: number,
 ): number {
   if (totalSupply === 0) {
     // Initial liquidity: LP tokens = sqrt(amountA * amountB)
@@ -83,7 +80,7 @@ export function calculateRemoveLiquidity(
   reserveA: number,
   reserveB: number,
   lpAmount: number,
-  totalSupply: number
+  totalSupply: number,
 ): RemoveLiquidityResult {
   if (totalSupply <= 0 || lpAmount <= 0) {
     return { amountA: 0, amountB: 0 };

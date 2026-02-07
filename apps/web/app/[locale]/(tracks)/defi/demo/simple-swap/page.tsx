@@ -1,5 +1,15 @@
 import { useTranslations } from "next-intl";
-import { Container, Title, Text, Stack, Badge, Group, Breadcrumbs, Anchor, Paper } from "@mantine/core";
+import {
+  Container,
+  Title,
+  Text,
+  Stack,
+  Badge,
+  Group,
+  Breadcrumbs,
+  Anchor,
+  Paper,
+} from "@mantine/core";
 import { SimpleSwapDemo } from "../../../../../../components/defi/simple-swap-demo";
 
 export default function SimpleSwapPage() {
@@ -13,10 +23,14 @@ export default function SimpleSwapPage() {
         </Breadcrumbs>
         <div>
           <Group gap="xs" mb="xs">
-            <Badge variant="light" color="green">Beginner</Badge>
+            <Badge variant="light" color="green">
+              Beginner
+            </Badge>
           </Group>
           <Title order={1}>{t("title")}</Title>
-          <Text size="lg" c="dimmed" mt="xs">{t("description")}</Text>
+          <Text size="lg" c="dimmed" mt="xs">
+            {t("description")}
+          </Text>
         </div>
         <Paper p="lg" radius="md" withBorder>
           <SimpleSwapDemo />

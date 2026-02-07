@@ -2,16 +2,34 @@
 
 import { useState, useMemo } from "react";
 import {
-  Stack, Paper, TextInput, Button, Table, Code, Badge, Group, Text, Alert,
+  Stack,
+  Paper,
+  TextInput,
+  Button,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Alert,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
-  createERC721, mintNFT, transferNFT, ownerOf, balanceOfNFT, tokensOfOwner, totalSupplyNFT,
-  type ERC721State, type NFTMetadata,
+  createERC721,
+  mintNFT,
+  transferNFT,
+  ownerOf,
+  balanceOfNFT,
+  tokensOfOwner,
+  totalSupplyNFT,
+  type ERC721State,
+  type NFTMetadata,
 } from "../../lib/tokens/erc721";
 
 export function ERC721MinterDemo() {
-  const [state, setState] = useState<ERC721State>(() => createERC721("CryptoArt", "CART"));
+  const [state, setState] = useState<ERC721State>(() =>
+    createERC721("CryptoArt", "CART"),
+  );
   const [mintTo, setMintTo] = useState("alice");
   const [nftName, setNftName] = useState("Art #1");
   const [nftDesc, setNftDesc] = useState("A digital artwork");
@@ -51,7 +69,12 @@ export function ERC721MinterDemo() {
       setLastMessage("Invalid token ID");
       return;
     }
-    const result = transferNFT(state, transferFromAddr, transferToAddr, tokenId);
+    const result = transferNFT(
+      state,
+      transferFromAddr,
+      transferToAddr,
+      tokenId,
+    );
     setState(result.newState);
     setLastMessage(result.message);
   };
@@ -60,28 +83,64 @@ export function ERC721MinterDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Mint NFT</Text>
+          <Text size="sm" fw={600}>
+            Mint NFT
+          </Text>
           <Group grow>
-            <TextInput label="To" value={mintTo} onChange={(e) => setMintTo(e.currentTarget.value)} />
-            <TextInput label="Name" value={nftName} onChange={(e) => setNftName(e.currentTarget.value)} />
+            <TextInput
+              label="To"
+              value={mintTo}
+              onChange={(e) => setMintTo(e.currentTarget.value)}
+            />
+            <TextInput
+              label="Name"
+              value={nftName}
+              onChange={(e) => setNftName(e.currentTarget.value)}
+            />
           </Group>
           <Group grow>
-            <TextInput label="Description" value={nftDesc} onChange={(e) => setNftDesc(e.currentTarget.value)} />
-            <TextInput label="Image URI" value={nftImage} onChange={(e) => setNftImage(e.currentTarget.value)} />
+            <TextInput
+              label="Description"
+              value={nftDesc}
+              onChange={(e) => setNftDesc(e.currentTarget.value)}
+            />
+            <TextInput
+              label="Image URI"
+              value={nftImage}
+              onChange={(e) => setNftImage(e.currentTarget.value)}
+            />
           </Group>
-          <Button onClick={handleMint} variant="light" color="green">Mint</Button>
+          <Button onClick={handleMint} variant="light" color="green">
+            Mint
+          </Button>
         </Stack>
       </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Transfer NFT</Text>
+          <Text size="sm" fw={600}>
+            Transfer NFT
+          </Text>
           <Group grow>
-            <TextInput label="From" value={transferFromAddr} onChange={(e) => setTransferFromAddr(e.currentTarget.value)} />
-            <TextInput label="To" value={transferToAddr} onChange={(e) => setTransferToAddr(e.currentTarget.value)} />
-            <TextInput label="Token ID" value={transferTokenId} onChange={(e) => setTransferTokenId(e.currentTarget.value)} />
+            <TextInput
+              label="From"
+              value={transferFromAddr}
+              onChange={(e) => setTransferFromAddr(e.currentTarget.value)}
+            />
+            <TextInput
+              label="To"
+              value={transferToAddr}
+              onChange={(e) => setTransferToAddr(e.currentTarget.value)}
+            />
+            <TextInput
+              label="Token ID"
+              value={transferTokenId}
+              onChange={(e) => setTransferTokenId(e.currentTarget.value)}
+            />
           </Group>
-          <Button onClick={handleTransfer} variant="light" color="blue">Transfer</Button>
+          <Button onClick={handleTransfer} variant="light" color="blue">
+            Transfer
+          </Button>
         </Stack>
       </Paper>
 
@@ -94,7 +153,9 @@ export function ERC721MinterDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Collection: {state.name} ({state.symbol})</Text>
+            <Text size="sm" fw={600}>
+              Collection: {state.name} ({state.symbol})
+            </Text>
             <Badge variant="light">Total: {totalSupplyNFT(state)}</Badge>
           </Group>
           <Table striped>
@@ -108,15 +169,21 @@ export function ERC721MinterDemo() {
             <Table.Tbody>
               {Object.entries(state.owners).map(([id, owner]) => (
                 <Table.Tr key={id}>
-                  <Table.Td><Badge variant="light">#{id}</Badge></Table.Td>
-                  <Table.Td><Code>{owner}</Code></Table.Td>
+                  <Table.Td>
+                    <Badge variant="light">#{id}</Badge>
+                  </Table.Td>
+                  <Table.Td>
+                    <Code>{owner}</Code>
+                  </Table.Td>
                   <Table.Td>{state.metadata[Number(id)]?.name ?? "—"}</Table.Td>
                 </Table.Tr>
               ))}
               {Object.keys(state.owners).length === 0 && (
                 <Table.Tr>
                   <Table.Td colSpan={3} ta="center">
-                    <Text size="sm" c="dimmed">No tokens minted</Text>
+                    <Text size="sm" c="dimmed">
+                      No tokens minted
+                    </Text>
                   </Table.Td>
                 </Table.Tr>
               )}
@@ -127,7 +194,9 @@ export function ERC721MinterDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Balances by Owner</Text>
+          <Text size="sm" fw={600}>
+            Balances by Owner
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -139,12 +208,16 @@ export function ERC721MinterDemo() {
             <Table.Tbody>
               {owners.map((addr) => (
                 <Table.Tr key={addr}>
-                  <Table.Td><Code>{addr}</Code></Table.Td>
+                  <Table.Td>
+                    <Code>{addr}</Code>
+                  </Table.Td>
                   <Table.Td ta="right">{balanceOfNFT(state, addr)}</Table.Td>
                   <Table.Td>
                     <Group gap="xs">
                       {tokensOfOwner(state, addr).map((id) => (
-                        <Badge key={id} size="xs" variant="outline">#{id}</Badge>
+                        <Badge key={id} size="xs" variant="outline">
+                          #{id}
+                        </Badge>
                       ))}
                     </Group>
                   </Table.Td>

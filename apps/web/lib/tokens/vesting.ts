@@ -32,7 +32,7 @@ export function createVestingSchedule(
   vestingType: VestingType,
   startTime: number,
   cliffDuration: number,
-  totalDuration: number
+  totalDuration: number,
 ): VestingSchedule {
   return {
     beneficiary,
@@ -47,7 +47,7 @@ export function createVestingSchedule(
 
 export function calculateVestedAmount(
   schedule: VestingSchedule,
-  currentTime: number
+  currentTime: number,
 ): number {
   const elapsed = currentTime - schedule.startTime;
 
@@ -77,29 +77,27 @@ export function calculateVestedAmount(
 
 export function getVestingInfo(
   schedule: VestingSchedule,
-  currentTime: number
+  currentTime: number,
 ): VestingInfo {
   const vestedAmount = calculateVestedAmount(schedule, currentTime);
   const releasableAmount = Math.max(0, vestedAmount - schedule.released);
   const remainingAmount = schedule.totalAmount - vestedAmount;
   const vestedPercent =
-    schedule.totalAmount > 0
-      ? (vestedAmount / schedule.totalAmount) * 100
-      : 0;
+    schedule.totalAmount > 0 ? (vestedAmount / schedule.totalAmount) * 100 : 0;
 
   return {
     vestedAmount,
     releasableAmount,
     remainingAmount,
     vestedPercent,
-    isCliffReached: (currentTime - schedule.startTime) >= schedule.cliffDuration,
+    isCliffReached: currentTime - schedule.startTime >= schedule.cliffDuration,
     isFullyVested: vestedAmount >= schedule.totalAmount,
   };
 }
 
 export function releaseTokens(
   schedule: VestingSchedule,
-  currentTime: number
+  currentTime: number,
 ): { readonly newSchedule: VestingSchedule; readonly released: number } {
   const vestedAmount = calculateVestedAmount(schedule, currentTime);
   const releasable = Math.max(0, vestedAmount - schedule.released);
@@ -111,7 +109,7 @@ export function releaseTokens(
 
 export function generateVestingCurve(
   schedule: VestingSchedule,
-  points: number = 20
+  points: number = 20,
 ): readonly VestingPoint[] {
   const result: VestingPoint[] = [];
   const step = schedule.totalDuration / points;

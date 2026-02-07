@@ -1,6 +1,6 @@
 export function calculateUtilizationRate(
   totalBorrowed: number,
-  totalSupply: number
+  totalSupply: number,
 ): number {
   if (totalSupply <= 0) return 0;
   return totalBorrowed / totalSupply;
@@ -11,7 +11,7 @@ export function calculateBorrowRate(
   baseRate: number,
   slope1: number,
   slope2: number,
-  kink: number
+  kink: number,
 ): number {
   if (utilization <= 0) return baseRate;
   if (kink <= 0 || kink >= 1) {
@@ -32,7 +32,7 @@ export function calculateBorrowRate(
 export function calculateSupplyRate(
   utilization: number,
   borrowRate: number,
-  reserveFactor: number
+  reserveFactor: number,
 ): number {
   if (utilization <= 0 || borrowRate <= 0) return 0;
   return utilization * borrowRate * (1 - reserveFactor);
@@ -41,7 +41,7 @@ export function calculateSupplyRate(
 export function calculateHealthFactor(
   collateralValue: number,
   borrowedValue: number,
-  liquidationThreshold: number
+  liquidationThreshold: number,
 ): number {
   if (borrowedValue <= 0) return Infinity;
   return (collateralValue * liquidationThreshold) / borrowedValue;
@@ -49,7 +49,7 @@ export function calculateHealthFactor(
 
 export function calculateMaxBorrow(
   collateralValue: number,
-  collateralFactor: number
+  collateralFactor: number,
 ): number {
   if (collateralValue <= 0 || collateralFactor <= 0) return 0;
   return collateralValue * collateralFactor;
@@ -58,7 +58,7 @@ export function calculateMaxBorrow(
 export function calculateLiquidationPrice(
   borrowedValue: number,
   collateralAmount: number,
-  liquidationThreshold: number
+  liquidationThreshold: number,
 ): number {
   if (collateralAmount <= 0 || liquidationThreshold <= 0) return 0;
   return borrowedValue / (collateralAmount * liquidationThreshold);

@@ -1,5 +1,15 @@
 import { useTranslations } from "next-intl";
-import { Container, Title, Text, Stack, Badge, Group, Breadcrumbs, Anchor, Paper } from "@mantine/core";
+import {
+  Container,
+  Title,
+  Text,
+  Stack,
+  Badge,
+  Group,
+  Breadcrumbs,
+  Anchor,
+  Paper,
+} from "@mantine/core";
 import { TransactionBuilderDemo } from "../../../../../../components/fundamentals/transaction-builder-demo";
 
 export default function TransactionBuilderPage() {
@@ -13,11 +23,17 @@ export default function TransactionBuilderPage() {
         </Breadcrumbs>
         <div>
           <Group gap="xs" mb="xs">
-            <Badge variant="light" color="yellow">Intermediate</Badge>
-            <Badge variant="light" color="violet">On-Chain</Badge>
+            <Badge variant="light" color="yellow">
+              Intermediate
+            </Badge>
+            <Badge variant="light" color="violet">
+              On-Chain
+            </Badge>
           </Group>
           <Title order={1}>{t("title")}</Title>
-          <Text size="lg" c="dimmed" mt="xs">{t("description")}</Text>
+          <Text size="lg" c="dimmed" mt="xs">
+            {t("description")}
+          </Text>
         </div>
         <Paper p="lg" radius="md" withBorder>
           <TransactionBuilderDemo />

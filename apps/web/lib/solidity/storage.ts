@@ -71,10 +71,16 @@ export function getTypeSize(type: SolidityStorageType): number {
 }
 
 export function calculateStorageLayout(
-  variables: readonly StorageVariable[]
+  variables: readonly StorageVariable[],
 ): StorageLayout {
   if (variables.length === 0) {
-    return { assignments: [], totalSlots: 0, usedBytes: 0, wastedBytes: 0, efficiency: 0 };
+    return {
+      assignments: [],
+      totalSlots: 0,
+      usedBytes: 0,
+      wastedBytes: 0,
+      efficiency: 0,
+    };
   }
 
   const assignments: SlotAssignment[] = [];
@@ -110,14 +116,20 @@ export function calculateStorageLayout(
 }
 
 export function optimizeStorageLayout(
-  variables: readonly StorageVariable[]
+  variables: readonly StorageVariable[],
 ): StorageLayout {
   if (variables.length === 0) {
-    return { assignments: [], totalSlots: 0, usedBytes: 0, wastedBytes: 0, efficiency: 0 };
+    return {
+      assignments: [],
+      totalSlots: 0,
+      usedBytes: 0,
+      wastedBytes: 0,
+      efficiency: 0,
+    };
   }
 
   const sorted = [...variables].sort(
-    (a, b) => getTypeSize(b.type) - getTypeSize(a.type)
+    (a, b) => getTypeSize(b.type) - getTypeSize(a.type),
   );
 
   return calculateStorageLayout(sorted);

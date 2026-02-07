@@ -1,7 +1,17 @@
-export { hash, hashBytes, toBinaryString, computeAvalancheEffect } from "./hash";
+export {
+  hash,
+  hashBytes,
+  toBinaryString,
+  computeAvalancheEffect,
+} from "./hash";
 export type { HashAlgorithm } from "./hash";
 
-export { generateKeyPair, publicKeyToAddress, signMessage, verifySignature } from "./signature";
+export {
+  generateKeyPair,
+  publicKeyToAddress,
+  signMessage,
+  verifySignature,
+} from "./signature";
 export type { KeyPair } from "./signature";
 
 export { MerkleTree } from "./merkle";

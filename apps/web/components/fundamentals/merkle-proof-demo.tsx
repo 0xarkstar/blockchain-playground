@@ -48,15 +48,12 @@ export function MerkleProofDemo() {
     setVerifyResult(null);
   }, [newItem]);
 
-  const handleRemoveItem = useCallback(
-    (index: number) => {
-      setItems((prev) => prev.filter((_, i) => i !== index));
-      setProof(null);
-      setVerifyResult(null);
-      setSelectedLeaf(null);
-    },
-    []
-  );
+  const handleRemoveItem = useCallback((index: number) => {
+    setItems((prev) => prev.filter((_, i) => i !== index));
+    setProof(null);
+    setVerifyResult(null);
+    setSelectedLeaf(null);
+  }, []);
 
   const handleGenerateProof = useCallback(
     (index: number) => {
@@ -66,7 +63,7 @@ export function MerkleProofDemo() {
       setProof(p);
       setVerifyResult(null);
     },
-    [tree]
+    [tree],
   );
 
   const handleVerifyProof = useCallback(() => {
@@ -185,7 +182,10 @@ export function MerkleProofDemo() {
               <Text size="xs" c="dimmed">
                 Leaf Hash
               </Text>
-              <Code block style={{ wordBreak: "break-all", fontSize: "0.7rem" }}>
+              <Code
+                block
+                style={{ wordBreak: "break-all", fontSize: "0.7rem" }}
+              >
                 {proof.leaf}
               </Code>
             </div>
@@ -216,11 +216,7 @@ export function MerkleProofDemo() {
             {verifyResult !== null && (
               <Alert
                 icon={
-                  verifyResult ? (
-                    <IconCheck size={16} />
-                  ) : (
-                    <IconX size={16} />
-                  )
+                  verifyResult ? <IconCheck size={16} /> : <IconX size={16} />
                 }
                 color={verifyResult ? "green" : "red"}
                 title={verifyResult ? "Proof Valid" : "Proof Invalid"}

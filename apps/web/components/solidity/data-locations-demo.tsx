@@ -29,43 +29,64 @@ const LOCATIONS: Record<string, LocationInfo> = {
     persistent: true,
     mutable: true,
     gasCost: "20,000 (write) / 2,100 (read)",
-    description: "Persistent on-chain state. Survives function calls and transactions. Most expensive.",
+    description:
+      "Persistent on-chain state. Survives function calls and transactions. Most expensive.",
   },
   memory: {
     location: "memory",
     persistent: false,
     mutable: true,
     gasCost: "3 (read/write) + expansion",
-    description: "Temporary during function execution. Cleared after external call returns. Cheap for computation.",
+    description:
+      "Temporary during function execution. Cleared after external call returns. Cheap for computation.",
   },
   calldata: {
     location: "calldata",
     persistent: false,
     mutable: false,
     gasCost: "4-16 per byte (input only)",
-    description: "Read-only input data from the transaction. Cannot be modified. Cheapest for function parameters.",
+    description:
+      "Read-only input data from the transaction. Cannot be modified. Cheapest for function parameters.",
   },
   stack: {
     location: "stack",
     persistent: false,
     mutable: true,
     gasCost: "2-3 (cheapest)",
-    description: "EVM execution stack. Limited to 1024 depth, 16 accessible. Used for value types and locals.",
+    description:
+      "EVM execution stack. Limited to 1024 depth, 16 accessible. Used for value types and locals.",
   },
 };
 
-function getRecommendation(context: VariableContext, dataType: string): {
+function getRecommendation(
+  context: VariableContext,
+  dataType: string,
+): {
   recommended: string;
   reason: string;
   alternatives: string[];
 } {
-  const isValueType = ["uint256", "address", "bool", "bytes32", "int256", "uint8"].includes(dataType);
-  const isReferenceType = ["struct", "array", "mapping", "string", "bytes"].includes(dataType);
+  const isValueType = [
+    "uint256",
+    "address",
+    "bool",
+    "bytes32",
+    "int256",
+    "uint8",
+  ].includes(dataType);
+  const isReferenceType = [
+    "struct",
+    "array",
+    "mapping",
+    "string",
+    "bytes",
+  ].includes(dataType);
 
   if (context === "state") {
     return {
       recommended: "storage",
-      reason: "State variables always live in storage — they persist across transactions.",
+      reason:
+        "State variables always live in storage — they persist across transactions.",
       alternatives: [],
     };
   }
@@ -74,13 +95,15 @@ function getRecommendation(context: VariableContext, dataType: string): {
     if (isValueType) {
       return {
         recommended: "stack",
-        reason: "Value type parameters are copied to the stack. No explicit location needed.",
+        reason:
+          "Value type parameters are copied to the stack. No explicit location needed.",
         alternatives: [],
       };
     }
     return {
       recommended: "calldata",
-      reason: "Reference type parameters should use calldata (read-only) for cheapest gas. Use memory if modification needed.",
+      reason:
+        "Reference type parameters should use calldata (read-only) for cheapest gas. Use memory if modification needed.",
       alternatives: ["memory"],
     };
   }
@@ -96,7 +119,8 @@ function getRecommendation(context: VariableContext, dataType: string): {
     if (isReferenceType) {
       return {
         recommended: "memory",
-        reason: "Local reference types default to memory. Temporary and mutable.",
+        reason:
+          "Local reference types default to memory. Temporary and mutable.",
         alternatives: ["storage (reference to state)"],
       };
     }
@@ -132,8 +156,17 @@ const CONTEXTS: { value: VariableContext; label: string }[] = [
 ];
 
 const DATA_TYPES = [
-  "uint256", "address", "bool", "bytes32", "int256", "uint8",
-  "struct", "array", "mapping", "string", "bytes",
+  "uint256",
+  "address",
+  "bool",
+  "bytes32",
+  "int256",
+  "uint8",
+  "struct",
+  "array",
+  "mapping",
+  "string",
+  "bytes",
 ];
 
 export function DataLocationsDemo() {
@@ -142,14 +175,16 @@ export function DataLocationsDemo() {
 
   const recommendation = useMemo(
     () => getRecommendation(context, dataType),
-    [context, dataType]
+    [context, dataType],
   );
 
   return (
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Variable Context</Text>
+          <Text size="sm" fw={600}>
+            Variable Context
+          </Text>
           <SegmentedControl
             data={CONTEXTS}
             value={context}
@@ -167,7 +202,9 @@ export function DataLocationsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Recommendation</Text>
+          <Text size="sm" fw={600}>
+            Recommendation
+          </Text>
           <Alert icon={<IconInfoCircle size={16} />} color="blue">
             <Text fw={600}>Use: {recommendation.recommended}</Text>
             <Text size="sm">{recommendation.reason}</Text>
@@ -182,7 +219,9 @@ export function DataLocationsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Location Comparison</Text>
+          <Text size="sm" fw={600}>
+            Location Comparison
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -197,30 +236,49 @@ export function DataLocationsDemo() {
                 <Table.Tr
                   key={loc.location}
                   style={{
-                    backgroundColor: loc.location === recommendation.recommended
-                      ? "var(--mantine-color-blue-light)"
-                      : undefined,
+                    backgroundColor:
+                      loc.location === recommendation.recommended
+                        ? "var(--mantine-color-blue-light)"
+                        : undefined,
                   }}
                 >
                   <Table.Td>
                     <Badge
-                      variant={loc.location === recommendation.recommended ? "filled" : "outline"}
-                      color={loc.location === recommendation.recommended ? "blue" : "gray"}
+                      variant={
+                        loc.location === recommendation.recommended
+                          ? "filled"
+                          : "outline"
+                      }
+                      color={
+                        loc.location === recommendation.recommended
+                          ? "blue"
+                          : "gray"
+                      }
                     >
                       {loc.location}
                     </Badge>
                   </Table.Td>
                   <Table.Td>
-                    <Badge size="xs" color={loc.persistent ? "green" : "gray"} variant="light">
+                    <Badge
+                      size="xs"
+                      color={loc.persistent ? "green" : "gray"}
+                      variant="light"
+                    >
                       {loc.persistent ? "Yes" : "No"}
                     </Badge>
                   </Table.Td>
                   <Table.Td>
-                    <Badge size="xs" color={loc.mutable ? "green" : "red"} variant="light">
+                    <Badge
+                      size="xs"
+                      color={loc.mutable ? "green" : "red"}
+                      variant="light"
+                    >
                       {loc.mutable ? "Yes" : "No"}
                     </Badge>
                   </Table.Td>
-                  <Table.Td><Text size="xs">{loc.gasCost}</Text></Table.Td>
+                  <Table.Td>
+                    <Text size="xs">{loc.gasCost}</Text>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -230,28 +288,56 @@ export function DataLocationsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Rules Summary</Text>
+          <Text size="sm" fw={600}>
+            Rules Summary
+          </Text>
           <Table>
             <Table.Tbody>
               <Table.Tr>
-                <Table.Td><Badge size="xs" variant="outline">State vars</Badge></Table.Td>
+                <Table.Td>
+                  <Badge size="xs" variant="outline">
+                    State vars
+                  </Badge>
+                </Table.Td>
                 <Table.Td>Always storage (implicit)</Table.Td>
               </Table.Tr>
               <Table.Tr>
-                <Table.Td><Badge size="xs" variant="outline">Value params</Badge></Table.Td>
+                <Table.Td>
+                  <Badge size="xs" variant="outline">
+                    Value params
+                  </Badge>
+                </Table.Td>
                 <Table.Td>Copied to stack (no keyword needed)</Table.Td>
               </Table.Tr>
               <Table.Tr>
-                <Table.Td><Badge size="xs" variant="outline">Reference params</Badge></Table.Td>
-                <Table.Td>calldata (read-only) or memory (mutable) required</Table.Td>
+                <Table.Td>
+                  <Badge size="xs" variant="outline">
+                    Reference params
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  calldata (read-only) or memory (mutable) required
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
-                <Table.Td><Badge size="xs" variant="outline">Local ref vars</Badge></Table.Td>
-                <Table.Td>memory (default) or storage (state reference)</Table.Td>
+                <Table.Td>
+                  <Badge size="xs" variant="outline">
+                    Local ref vars
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  memory (default) or storage (state reference)
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
-                <Table.Td><Badge size="xs" variant="outline">Mappings</Badge></Table.Td>
-                <Table.Td>Only in storage — cannot be in memory or calldata</Table.Td>
+                <Table.Td>
+                  <Badge size="xs" variant="outline">
+                    Mappings
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  Only in storage — cannot be in memory or calldata
+                </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>

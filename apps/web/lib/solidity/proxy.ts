@@ -44,15 +44,19 @@ export interface DelegatecallVisualization {
 }
 
 // EIP-1967 storage slots (keccak256 hashes - 1)
-const EIP_1967_IMPLEMENTATION = "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc";
-const EIP_1967_ADMIN = "0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103";
-const EIP_1967_BEACON = "0xa3f0ad74e5423aebfd80d3ef4346578335a9a72aeaee59ff6cb3582b35133d50";
+const EIP_1967_IMPLEMENTATION =
+  "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc";
+const EIP_1967_ADMIN =
+  "0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103";
+const EIP_1967_BEACON =
+  "0xa3f0ad74e5423aebfd80d3ef4346578335a9a72aeaee59ff6cb3582b35133d50";
 
 const PROXY_INFO: Record<ProxyType, ProxyInfo> = {
   transparent: {
     type: "transparent",
     name: "Transparent Proxy (EIP-1967)",
-    description: "Admin can upgrade, users interact directly. Proxy checks if caller is admin; if so, handles upgrades, otherwise delegates to implementation.",
+    description:
+      "Admin can upgrade, users interact directly. Proxy checks if caller is admin; if so, handles upgrades, otherwise delegates to implementation.",
     pros: [
       "Simple mental model — admin upgrades, users delegate",
       "No function selector clashes between proxy and implementation",
@@ -71,7 +75,8 @@ const PROXY_INFO: Record<ProxyType, ProxyInfo> = {
   uups: {
     type: "uups",
     name: "UUPS Proxy (EIP-1822)",
-    description: "Upgrade logic lives in the implementation contract itself. The proxy is minimal — just a delegatecall forwarder. Cheaper to deploy.",
+    description:
+      "Upgrade logic lives in the implementation contract itself. The proxy is minimal — just a delegatecall forwarder. Cheaper to deploy.",
     pros: [
       "Cheaper deployment (minimal proxy, no admin logic)",
       "No admin check overhead on each call",
@@ -89,7 +94,8 @@ const PROXY_INFO: Record<ProxyType, ProxyInfo> = {
   diamond: {
     type: "diamond",
     name: "Diamond Proxy (EIP-2535)",
-    description: "Multi-facet proxy that routes function calls to different implementation contracts (facets) based on function selectors.",
+    description:
+      "Multi-facet proxy that routes function calls to different implementation contracts (facets) based on function selectors.",
     pros: [
       "Unlimited contract size (split across facets)",
       "Granular upgrades — update individual facets",
@@ -123,7 +129,7 @@ export function createProxyState(type: ProxyType, admin: string): ProxyState {
 export function simulateUpgrade(
   state: ProxyState,
   newImplementation: string,
-  caller: string
+  caller: string,
 ): UpgradeResult {
   const normalizedCaller = caller.toLowerCase();
   const normalizedImpl = newImplementation.toLowerCase();
@@ -178,7 +184,7 @@ export function simulateUpgrade(
 export function visualizeDelegatecall(
   caller: string,
   proxy: string,
-  implementation: string
+  implementation: string,
 ): DelegatecallVisualization {
   return {
     steps: [
@@ -193,7 +199,8 @@ export function visualizeDelegatecall(
         step: 2,
         from: proxy,
         to: proxy,
-        description: "Proxy fallback() triggered — no matching function selector",
+        description:
+          "Proxy fallback() triggered — no matching function selector",
         context: "Proxy reads implementation address from EIP-1967 slot",
       },
       {

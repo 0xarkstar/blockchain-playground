@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 import {
-  Stack, Paper, Button, Table, Code, Badge, Group, Text, Alert, TextInput, Select,
+  Stack,
+  Paper,
+  Button,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Alert,
+  TextInput,
+  Select,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
@@ -48,16 +58,20 @@ export function ZKSetMembershipDemo() {
     <Stack gap="lg">
       <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
         Prove you belong to a group without revealing which member you are.
-        Members commit to their identity via hash, forming a Merkle tree.
-        A Merkle path proves inclusion without exposing the member index.
+        Members commit to their identity via hash, forming a Merkle tree. A
+        Merkle path proves inclusion without exposing the member index.
       </Alert>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Group Members</Text>
+          <Text size="sm" fw={600}>
+            Group Members
+          </Text>
           <Group>
             {members.map((m, i) => (
-              <Badge key={i} variant="light">{m}</Badge>
+              <Badge key={i} variant="light">
+                {m}
+              </Badge>
             ))}
           </Group>
           <Button onClick={handleCreateGroup} variant="light">
@@ -70,8 +84,12 @@ export function ZKSetMembershipDemo() {
         <>
           <Paper p="md" withBorder>
             <Stack gap="sm">
-              <Text size="sm" fw={600}>Merkle Tree</Text>
-              <Text size="sm">Root: <Code>{group.root.slice(0, 18)}...</Code></Text>
+              <Text size="sm" fw={600}>
+                Merkle Tree
+              </Text>
+              <Text size="sm">
+                Root: <Code>{group.root.slice(0, 18)}...</Code>
+              </Text>
               <Table striped>
                 <Table.Thead>
                   <Table.Tr>
@@ -83,7 +101,9 @@ export function ZKSetMembershipDemo() {
                   {group.members.map((m, i) => (
                     <Table.Tr key={i}>
                       <Table.Td>{members[i]}</Table.Td>
-                      <Table.Td><Code>{m.commitment.slice(0, 18)}...</Code></Table.Td>
+                      <Table.Td>
+                        <Code>{m.commitment.slice(0, 18)}...</Code>
+                      </Table.Td>
                     </Table.Tr>
                   ))}
                 </Table.Tbody>
@@ -93,7 +113,9 @@ export function ZKSetMembershipDemo() {
 
           <Paper p="md" withBorder>
             <Stack gap="md">
-              <Text size="sm" fw={600}>Prove Membership</Text>
+              <Text size="sm" fw={600}>
+                Prove Membership
+              </Text>
               <Select
                 label="I am..."
                 value={selectedMember}
@@ -117,14 +139,21 @@ export function ZKSetMembershipDemo() {
             <Paper p="md" withBorder>
               <Stack gap="sm">
                 <Group justify="space-between">
-                  <Text size="sm" fw={600}>Proof</Text>
+                  <Text size="sm" fw={600}>
+                    Proof
+                  </Text>
                   {verifyResult !== null && (
-                    <Badge variant="light" color={verifyResult ? "green" : "red"}>
+                    <Badge
+                      variant="light"
+                      color={verifyResult ? "green" : "red"}
+                    >
                       {verifyResult ? "Verified" : "Invalid"}
                     </Badge>
                   )}
                 </Group>
-                <Text size="sm">Path length: {proof.merklePath.length} nodes</Text>
+                <Text size="sm">
+                  Path length: {proof.merklePath.length} nodes
+                </Text>
                 <Table striped>
                   <Table.Thead>
                     <Table.Tr>
@@ -137,8 +166,14 @@ export function ZKSetMembershipDemo() {
                     {proof.merklePath.map((node, i) => (
                       <Table.Tr key={i}>
                         <Table.Td>{i + 1}</Table.Td>
-                        <Table.Td><Code>{node.hash.slice(0, 18)}...</Code></Table.Td>
-                        <Table.Td><Badge variant="light" size="sm">{node.position}</Badge></Table.Td>
+                        <Table.Td>
+                          <Code>{node.hash.slice(0, 18)}...</Code>
+                        </Table.Td>
+                        <Table.Td>
+                          <Badge variant="light" size="sm">
+                            {node.position}
+                          </Badge>
+                        </Table.Td>
                       </Table.Tr>
                     ))}
                   </Table.Tbody>
@@ -151,7 +186,9 @@ export function ZKSetMembershipDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="sm">
-          <Text size="sm" fw={600}>Privacy Comparison</Text>
+          <Text size="sm" fw={600}>
+            Privacy Comparison
+          </Text>
           <Table>
             <Table.Thead>
               <Table.Tr>
@@ -162,14 +199,30 @@ export function ZKSetMembershipDemo() {
             </Table.Thead>
             <Table.Tbody>
               <Table.Tr>
-                <Table.Td><Badge variant="light" color="red">Transparent</Badge></Table.Td>
+                <Table.Td>
+                  <Badge variant="light" color="red">
+                    Transparent
+                  </Badge>
+                </Table.Td>
                 <Table.Td>{comparison.transparent.revealed}</Table.Td>
-                <Table.Td><Text size="xs" c="dimmed">{comparison.transparent.info}</Text></Table.Td>
+                <Table.Td>
+                  <Text size="xs" c="dimmed">
+                    {comparison.transparent.info}
+                  </Text>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
-                <Table.Td><Badge variant="light" color="green">Zero-Knowledge</Badge></Table.Td>
+                <Table.Td>
+                  <Badge variant="light" color="green">
+                    Zero-Knowledge
+                  </Badge>
+                </Table.Td>
                 <Table.Td>{comparison.zk.revealed}</Table.Td>
-                <Table.Td><Text size="xs" c="dimmed">{comparison.zk.info}</Text></Table.Td>
+                <Table.Td>
+                  <Text size="xs" c="dimmed">
+                    {comparison.zk.info}
+                  </Text>
+                </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>

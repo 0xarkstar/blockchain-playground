@@ -30,7 +30,9 @@ export interface AuctionResult {
   readonly message: string;
 }
 
-export function createDutchAuction(config: DutchAuctionConfig): DutchAuctionState {
+export function createDutchAuction(
+  config: DutchAuctionConfig,
+): DutchAuctionState {
   return {
     config: {
       ...config,
@@ -47,27 +49,27 @@ export function createDutchAuction(config: DutchAuctionConfig): DutchAuctionStat
 
 export function getCurrentPrice(
   config: DutchAuctionConfig,
-  currentTime: number
+  currentTime: number,
 ): number {
   const elapsed = currentTime - config.startTime;
   if (elapsed <= 0) return config.startPrice;
   if (elapsed >= config.duration) return config.endPrice;
 
-  const decay = (config.startPrice - config.endPrice) * (elapsed / config.duration);
+  const decay =
+    (config.startPrice - config.endPrice) * (elapsed / config.duration);
   return config.startPrice - decay;
 }
 
 export function getAuctionPriceInfo(
   config: DutchAuctionConfig,
-  currentTime: number
+  currentTime: number,
 ): AuctionPriceInfo {
   const currentPrice = getCurrentPrice(config, currentTime);
   const elapsed = Math.max(0, currentTime - config.startTime);
   const remaining = Math.max(0, config.duration - elapsed);
   const priceDrop = config.startPrice - config.endPrice;
-  const percentDecayed = priceDrop > 0
-    ? ((config.startPrice - currentPrice) / priceDrop) * 100
-    : 0;
+  const percentDecayed =
+    priceDrop > 0 ? ((config.startPrice - currentPrice) / priceDrop) * 100 : 0;
 
   return {
     currentPrice,
@@ -82,17 +84,29 @@ export function getAuctionPriceInfo(
 export function settleDutchAuction(
   state: DutchAuctionState,
   buyer: string,
-  currentTime: number
+  currentTime: number,
 ): AuctionResult {
   if (state.settled) {
-    return { success: false, newState: state, message: "Auction already settled" };
+    return {
+      success: false,
+      newState: state,
+      message: "Auction already settled",
+    };
   }
   if (buyer === state.config.seller) {
-    return { success: false, newState: state, message: "Seller cannot buy own auction" };
+    return {
+      success: false,
+      newState: state,
+      message: "Seller cannot buy own auction",
+    };
   }
   const elapsed = currentTime - state.config.startTime;
   if (elapsed < 0) {
-    return { success: false, newState: state, message: "Auction has not started" };
+    return {
+      success: false,
+      newState: state,
+      message: "Auction has not started",
+    };
   }
   if (elapsed > state.config.duration) {
     return { success: false, newState: state, message: "Auction has ended" };
@@ -115,7 +129,7 @@ export function settleDutchAuction(
 
 export function generatePriceCurve(
   config: DutchAuctionConfig,
-  points: number = 20
+  points: number = 20,
 ): readonly { readonly time: number; readonly price: number }[] {
   const result: { time: number; price: number }[] = [];
   const step = config.duration / points;

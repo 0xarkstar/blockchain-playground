@@ -78,7 +78,7 @@ describe("Range Proof", () => {
           bitCommitments: [],
           reconstructed: 0n,
           valid: false,
-        })
+        }),
       ).toBe(false);
     });
   });

@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 import {
-  Stack, Paper, TextInput, Button, Table, Code, Badge, Group, Text, Alert, Select,
+  Stack,
+  Paper,
+  TextInput,
+  Button,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Alert,
+  Select,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
@@ -52,14 +62,17 @@ export function HashCommitmentDemo() {
   return (
     <Stack gap="lg">
       <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        A commitment scheme lets you &quot;lock in&quot; a value without revealing it.
-        Later, you reveal the value and nonce to prove you committed to it.
+        A commitment scheme lets you &quot;lock in&quot; a value without
+        revealing it. Later, you reveal the value and nonce to prove you
+        committed to it.
       </Alert>
 
       {phase === "commit" ? (
         <Paper p="md" withBorder>
           <Stack gap="md">
-            <Text size="sm" fw={600}>Phase 1: Commit</Text>
+            <Text size="sm" fw={600}>
+              Phase 1: Commit
+            </Text>
             <TextInput
               label="Secret value"
               value={secret}
@@ -89,15 +102,21 @@ export function HashCommitmentDemo() {
         <Stack gap="md">
           <Paper p="md" withBorder>
             <Stack gap="sm">
-              <Text size="sm" fw={600}>Commitment (public)</Text>
+              <Text size="sm" fw={600}>
+                Commitment (public)
+              </Text>
               <Code block>{commitHash}</Code>
-              <Badge variant="light" color="blue">{scheme}</Badge>
+              <Badge variant="light" color="blue">
+                {scheme}
+              </Badge>
             </Stack>
           </Paper>
 
           <Paper p="md" withBorder>
             <Stack gap="md">
-              <Text size="sm" fw={600}>Phase 2: Reveal</Text>
+              <Text size="sm" fw={600}>
+                Phase 2: Reveal
+              </Text>
               <TextInput
                 label="Reveal secret"
                 value={revealSecret}
@@ -135,24 +154,46 @@ export function HashCommitmentDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="sm">
-          <Text size="sm" fw={600}>How It Works</Text>
+          <Text size="sm" fw={600}>
+            How It Works
+          </Text>
           <Table>
             <Table.Tbody>
               <Table.Tr>
-                <Table.Td><Badge variant="light" size="sm">Commit</Badge></Table.Td>
+                <Table.Td>
+                  <Badge variant="light" size="sm">
+                    Commit
+                  </Badge>
+                </Table.Td>
                 <Table.Td>hash(secret || nonce) → commitment</Table.Td>
               </Table.Tr>
               <Table.Tr>
-                <Table.Td><Badge variant="light" size="sm" color="green">Reveal</Badge></Table.Td>
-                <Table.Td>Publish (secret, nonce). Anyone can verify hash matches.</Table.Td>
+                <Table.Td>
+                  <Badge variant="light" size="sm" color="green">
+                    Reveal
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  Publish (secret, nonce). Anyone can verify hash matches.
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
-                <Table.Td><Badge variant="light" size="sm" color="yellow">Hiding</Badge></Table.Td>
+                <Table.Td>
+                  <Badge variant="light" size="sm" color="yellow">
+                    Hiding
+                  </Badge>
+                </Table.Td>
                 <Table.Td>Commitment reveals nothing about the secret</Table.Td>
               </Table.Tr>
               <Table.Tr>
-                <Table.Td><Badge variant="light" size="sm" color="red">Binding</Badge></Table.Td>
-                <Table.Td>Cannot find another (secret, nonce) that gives the same hash</Table.Td>
+                <Table.Td>
+                  <Badge variant="light" size="sm" color="red">
+                    Binding
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  Cannot find another (secret, nonce) that gives the same hash
+                </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>

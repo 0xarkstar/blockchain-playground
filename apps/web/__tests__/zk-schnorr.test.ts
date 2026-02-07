@@ -16,9 +16,7 @@ describe("Schnorr Sigma Protocol", () => {
       const keys = generateSchnorrKeys(params);
       expect(keys.secretKey).toBeGreaterThan(0n);
       expect(keys.secretKey).toBeLessThan(params.q);
-      expect(keys.publicKey).toBe(
-        modPow(params.g, keys.secretKey, params.p)
-      );
+      expect(keys.publicKey).toBe(modPow(params.g, keys.secretKey, params.p));
     });
   });
 
@@ -48,14 +46,14 @@ describe("Schnorr Sigma Protocol", () => {
         randomness,
         challenge,
         keys.secretKey,
-        params.q
+        params.q,
       );
       const valid = verifySchnorr(
         params,
         commitment,
         challenge,
         response,
-        keys.publicKey
+        keys.publicKey,
       );
       expect(valid).toBe(true);
     });
@@ -70,7 +68,7 @@ describe("Schnorr Sigma Protocol", () => {
         commitment,
         challenge,
         fakeResponse,
-        keys.publicKey
+        keys.publicKey,
       );
       expect(valid).toBe(false);
     });

@@ -23,14 +23,39 @@ import {
 } from "../../lib/solidity/storage";
 
 const TYPES: SolidityStorageType[] = [
-  "uint8", "uint16", "uint32", "uint64", "uint128", "uint256",
-  "int8", "int16", "int32", "int64", "int128", "int256",
-  "bool", "address",
-  "bytes1", "bytes2", "bytes4", "bytes8", "bytes16", "bytes32",
+  "uint8",
+  "uint16",
+  "uint32",
+  "uint64",
+  "uint128",
+  "uint256",
+  "int8",
+  "int16",
+  "int32",
+  "int64",
+  "int128",
+  "int256",
+  "bool",
+  "address",
+  "bytes1",
+  "bytes2",
+  "bytes4",
+  "bytes8",
+  "bytes16",
+  "bytes32",
 ];
 
 const SLOT_COLORS = [
-  "blue", "green", "orange", "violet", "cyan", "pink", "teal", "yellow", "grape", "indigo",
+  "blue",
+  "green",
+  "orange",
+  "violet",
+  "cyan",
+  "pink",
+  "teal",
+  "yellow",
+  "grape",
+  "indigo",
 ];
 
 interface VariableWithId extends StorageVariable {
@@ -49,21 +74,21 @@ export function StorageLayoutDemo() {
   const [newType, setNewType] = useState<SolidityStorageType>("uint256");
   const [showOptimized, setShowOptimized] = useState(false);
 
-  const layout = useMemo(
-    () => calculateStorageLayout(variables),
-    [variables]
-  );
+  const layout = useMemo(() => calculateStorageLayout(variables), [variables]);
 
   const optimized = useMemo(
     () => optimizeStorageLayout(variables),
-    [variables]
+    [variables],
   );
 
   const activeLayout = showOptimized ? optimized : layout;
 
   const addVariable = () => {
     if (!newName.trim()) return;
-    setVariables([...variables, { id: nextId.current++, name: newName.trim(), type: newType }]);
+    setVariables([
+      ...variables,
+      { id: nextId.current++, name: newName.trim(), type: newType },
+    ]);
     setNewName("");
   };
 
@@ -75,7 +100,9 @@ export function StorageLayoutDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Add Variable</Text>
+          <Text size="sm" fw={600}>
+            Add Variable
+          </Text>
           <Group>
             <TextInput
               placeholder="Variable name"
@@ -99,7 +126,9 @@ export function StorageLayoutDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Variables ({variables.length})</Text>
+            <Text size="sm" fw={600}>
+              Variables ({variables.length})
+            </Text>
           </Group>
           <Table>
             <Table.Thead>
@@ -114,7 +143,9 @@ export function StorageLayoutDemo() {
               {variables.map((v, i) => (
                 <Table.Tr key={v.id}>
                   <Table.Td>{v.name}</Table.Td>
-                  <Table.Td><Badge variant="light">{v.type}</Badge></Table.Td>
+                  <Table.Td>
+                    <Badge variant="light">{v.type}</Badge>
+                  </Table.Td>
                   <Table.Td>{getTypeSize(v.type)} bytes</Table.Td>
                   <Table.Td>
                     <Button
@@ -136,7 +167,9 @@ export function StorageLayoutDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Storage Layout</Text>
+            <Text size="sm" fw={600}>
+              Storage Layout
+            </Text>
             <Button
               size="xs"
               variant={showOptimized ? "filled" : "outline"}
@@ -150,14 +183,19 @@ export function StorageLayoutDemo() {
             <>
               {Array.from({ length: activeLayout.totalSlots }, (_, slotIdx) => {
                 const slotAssignments = activeLayout.assignments.filter(
-                  (a) => a.slotIndex === slotIdx
+                  (a) => a.slotIndex === slotIdx,
                 );
-                const usedInSlot = slotAssignments.reduce((s, a) => s + a.size, 0);
+                const usedInSlot = slotAssignments.reduce(
+                  (s, a) => s + a.size,
+                  0,
+                );
                 const wastedInSlot = 32 - usedInSlot;
 
                 return (
                   <Paper key={slotIdx} p="xs" withBorder>
-                    <Text size="xs" c="dimmed" mb={4}>Slot {slotIdx}</Text>
+                    <Text size="xs" c="dimmed" mb={4}>
+                      Slot {slotIdx}
+                    </Text>
                     <Progress.Root size={24}>
                       {slotAssignments.map((a, i) => (
                         <Progress.Section
@@ -171,7 +209,10 @@ export function StorageLayoutDemo() {
                         </Progress.Section>
                       ))}
                       {wastedInSlot > 0 && (
-                        <Progress.Section value={(wastedInSlot / 32) * 100} color="gray">
+                        <Progress.Section
+                          value={(wastedInSlot / 32) * 100}
+                          color="gray"
+                        >
                           <Progress.Label>{wastedInSlot}B</Progress.Label>
                         </Progress.Section>
                       )}
@@ -186,7 +227,9 @@ export function StorageLayoutDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Comparison</Text>
+          <Text size="sm" fw={600}>
+            Comparison
+          </Text>
           <Table>
             <Table.Thead>
               <Table.Tr>
@@ -200,7 +243,14 @@ export function StorageLayoutDemo() {
                 <Table.Td>Total Slots</Table.Td>
                 <Table.Td ta="right">{layout.totalSlots}</Table.Td>
                 <Table.Td ta="right">
-                  <Badge color={optimized.totalSlots < layout.totalSlots ? "green" : "gray"} variant="light">
+                  <Badge
+                    color={
+                      optimized.totalSlots < layout.totalSlots
+                        ? "green"
+                        : "gray"
+                    }
+                    variant="light"
+                  >
                     {optimized.totalSlots}
                   </Badge>
                 </Table.Td>
@@ -214,7 +264,14 @@ export function StorageLayoutDemo() {
                 <Table.Td>Wasted Bytes</Table.Td>
                 <Table.Td ta="right">{layout.wastedBytes}</Table.Td>
                 <Table.Td ta="right">
-                  <Badge color={optimized.wastedBytes < layout.wastedBytes ? "green" : "gray"} variant="light">
+                  <Badge
+                    color={
+                      optimized.wastedBytes < layout.wastedBytes
+                        ? "green"
+                        : "gray"
+                    }
+                    variant="light"
+                  >
                     {optimized.wastedBytes}
                   </Badge>
                 </Table.Td>
@@ -223,7 +280,14 @@ export function StorageLayoutDemo() {
                 <Table.Td>Efficiency</Table.Td>
                 <Table.Td ta="right">{layout.efficiency.toFixed(1)}%</Table.Td>
                 <Table.Td ta="right">
-                  <Badge color={optimized.efficiency > layout.efficiency ? "green" : "gray"} variant="light">
+                  <Badge
+                    color={
+                      optimized.efficiency > layout.efficiency
+                        ? "green"
+                        : "gray"
+                    }
+                    variant="light"
+                  >
                     {optimized.efficiency.toFixed(1)}%
                   </Badge>
                 </Table.Td>

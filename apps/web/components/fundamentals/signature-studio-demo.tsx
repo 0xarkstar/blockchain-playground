@@ -16,7 +16,12 @@ import {
   Alert,
   SimpleGrid,
 } from "@mantine/core";
-import { IconKey, IconCheck, IconCopy, IconInfoCircle } from "@tabler/icons-react";
+import {
+  IconKey,
+  IconCheck,
+  IconCopy,
+  IconInfoCircle,
+} from "@tabler/icons-react";
 import {
   generateKeyPair,
   signMessage,
@@ -115,11 +120,7 @@ export function SignatureStudioDemo() {
             onChange={(e) => setMessage(e.currentTarget.value)}
             minRows={2}
           />
-          <Button
-            onClick={handleSign}
-            disabled={!keyPair}
-            loading={signing}
-          >
+          <Button onClick={handleSign} disabled={!keyPair} loading={signing}>
             Sign Message
           </Button>
 

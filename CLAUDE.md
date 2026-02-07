@@ -1,8 +1,9 @@
 # Blockchain Playground
 
-Interactive blockchain education platform with 5 learning tracks and ~55 demos.
+Interactive blockchain education platform with 5 learning tracks and 55 demos (all complete).
 
 ## Tech Stack
+
 - **Monorepo**: Turborepo + pnpm
 - **App**: Next.js 16 + React 19 + App Router
 - **UI**: Mantine v7 + Tailwind CSS
@@ -10,19 +11,22 @@ Interactive blockchain education platform with 5 learning tracks and ~55 demos.
 - **Contracts**: Hardhat + Solidity 0.8.24
 - **Crypto**: @noble/hashes, @noble/secp256k1, @scure/bip32, @scure/bip39
 - **i18n**: next-intl (EN, KO)
-- **Testing**: Vitest + Playwright
+- **Testing**: Vitest (556+ unit tests) + Playwright (18 E2E tests)
+- **Linting**: ESLint + Prettier
+- **CI/CD**: GitHub Actions (quality + e2e)
 - **Chain**: Base Sepolia testnet
 
 ## Project Structure
+
 ```
 apps/web/              # Next.js app
   app/[locale]/        # i18n route root
     (tracks)/          # Route group for track pages
       fundamentals/    # Track 1: 11 demos
-      defi/            # Track 2 (planned)
-      solidity/        # Track 3 (planned)
-      tokens/          # Track 4 (planned)
-      zk/              # Track 5 (planned)
+      defi/            # Track 2: 11 demos
+      solidity/        # Track 3: 11 demos
+      tokens/          # Track 4: 11 demos
+      zk/              # Track 5: 11 demos
   components/          # React components by track
   lib/                 # Utility libraries (blockchain, wallet, trie, web3)
   messages/            # i18n JSON files
@@ -35,15 +39,21 @@ packages/
 ```
 
 ## Commands
+
 - `pnpm dev` - Start dev server
 - `pnpm build` - Build all packages
 - `pnpm test` - Run unit tests (Vitest)
 - `pnpm test:e2e` - Run E2E tests (Playwright)
+- `pnpm lint` - Lint all packages (ESLint)
+- `pnpm format:check` - Check formatting (Prettier)
+- `pnpm format` - Auto-format all files (Prettier)
 
 ## Routing Pattern
+
 `/{locale}/{track}/demo/{slug}` e.g. `/en/fundamentals/demo/hash-explorer`
 
 ## Key Patterns
+
 - All demo components are client components (`"use client"`)
 - Demo pages are server components that import client demo components
 - Crypto operations use @noble libraries (audited, no native deps)

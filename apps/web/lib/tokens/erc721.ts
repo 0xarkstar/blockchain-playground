@@ -3,7 +3,10 @@ export interface NFTMetadata {
   readonly description: string;
   readonly image: string;
   readonly externalUrl?: string;
-  readonly attributes: readonly { readonly trait_type: string; readonly value: string }[];
+  readonly attributes: readonly {
+    readonly trait_type: string;
+    readonly value: string;
+  }[];
 }
 
 export interface ERC721State {
@@ -11,7 +14,9 @@ export interface ERC721State {
   readonly symbol: string;
   readonly owners: Readonly<Record<number, string>>;
   readonly approvals: Readonly<Record<number, string>>;
-  readonly operatorApprovals: Readonly<Record<string, Readonly<Record<string, boolean>>>>;
+  readonly operatorApprovals: Readonly<
+    Record<string, Readonly<Record<string, boolean>>>
+  >;
   readonly metadata: Readonly<Record<number, NFTMetadata>>;
   readonly nextTokenId: number;
   readonly soulbound: boolean;
@@ -27,7 +32,7 @@ export interface NFTResult {
 export function createERC721(
   name: string,
   symbol: string,
-  soulbound: boolean = false
+  soulbound: boolean = false,
 ): ERC721State {
   return {
     name,
@@ -44,7 +49,7 @@ export function createERC721(
 export function mintNFT(
   state: ERC721State,
   to: string,
-  meta: NFTMetadata
+  meta: NFTMetadata,
 ): NFTResult {
   if (!to) {
     return { success: false, newState: state, message: "Invalid recipient" };
@@ -67,17 +72,29 @@ export function transferNFT(
   state: ERC721State,
   from: string,
   to: string,
-  tokenId: number
+  tokenId: number,
 ): NFTResult {
   if (state.soulbound) {
-    return { success: false, newState: state, message: "Soulbound tokens cannot be transferred" };
+    return {
+      success: false,
+      newState: state,
+      message: "Soulbound tokens cannot be transferred",
+    };
   }
   const owner = state.owners[tokenId];
   if (!owner) {
-    return { success: false, newState: state, message: `Token #${tokenId} does not exist` };
+    return {
+      success: false,
+      newState: state,
+      message: `Token #${tokenId} does not exist`,
+    };
   }
   if (owner !== from) {
-    return { success: false, newState: state, message: `${from} does not own token #${tokenId}` };
+    return {
+      success: false,
+      newState: state,
+      message: `${from} does not own token #${tokenId}`,
+    };
   }
   if (!to) {
     return { success: false, newState: state, message: "Invalid recipient" };
@@ -98,14 +115,22 @@ export function approveNFT(
   state: ERC721State,
   owner: string,
   approved: string,
-  tokenId: number
+  tokenId: number,
 ): NFTResult {
   const tokenOwner = state.owners[tokenId];
   if (!tokenOwner) {
-    return { success: false, newState: state, message: `Token #${tokenId} does not exist` };
+    return {
+      success: false,
+      newState: state,
+      message: `Token #${tokenId} does not exist`,
+    };
   }
   if (tokenOwner !== owner) {
-    return { success: false, newState: state, message: `${owner} does not own token #${tokenId}` };
+    return {
+      success: false,
+      newState: state,
+      message: `${owner} does not own token #${tokenId}`,
+    };
   }
   return {
     success: true,

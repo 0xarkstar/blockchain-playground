@@ -22,18 +22,78 @@ interface GasOperation {
 }
 
 const GAS_OPERATIONS: GasOperation[] = [
-  { name: "ETH Transfer", gasUsed: 21000, description: "Simple ETH send", category: "transfer" },
-  { name: "SSTORE (new)", gasUsed: 20000, description: "Write new storage slot", category: "storage" },
-  { name: "SSTORE (update)", gasUsed: 5000, description: "Update existing storage slot", category: "storage" },
-  { name: "SLOAD", gasUsed: 2100, description: "Read storage slot", category: "storage" },
-  { name: "ERC-20 Transfer", gasUsed: 65000, description: "Token transfer", category: "contract" },
-  { name: "ERC-20 Approve", gasUsed: 46000, description: "Token approval", category: "contract" },
-  { name: "NFT Mint", gasUsed: 150000, description: "Mint a new NFT", category: "contract" },
-  { name: "Uniswap Swap", gasUsed: 184000, description: "DEX token swap", category: "contract" },
-  { name: "Contract Deploy (small)", gasUsed: 500000, description: "Deploy simple contract", category: "contract" },
-  { name: "Keccak256", gasUsed: 36, description: "Hash 32 bytes", category: "computation" },
-  { name: "ECRECOVER", gasUsed: 3000, description: "Signature verification", category: "computation" },
-  { name: "LOG1", gasUsed: 750, description: "Emit event with 1 topic", category: "computation" },
+  {
+    name: "ETH Transfer",
+    gasUsed: 21000,
+    description: "Simple ETH send",
+    category: "transfer",
+  },
+  {
+    name: "SSTORE (new)",
+    gasUsed: 20000,
+    description: "Write new storage slot",
+    category: "storage",
+  },
+  {
+    name: "SSTORE (update)",
+    gasUsed: 5000,
+    description: "Update existing storage slot",
+    category: "storage",
+  },
+  {
+    name: "SLOAD",
+    gasUsed: 2100,
+    description: "Read storage slot",
+    category: "storage",
+  },
+  {
+    name: "ERC-20 Transfer",
+    gasUsed: 65000,
+    description: "Token transfer",
+    category: "contract",
+  },
+  {
+    name: "ERC-20 Approve",
+    gasUsed: 46000,
+    description: "Token approval",
+    category: "contract",
+  },
+  {
+    name: "NFT Mint",
+    gasUsed: 150000,
+    description: "Mint a new NFT",
+    category: "contract",
+  },
+  {
+    name: "Uniswap Swap",
+    gasUsed: 184000,
+    description: "DEX token swap",
+    category: "contract",
+  },
+  {
+    name: "Contract Deploy (small)",
+    gasUsed: 500000,
+    description: "Deploy simple contract",
+    category: "contract",
+  },
+  {
+    name: "Keccak256",
+    gasUsed: 36,
+    description: "Hash 32 bytes",
+    category: "computation",
+  },
+  {
+    name: "ECRECOVER",
+    gasUsed: 3000,
+    description: "Signature verification",
+    category: "computation",
+  },
+  {
+    name: "LOG1",
+    gasUsed: 750,
+    description: "Emit event with 1 topic",
+    category: "computation",
+  },
 ];
 
 const categoryColors = {

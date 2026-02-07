@@ -84,8 +84,8 @@ describe("calculateStorageLayout", () => {
 
   it("packs bool and address into same slot", () => {
     const layout = calculateStorageLayout([
-      { name: "active", type: "bool" },     // 1 byte
-      { name: "owner", type: "address" },    // 20 bytes → fits (21 < 32)
+      { name: "active", type: "bool" }, // 1 byte
+      { name: "owner", type: "address" }, // 20 bytes → fits (21 < 32)
     ]);
     expect(layout.totalSlots).toBe(1);
     expect(layout.assignments[1]!.offset).toBe(1);

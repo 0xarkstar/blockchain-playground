@@ -45,7 +45,12 @@ export function StakingRewardsDemo() {
       { label: "Daily", freq: 365 },
     ].map(({ label, freq }) => {
       const apy = aprToApy(apr, freq);
-      const finalValue = calculateCompoundedValue(stakeAmount, apr, freq, duration);
+      const finalValue = calculateCompoundedValue(
+        stakeAmount,
+        apr,
+        freq,
+        duration,
+      );
       return {
         label,
         freq,
@@ -62,7 +67,9 @@ export function StakingRewardsDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Staking Parameters</Text>
+          <Text size="sm" fw={600}>
+            Staking Parameters
+          </Text>
           <Group grow>
             <NumberInput
               label="Stake Amount"
@@ -89,7 +96,9 @@ export function StakingRewardsDemo() {
             decimalScale={1}
           />
           <div>
-            <Text size="xs" c="dimmed" mb={4}>Duration</Text>
+            <Text size="xs" c="dimmed" mb={4}>
+              Duration
+            </Text>
             <SegmentedControl
               value={durationKey}
               onChange={setDurationKey}
@@ -102,12 +111,16 @@ export function StakingRewardsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Summary</Text>
+          <Text size="sm" fw={600}>
+            Summary
+          </Text>
           <Table>
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>Pool Share</Table.Td>
-                <Table.Td ta="right">{(result.poolShare * 100).toFixed(4)}%</Table.Td>
+                <Table.Td ta="right">
+                  {(result.poolShare * 100).toFixed(4)}%
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Simple Rewards ({durationKey})</Table.Td>
@@ -126,7 +139,9 @@ export function StakingRewardsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Compounding Comparison ({durationKey})</Text>
+          <Text size="sm" fw={600}>
+            Compounding Comparison ({durationKey})
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -143,7 +158,9 @@ export function StakingRewardsDemo() {
                   <Table.Td ta="right">{row.apy.toFixed(2)}%</Table.Td>
                   <Table.Td ta="right">{row.finalValue.toFixed(2)}</Table.Td>
                   <Table.Td ta="right">
-                    <Text fw={600} c="green">{row.rewards.toFixed(2)}</Text>
+                    <Text fw={600} c="green">
+                      {row.rewards.toFixed(2)}
+                    </Text>
                   </Table.Td>
                 </Table.Tr>
               ))}

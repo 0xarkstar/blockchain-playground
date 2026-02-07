@@ -51,7 +51,7 @@ export function generateNonce(): string {
 export function createCommitment(
   secret: string,
   nonce: string,
-  scheme: HashScheme = "sha256"
+  scheme: HashScheme = "sha256",
 ): Commitment {
   const payload = `${secret}:${nonce}`;
   return { commitHash: hashToHex(payload, scheme), scheme };
@@ -61,7 +61,7 @@ export function verifyCommitment(
   secret: string,
   nonce: string,
   expected: string,
-  scheme: HashScheme = "sha256"
+  scheme: HashScheme = "sha256",
 ): CommitmentVerification {
   const recomputed = hashToHex(`${secret}:${nonce}`, scheme);
   const valid = recomputed === expected;

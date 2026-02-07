@@ -1,8 +1,14 @@
-import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from "@scure/bip39";
+import {
+  generateMnemonic,
+  mnemonicToSeedSync,
+  validateMnemonic,
+} from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
 import { bytesToHex } from "@blockchain-playground/utils";
 
-export function generateNewMnemonic(strength: 128 | 160 | 192 | 224 | 256 = 128): string {
+export function generateNewMnemonic(
+  strength: 128 | 160 | 192 | 224 | 256 = 128,
+): string {
   return generateMnemonic(wordlist, strength);
 }
 

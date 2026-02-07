@@ -64,7 +64,7 @@ export interface CompressionAnalysis {
 
 function computeStateRoot(
   accounts: readonly RollupAccount[],
-  scheme: HashScheme = "sha256"
+  scheme: HashScheme = "sha256",
 ): string {
   const data = accounts
     .map((a) => `${a.address}:${a.balance}:${a.nonce}`)
@@ -74,7 +74,7 @@ function computeStateRoot(
 
 /** Create initial rollup state from a list of accounts. */
 export function createRollupState(
-  accounts: readonly { address: string; balance: bigint }[]
+  accounts: readonly { address: string; balance: bigint }[],
 ): RollupState {
   const accts: RollupAccount[] = accounts.map((a) => ({
     address: a.address,
@@ -91,7 +91,7 @@ export function createRollupState(
 /** Process a batch of transactions, returning new state + proof hash. */
 export function processBatch(
   state: RollupState,
-  transactions: readonly RollupTransaction[]
+  transactions: readonly RollupTransaction[],
 ): BatchResult {
   const preStateRoot = state.stateRoot;
   let currentAccounts = [...state.accounts.map((a) => ({ ...a }))];
@@ -102,15 +102,27 @@ export function processBatch(
     const toIdx = currentAccounts.findIndex((a) => a.address === tx.to);
 
     if (fromIdx === -1) {
-      processed.push({ tx, success: false, message: `Sender ${tx.from} not found` });
+      processed.push({
+        tx,
+        success: false,
+        message: `Sender ${tx.from} not found`,
+      });
       continue;
     }
     if (toIdx === -1) {
-      processed.push({ tx, success: false, message: `Recipient ${tx.to} not found` });
+      processed.push({
+        tx,
+        success: false,
+        message: `Recipient ${tx.to} not found`,
+      });
       continue;
     }
     if (tx.amount <= 0n) {
-      processed.push({ tx, success: false, message: "Amount must be positive" });
+      processed.push({
+        tx,
+        success: false,
+        message: "Amount must be positive",
+      });
       continue;
     }
     if (currentAccounts[fromIdx].balance < tx.amount) {

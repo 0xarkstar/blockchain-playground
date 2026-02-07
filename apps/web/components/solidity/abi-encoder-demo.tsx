@@ -27,7 +27,12 @@ export function AbiEncoderDemo() {
   const nextId = useRef(2);
   const [funcName, setFuncName] = useState("transfer");
   const [params, setParams] = useState<ParamWithId[]>([
-    { id: 0, name: "to", type: "address", value: "0x0000000000000000000000000000000000000001" },
+    {
+      id: 0,
+      name: "to",
+      type: "address",
+      value: "0x0000000000000000000000000000000000000001",
+    },
     { id: 1, name: "amount", type: "uint256", value: "1000" },
   ]);
 
@@ -40,35 +45,47 @@ export function AbiEncoderDemo() {
   }, [funcName, params]);
 
   const addParam = () => {
-    setParams([...params, { id: nextId.current++, name: "", type: "uint256", value: "0" }]);
+    setParams([
+      ...params,
+      { id: nextId.current++, name: "", type: "uint256", value: "0" },
+    ]);
   };
 
   const removeParam = (index: number) => {
     setParams(params.filter((_, i) => i !== index));
   };
 
-  const updateParam = (index: number, field: keyof ParamWithId, value: string) => {
-    setParams(params.map((p, i) =>
-      i === index ? { ...p, [field]: value } : p
-    ));
+  const updateParam = (
+    index: number,
+    field: keyof ParamWithId,
+    value: string,
+  ) => {
+    setParams(
+      params.map((p, i) => (i === index ? { ...p, [field]: value } : p)),
+    );
   };
 
   return (
     <Stack gap="lg">
       <Alert icon={<IconInfoCircle size={16} />} color="blue" variant="light">
-        This encoder supports static types only: uint256, address, bool, bytes32, uint8.
-        Dynamic types (string, bytes, arrays) require offset-based encoding.
+        This encoder supports static types only: uint256, address, bool,
+        bytes32, uint8. Dynamic types (string, bytes, arrays) require
+        offset-based encoding.
       </Alert>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Function Definition</Text>
+          <Text size="sm" fw={600}>
+            Function Definition
+          </Text>
           <TextInput
             label="Function Name"
             value={funcName}
             onChange={(e) => setFuncName(e.currentTarget.value)}
           />
-          <Text size="xs" fw={600}>Parameters</Text>
+          <Text size="xs" fw={600}>
+            Parameters
+          </Text>
           {params.map((param, i) => (
             <Group key={param.id} align="flex-end">
               <Select
@@ -114,7 +131,9 @@ export function AbiEncoderDemo() {
       {result && (
         <Paper p="md" withBorder>
           <Stack gap="md">
-            <Text size="sm" fw={600}>Encoded Result</Text>
+            <Text size="sm" fw={600}>
+              Encoded Result
+            </Text>
             <Table>
               <Table.Tbody>
                 <Table.Tr>
@@ -136,19 +155,23 @@ export function AbiEncoderDemo() {
 
             {result.encodedParams.length > 0 && (
               <>
-                <Text size="xs" fw={600}>Encoded Parameters (32-byte words)</Text>
+                <Text size="xs" fw={600}>
+                  Encoded Parameters (32-byte words)
+                </Text>
                 {result.encodedParams.map((encoded, i) => (
                   <Group key={i} gap="xs">
-                    <Badge size="xs" variant="outline">word {i}</Badge>
-                    <Code style={{ flex: 1, fontSize: 11 }}>
-                      {encoded}
-                    </Code>
+                    <Badge size="xs" variant="outline">
+                      word {i}
+                    </Badge>
+                    <Code style={{ flex: 1, fontSize: 11 }}>{encoded}</Code>
                   </Group>
                 ))}
               </>
             )}
 
-            <Text size="xs" fw={600}>Full Calldata</Text>
+            <Text size="xs" fw={600}>
+              Full Calldata
+            </Text>
             <Code block style={{ fontSize: 11, wordBreak: "break-all" }}>
               {result.fullCalldata}
             </Code>

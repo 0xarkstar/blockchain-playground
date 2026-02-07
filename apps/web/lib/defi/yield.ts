@@ -7,7 +7,7 @@ export function calculateCompoundedValue(
   principal: number,
   apr: number,
   compoundsPerYear: number,
-  years: number
+  years: number,
 ): number {
   if (principal <= 0 || years <= 0) return principal;
   if (compoundsPerYear <= 0) {
@@ -22,7 +22,7 @@ export function calculateCompoundedValue(
 export function calculateStakingRewards(
   staked: number,
   rewardRate: number,
-  duration: number
+  duration: number,
 ): number {
   if (staked <= 0 || rewardRate <= 0 || duration <= 0) return 0;
   return staked * rewardRate * duration;
@@ -30,7 +30,7 @@ export function calculateStakingRewards(
 
 export function calculatePoolShare(
   userStake: number,
-  totalStake: number
+  totalStake: number,
 ): number {
   if (totalStake <= 0) return 0;
   return userStake / totalStake;

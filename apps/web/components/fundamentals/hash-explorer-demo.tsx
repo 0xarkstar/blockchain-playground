@@ -34,14 +34,14 @@ export function HashExplorerDemo() {
       keccak256: hash(input, "keccak256"),
       blake2b: hash(input, "blake2b"),
     }),
-    [input]
+    [input],
   );
 
   const currentHash = hashes[algorithm];
 
   const avalanche = useMemo(
     () => computeAvalancheEffect(input, compareInput, algorithm),
-    [input, compareInput, algorithm]
+    [input, compareInput, algorithm],
   );
 
   return (
@@ -157,4 +157,3 @@ export function HashExplorerDemo() {
     </Stack>
   );
 }
-

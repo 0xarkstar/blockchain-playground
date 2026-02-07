@@ -100,7 +100,7 @@ function parseExpr(
   tokens: Token[],
   pos: { i: number },
   gates: Gate[],
-  counter: { n: number }
+  counter: { n: number },
 ): string {
   let left = parseTerm(tokens, pos, gates, counter);
   while (pos.i < tokens.length && tokens[pos.i].value === "+") {
@@ -118,7 +118,7 @@ function parseTerm(
   tokens: Token[],
   pos: { i: number },
   gates: Gate[],
-  counter: { n: number }
+  counter: { n: number },
 ): string {
   let left = parseFactor(tokens, pos, gates, counter);
   while (pos.i < tokens.length && tokens[pos.i].value === "*") {
@@ -136,7 +136,7 @@ function parseFactor(
   tokens: Token[],
   pos: { i: number },
   gates: Gate[],
-  counter: { n: number }
+  counter: { n: number },
 ): string {
   const tok = tokens[pos.i];
   if (tok.type === "lparen") {
@@ -225,7 +225,7 @@ export function gatesToR1CS(gates: readonly Gate[], p: bigint): R1CS {
 export function computeWitness(
   gates: readonly Gate[],
   inputs: Readonly<Record<string, bigint>>,
-  p: bigint
+  p: bigint,
 ): WitnessResult {
   const values: Record<string, bigint> = { one: 1n, ...inputs };
 
@@ -243,8 +243,7 @@ export function computeWitness(
   for (const g of gates) {
     const l = values[g.left] ?? 0n;
     const r = values[g.right] ?? 0n;
-    values[g.output] =
-      g.op === "mul" ? modMul(l, r, p) : modAdd(l, r, p);
+    values[g.output] = g.op === "mul" ? modMul(l, r, p) : modAdd(l, r, p);
   }
 
   // Build wire vector matching R1CS ordering
@@ -269,7 +268,7 @@ export function computeWitness(
 export function verifySatisfaction(
   r1cs: R1CS,
   witness: readonly bigint[],
-  p: bigint
+  p: bigint,
 ): ConstraintCheck[] {
   const checks: ConstraintCheck[] = [];
   for (let i = 0; i < r1cs.numConstraints; i++) {

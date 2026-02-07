@@ -20,7 +20,8 @@ export interface AccessCheckResult {
   readonly reason: string;
 }
 
-export const DEFAULT_ADMIN_ROLE = "0x0000000000000000000000000000000000000000000000000000000000000000";
+export const DEFAULT_ADMIN_ROLE =
+  "0x0000000000000000000000000000000000000000000000000000000000000000";
 export const MINTER_ROLE = "MINTER_ROLE";
 export const PAUSER_ROLE = "PAUSER_ROLE";
 export const ADMIN_ROLE = "ADMIN_ROLE";
@@ -40,7 +41,7 @@ export function createInitialState(ownerAddress: string): AccessControlState {
 export function hasRole(
   state: AccessControlState,
   roleId: string,
-  account: string
+  account: string,
 ): boolean {
   const role = state.roles[roleId];
   if (!role) return false;
@@ -51,7 +52,7 @@ export function grantRole(
   state: AccessControlState,
   roleId: string,
   account: string,
-  caller: string
+  caller: string,
 ): TransactionResult {
   const normalizedAccount = account.toLowerCase();
   const normalizedCaller = caller.toLowerCase();
@@ -100,7 +101,7 @@ export function revokeRole(
   state: AccessControlState,
   roleId: string,
   account: string,
-  caller: string
+  caller: string,
 ): TransactionResult {
   const normalizedAccount = account.toLowerCase();
   const normalizedCaller = caller.toLowerCase();
@@ -143,7 +144,7 @@ export function revokeRole(
 export function renounceRole(
   state: AccessControlState,
   roleId: string,
-  caller: string
+  caller: string,
 ): TransactionResult {
   const normalizedCaller = caller.toLowerCase();
 
@@ -175,7 +176,7 @@ export function renounceRole(
 export function transferOwnership(
   state: AccessControlState,
   newOwner: string,
-  caller: string
+  caller: string,
 ): TransactionResult {
   const normalizedCaller = caller.toLowerCase();
   const normalizedNewOwner = newOwner.toLowerCase();
@@ -191,7 +192,9 @@ export function transferOwnership(
 
   const adminRole = state.roles[DEFAULT_ADMIN_ROLE];
   const newAdminMembers = adminRole
-    ? adminRole.members.filter((m) => m !== normalizedCaller).concat(normalizedNewOwner)
+    ? adminRole.members
+        .filter((m) => m !== normalizedCaller)
+        .concat(normalizedNewOwner)
     : [normalizedNewOwner];
 
   const newRoles = {
@@ -213,7 +216,7 @@ export function transferOwnership(
 export function checkFunctionAccess(
   state: AccessControlState,
   caller: string,
-  requiredRole: string
+  requiredRole: string,
 ): AccessCheckResult {
   const normalizedCaller = caller.toLowerCase();
 
@@ -225,5 +228,8 @@ export function checkFunctionAccess(
 
   return hasRole(state, requiredRole, normalizedCaller)
     ? { allowed: true, reason: `Caller has role ${requiredRole}` }
-    : { allowed: false, reason: `AccessControl: account ${normalizedCaller} is missing role ${requiredRole}` };
+    : {
+        allowed: false,
+        reason: `AccessControl: account ${normalizedCaller} is missing role ${requiredRole}`,
+      };
 }

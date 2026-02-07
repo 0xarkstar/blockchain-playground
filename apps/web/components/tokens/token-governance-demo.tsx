@@ -2,12 +2,30 @@
 
 import { useState, useMemo } from "react";
 import {
-  Stack, Paper, TextInput, NumberInput, Button, Table, Code, Badge, Group, Text, Alert, Select, Progress,
+  Stack,
+  Paper,
+  TextInput,
+  NumberInput,
+  Button,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Alert,
+  Select,
+  Progress,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
-  createGovernance, setVotingPower, delegate, getEffectiveVotingPower, getTotalVotingPower,
-  createProposal, vote, finalizeProposal,
+  createGovernance,
+  setVotingPower,
+  delegate,
+  getEffectiveVotingPower,
+  getTotalVotingPower,
+  createProposal,
+  vote,
+  finalizeProposal,
   type GovernanceState,
 } from "../../lib/tokens/governance";
 
@@ -29,12 +47,19 @@ export function TokenGovernanceDemo() {
   const [proposalCreator, setProposalCreator] = useState("alice");
   const [voteProposalId, setVoteProposalId] = useState(1);
   const [voter, setVoter] = useState("alice");
-  const [voteChoice, setVoteChoice] = useState<"for" | "against" | "abstain">("for");
+  const [voteChoice, setVoteChoice] = useState<"for" | "against" | "abstain">(
+    "for",
+  );
   const [currentTime, setCurrentTime] = useState(50);
-  const [lastMessage, setLastMessage] = useState("Governance initialized with alice(100), bob(60), charlie(40)");
+  const [lastMessage, setLastMessage] = useState(
+    "Governance initialized with alice(100), bob(60), charlie(40)",
+  );
 
   const totalPower = useMemo(() => getTotalVotingPower(state), [state]);
-  const members = useMemo(() => Object.keys(state.votingPower), [state.votingPower]);
+  const members = useMemo(
+    () => Object.keys(state.votingPower),
+    [state.votingPower],
+  );
 
   const handleSetPower = () => {
     setState(setVotingPower(state, powerAddr, powerAmount));
@@ -48,7 +73,13 @@ export function TokenGovernanceDemo() {
   };
 
   const handleCreateProposal = () => {
-    const result = createProposal(state, proposalTitle, proposalDesc, proposalCreator, currentTime);
+    const result = createProposal(
+      state,
+      proposalTitle,
+      proposalDesc,
+      proposalCreator,
+      currentTime,
+    );
     setState(result.newState);
     setLastMessage(result.message);
   };
@@ -70,7 +101,9 @@ export function TokenGovernanceDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Members</Text>
+            <Text size="sm" fw={600}>
+              Members
+            </Text>
             <Badge variant="light">Total Power: {totalPower}</Badge>
           </Group>
           <Table striped>
@@ -85,60 +118,131 @@ export function TokenGovernanceDemo() {
             <Table.Tbody>
               {members.map((addr) => (
                 <Table.Tr key={addr}>
-                  <Table.Td><Code>{addr}</Code></Table.Td>
+                  <Table.Td>
+                    <Code>{addr}</Code>
+                  </Table.Td>
                   <Table.Td ta="right">{state.votingPower[addr]}</Table.Td>
                   <Table.Td ta="right">
-                    <Badge variant="light" color={getEffectiveVotingPower(state, addr) > 0 ? "blue" : "gray"}>
+                    <Badge
+                      variant="light"
+                      color={
+                        getEffectiveVotingPower(state, addr) > 0
+                          ? "blue"
+                          : "gray"
+                      }
+                    >
                       {getEffectiveVotingPower(state, addr)}
                     </Badge>
                   </Table.Td>
-                  <Table.Td>{state.delegations[addr] ? <Code>{state.delegations[addr]}</Code> : "—"}</Table.Td>
+                  <Table.Td>
+                    {state.delegations[addr] ? (
+                      <Code>{state.delegations[addr]}</Code>
+                    ) : (
+                      "—"
+                    )}
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
           </Table>
           <Group grow>
-            <TextInput label="Address" value={powerAddr} onChange={(e) => setPowerAddr(e.currentTarget.value)} />
-            <NumberInput label="Power" value={powerAmount} onChange={(v) => setPowerAmount(Number(v) || 0)} min={0} />
+            <TextInput
+              label="Address"
+              value={powerAddr}
+              onChange={(e) => setPowerAddr(e.currentTarget.value)}
+            />
+            <NumberInput
+              label="Power"
+              value={powerAmount}
+              onChange={(v) => setPowerAmount(Number(v) || 0)}
+              min={0}
+            />
           </Group>
-          <Button onClick={handleSetPower} variant="light" size="sm">Set Power</Button>
+          <Button onClick={handleSetPower} variant="light" size="sm">
+            Set Power
+          </Button>
         </Stack>
       </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Delegate</Text>
+          <Text size="sm" fw={600}>
+            Delegate
+          </Text>
           <Group grow>
-            <TextInput label="From" value={delegateFrom} onChange={(e) => setDelegateFrom(e.currentTarget.value)} />
-            <TextInput label="To (self = undelegate)" value={delegateTo} onChange={(e) => setDelegateTo(e.currentTarget.value)} />
+            <TextInput
+              label="From"
+              value={delegateFrom}
+              onChange={(e) => setDelegateFrom(e.currentTarget.value)}
+            />
+            <TextInput
+              label="To (self = undelegate)"
+              value={delegateTo}
+              onChange={(e) => setDelegateTo(e.currentTarget.value)}
+            />
           </Group>
-          <Button onClick={handleDelegate} variant="light" color="orange">Delegate</Button>
+          <Button onClick={handleDelegate} variant="light" color="orange">
+            Delegate
+          </Button>
         </Stack>
       </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Time & Proposals</Text>
-          <NumberInput label="Current Time" value={currentTime} onChange={(v) => setCurrentTime(Number(v) || 0)} />
+          <Text size="sm" fw={600}>
+            Time & Proposals
+          </Text>
+          <NumberInput
+            label="Current Time"
+            value={currentTime}
+            onChange={(v) => setCurrentTime(Number(v) || 0)}
+          />
           <Group grow>
-            <TextInput label="Title" value={proposalTitle} onChange={(e) => setProposalTitle(e.currentTarget.value)} />
-            <TextInput label="Proposer" value={proposalCreator} onChange={(e) => setProposalCreator(e.currentTarget.value)} />
+            <TextInput
+              label="Title"
+              value={proposalTitle}
+              onChange={(e) => setProposalTitle(e.currentTarget.value)}
+            />
+            <TextInput
+              label="Proposer"
+              value={proposalCreator}
+              onChange={(e) => setProposalCreator(e.currentTarget.value)}
+            />
           </Group>
-          <TextInput label="Description" value={proposalDesc} onChange={(e) => setProposalDesc(e.currentTarget.value)} />
-          <Button onClick={handleCreateProposal} variant="light" color="green">Create Proposal</Button>
+          <TextInput
+            label="Description"
+            value={proposalDesc}
+            onChange={(e) => setProposalDesc(e.currentTarget.value)}
+          />
+          <Button onClick={handleCreateProposal} variant="light" color="green">
+            Create Proposal
+          </Button>
         </Stack>
       </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Vote</Text>
+          <Text size="sm" fw={600}>
+            Vote
+          </Text>
           <Group grow>
-            <NumberInput label="Proposal ID" value={voteProposalId} onChange={(v) => setVoteProposalId(Number(v) || 0)} min={1} />
-            <TextInput label="Voter" value={voter} onChange={(e) => setVoter(e.currentTarget.value)} />
+            <NumberInput
+              label="Proposal ID"
+              value={voteProposalId}
+              onChange={(v) => setVoteProposalId(Number(v) || 0)}
+              min={1}
+            />
+            <TextInput
+              label="Voter"
+              value={voter}
+              onChange={(e) => setVoter(e.currentTarget.value)}
+            />
             <Select
               label="Choice"
               value={voteChoice}
-              onChange={(v) => setVoteChoice((v as "for" | "against" | "abstain") ?? "for")}
+              onChange={(v) =>
+                setVoteChoice((v as "for" | "against" | "abstain") ?? "for")
+              }
               data={[
                 { value: "for", label: "For" },
                 { value: "against", label: "Against" },
@@ -147,8 +251,12 @@ export function TokenGovernanceDemo() {
             />
           </Group>
           <Group>
-            <Button onClick={handleVote} variant="light" color="blue">Vote</Button>
-            <Button onClick={handleFinalize} variant="light" color="violet">Finalize</Button>
+            <Button onClick={handleVote} variant="light" color="blue">
+              Vote
+            </Button>
+            <Button onClick={handleFinalize} variant="light" color="violet">
+              Finalize
+            </Button>
           </Group>
         </Stack>
       </Paper>
@@ -162,30 +270,51 @@ export function TokenGovernanceDemo() {
       {state.proposals.length > 0 && (
         <Paper p="md" withBorder>
           <Stack gap="md">
-            <Text size="sm" fw={600}>Proposals</Text>
+            <Text size="sm" fw={600}>
+              Proposals
+            </Text>
             {state.proposals.map((p) => {
               const totalVotes = p.votesFor + p.votesAgainst + p.votesAbstain;
-              const forPct = totalVotes > 0 ? (p.votesFor / totalVotes) * 100 : 0;
-              const againstPct = totalVotes > 0 ? (p.votesAgainst / totalVotes) * 100 : 0;
-              const abstainPct = totalVotes > 0 ? (p.votesAbstain / totalVotes) * 100 : 0;
-              const statusColor = p.status === "passed" ? "green" : p.status === "rejected" ? "red" : "blue";
+              const forPct =
+                totalVotes > 0 ? (p.votesFor / totalVotes) * 100 : 0;
+              const againstPct =
+                totalVotes > 0 ? (p.votesAgainst / totalVotes) * 100 : 0;
+              const abstainPct =
+                totalVotes > 0 ? (p.votesAbstain / totalVotes) * 100 : 0;
+              const statusColor =
+                p.status === "passed"
+                  ? "green"
+                  : p.status === "rejected"
+                    ? "red"
+                    : "blue";
               return (
                 <Paper key={p.id} p="sm" withBorder>
                   <Stack gap="xs">
                     <Group justify="space-between">
-                      <Text fw={600}>#{p.id}: {p.title}</Text>
-                      <Badge color={statusColor} variant="light">{p.status}</Badge>
+                      <Text fw={600}>
+                        #{p.id}: {p.title}
+                      </Text>
+                      <Badge color={statusColor} variant="light">
+                        {p.status}
+                      </Badge>
                     </Group>
-                    <Text size="xs" c="dimmed">By {p.proposer} | Ends at {p.endTime} | Quorum: {p.quorumRequired}</Text>
+                    <Text size="xs" c="dimmed">
+                      By {p.proposer} | Ends at {p.endTime} | Quorum:{" "}
+                      {p.quorumRequired}
+                    </Text>
                     <Progress.Root size="lg">
                       <Progress.Section value={forPct} color="green">
                         <Progress.Label>For {p.votesFor}</Progress.Label>
                       </Progress.Section>
                       <Progress.Section value={againstPct} color="red">
-                        <Progress.Label>Against {p.votesAgainst}</Progress.Label>
+                        <Progress.Label>
+                          Against {p.votesAgainst}
+                        </Progress.Label>
                       </Progress.Section>
                       <Progress.Section value={abstainPct} color="gray">
-                        <Progress.Label>Abstain {p.votesAbstain}</Progress.Label>
+                        <Progress.Label>
+                          Abstain {p.votesAbstain}
+                        </Progress.Label>
                       </Progress.Section>
                     </Progress.Root>
                     <Text size="xs" c="dimmed">

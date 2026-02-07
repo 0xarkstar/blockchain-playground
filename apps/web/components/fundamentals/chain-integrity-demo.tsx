@@ -13,7 +13,11 @@ import {
   Textarea,
   SimpleGrid,
 } from "@mantine/core";
-import { IconLink, IconAlertTriangle, IconShieldCheck } from "@tabler/icons-react";
+import {
+  IconLink,
+  IconAlertTriangle,
+  IconShieldCheck,
+} from "@tabler/icons-react";
 import {
   createGenesisBlock,
   createBlock,
@@ -39,9 +43,7 @@ export function ChainIntegrityDemo() {
       blocks.push(minedGenesis.block);
 
       for (let i = 1; i <= 4; i++) {
-        const txs = [
-          createTransaction(`0xUser${i}`, `0xUser${i + 1}`, i * 10),
-        ];
+        const txs = [createTransaction(`0xUser${i}`, `0xUser${i + 1}`, i * 10)];
         const newBlock = createBlock(blocks[blocks.length - 1], txs, 1);
         const mined = mineBlock(newBlock);
         blocks.push(mined.block);
@@ -76,7 +78,7 @@ export function ChainIntegrityDemo() {
       setChain(newChain);
       setTamperedIndex(index);
     },
-    [chain]
+    [chain],
   );
 
   const validation = useMemo(() => {
@@ -139,10 +141,7 @@ export function ChainIntegrityDemo() {
                 >
                   <Stack gap="xs">
                     <Group justify="space-between">
-                      <Badge
-                        color={v?.valid ? "green" : "red"}
-                        variant="light"
-                      >
+                      <Badge color={v?.valid ? "green" : "red"} variant="light">
                         Block #{block.index}
                       </Badge>
                       <Group gap={4}>
@@ -163,7 +162,9 @@ export function ChainIntegrityDemo() {
                       <Text size="xs" c="dimmed">
                         Hash
                       </Text>
-                      <Code style={{ fontSize: "0.6rem", wordBreak: "break-all" }}>
+                      <Code
+                        style={{ fontSize: "0.6rem", wordBreak: "break-all" }}
+                      >
                         {block.hash.slice(0, 20)}...
                       </Code>
                     </div>
@@ -171,7 +172,9 @@ export function ChainIntegrityDemo() {
                       <Text size="xs" c="dimmed">
                         Prev Hash
                       </Text>
-                      <Code style={{ fontSize: "0.6rem", wordBreak: "break-all" }}>
+                      <Code
+                        style={{ fontSize: "0.6rem", wordBreak: "break-all" }}
+                      >
                         {block.header.previousHash.slice(0, 20)}...
                       </Code>
                     </div>

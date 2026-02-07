@@ -56,30 +56,198 @@ export interface CallResult {
 }
 
 const OPCODE_MAP: Record<string, OpcodeInfo> = {
-  PUSH1: { opcode: "PUSH1", name: "PUSH1", description: "Push 1-byte value onto stack", gas: 3, stackIn: 0, stackOut: 1 },
-  PUSH32: { opcode: "PUSH32", name: "PUSH32", description: "Push 32-byte value onto stack", gas: 3, stackIn: 0, stackOut: 1 },
-  ADD: { opcode: "ADD", name: "ADD", description: "Addition (a + b)", gas: 3, stackIn: 2, stackOut: 1 },
-  SUB: { opcode: "SUB", name: "SUB", description: "Subtraction (a - b)", gas: 3, stackIn: 2, stackOut: 1 },
-  MUL: { opcode: "MUL", name: "MUL", description: "Multiplication (a * b)", gas: 5, stackIn: 2, stackOut: 1 },
-  DIV: { opcode: "DIV", name: "DIV", description: "Integer division (a / b)", gas: 5, stackIn: 2, stackOut: 1 },
-  MOD: { opcode: "MOD", name: "MOD", description: "Modulo (a % b)", gas: 5, stackIn: 2, stackOut: 1 },
-  MSTORE: { opcode: "MSTORE", name: "MSTORE", description: "Store word to memory", gas: 3, stackIn: 2, stackOut: 0 },
-  MLOAD: { opcode: "MLOAD", name: "MLOAD", description: "Load word from memory", gas: 3, stackIn: 1, stackOut: 1 },
-  SSTORE: { opcode: "SSTORE", name: "SSTORE", description: "Store word to storage", gas: 20000, stackIn: 2, stackOut: 0 },
-  SLOAD: { opcode: "SLOAD", name: "SLOAD", description: "Load word from storage", gas: 2100, stackIn: 1, stackOut: 1 },
-  DUP1: { opcode: "DUP1", name: "DUP1", description: "Duplicate 1st stack item", gas: 3, stackIn: 1, stackOut: 2 },
-  DUP2: { opcode: "DUP2", name: "DUP2", description: "Duplicate 2nd stack item", gas: 3, stackIn: 2, stackOut: 3 },
-  SWAP1: { opcode: "SWAP1", name: "SWAP1", description: "Swap top two stack items", gas: 3, stackIn: 2, stackOut: 2 },
-  POP: { opcode: "POP", name: "POP", description: "Remove top stack item", gas: 2, stackIn: 1, stackOut: 0 },
-  ISZERO: { opcode: "ISZERO", name: "ISZERO", description: "Check if top is zero", gas: 3, stackIn: 1, stackOut: 1 },
-  AND: { opcode: "AND", name: "AND", description: "Bitwise AND", gas: 3, stackIn: 2, stackOut: 1 },
-  OR: { opcode: "OR", name: "OR", description: "Bitwise OR", gas: 3, stackIn: 2, stackOut: 1 },
-  NOT: { opcode: "NOT", name: "NOT", description: "Bitwise NOT", gas: 3, stackIn: 1, stackOut: 1 },
-  LT: { opcode: "LT", name: "LT", description: "Less than comparison", gas: 3, stackIn: 2, stackOut: 1 },
-  GT: { opcode: "GT", name: "GT", description: "Greater than comparison", gas: 3, stackIn: 2, stackOut: 1 },
-  EQ: { opcode: "EQ", name: "EQ", description: "Equality comparison", gas: 3, stackIn: 2, stackOut: 1 },
-  CALLER: { opcode: "CALLER", name: "CALLER", description: "Push msg.sender", gas: 2, stackIn: 0, stackOut: 1 },
-  CALLVALUE: { opcode: "CALLVALUE", name: "CALLVALUE", description: "Push msg.value", gas: 2, stackIn: 0, stackOut: 1 },
+  PUSH1: {
+    opcode: "PUSH1",
+    name: "PUSH1",
+    description: "Push 1-byte value onto stack",
+    gas: 3,
+    stackIn: 0,
+    stackOut: 1,
+  },
+  PUSH32: {
+    opcode: "PUSH32",
+    name: "PUSH32",
+    description: "Push 32-byte value onto stack",
+    gas: 3,
+    stackIn: 0,
+    stackOut: 1,
+  },
+  ADD: {
+    opcode: "ADD",
+    name: "ADD",
+    description: "Addition (a + b)",
+    gas: 3,
+    stackIn: 2,
+    stackOut: 1,
+  },
+  SUB: {
+    opcode: "SUB",
+    name: "SUB",
+    description: "Subtraction (a - b)",
+    gas: 3,
+    stackIn: 2,
+    stackOut: 1,
+  },
+  MUL: {
+    opcode: "MUL",
+    name: "MUL",
+    description: "Multiplication (a * b)",
+    gas: 5,
+    stackIn: 2,
+    stackOut: 1,
+  },
+  DIV: {
+    opcode: "DIV",
+    name: "DIV",
+    description: "Integer division (a / b)",
+    gas: 5,
+    stackIn: 2,
+    stackOut: 1,
+  },
+  MOD: {
+    opcode: "MOD",
+    name: "MOD",
+    description: "Modulo (a % b)",
+    gas: 5,
+    stackIn: 2,
+    stackOut: 1,
+  },
+  MSTORE: {
+    opcode: "MSTORE",
+    name: "MSTORE",
+    description: "Store word to memory",
+    gas: 3,
+    stackIn: 2,
+    stackOut: 0,
+  },
+  MLOAD: {
+    opcode: "MLOAD",
+    name: "MLOAD",
+    description: "Load word from memory",
+    gas: 3,
+    stackIn: 1,
+    stackOut: 1,
+  },
+  SSTORE: {
+    opcode: "SSTORE",
+    name: "SSTORE",
+    description: "Store word to storage",
+    gas: 20000,
+    stackIn: 2,
+    stackOut: 0,
+  },
+  SLOAD: {
+    opcode: "SLOAD",
+    name: "SLOAD",
+    description: "Load word from storage",
+    gas: 2100,
+    stackIn: 1,
+    stackOut: 1,
+  },
+  DUP1: {
+    opcode: "DUP1",
+    name: "DUP1",
+    description: "Duplicate 1st stack item",
+    gas: 3,
+    stackIn: 1,
+    stackOut: 2,
+  },
+  DUP2: {
+    opcode: "DUP2",
+    name: "DUP2",
+    description: "Duplicate 2nd stack item",
+    gas: 3,
+    stackIn: 2,
+    stackOut: 3,
+  },
+  SWAP1: {
+    opcode: "SWAP1",
+    name: "SWAP1",
+    description: "Swap top two stack items",
+    gas: 3,
+    stackIn: 2,
+    stackOut: 2,
+  },
+  POP: {
+    opcode: "POP",
+    name: "POP",
+    description: "Remove top stack item",
+    gas: 2,
+    stackIn: 1,
+    stackOut: 0,
+  },
+  ISZERO: {
+    opcode: "ISZERO",
+    name: "ISZERO",
+    description: "Check if top is zero",
+    gas: 3,
+    stackIn: 1,
+    stackOut: 1,
+  },
+  AND: {
+    opcode: "AND",
+    name: "AND",
+    description: "Bitwise AND",
+    gas: 3,
+    stackIn: 2,
+    stackOut: 1,
+  },
+  OR: {
+    opcode: "OR",
+    name: "OR",
+    description: "Bitwise OR",
+    gas: 3,
+    stackIn: 2,
+    stackOut: 1,
+  },
+  NOT: {
+    opcode: "NOT",
+    name: "NOT",
+    description: "Bitwise NOT",
+    gas: 3,
+    stackIn: 1,
+    stackOut: 1,
+  },
+  LT: {
+    opcode: "LT",
+    name: "LT",
+    description: "Less than comparison",
+    gas: 3,
+    stackIn: 2,
+    stackOut: 1,
+  },
+  GT: {
+    opcode: "GT",
+    name: "GT",
+    description: "Greater than comparison",
+    gas: 3,
+    stackIn: 2,
+    stackOut: 1,
+  },
+  EQ: {
+    opcode: "EQ",
+    name: "EQ",
+    description: "Equality comparison",
+    gas: 3,
+    stackIn: 2,
+    stackOut: 1,
+  },
+  CALLER: {
+    opcode: "CALLER",
+    name: "CALLER",
+    description: "Push msg.sender",
+    gas: 2,
+    stackIn: 0,
+    stackOut: 1,
+  },
+  CALLVALUE: {
+    opcode: "CALLVALUE",
+    name: "CALLVALUE",
+    description: "Push msg.value",
+    gas: 2,
+    stackIn: 0,
+    stackOut: 1,
+  },
 };
 
 const MAX_UINT256 = (BigInt(1) << BigInt(256)) - BigInt(1);
@@ -97,13 +265,17 @@ export function createInitialEvmState(): EvmState {
 
 export function executeInstruction(
   state: EvmState,
-  instruction: Instruction
+  instruction: Instruction,
 ): EvmState {
   if (state.halted) return state;
 
   const info = OPCODE_MAP[instruction.opcode];
   if (!info) {
-    return { ...state, halted: true, error: `Unknown opcode: ${instruction.opcode}` };
+    return {
+      ...state,
+      halted: true,
+      error: `Unknown opcode: ${instruction.opcode}`,
+    };
   }
 
   const { stack } = state;
@@ -122,7 +294,8 @@ export function executeInstruction(
     }
 
     case "ADD": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const a = stack[stack.length - 1]!;
       const b = stack[stack.length - 2]!;
       const result = (a + b) & MAX_UINT256;
@@ -135,7 +308,8 @@ export function executeInstruction(
     }
 
     case "SUB": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const a = stack[stack.length - 1]!;
       const b = stack[stack.length - 2]!;
       const result = a >= b ? a - b : MAX_UINT256 + BigInt(1) - (b - a);
@@ -148,7 +322,8 @@ export function executeInstruction(
     }
 
     case "MUL": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const a = stack[stack.length - 1]!;
       const b = stack[stack.length - 2]!;
       const result = (a * b) & MAX_UINT256;
@@ -161,7 +336,8 @@ export function executeInstruction(
     }
 
     case "DIV": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const a = stack[stack.length - 1]!;
       const b = stack[stack.length - 2]!;
       const result = b === BigInt(0) ? BigInt(0) : a / b;
@@ -174,7 +350,8 @@ export function executeInstruction(
     }
 
     case "MOD": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const a = stack[stack.length - 1]!;
       const b = stack[stack.length - 2]!;
       const result = b === BigInt(0) ? BigInt(0) : a % b;
@@ -187,20 +364,25 @@ export function executeInstruction(
     }
 
     case "MSTORE": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const offset = Number(stack[stack.length - 1]!);
       const value = stack[stack.length - 2]!;
       return {
         ...state,
         stack: [...stack.slice(0, -2)],
-        memory: { ...state.memory, [offset]: value.toString(16).padStart(64, "0") },
+        memory: {
+          ...state.memory,
+          [offset]: value.toString(16).padStart(64, "0"),
+        },
         pc: state.pc + 1,
         gasUsed: state.gasUsed + gas,
       };
     }
 
     case "MLOAD": {
-      if (stack.length < 1) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 1)
+        return { ...state, halted: true, error: "Stack underflow" };
       const offset = Number(stack[stack.length - 1]!);
       const value = state.memory[offset] ?? "0".repeat(64);
       return {
@@ -212,7 +394,8 @@ export function executeInstruction(
     }
 
     case "SSTORE": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const key = stack[stack.length - 1]!.toString(16);
       const value = stack[stack.length - 2]!.toString(16).padStart(64, "0");
       return {
@@ -225,7 +408,8 @@ export function executeInstruction(
     }
 
     case "SLOAD": {
-      if (stack.length < 1) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 1)
+        return { ...state, halted: true, error: "Stack underflow" };
       const key = stack[stack.length - 1]!.toString(16);
       const value = state.storage[key] ?? "0".repeat(64);
       return {
@@ -237,7 +421,8 @@ export function executeInstruction(
     }
 
     case "DUP1": {
-      if (stack.length < 1) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 1)
+        return { ...state, halted: true, error: "Stack underflow" };
       return {
         ...state,
         stack: [...stack, stack[stack.length - 1]!],
@@ -247,7 +432,8 @@ export function executeInstruction(
     }
 
     case "DUP2": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       return {
         ...state,
         stack: [...stack, stack[stack.length - 2]!],
@@ -257,7 +443,8 @@ export function executeInstruction(
     }
 
     case "SWAP1": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const newStack = [...stack];
       const top = newStack[newStack.length - 1]!;
       newStack[newStack.length - 1] = newStack[newStack.length - 2]!;
@@ -271,7 +458,8 @@ export function executeInstruction(
     }
 
     case "POP": {
-      if (stack.length < 1) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 1)
+        return { ...state, halted: true, error: "Stack underflow" };
       return {
         ...state,
         stack: [...stack.slice(0, -1)],
@@ -281,7 +469,8 @@ export function executeInstruction(
     }
 
     case "ISZERO": {
-      if (stack.length < 1) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 1)
+        return { ...state, halted: true, error: "Stack underflow" };
       const val = stack[stack.length - 1]!;
       const result = val === BigInt(0) ? BigInt(1) : BigInt(0);
       return {
@@ -293,7 +482,8 @@ export function executeInstruction(
     }
 
     case "AND": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const a = stack[stack.length - 1]!;
       const b = stack[stack.length - 2]!;
       return {
@@ -305,7 +495,8 @@ export function executeInstruction(
     }
 
     case "OR": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const a = stack[stack.length - 1]!;
       const b = stack[stack.length - 2]!;
       return {
@@ -317,7 +508,8 @@ export function executeInstruction(
     }
 
     case "NOT": {
-      if (stack.length < 1) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 1)
+        return { ...state, halted: true, error: "Stack underflow" };
       const val = stack[stack.length - 1]!;
       return {
         ...state,
@@ -328,7 +520,8 @@ export function executeInstruction(
     }
 
     case "LT": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const a = stack[stack.length - 1]!;
       const b = stack[stack.length - 2]!;
       return {
@@ -340,7 +533,8 @@ export function executeInstruction(
     }
 
     case "GT": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const a = stack[stack.length - 1]!;
       const b = stack[stack.length - 2]!;
       return {
@@ -352,7 +546,8 @@ export function executeInstruction(
     }
 
     case "EQ": {
-      if (stack.length < 2) return { ...state, halted: true, error: "Stack underflow" };
+      if (stack.length < 2)
+        return { ...state, halted: true, error: "Stack underflow" };
       const a = stack[stack.length - 1]!;
       const b = stack[stack.length - 2]!;
       return {
@@ -383,11 +578,17 @@ export function executeInstruction(
     }
 
     default:
-      return { ...state, halted: true, error: `Unimplemented: ${instruction.opcode}` };
+      return {
+        ...state,
+        halted: true,
+        error: `Unimplemented: ${instruction.opcode}`,
+      };
   }
 }
 
-export function executeProgram(instructions: readonly Instruction[]): ProgramResult {
+export function executeProgram(
+  instructions: readonly Instruction[],
+): ProgramResult {
   const steps: ExecutionStep[] = [];
   let state = createInitialEvmState();
 

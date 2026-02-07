@@ -27,7 +27,7 @@ describe("calculateTWAP", () => {
   it("weights by time duration", () => {
     const snapshots = [
       { price: 100, timestamp: 0 },
-      { price: 200, timestamp: 10 },  // 100 held for 10s
+      { price: 200, timestamp: 10 }, // 100 held for 10s
       { price: 300, timestamp: 110 }, // 200 held for 100s
     ];
     // TWAP = (100*10 + 200*100) / 110 = 21000/110 ≈ 190.91

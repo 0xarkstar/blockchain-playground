@@ -66,7 +66,7 @@ export function proverRespond(
   r: bigint,
   e: bigint,
   x: bigint,
-  q: bigint
+  q: bigint,
 ): bigint {
   return modAdd(r, modMul(e, x, q), q);
 }
@@ -77,7 +77,7 @@ export function verifySchnorr(
   R: bigint,
   e: bigint,
   s: bigint,
-  y: bigint
+  y: bigint,
 ): boolean {
   const lhs = modPow(params.g, s, params.p);
   const rhs = modMul(R, modPow(y, e, params.p), params.p);
@@ -88,7 +88,7 @@ export function verifySchnorr(
 export function runProtocol(
   params: FieldParams,
   keys: SchnorrKeys,
-  numRounds: number
+  numRounds: number,
 ): SchnorrProtocolResult {
   const rounds: SchnorrRound[] = [];
   for (let i = 0; i < numRounds; i++) {
@@ -98,13 +98,13 @@ export function runProtocol(
       randomness,
       challenge,
       keys.secretKey,
-      params.q
+      params.q,
     );
     const lhs = modPow(params.g, response, params.p);
     const rhs = modMul(
       commitment,
       modPow(keys.publicKey, challenge, params.p),
-      params.p
+      params.p,
     );
     rounds.push({
       round: i + 1,

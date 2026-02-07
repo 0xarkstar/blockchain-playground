@@ -94,16 +94,10 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
                 </ActionIcon>
               </Menu.Target>
               <Menu.Dropdown>
-                <Menu.Item
-                  component="a"
-                  href={`/en${pathWithoutLocale}`}
-                >
+                <Menu.Item component="a" href={`/en${pathWithoutLocale}`}>
                   <Text size="sm">English</Text>
                 </Menu.Item>
-                <Menu.Item
-                  component="a"
-                  href={`/ko${pathWithoutLocale}`}
-                >
+                <Menu.Item component="a" href={`/ko${pathWithoutLocale}`}>
                   <Text size="sm">한국어</Text>
                 </Menu.Item>
               </Menu.Dropdown>

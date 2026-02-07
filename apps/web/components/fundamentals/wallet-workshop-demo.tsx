@@ -16,8 +16,16 @@ import {
   ActionIcon,
   Alert,
 } from "@mantine/core";
-import { IconWallet, IconCopy, IconCheck, IconInfoCircle } from "@tabler/icons-react";
-import { generateNewMnemonic, isValidMnemonic } from "../../lib/wallet/mnemonic";
+import {
+  IconWallet,
+  IconCopy,
+  IconCheck,
+  IconInfoCircle,
+} from "@tabler/icons-react";
+import {
+  generateNewMnemonic,
+  isValidMnemonic,
+} from "../../lib/wallet/mnemonic";
 import {
   deriveAccountsFromMnemonic,
   type HDWalletInfo,

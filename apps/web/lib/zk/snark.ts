@@ -10,7 +10,12 @@
  */
 
 import { modPow, modMul, randomFieldElement } from "./field";
-import { parseExpression, gatesToR1CS, computeWitness, type Gate } from "./circuit";
+import {
+  parseExpression,
+  gatesToR1CS,
+  computeWitness,
+  type Gate,
+} from "./circuit";
 import {
   r1csToQAP,
   verifyQAP,
@@ -75,7 +80,7 @@ export function generateSNARKProof(
   qap: QAP,
   witness: readonly bigint[],
   setup: TrustedSetup,
-  p: bigint
+  p: bigint,
 ): SNARKResult {
   const steps: PipelineStep[] = [];
 
@@ -95,9 +100,15 @@ export function generateSNARKProof(
 
   steps.push({
     name: "Evaluate at secret point",
-    description: "Evaluate QAP polynomials A(τ), B(τ), C(τ) using encrypted powers of τ",
-    data: { "A(τ)": Atau.toString(), "B(τ)": Btau.toString(), "C(τ)": Ctau.toString() },
-    warning: "In a real SNARK, τ is destroyed after setup. Evaluations use elliptic-curve operations on encrypted powers.",
+    description:
+      "Evaluate QAP polynomials A(τ), B(τ), C(τ) using encrypted powers of τ",
+    data: {
+      "A(τ)": Atau.toString(),
+      "B(τ)": Btau.toString(),
+      "C(τ)": Ctau.toString(),
+    },
+    warning:
+      "In a real SNARK, τ is destroyed after setup. Evaluations use elliptic-curve operations on encrypted powers.",
   });
 
   const proof: SNARKProof = { piA: Atau, piB: Btau, piC: Ctau };
@@ -113,7 +124,8 @@ export function generateSNARKProof(
       "H*T": qapCheck.rhs.toString(),
       verified: qapCheck.verified,
     },
-    warning: "Real SNARKs use bilinear pairings: e(πA, πB) = e(πC, g) * e(H, T) on elliptic curves.",
+    warning:
+      "Real SNARKs use bilinear pairings: e(πA, πB) = e(πC, g) * e(H, T) on elliptic curves.",
   });
 
   return { proof, verified: qapCheck.verified, steps };
@@ -125,7 +137,7 @@ export function verifySNARKProof(
   setup: TrustedSetup,
   qap: QAP,
   witness: readonly bigint[],
-  p: bigint
+  p: bigint,
 ): boolean {
   const qapCheck = verifyQAP(qap, witness, p, setup.tau);
   return qapCheck.verified;
@@ -137,7 +149,7 @@ export function verifySNARKProof(
 export function getFullPipeline(
   expression: string,
   inputs: Readonly<Record<string, bigint>>,
-  p: bigint
+  p: bigint,
 ): FullPipelineResult {
   const steps: PipelineStep[] = [];
 
@@ -146,18 +158,28 @@ export function getFullPipeline(
   steps.push({
     name: "1. Parse Expression",
     description: `Parsed "${expression}" into ${gates.length} arithmetic gate(s)`,
-    data: { gates: gates.map((g) => `${g.output} = ${g.left} ${g.op === "mul" ? "*" : "+"} ${g.right}`) },
+    data: {
+      gates: gates.map(
+        (g) =>
+          `${g.output} = ${g.left} ${g.op === "mul" ? "*" : "+"} ${g.right}`,
+      ),
+    },
   });
 
   // 2. Compute witness
   const witnessResult = computeWitness(gates, inputs, p);
-  const output = gates.length > 0
-    ? witnessResult.values[gates[gates.length - 1].output] ?? 0n
-    : 0n;
+  const output =
+    gates.length > 0
+      ? (witnessResult.values[gates[gates.length - 1].output] ?? 0n)
+      : 0n;
   steps.push({
     name: "2. Compute Witness",
     description: "Evaluate all wires with the given inputs",
-    data: { ...Object.fromEntries(Object.entries(witnessResult.values).map(([k, v]) => [k, v.toString()])) },
+    data: {
+      ...Object.fromEntries(
+        Object.entries(witnessResult.values).map(([k, v]) => [k, v.toString()]),
+      ),
+    },
   });
 
   // 3. R1CS
@@ -174,7 +196,8 @@ export function getFullPipeline(
     name: "4. R1CS → QAP",
     description: "Interpolate constraint matrices into polynomials",
     data: { evaluationPoints: qap.evaluationPoints.map(String) },
-    warning: "QAP converts discrete constraint checks into a single polynomial divisibility check.",
+    warning:
+      "QAP converts discrete constraint checks into a single polynomial divisibility check.",
   });
 
   // 5. Setup
@@ -182,18 +205,24 @@ export function getFullPipeline(
     ...qap.Ai.map((poly) => poly.length),
     ...qap.Bi.map((poly) => poly.length),
     ...qap.Ci.map((poly) => poly.length),
-    qap.target.length
+    qap.target.length,
   );
   const setup = performTrustedSetup(maxDeg + 2, p);
   steps.push({
     name: "5. Trusted Setup",
     description: "Generate secret τ and its powers (toxic waste ceremony)",
     data: { tau: setup.tau.toString(), degree: setup.degree },
-    warning: "In real SNARKs, τ must be securely destroyed. Multi-party ceremonies (Powers of Tau) ensure no single party knows τ.",
+    warning:
+      "In real SNARKs, τ must be securely destroyed. Multi-party ceremonies (Powers of Tau) ensure no single party knows τ.",
   });
 
   // 6. Prove
-  const snarkResult = generateSNARKProof(qap, witnessResult.wireVector, setup, p);
+  const snarkResult = generateSNARKProof(
+    qap,
+    witnessResult.wireVector,
+    setup,
+    p,
+  );
   steps.push(...snarkResult.steps);
 
   return {

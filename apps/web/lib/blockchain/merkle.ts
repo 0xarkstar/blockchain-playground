@@ -53,13 +53,13 @@ export class MerkleTree {
         left.hash
           .slice(2)
           .match(/.{2}/g)!
-          .map((b) => parseInt(b, 16))
+          .map((b) => parseInt(b, 16)),
       );
       const rightBytes = new Uint8Array(
         right.hash
           .slice(2)
           .match(/.{2}/g)!
-          .map((b) => parseInt(b, 16))
+          .map((b) => parseInt(b, 16)),
       );
       combinedBytes.set(leftBytes, 0);
       combinedBytes.set(rightBytes, 32);
@@ -113,13 +113,12 @@ export class MerkleTree {
 
   static verifyProof(
     proof: MerkleProof,
-    algorithm: HashAlgorithm = "keccak256"
+    algorithm: HashAlgorithm = "keccak256",
   ): boolean {
     let currentHash = proof.leaf;
 
     for (const sibling of proof.siblings) {
-      const leftHash =
-        sibling.position === "left" ? sibling.hash : currentHash;
+      const leftHash = sibling.position === "left" ? sibling.hash : currentHash;
       const rightHash =
         sibling.position === "right" ? sibling.hash : currentHash;
 
@@ -127,13 +126,13 @@ export class MerkleTree {
         leftHash
           .slice(2)
           .match(/.{2}/g)!
-          .map((b) => parseInt(b, 16))
+          .map((b) => parseInt(b, 16)),
       );
       const rightBytes = new Uint8Array(
         rightHash
           .slice(2)
           .match(/.{2}/g)!
-          .map((b) => parseInt(b, 16))
+          .map((b) => parseInt(b, 16)),
       );
 
       const combined = new Uint8Array(64);

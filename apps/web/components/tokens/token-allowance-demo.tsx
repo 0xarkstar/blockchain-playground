@@ -2,11 +2,26 @@
 
 import { useState, useMemo } from "react";
 import {
-  Stack, Paper, TextInput, NumberInput, Button, Table, Code, Badge, Group, Text, Alert,
+  Stack,
+  Paper,
+  TextInput,
+  NumberInput,
+  Button,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Alert,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
-  createERC20, mint, approve, transferFrom, balanceOf, allowance,
+  createERC20,
+  mint,
+  approve,
+  transferFrom,
+  balanceOf,
+  allowance,
   type ERC20State,
 } from "../../lib/tokens/erc20";
 
@@ -30,13 +45,24 @@ export function TokenAllowanceDemo() {
   }, [state.balances]);
 
   const handleApprove = () => {
-    const result = approve(state, "owner", approveSpender, BigInt(approveAmount));
+    const result = approve(
+      state,
+      "owner",
+      approveSpender,
+      BigInt(approveAmount),
+    );
     setState(result.newState);
     setLastMessage(result.message);
   };
 
   const handleTransferFrom = () => {
-    const result = transferFrom(state, tfSpender, tfFrom, tfTo, BigInt(tfAmount));
+    const result = transferFrom(
+      state,
+      tfSpender,
+      tfFrom,
+      tfTo,
+      BigInt(tfAmount),
+    );
     setState(result.newState);
     setLastMessage(result.message);
   };
@@ -45,25 +71,59 @@ export function TokenAllowanceDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Step 1: Owner Approves Spender</Text>
+          <Text size="sm" fw={600}>
+            Step 1: Owner Approves Spender
+          </Text>
           <Group grow>
-            <TextInput label="Spender" value={approveSpender} onChange={(e) => setApproveSpender(e.currentTarget.value)} />
-            <NumberInput label="Amount" value={approveAmount} onChange={(v) => setApproveAmount(Number(v) || 0)} min={0} />
+            <TextInput
+              label="Spender"
+              value={approveSpender}
+              onChange={(e) => setApproveSpender(e.currentTarget.value)}
+            />
+            <NumberInput
+              label="Amount"
+              value={approveAmount}
+              onChange={(v) => setApproveAmount(Number(v) || 0)}
+              min={0}
+            />
           </Group>
-          <Button onClick={handleApprove} variant="light" color="orange">Approve</Button>
+          <Button onClick={handleApprove} variant="light" color="orange">
+            Approve
+          </Button>
         </Stack>
       </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Step 2: Spender Transfers From Owner</Text>
+          <Text size="sm" fw={600}>
+            Step 2: Spender Transfers From Owner
+          </Text>
           <Group grow>
-            <TextInput label="Spender" value={tfSpender} onChange={(e) => setTfSpender(e.currentTarget.value)} />
-            <TextInput label="From" value={tfFrom} onChange={(e) => setTfFrom(e.currentTarget.value)} />
-            <TextInput label="To" value={tfTo} onChange={(e) => setTfTo(e.currentTarget.value)} />
-            <NumberInput label="Amount" value={tfAmount} onChange={(v) => setTfAmount(Number(v) || 0)} min={1} />
+            <TextInput
+              label="Spender"
+              value={tfSpender}
+              onChange={(e) => setTfSpender(e.currentTarget.value)}
+            />
+            <TextInput
+              label="From"
+              value={tfFrom}
+              onChange={(e) => setTfFrom(e.currentTarget.value)}
+            />
+            <TextInput
+              label="To"
+              value={tfTo}
+              onChange={(e) => setTfTo(e.currentTarget.value)}
+            />
+            <NumberInput
+              label="Amount"
+              value={tfAmount}
+              onChange={(v) => setTfAmount(Number(v) || 0)}
+              min={1}
+            />
           </Group>
-          <Button onClick={handleTransferFrom} variant="light" color="blue">Transfer From</Button>
+          <Button onClick={handleTransferFrom} variant="light" color="blue">
+            Transfer From
+          </Button>
         </Stack>
       </Paper>
 
@@ -75,7 +135,9 @@ export function TokenAllowanceDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Balances</Text>
+          <Text size="sm" fw={600}>
+            Balances
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -86,8 +148,12 @@ export function TokenAllowanceDemo() {
             <Table.Tbody>
               {addresses.map((addr) => (
                 <Table.Tr key={addr}>
-                  <Table.Td><Code>{addr}</Code></Table.Td>
-                  <Table.Td ta="right"><Code>{balanceOf(state, addr).toString()}</Code></Table.Td>
+                  <Table.Td>
+                    <Code>{addr}</Code>
+                  </Table.Td>
+                  <Table.Td ta="right">
+                    <Code>{balanceOf(state, addr).toString()}</Code>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -97,7 +163,9 @@ export function TokenAllowanceDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Allowances</Text>
+          <Text size="sm" fw={600}>
+            Allowances
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -110,20 +178,29 @@ export function TokenAllowanceDemo() {
               {Object.entries(state.allowances).flatMap(([owner, spenders]) =>
                 Object.entries(spenders).map(([spender, amount]) => (
                   <Table.Tr key={`${owner}-${spender}`}>
-                    <Table.Td><Code>{owner}</Code></Table.Td>
-                    <Table.Td><Code>{spender}</Code></Table.Td>
+                    <Table.Td>
+                      <Code>{owner}</Code>
+                    </Table.Td>
+                    <Table.Td>
+                      <Code>{spender}</Code>
+                    </Table.Td>
                     <Table.Td ta="right">
-                      <Badge variant="light" color={amount > BigInt(0) ? "green" : "gray"}>
+                      <Badge
+                        variant="light"
+                        color={amount > BigInt(0) ? "green" : "gray"}
+                      >
                         {amount.toString()}
                       </Badge>
                     </Table.Td>
                   </Table.Tr>
-                ))
+                )),
               )}
               {Object.keys(state.allowances).length === 0 && (
                 <Table.Tr>
                   <Table.Td colSpan={3} ta="center">
-                    <Text size="sm" c="dimmed">No allowances set</Text>
+                    <Text size="sm" c="dimmed">
+                      No allowances set
+                    </Text>
                   </Table.Td>
                 </Table.Tr>
               )}

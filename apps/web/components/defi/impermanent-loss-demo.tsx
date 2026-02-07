@@ -44,7 +44,9 @@ export function ImpermanentLossDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Initial Position (50/50 Pool)</Text>
+          <Text size="sm" fw={600}>
+            Initial Position (50/50 Pool)
+          </Text>
           <NumberInput
             label="Total Position Value (USD)"
             description="Automatically split equally between Token A and Token B"
@@ -55,7 +57,8 @@ export function ImpermanentLossDemo() {
             prefix="$"
           />
           <Text size="xs" c="dimmed">
-            Token A: ${result.halfValue.toLocaleString()} | Token B: ${result.halfValue.toLocaleString()}
+            Token A: ${result.halfValue.toLocaleString()} | Token B: $
+            {result.halfValue.toLocaleString()}
           </Text>
         </Stack>
       </Paper>
@@ -88,7 +91,9 @@ export function ImpermanentLossDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Comparison</Text>
+          <Text size="sm" fw={600}>
+            Comparison
+          </Text>
           <Table>
             <Table.Thead>
               <Table.Tr>
@@ -100,26 +105,42 @@ export function ImpermanentLossDemo() {
               <Table.Tr>
                 <Table.Td>Initial Value</Table.Td>
                 <Table.Td ta="right">
-                  ${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  $
+                  {totalValue.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>HODL Value</Table.Td>
                 <Table.Td ta="right">
-                  ${result.hodlValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  $
+                  {result.hodlValue.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>LP Value</Table.Td>
                 <Table.Td ta="right">
-                  ${result.lpValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  $
+                  {result.lpValue.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Difference (LP - HODL)</Table.Td>
                 <Table.Td ta="right">
                   <Text c={result.difference < 0 ? "red" : "green"} fw={600}>
-                    ${result.difference.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    $
+                    {result.difference.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </Text>
                 </Table.Td>
               </Table.Tr>
@@ -136,11 +157,17 @@ export function ImpermanentLossDemo() {
         </Stack>
       </Paper>
 
-      <Alert icon={<IconInfoCircle size={16} />} color="blue" title="What is Impermanent Loss?">
-        Impermanent loss occurs when the price ratio of pooled tokens changes from when you deposited.
-        The greater the divergence, the more IL you experience. It is &quot;impermanent&quot; because
-        if prices return to the original ratio, the loss disappears. Trading fees earned may offset IL.
-        This calculator assumes a standard 50/50 constant product pool (x*y=k).
+      <Alert
+        icon={<IconInfoCircle size={16} />}
+        color="blue"
+        title="What is Impermanent Loss?"
+      >
+        Impermanent loss occurs when the price ratio of pooled tokens changes
+        from when you deposited. The greater the divergence, the more IL you
+        experience. It is &quot;impermanent&quot; because if prices return to
+        the original ratio, the loss disappears. Trading fees earned may offset
+        IL. This calculator assumes a standard 50/50 constant product pool
+        (x*y=k).
       </Alert>
     </Stack>
   );

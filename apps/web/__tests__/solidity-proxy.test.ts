@@ -41,7 +41,9 @@ describe("createProxyState", () => {
     const state = createProxyState("transparent", ADMIN);
     expect(state.type).toBe("transparent");
     expect(state.admin).toBe(ADMIN);
-    expect(state.implementation).toBe("0x0000000000000000000000000000000000000000");
+    expect(state.implementation).toBe(
+      "0x0000000000000000000000000000000000000000",
+    );
     expect(state.previousImplementations).toHaveLength(0);
   });
 });
@@ -90,7 +92,9 @@ describe("simulateUpgrade", () => {
   it("does not mutate original state", () => {
     const state = createProxyState("transparent", ADMIN);
     const result = simulateUpgrade(state, IMPL_V1, ADMIN);
-    expect(state.implementation).toBe("0x0000000000000000000000000000000000000000");
+    expect(state.implementation).toBe(
+      "0x0000000000000000000000000000000000000000",
+    );
     expect(result.state.implementation).toBe(IMPL_V1);
   });
 });

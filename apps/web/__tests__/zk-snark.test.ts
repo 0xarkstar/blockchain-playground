@@ -5,7 +5,11 @@ import {
   verifySNARKProof,
   getFullPipeline,
 } from "../lib/zk/snark";
-import { parseExpression, gatesToR1CS, computeWitness } from "../lib/zk/circuit";
+import {
+  parseExpression,
+  gatesToR1CS,
+  computeWitness,
+} from "../lib/zk/circuit";
 import { r1csToQAP } from "../lib/zk/polynomial";
 
 describe("SNARK Pipeline", () => {
@@ -29,14 +33,9 @@ describe("SNARK Pipeline", () => {
       const qap = r1csToQAP(r1cs, p);
       const setup = performTrustedSetup(
         Math.max(...qap.Ai.map((a) => a.length), qap.target.length) + 2,
-        p
+        p,
       );
-      const result = generateSNARKProof(
-        qap,
-        witness.wireVector,
-        setup,
-        p
-      );
+      const result = generateSNARKProof(qap, witness.wireVector, setup, p);
       expect(result.verified).toBe(true);
       expect(result.steps.length).toBeGreaterThan(0);
     });
@@ -47,12 +46,7 @@ describe("SNARK Pipeline", () => {
       const witness = computeWitness(gates, { x: 2n, y: 5n }, p);
       const qap = r1csToQAP(r1cs, p);
       const setup = performTrustedSetup(10, p);
-      const result = generateSNARKProof(
-        qap,
-        witness.wireVector,
-        setup,
-        p
-      );
+      const result = generateSNARKProof(qap, witness.wireVector, setup, p);
       expect(result.proof.piA).toBeDefined();
       expect(result.proof.piB).toBeDefined();
       expect(result.proof.piC).toBeDefined();
@@ -66,18 +60,13 @@ describe("SNARK Pipeline", () => {
       const witness = computeWitness(gates, { x: 3n, y: 7n }, p);
       const qap = r1csToQAP(r1cs, p);
       const setup = performTrustedSetup(10, p);
-      const result = generateSNARKProof(
-        qap,
-        witness.wireVector,
-        setup,
-        p
-      );
+      const result = generateSNARKProof(qap, witness.wireVector, setup, p);
       const verified = verifySNARKProof(
         result.proof,
         setup,
         qap,
         witness.wireVector,
-        p
+        p,
       );
       expect(verified).toBe(true);
     });
@@ -92,11 +81,7 @@ describe("SNARK Pipeline", () => {
     });
 
     it("runs end-to-end for (x + y) * z", () => {
-      const result = getFullPipeline(
-        "(x + y) * z",
-        { x: 2n, y: 3n, z: 4n },
-        p
-      );
+      const result = getFullPipeline("(x + y) * z", { x: 2n, y: 3n, z: 4n }, p);
       expect(result.verified).toBe(true);
       expect(result.output).toBe(20n);
     });

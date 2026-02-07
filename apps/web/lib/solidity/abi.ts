@@ -28,7 +28,7 @@ export interface EncodedLog {
 
 export function buildFunctionSignature(
   name: string,
-  paramTypes: readonly string[]
+  paramTypes: readonly string[],
 ): string {
   return `${name}(${paramTypes.join(",")})`;
 }
@@ -71,21 +71,20 @@ export function encodeParameter(value: string, type: string): string {
 
 export function encodeCalldata(
   name: string,
-  params: readonly AbiParam[]
+  params: readonly AbiParam[],
 ): EncodedCalldata {
   const paramTypes = params.map((p) => p.type);
   const functionSignature = buildFunctionSignature(name, paramTypes);
   const selector = computeFunctionSelector(functionSignature);
   const encodedParams = params.map((p) => encodeParameter(p.value, p.type));
-  const fullCalldata =
-    selector + encodedParams.join("");
+  const fullCalldata = selector + encodedParams.join("");
 
   return { selector, encodedParams, fullCalldata, functionSignature };
 }
 
 export function computeEventTopic(
   name: string,
-  paramTypes: readonly string[]
+  paramTypes: readonly string[],
 ): string {
   const signature = buildFunctionSignature(name, paramTypes);
   return keccak256(toHex(toBytes(signature)));
@@ -93,7 +92,7 @@ export function computeEventTopic(
 
 export function encodeLogEntry(
   eventName: string,
-  params: readonly EventParam[]
+  params: readonly EventParam[],
 ): EncodedLog {
   const allTypes = params.map((p) => p.type);
   const topic0 = computeEventTopic(eventName, allTypes);
@@ -110,7 +109,7 @@ export function encodeLogEntry(
       const encoded = "0x" + encodeParameter(param.value, param.type);
       topics.push(encoded);
       topicDescriptions.push(
-        `topic[${topics.length - 1}]: ${param.name} (${param.type}, indexed)`
+        `topic[${topics.length - 1}]: ${param.name} (${param.type}, indexed)`,
       );
     } else {
       dataParams.push(param);
@@ -118,8 +117,7 @@ export function encodeLogEntry(
   }
 
   const data =
-    "0x" +
-    dataParams.map((p) => encodeParameter(p.value, p.type)).join("");
+    "0x" + dataParams.map((p) => encodeParameter(p.value, p.type)).join("");
 
   return { topics, data, topicDescriptions };
 }

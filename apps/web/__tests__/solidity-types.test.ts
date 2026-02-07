@@ -87,7 +87,10 @@ describe("encodeValue", () => {
   });
 
   it("encodes valid address", () => {
-    const result = encodeValue("0xdead000000000000000000000000000000000000", "address");
+    const result = encodeValue(
+      "0xdead000000000000000000000000000000000000",
+      "address",
+    );
     expect(result.valid).toBe(true);
     expect(result.hex).toContain("dead");
   });

@@ -73,7 +73,7 @@ describe("Private Transfers", () => {
         "bob",
         60n,
         "bob_secret",
-        "alice_secret"
+        "alice_secret",
       );
       expect(result.success).toBe(true);
       expect(result.newNotes).toHaveLength(2); // recipient + change
@@ -105,7 +105,14 @@ describe("Private Transfers", () => {
       let state = createPrivateState();
       const mint = mintShieldedCoin(state, 50n, "alice", "as");
       state = mint.newState;
-      const result = privateTransfer(state, mint.note!, "bob", 100n, "bs", "as");
+      const result = privateTransfer(
+        state,
+        mint.note!,
+        "bob",
+        100n,
+        "bs",
+        "as",
+      );
       expect(result.success).toBe(false);
       expect(result.message).toContain("Insufficient");
     });
@@ -148,7 +155,7 @@ describe("Private Transfers", () => {
       state = mint.newState;
       const result = privateTransfer(state, mint.note!, "bob", 50n, "bs", "as");
       expect(detectDoubleSpend(mint.note!.nullifier, result.newState)).toBe(
-        true
+        true,
       );
     });
 
@@ -171,7 +178,7 @@ describe("Private Transfers", () => {
         "charlie",
         30n,
         "cs",
-        "as"
+        "as",
       );
       expect(second.success).toBe(false);
       expect(second.message).toContain("Double spend");

@@ -1,11 +1,23 @@
 import { describe, it, expect } from "vitest";
 import {
-  createERC721, mintNFT, transferNFT, approveNFT,
-  ownerOf, balanceOfNFT, tokensOfOwner, totalSupplyNFT,
-  buildMetadataJSON, buildTokenURI,
+  createERC721,
+  mintNFT,
+  transferNFT,
+  approveNFT,
+  ownerOf,
+  balanceOfNFT,
+  tokensOfOwner,
+  totalSupplyNFT,
+  buildMetadataJSON,
+  buildTokenURI,
 } from "../lib/tokens/erc721";
 
-const sampleMeta = { name: "Art #1", description: "A piece", image: "ipfs://abc", attributes: [] };
+const sampleMeta = {
+  name: "Art #1",
+  description: "A piece",
+  image: "ipfs://abc",
+  attributes: [],
+};
 
 describe("createERC721", () => {
   it("creates collection with correct initial state", () => {
@@ -65,7 +77,9 @@ describe("transferNFT", () => {
     let state = createERC721("SBT", "SBT", true);
     state = mintNFT(state, "alice", sampleMeta).newState;
     expect(transferNFT(state, "alice", "bob", 1).success).toBe(false);
-    expect(transferNFT(state, "alice", "bob", 1).message).toContain("Soulbound");
+    expect(transferNFT(state, "alice", "bob", 1).message).toContain(
+      "Soulbound",
+    );
   });
 
   it("clears approval on transfer", () => {
@@ -105,6 +119,8 @@ describe("metadata utilities", () => {
   });
 
   it("builds token URI", () => {
-    expect(buildTokenURI(42, "https://api.example.com/token/")).toBe("https://api.example.com/token/42");
+    expect(buildTokenURI(42, "https://api.example.com/token/")).toBe(
+      "https://api.example.com/token/42",
+    );
   });
 });

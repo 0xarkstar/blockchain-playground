@@ -41,7 +41,9 @@ export interface PriceBreakdown {
   readonly sellerProceeds: number;
 }
 
-export function createMarketplace(platformFeePercent: number = 2.5): MarketplaceState {
+export function createMarketplace(
+  platformFeePercent: number = 2.5,
+): MarketplaceState {
   return {
     listings: [],
     nextListingId: 1,
@@ -56,13 +58,21 @@ export function listNFT(
   tokenId: number,
   price: number,
   royaltyPercent: number = 0,
-  timestamp: number = Date.now()
+  timestamp: number = Date.now(),
 ): MarketplaceResult {
   if (price <= 0) {
-    return { success: false, newState: state, message: "Price must be positive" };
+    return {
+      success: false,
+      newState: state,
+      message: "Price must be positive",
+    };
   }
   if (royaltyPercent < 0 || royaltyPercent > 50) {
-    return { success: false, newState: state, message: "Royalty must be 0-50%" };
+    return {
+      success: false,
+      newState: state,
+      message: "Royalty must be 0-50%",
+    };
   }
   const listing: Listing = {
     id: state.nextListingId,
@@ -88,24 +98,32 @@ export function listNFT(
 export function cancelListing(
   state: MarketplaceState,
   listingId: number,
-  caller: string
+  caller: string,
 ): MarketplaceResult {
   const listing = state.listings.find((l) => l.id === listingId);
   if (!listing) {
     return { success: false, newState: state, message: "Listing not found" };
   }
   if (!listing.active) {
-    return { success: false, newState: state, message: "Listing already inactive" };
+    return {
+      success: false,
+      newState: state,
+      message: "Listing already inactive",
+    };
   }
   if (listing.seller !== caller) {
-    return { success: false, newState: state, message: "Only seller can cancel" };
+    return {
+      success: false,
+      newState: state,
+      message: "Only seller can cancel",
+    };
   }
   return {
     success: true,
     newState: {
       ...state,
       listings: state.listings.map((l) =>
-        l.id === listingId ? { ...l, active: false } : l
+        l.id === listingId ? { ...l, active: false } : l,
       ),
     },
     message: `Cancelled listing #${listingId}`,
@@ -116,7 +134,7 @@ export function buyNFT(
   state: MarketplaceState,
   listingId: number,
   buyer: string,
-  timestamp: number = Date.now()
+  timestamp: number = Date.now(),
 ): MarketplaceResult {
   const listing = state.listings.find((l) => l.id === listingId);
   if (!listing) {
@@ -126,13 +144,17 @@ export function buyNFT(
     return { success: false, newState: state, message: "Listing not active" };
   }
   if (listing.seller === buyer) {
-    return { success: false, newState: state, message: "Cannot buy own listing" };
+    return {
+      success: false,
+      newState: state,
+      message: "Cannot buy own listing",
+    };
   }
 
   const breakdown = calculatePriceBreakdown(
     listing.price,
     listing.royaltyPercent,
-    listing.platformFeePercent
+    listing.platformFeePercent,
   );
 
   const sale: Sale = {
@@ -150,7 +172,7 @@ export function buyNFT(
     newState: {
       ...state,
       listings: state.listings.map((l) =>
-        l.id === listingId ? { ...l, active: false } : l
+        l.id === listingId ? { ...l, active: false } : l,
       ),
       sales: [...state.sales, sale],
     },
@@ -161,10 +183,17 @@ export function buyNFT(
 export function calculatePriceBreakdown(
   price: number,
   royaltyPercent: number,
-  platformFeePercent: number
+  platformFeePercent: number,
 ): PriceBreakdown {
   if (price <= 0) {
-    return { price: 0, royaltyAmount: 0, royaltyPercent: 0, platformFee: 0, platformFeePercent: 0, sellerProceeds: 0 };
+    return {
+      price: 0,
+      royaltyAmount: 0,
+      royaltyPercent: 0,
+      platformFee: 0,
+      platformFeePercent: 0,
+      sellerProceeds: 0,
+    };
   }
   const royaltyAmount = price * (royaltyPercent / 100);
   const platformFee = price * (platformFeePercent / 100);

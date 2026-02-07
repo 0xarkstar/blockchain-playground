@@ -1,7 +1,10 @@
 import { describe, it, expect } from "vitest";
 import {
-  createVestingSchedule, calculateVestedAmount, getVestingInfo,
-  releaseTokens, generateVestingCurve,
+  createVestingSchedule,
+  calculateVestedAmount,
+  getVestingInfo,
+  releaseTokens,
+  generateVestingCurve,
 } from "../lib/tokens/vesting";
 
 describe("calculateVestedAmount", () => {

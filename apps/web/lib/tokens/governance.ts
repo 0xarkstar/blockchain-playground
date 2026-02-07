@@ -1,4 +1,9 @@
-export type ProposalStatus = "pending" | "active" | "passed" | "rejected" | "executed";
+export type ProposalStatus =
+  | "pending"
+  | "active"
+  | "passed"
+  | "rejected"
+  | "executed";
 
 export interface Proposal {
   readonly id: number;
@@ -32,7 +37,7 @@ export interface GovernanceResult {
 
 export function createGovernance(
   quorumPercent: number = 10,
-  votingDuration: number = 86400
+  votingDuration: number = 86400,
 ): GovernanceState {
   return {
     proposals: [],
@@ -47,7 +52,7 @@ export function createGovernance(
 export function setVotingPower(
   state: GovernanceState,
   account: string,
-  power: number
+  power: number,
 ): GovernanceState {
   return {
     ...state,
@@ -58,7 +63,7 @@ export function setVotingPower(
 export function delegate(
   state: GovernanceState,
   from: string,
-  to: string
+  to: string,
 ): GovernanceResult {
   if (from === to) {
     // Self-delegation removes delegation
@@ -81,7 +86,7 @@ export function delegate(
 
 export function getEffectiveVotingPower(
   state: GovernanceState,
-  account: string
+  account: string,
 ): number {
   let power = state.votingPower[account] ?? 0;
 
@@ -109,7 +114,7 @@ export function createProposal(
   title: string,
   description: string,
   proposer: string,
-  currentTime: number
+  currentTime: number,
 ): GovernanceResult {
   if (!title.trim()) {
     return { success: false, newState: state, message: "Title required" };
@@ -148,7 +153,7 @@ export function vote(
   proposalId: number,
   voter: string,
   choice: "for" | "against" | "abstain",
-  currentTime: number
+  currentTime: number,
 ): GovernanceResult {
   const proposal = state.proposals.find((p) => p.id === proposalId);
   if (!proposal) {
@@ -182,7 +187,7 @@ export function vote(
     newState: {
       ...state,
       proposals: state.proposals.map((p) =>
-        p.id === proposalId ? updatedProposal : p
+        p.id === proposalId ? updatedProposal : p,
       ),
     },
     message: `${voter} voted "${choice}" with ${power} power`,
@@ -192,7 +197,7 @@ export function vote(
 export function finalizeProposal(
   state: GovernanceState,
   proposalId: number,
-  currentTime: number
+  currentTime: number,
 ): GovernanceResult {
   const proposal = state.proposals.find((p) => p.id === proposalId);
   if (!proposal) {
@@ -202,10 +207,15 @@ export function finalizeProposal(
     return { success: false, newState: state, message: "Proposal not active" };
   }
   if (currentTime < proposal.endTime) {
-    return { success: false, newState: state, message: "Voting period not ended" };
+    return {
+      success: false,
+      newState: state,
+      message: "Voting period not ended",
+    };
   }
 
-  const totalVotes = proposal.votesFor + proposal.votesAgainst + proposal.votesAbstain;
+  const totalVotes =
+    proposal.votesFor + proposal.votesAgainst + proposal.votesAbstain;
   const quorumMet = totalVotes >= proposal.quorumRequired;
   const passed = quorumMet && proposal.votesFor > proposal.votesAgainst;
 
@@ -219,7 +229,7 @@ export function finalizeProposal(
     newState: {
       ...state,
       proposals: state.proposals.map((p) =>
-        p.id === proposalId ? updatedProposal : p
+        p.id === proposalId ? updatedProposal : p,
       ),
     },
     message: passed

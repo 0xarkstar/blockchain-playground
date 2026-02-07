@@ -4,10 +4,7 @@
   "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
-  "scripts": {
-    "lint": "eslint src/",
-    "test": "vitest run"
-  },
+  "scripts": {},
   "dependencies": {
     "@mantine/core": "^7.17",
     "@mantine/hooks": "^7.17",

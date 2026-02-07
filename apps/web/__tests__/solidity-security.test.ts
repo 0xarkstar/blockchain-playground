@@ -17,7 +17,9 @@ describe("simulateReentrancyAttack", () => {
     const result = simulateReentrancyAttack(100, 10, 5);
     expect(result.attackSuccessful).toBe(true);
     expect(result.attackerProfit).toBeGreaterThan(0);
-    expect(result.finalBalances.attacker).toBeGreaterThan(result.initialBalances.attacker);
+    expect(result.finalBalances.attacker).toBeGreaterThan(
+      result.initialBalances.attacker,
+    );
   });
 
   it("drains victim contract", () => {

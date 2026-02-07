@@ -38,11 +38,18 @@ export function ReentrancyAttackDemo() {
   const simulation = useMemo(() => {
     switch (defense) {
       case "vulnerable":
-        return simulateReentrancyAttack(victimBalance, attackerDeposit, maxDepth);
+        return simulateReentrancyAttack(
+          victimBalance,
+          attackerDeposit,
+          maxDepth,
+        );
       case "guard":
         return simulateWithReentrancyGuard(victimBalance, attackerDeposit);
       case "cei":
-        return simulateChecksEffectsInteractions(victimBalance, attackerDeposit);
+        return simulateChecksEffectsInteractions(
+          victimBalance,
+          attackerDeposit,
+        );
     }
   }, [victimBalance, attackerDeposit, maxDepth, defense]);
 
@@ -50,7 +57,9 @@ export function ReentrancyAttackDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Configuration</Text>
+          <Text size="sm" fw={600}>
+            Configuration
+          </Text>
           <SegmentedControl
             data={DEFENSES}
             value={defense}
@@ -86,12 +95,16 @@ export function ReentrancyAttackDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Result</Text>
+            <Text size="sm" fw={600}>
+              Result
+            </Text>
             <Badge
               size="lg"
               color={simulation.attackSuccessful ? "red" : "green"}
             >
-              {simulation.attackSuccessful ? "ATTACK SUCCESSFUL" : "ATTACK BLOCKED"}
+              {simulation.attackSuccessful
+                ? "ATTACK SUCCESSFUL"
+                : "ATTACK BLOCKED"}
             </Badge>
           </Group>
           <Table>
@@ -106,27 +119,43 @@ export function ReentrancyAttackDemo() {
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>Victim Contract</Table.Td>
-                <Table.Td ta="right">{simulation.initialBalances.victim} ETH</Table.Td>
-                <Table.Td ta="right">{simulation.finalBalances.victim} ETH</Table.Td>
+                <Table.Td ta="right">
+                  {simulation.initialBalances.victim} ETH
+                </Table.Td>
+                <Table.Td ta="right">
+                  {simulation.finalBalances.victim} ETH
+                </Table.Td>
                 <Table.Td ta="right">
                   <Badge
-                    color={simulation.finalBalances.victim < simulation.initialBalances.victim ? "red" : "gray"}
+                    color={
+                      simulation.finalBalances.victim <
+                      simulation.initialBalances.victim
+                        ? "red"
+                        : "gray"
+                    }
                     variant="light"
                   >
-                    {simulation.finalBalances.victim - simulation.initialBalances.victim} ETH
+                    {simulation.finalBalances.victim -
+                      simulation.initialBalances.victim}{" "}
+                    ETH
                   </Badge>
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Attacker</Table.Td>
-                <Table.Td ta="right">{simulation.initialBalances.attacker} ETH</Table.Td>
-                <Table.Td ta="right">{simulation.finalBalances.attacker} ETH</Table.Td>
+                <Table.Td ta="right">
+                  {simulation.initialBalances.attacker} ETH
+                </Table.Td>
+                <Table.Td ta="right">
+                  {simulation.finalBalances.attacker} ETH
+                </Table.Td>
                 <Table.Td ta="right">
                   <Badge
                     color={simulation.attackerProfit > 0 ? "red" : "green"}
                     variant="light"
                   >
-                    {simulation.attackerProfit > 0 ? "+" : ""}{simulation.attackerProfit} ETH
+                    {simulation.attackerProfit > 0 ? "+" : ""}
+                    {simulation.attackerProfit} ETH
                   </Badge>
                 </Table.Td>
               </Table.Tr>
@@ -143,7 +172,9 @@ export function ReentrancyAttackDemo() {
       {simulation.frames.length > 0 && (
         <Paper p="md" withBorder>
           <Stack gap="md">
-            <Text size="sm" fw={600}>Call Trace</Text>
+            <Text size="sm" fw={600}>
+              Call Trace
+            </Text>
             <Stepper
               active={simulation.frames.length}
               orientation="vertical"
@@ -157,8 +188,11 @@ export function ReentrancyAttackDemo() {
                       <Badge
                         size="xs"
                         color={
-                          frame.status === "reverted" ? "red" :
-                          frame.status === "success" ? "green" : "yellow"
+                          frame.status === "reverted"
+                            ? "red"
+                            : frame.status === "success"
+                              ? "green"
+                              : "yellow"
                         }
                       >
                         {frame.status}
@@ -167,13 +201,16 @@ export function ReentrancyAttackDemo() {
                         {frame.caller} → {frame.target}.{frame.functionName}()
                       </Code>
                       {frame.ethValue > 0 && (
-                        <Badge size="xs" variant="light">{frame.ethValue} ETH</Badge>
+                        <Badge size="xs" variant="light">
+                          {frame.ethValue} ETH
+                        </Badge>
                       )}
                     </Group>
                   }
                   description={
                     <Text size="xs" c="dimmed" ml={frame.depth * 16}>
-                      {"  ".repeat(frame.depth)}{frame.description}
+                      {"  ".repeat(frame.depth)}
+                      {frame.description}
                     </Text>
                   }
                   color={frame.status === "reverted" ? "red" : "green"}
@@ -193,8 +230,9 @@ export function ReentrancyAttackDemo() {
           <>
             <Text fw={600}>Vulnerable Pattern</Text>
             <Text size="sm">
-              The withdraw function sends ETH before updating the balance.
-              The attacker&apos;s receive() function re-calls withdraw(), draining the contract.
+              The withdraw function sends ETH before updating the balance. The
+              attacker&apos;s receive() function re-calls withdraw(), draining
+              the contract.
             </Text>
           </>
         )}
@@ -202,8 +240,8 @@ export function ReentrancyAttackDemo() {
           <>
             <Text fw={600}>ReentrancyGuard (OpenZeppelin)</Text>
             <Text size="sm">
-              A mutex lock prevents re-entering the function. The second withdraw()
-              call reverts because the lock is still held.
+              A mutex lock prevents re-entering the function. The second
+              withdraw() call reverts because the lock is still held.
             </Text>
           </>
         )}
@@ -211,8 +249,8 @@ export function ReentrancyAttackDemo() {
           <>
             <Text fw={600}>Checks-Effects-Interactions (CEI)</Text>
             <Text size="sm">
-              Update state (set balance to 0) BEFORE sending ETH. When the attacker
-              re-enters, the check fails because balance is already 0.
+              Update state (set balance to 0) BEFORE sending ETH. When the
+              attacker re-enters, the check fails because balance is already 0.
             </Text>
           </>
         )}

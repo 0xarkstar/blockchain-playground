@@ -134,7 +134,11 @@ export default function FundamentalsPage() {
           <Stack key={level} gap="md">
             <Divider
               label={
-                <Badge size="lg" variant="light" color={difficultyColors[level]}>
+                <Badge
+                  size="lg"
+                  variant="light"
+                  color={difficultyColors[level]}
+                >
                   {t(level)}
                 </Badge>
               }
@@ -166,9 +170,7 @@ export default function FundamentalsPage() {
                         </Badge>
                       )}
                     </Group>
-                    <Title order={4}>
-                      {t(`demos.${demo.key}.title`)}
-                    </Title>
+                    <Title order={4}>{t(`demos.${demo.key}.title`)}</Title>
                     <Text size="sm" c="dimmed">
                       {t(`demos.${demo.key}.description`)}
                     </Text>

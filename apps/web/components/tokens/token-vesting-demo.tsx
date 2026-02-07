@@ -2,11 +2,26 @@
 
 import { useState, useMemo } from "react";
 import {
-  Stack, Paper, TextInput, NumberInput, Button, Table, Code, Badge, Group, Text, Select, Progress,
+  Stack,
+  Paper,
+  TextInput,
+  NumberInput,
+  Button,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Select,
+  Progress,
 } from "@mantine/core";
 import {
-  createVestingSchedule, getVestingInfo, releaseTokens, generateVestingCurve,
-  type VestingSchedule, type VestingType,
+  createVestingSchedule,
+  getVestingInfo,
+  releaseTokens,
+  generateVestingCurve,
+  type VestingSchedule,
+  type VestingType,
 } from "../../lib/tokens/vesting";
 
 export function TokenVestingDemo() {
@@ -19,21 +34,25 @@ export function TokenVestingDemo() {
   const [currentTime, setCurrentTime] = useState(100);
 
   const [schedule, setSchedule] = useState<VestingSchedule>(() =>
-    createVestingSchedule("alice", 10000, "linear", 0, 30, 365)
+    createVestingSchedule("alice", 10000, "linear", 0, 30, 365),
   );
 
   const info = useMemo(
     () => getVestingInfo(schedule, currentTime),
-    [schedule, currentTime]
+    [schedule, currentTime],
   );
 
-  const curve = useMemo(
-    () => generateVestingCurve(schedule, 20),
-    [schedule]
-  );
+  const curve = useMemo(() => generateVestingCurve(schedule, 20), [schedule]);
 
   const handleCreate = () => {
-    const s = createVestingSchedule(beneficiary, totalAmount, vestingType, startTime, cliffDuration, totalDuration);
+    const s = createVestingSchedule(
+      beneficiary,
+      totalAmount,
+      vestingType,
+      startTime,
+      cliffDuration,
+      totalDuration,
+    );
     setSchedule(s);
   };
 
@@ -46,10 +65,21 @@ export function TokenVestingDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Vesting Configuration</Text>
+          <Text size="sm" fw={600}>
+            Vesting Configuration
+          </Text>
           <Group grow>
-            <TextInput label="Beneficiary" value={beneficiary} onChange={(e) => setBeneficiary(e.currentTarget.value)} />
-            <NumberInput label="Total Amount" value={totalAmount} onChange={(v) => setTotalAmount(Number(v) || 0)} min={1} />
+            <TextInput
+              label="Beneficiary"
+              value={beneficiary}
+              onChange={(e) => setBeneficiary(e.currentTarget.value)}
+            />
+            <NumberInput
+              label="Total Amount"
+              value={totalAmount}
+              onChange={(v) => setTotalAmount(Number(v) || 0)}
+              min={1}
+            />
             <Select
               label="Type"
               value={vestingType}
@@ -62,30 +92,63 @@ export function TokenVestingDemo() {
             />
           </Group>
           <Group grow>
-            <NumberInput label="Start Time" value={startTime} onChange={(v) => setStartTime(Number(v) || 0)} min={0} />
-            <NumberInput label="Cliff Duration" value={cliffDuration} onChange={(v) => setCliffDuration(Number(v) || 0)} min={0} />
-            <NumberInput label="Total Duration" value={totalDuration} onChange={(v) => setTotalDuration(Number(v) || 0)} min={1} />
+            <NumberInput
+              label="Start Time"
+              value={startTime}
+              onChange={(v) => setStartTime(Number(v) || 0)}
+              min={0}
+            />
+            <NumberInput
+              label="Cliff Duration"
+              value={cliffDuration}
+              onChange={(v) => setCliffDuration(Number(v) || 0)}
+              min={0}
+            />
+            <NumberInput
+              label="Total Duration"
+              value={totalDuration}
+              onChange={(v) => setTotalDuration(Number(v) || 0)}
+              min={1}
+            />
           </Group>
-          <Button onClick={handleCreate} variant="light">Create Schedule</Button>
+          <Button onClick={handleCreate} variant="light">
+            Create Schedule
+          </Button>
         </Stack>
       </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Time Control</Text>
+          <Text size="sm" fw={600}>
+            Time Control
+          </Text>
           <Group grow>
-            <NumberInput label="Current Time" value={currentTime} onChange={(v) => setCurrentTime(Number(v) || 0)} min={0} />
+            <NumberInput
+              label="Current Time"
+              value={currentTime}
+              onChange={(v) => setCurrentTime(Number(v) || 0)}
+              min={0}
+            />
           </Group>
-          <Button onClick={handleRelease} variant="light" color="green">Release Tokens</Button>
+          <Button onClick={handleRelease} variant="light" color="green">
+            Release Tokens
+          </Button>
         </Stack>
       </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Vesting Status</Text>
-            <Badge variant="light" color={info.isFullyVested ? "green" : "blue"}>
-              {info.isFullyVested ? "Fully Vested" : `${info.vestedPercent.toFixed(1)}% Vested`}
+            <Text size="sm" fw={600}>
+              Vesting Status
+            </Text>
+            <Badge
+              variant="light"
+              color={info.isFullyVested ? "green" : "blue"}
+            >
+              {info.isFullyVested
+                ? "Fully Vested"
+                : `${info.vestedPercent.toFixed(1)}% Vested`}
             </Badge>
           </Group>
           <Progress value={info.vestedPercent} color="blue" size="lg" />
@@ -93,35 +156,50 @@ export function TokenVestingDemo() {
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>Beneficiary</Table.Td>
-                <Table.Td ta="right"><Code>{schedule.beneficiary}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{schedule.beneficiary}</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Type</Table.Td>
-                <Table.Td ta="right"><Badge variant="light">{schedule.vestingType}</Badge></Table.Td>
+                <Table.Td ta="right">
+                  <Badge variant="light">{schedule.vestingType}</Badge>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Cliff Reached</Table.Td>
                 <Table.Td ta="right">
-                  <Badge color={info.isCliffReached ? "green" : "red"} variant="light">
+                  <Badge
+                    color={info.isCliffReached ? "green" : "red"}
+                    variant="light"
+                  >
                     {info.isCliffReached ? "Yes" : "No"}
                   </Badge>
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Vested Amount</Table.Td>
-                <Table.Td ta="right"><Code>{info.vestedAmount}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{info.vestedAmount}</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Released</Table.Td>
-                <Table.Td ta="right"><Code>{schedule.released}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{schedule.released}</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Releasable</Table.Td>
-                <Table.Td ta="right"><Code>{info.releasableAmount}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{info.releasableAmount}</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Remaining</Table.Td>
-                <Table.Td ta="right"><Code>{info.remainingAmount}</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{info.remainingAmount}</Code>
+                </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>
@@ -130,7 +208,9 @@ export function TokenVestingDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Vesting Curve</Text>
+          <Text size="sm" fw={600}>
+            Vesting Curve
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -143,8 +223,12 @@ export function TokenVestingDemo() {
               {curve.map((point, i) => (
                 <Table.Tr key={i}>
                   <Table.Td>{point.time}</Table.Td>
-                  <Table.Td ta="right">{point.vestedPercent.toFixed(1)}%</Table.Td>
-                  <Table.Td ta="right"><Code>{point.vestedAmount}</Code></Table.Td>
+                  <Table.Td ta="right">
+                    {point.vestedPercent.toFixed(1)}%
+                  </Table.Td>
+                  <Table.Td ta="right">
+                    <Code>{point.vestedAmount}</Code>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

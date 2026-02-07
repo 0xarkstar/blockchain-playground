@@ -123,7 +123,11 @@ export default function SolidityPage() {
           <Stack key={level} gap="md">
             <Divider
               label={
-                <Badge size="lg" variant="light" color={difficultyColors[level]}>
+                <Badge
+                  size="lg"
+                  variant="light"
+                  color={difficultyColors[level]}
+                >
                   {t(level)}
                 </Badge>
               }
@@ -150,9 +154,7 @@ export default function SolidityPage() {
                         <demo.icon size={20} />
                       </ThemeIcon>
                     </Group>
-                    <Title order={4}>
-                      {t(`demos.${demo.key}.title`)}
-                    </Title>
+                    <Title order={4}>{t(`demos.${demo.key}.title`)}</Title>
                     <Text size="sm" c="dimmed">
                       {t(`demos.${demo.key}.description`)}
                     </Text>

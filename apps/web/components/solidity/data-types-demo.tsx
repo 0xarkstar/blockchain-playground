@@ -29,19 +29,21 @@ export function DataTypesDemo() {
 
   const typeInfo = useMemo(
     () => getSolidityTypeInfo(selectedType),
-    [selectedType]
+    [selectedType],
   );
 
   const encoded = useMemo(
     () => encodeValue(inputValue, selectedType),
-    [inputValue, selectedType]
+    [inputValue, selectedType],
   );
 
   return (
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Input</Text>
+          <Text size="sm" fw={600}>
+            Input
+          </Text>
           <Group grow>
             <Select
               label="Solidity Type"
@@ -68,7 +70,9 @@ export function DataTypesDemo() {
       {typeInfo && (
         <Paper p="md" withBorder>
           <Stack gap="md">
-            <Text size="sm" fw={600}>Type Info</Text>
+            <Text size="sm" fw={600}>
+              Type Info
+            </Text>
             <Table>
               <Table.Tbody>
                 <Table.Tr>
@@ -79,12 +83,17 @@ export function DataTypesDemo() {
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>Size</Table.Td>
-                  <Table.Td ta="right">{typeInfo.size} bytes ({typeInfo.bits} bits)</Table.Td>
+                  <Table.Td ta="right">
+                    {typeInfo.size} bytes ({typeInfo.bits} bits)
+                  </Table.Td>
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>Signed</Table.Td>
                   <Table.Td ta="right">
-                    <Badge color={typeInfo.signed ? "yellow" : "gray"} variant="light">
+                    <Badge
+                      color={typeInfo.signed ? "yellow" : "gray"}
+                      variant="light"
+                    >
                       {typeInfo.signed ? "Yes" : "No"}
                     </Badge>
                   </Table.Td>
@@ -93,7 +102,9 @@ export function DataTypesDemo() {
                   <Table.Td>Min</Table.Td>
                   <Table.Td ta="right">
                     <Code style={{ fontSize: 11 }}>
-                      {typeInfo.min.length > 40 ? typeInfo.min.slice(0, 20) + "..." : typeInfo.min}
+                      {typeInfo.min.length > 40
+                        ? typeInfo.min.slice(0, 20) + "..."
+                        : typeInfo.min}
                     </Code>
                   </Table.Td>
                 </Table.Tr>
@@ -101,7 +112,9 @@ export function DataTypesDemo() {
                   <Table.Td>Max</Table.Td>
                   <Table.Td ta="right">
                     <Code style={{ fontSize: 11 }}>
-                      {typeInfo.max.length > 40 ? typeInfo.max.slice(0, 20) + "..." : typeInfo.max}
+                      {typeInfo.max.length > 40
+                        ? typeInfo.max.slice(0, 20) + "..."
+                        : typeInfo.max}
                     </Code>
                   </Table.Td>
                 </Table.Tr>
@@ -113,23 +126,31 @@ export function DataTypesDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Encoded Value</Text>
+          <Text size="sm" fw={600}>
+            Encoded Value
+          </Text>
           {encoded.valid ? (
             <Table>
               <Table.Tbody>
                 <Table.Tr>
                   <Table.Td>Hex</Table.Td>
-                  <Table.Td ta="right"><Code>{encoded.hex}</Code></Table.Td>
+                  <Table.Td ta="right">
+                    <Code>{encoded.hex}</Code>
+                  </Table.Td>
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>Padded (32 bytes)</Table.Td>
                   <Table.Td ta="right">
-                    <Code style={{ fontSize: 11, wordBreak: "break-all" }}>{encoded.paddedHex}</Code>
+                    <Code style={{ fontSize: 11, wordBreak: "break-all" }}>
+                      {encoded.paddedHex}
+                    </Code>
                   </Table.Td>
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>Decimal</Table.Td>
-                  <Table.Td ta="right"><Code>{encoded.decimal}</Code></Table.Td>
+                  <Table.Td ta="right">
+                    <Code>{encoded.decimal}</Code>
+                  </Table.Td>
                 </Table.Tr>
               </Table.Tbody>
             </Table>
@@ -143,7 +164,9 @@ export function DataTypesDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>All Types Reference</Text>
+          <Text size="sm" fw={600}>
+            All Types Reference
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -160,7 +183,9 @@ export function DataTypesDemo() {
                     <Code>{t.name}</Code>
                   </Table.Td>
                   <Table.Td>
-                    <Badge size="xs" variant="light">{t.category}</Badge>
+                    <Badge size="xs" variant="light">
+                      {t.category}
+                    </Badge>
                   </Table.Td>
                   <Table.Td ta="right">{t.size}B</Table.Td>
                   <Table.Td ta="right">{t.bits}</Table.Td>

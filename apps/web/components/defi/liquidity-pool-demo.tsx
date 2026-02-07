@@ -27,9 +27,16 @@ export function LiquidityPoolDemo() {
   const [lpAmount, setLpAmount] = useState<number>(500);
 
   const addResult = useMemo(() => {
-    const lpTokens = calculateLPTokens(reserveA, reserveB, amountA, amountB, totalSupply);
+    const lpTokens = calculateLPTokens(
+      reserveA,
+      reserveB,
+      amountA,
+      amountB,
+      totalSupply,
+    );
     const newTotalSupply = totalSupply + lpTokens;
-    const poolShare = newTotalSupply > 0 ? (lpTokens / newTotalSupply) * 100 : 0;
+    const poolShare =
+      newTotalSupply > 0 ? (lpTokens / newTotalSupply) * 100 : 0;
     return {
       lpTokens,
       poolShare,
@@ -40,7 +47,12 @@ export function LiquidityPoolDemo() {
   }, [reserveA, reserveB, amountA, amountB, totalSupply]);
 
   const removeResult = useMemo(() => {
-    const result = calculateRemoveLiquidity(reserveA, reserveB, lpAmount, totalSupply);
+    const result = calculateRemoveLiquidity(
+      reserveA,
+      reserveB,
+      lpAmount,
+      totalSupply,
+    );
     return {
       ...result,
       shareRemoved: totalSupply > 0 ? (lpAmount / totalSupply) * 100 : 0,
@@ -52,14 +64,16 @@ export function LiquidityPoolDemo() {
 
   const spotPrice = useMemo(
     () => calculateSpotPrice(reserveA, reserveB),
-    [reserveA, reserveB]
+    [reserveA, reserveB],
   );
 
   return (
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Current Pool State</Text>
+          <Text size="sm" fw={600}>
+            Current Pool State
+          </Text>
           <Group grow>
             <NumberInput
               label="Token A Reserve"
@@ -101,7 +115,9 @@ export function LiquidityPoolDemo() {
       {mode === "add" ? (
         <Paper p="md" withBorder>
           <Stack gap="md">
-            <Text size="sm" fw={600}>Add Liquidity</Text>
+            <Text size="sm" fw={600}>
+              Add Liquidity
+            </Text>
             <Group grow>
               <NumberInput
                 label="Token A Amount"
@@ -126,20 +142,28 @@ export function LiquidityPoolDemo() {
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>Your Pool Share</Table.Td>
-                  <Table.Td ta="right">{addResult.poolShare.toFixed(2)}%</Table.Td>
+                  <Table.Td ta="right">
+                    {addResult.poolShare.toFixed(2)}%
+                  </Table.Td>
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>New Reserve A</Table.Td>
-                  <Table.Td ta="right">{addResult.newReserveA.toLocaleString()}</Table.Td>
+                  <Table.Td ta="right">
+                    {addResult.newReserveA.toLocaleString()}
+                  </Table.Td>
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>New Reserve B</Table.Td>
-                  <Table.Td ta="right">{addResult.newReserveB.toLocaleString()}</Table.Td>
+                  <Table.Td ta="right">
+                    {addResult.newReserveB.toLocaleString()}
+                  </Table.Td>
                 </Table.Tr>
               </Table.Tbody>
             </Table>
             <div>
-              <Text size="xs" c="dimmed" mb={4}>Pool Share</Text>
+              <Text size="xs" c="dimmed" mb={4}>
+                Pool Share
+              </Text>
               <Progress value={addResult.poolShare} color="blue" size="lg" />
             </div>
           </Stack>
@@ -147,7 +171,9 @@ export function LiquidityPoolDemo() {
       ) : (
         <Paper p="md" withBorder>
           <Stack gap="md">
-            <Text size="sm" fw={600}>Remove Liquidity</Text>
+            <Text size="sm" fw={600}>
+              Remove Liquidity
+            </Text>
             <NumberInput
               label="LP Tokens to Burn"
               value={lpAmount}
@@ -171,13 +197,21 @@ export function LiquidityPoolDemo() {
                 </Table.Tr>
                 <Table.Tr>
                   <Table.Td>Share Removed</Table.Td>
-                  <Table.Td ta="right">{removeResult.shareRemoved.toFixed(2)}%</Table.Td>
+                  <Table.Td ta="right">
+                    {removeResult.shareRemoved.toFixed(2)}%
+                  </Table.Td>
                 </Table.Tr>
               </Table.Tbody>
             </Table>
             <div>
-              <Text size="xs" c="dimmed" mb={4}>Share Being Removed</Text>
-              <Progress value={removeResult.shareRemoved} color="orange" size="lg" />
+              <Text size="xs" c="dimmed" mb={4}>
+                Share Being Removed
+              </Text>
+              <Progress
+                value={removeResult.shareRemoved}
+                color="orange"
+                size="lg"
+              />
             </div>
           </Stack>
         </Paper>

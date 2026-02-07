@@ -1,7 +1,10 @@
 import { describe, it, expect } from "vitest";
 import {
-  createDutchAuction, getCurrentPrice, getAuctionPriceInfo,
-  settleDutchAuction, generatePriceCurve,
+  createDutchAuction,
+  getCurrentPrice,
+  getAuctionPriceInfo,
+  settleDutchAuction,
+  generatePriceCurve,
   type DutchAuctionConfig,
 } from "../lib/tokens/auction";
 

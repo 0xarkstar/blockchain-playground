@@ -28,7 +28,9 @@ export function FlashLoanDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Flash Loan Parameters</Text>
+          <Text size="sm" fw={600}>
+            Flash Loan Parameters
+          </Text>
           <NumberInput
             label="Borrow Amount"
             value={borrowAmount}
@@ -60,11 +62,10 @@ export function FlashLoanDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Transaction Simulation</Text>
-          <Stepper
-            active={activeStep}
-            color={result.success ? "green" : "red"}
-          >
+          <Text size="sm" fw={600}>
+            Transaction Simulation
+          </Text>
+          <Stepper active={activeStep} color={result.success ? "green" : "red"}>
             <Stepper.Step
               label="Borrow"
               description={`$${borrowAmount.toLocaleString()}`}
@@ -77,7 +78,9 @@ export function FlashLoanDemo() {
             <Stepper.Step
               label="Repay"
               description={`$${result.repayAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}`}
-              icon={result.success ? <IconCheck size={16} /> : <IconX size={16} />}
+              icon={
+                result.success ? <IconCheck size={16} /> : <IconX size={16} />
+              }
             />
           </Stepper>
         </Stack>
@@ -85,7 +88,9 @@ export function FlashLoanDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Result</Text>
+          <Text size="sm" fw={600}>
+            Result
+          </Text>
           <Table>
             <Table.Tbody>
               <Table.Tr>
@@ -95,20 +100,30 @@ export function FlashLoanDemo() {
               <Table.Tr>
                 <Table.Td>Protocol Fee</Table.Td>
                 <Table.Td ta="right">
-                  ${(result.repayAmount - borrowAmount).toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                  $
+                  {(result.repayAmount - borrowAmount).toLocaleString(
+                    undefined,
+                    { maximumFractionDigits: 2 },
+                  )}
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Repay Amount</Table.Td>
                 <Table.Td ta="right">
-                  ${result.repayAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                  $
+                  {result.repayAmount.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  })}
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Net Profit</Table.Td>
                 <Table.Td ta="right">
                   <Text fw={600} c={result.profit > 0 ? "green" : "red"}>
-                    ${result.profit.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                    $
+                    {result.profit.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}
                   </Text>
                 </Table.Td>
               </Table.Tr>

@@ -30,11 +30,7 @@ describe("Pedersen Commitment", () => {
   describe("pedersenCommit", () => {
     it("computes C = g^v * h^r mod p", () => {
       const result = pedersenCommit(params, 3n, 5n);
-      const expected = modMul(
-        modPow(2n, 3n, 23n),
-        modPow(9n, 5n, 23n),
-        23n
-      );
+      const expected = modMul(modPow(2n, 3n, 23n), modPow(9n, 5n, 23n), 23n);
       expect(result.commitment).toBe(expected);
     });
 

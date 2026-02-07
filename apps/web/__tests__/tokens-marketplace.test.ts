@@ -1,7 +1,11 @@
 import { describe, it, expect } from "vitest";
 import {
-  createMarketplace, listNFT, cancelListing, buyNFT,
-  calculatePriceBreakdown, getActiveListings,
+  createMarketplace,
+  listNFT,
+  cancelListing,
+  buyNFT,
+  calculatePriceBreakdown,
+  getActiveListings,
 } from "../lib/tokens/marketplace";
 
 describe("createMarketplace", () => {

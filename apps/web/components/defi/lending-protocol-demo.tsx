@@ -43,11 +43,20 @@ export function LendingProtocolDemo() {
 
   const result = useMemo(() => {
     const collateralValue = collateralAmount * collateralPrice;
-    const healthFactor = calculateHealthFactor(collateralValue, borrowAmount, liquidationThreshold);
+    const healthFactor = calculateHealthFactor(
+      collateralValue,
+      borrowAmount,
+      liquidationThreshold,
+    );
     const maxBorrow = calculateMaxBorrow(collateralValue, liquidationThreshold);
-    const liqPrice = calculateLiquidationPrice(borrowAmount, collateralAmount, liquidationThreshold);
+    const liqPrice = calculateLiquidationPrice(
+      borrowAmount,
+      collateralAmount,
+      liquidationThreshold,
+    );
     const utilization = calculateUtilizationRate(borrowAmount, collateralValue);
-    const collateralRatio = borrowAmount > 0 ? (collateralValue / borrowAmount) * 100 : Infinity;
+    const collateralRatio =
+      borrowAmount > 0 ? (collateralValue / borrowAmount) * 100 : Infinity;
 
     return {
       collateralValue,
@@ -67,7 +76,9 @@ export function LendingProtocolDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Collateral</Text>
+          <Text size="sm" fw={600}>
+            Collateral
+          </Text>
           <Group grow>
             <NumberInput
               label="Amount (tokens)"
@@ -93,7 +104,9 @@ export function LendingProtocolDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Borrow</Text>
+          <Text size="sm" fw={600}>
+            Borrow
+          </Text>
           <NumberInput
             label="Borrow Amount (USD)"
             value={borrowAmount}
@@ -117,7 +130,9 @@ export function LendingProtocolDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Group justify="space-between">
-            <Text size="sm" fw={600}>Position Health</Text>
+            <Text size="sm" fw={600}>
+              Position Health
+            </Text>
             <Badge
               size="lg"
               variant="light"
@@ -128,9 +143,14 @@ export function LendingProtocolDemo() {
           </Group>
 
           <div>
-            <Text size="xs" c="dimmed" mb={4}>Health Factor: {hfDisplay}</Text>
+            <Text size="xs" c="dimmed" mb={4}>
+              Health Factor: {hfDisplay}
+            </Text>
             <Progress
-              value={Math.min(isFinite(result.healthFactor) ? result.healthFactor * 50 : 100, 100)}
+              value={Math.min(
+                isFinite(result.healthFactor) ? result.healthFactor * 50 : 100,
+                100,
+              )}
               color={healthColor(result.healthFactor)}
               size="lg"
             />
@@ -141,12 +161,16 @@ export function LendingProtocolDemo() {
               <Table.Tr>
                 <Table.Td>Health Factor</Table.Td>
                 <Table.Td ta="right">
-                  <Text fw={600} c={healthColor(result.healthFactor)}>{hfDisplay}</Text>
+                  <Text fw={600} c={healthColor(result.healthFactor)}>
+                    {hfDisplay}
+                  </Text>
                 </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Max Borrow</Table.Td>
-                <Table.Td ta="right">${result.maxBorrow.toLocaleString()}</Table.Td>
+                <Table.Td ta="right">
+                  ${result.maxBorrow.toLocaleString()}
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Collateral Ratio</Table.Td>
@@ -166,7 +190,9 @@ export function LendingProtocolDemo() {
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Utilization</Table.Td>
-                <Table.Td ta="right">{(result.utilization * 100).toFixed(1)}%</Table.Td>
+                <Table.Td ta="right">
+                  {(result.utilization * 100).toFixed(1)}%
+                </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>

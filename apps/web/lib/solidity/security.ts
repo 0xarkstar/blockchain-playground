@@ -11,8 +11,14 @@ export interface CallFrame {
 
 export interface AttackSimulation {
   readonly frames: readonly CallFrame[];
-  readonly initialBalances: { readonly victim: number; readonly attacker: number };
-  readonly finalBalances: { readonly victim: number; readonly attacker: number };
+  readonly initialBalances: {
+    readonly victim: number;
+    readonly attacker: number;
+  };
+  readonly finalBalances: {
+    readonly victim: number;
+    readonly attacker: number;
+  };
   readonly attackerProfit: number;
   readonly attackSuccessful: boolean;
   readonly totalReentrancyDepth: number;
@@ -23,7 +29,7 @@ const MAX_DEPTH = 10;
 export function simulateReentrancyAttack(
   victimBalance: number,
   attackerDeposit: number,
-  maxDepth: number
+  maxDepth: number,
 ): AttackSimulation {
   if (victimBalance < 0 || attackerDeposit <= 0 || maxDepth <= 0) {
     return {
@@ -118,7 +124,7 @@ export function simulateReentrancyAttack(
 
 export function simulateWithReentrancyGuard(
   victimBalance: number,
-  attackerDeposit: number
+  attackerDeposit: number,
 ): AttackSimulation {
   if (victimBalance < 0 || attackerDeposit <= 0) {
     return {
@@ -193,7 +199,7 @@ export function simulateWithReentrancyGuard(
 
 export function simulateChecksEffectsInteractions(
   victimBalance: number,
-  attackerDeposit: number
+  attackerDeposit: number,
 ): AttackSimulation {
   if (victimBalance < 0 || attackerDeposit <= 0) {
     return {
@@ -231,7 +237,8 @@ export function simulateChecksEffectsInteractions(
     functionName: "withdraw",
     ethValue: 0,
     status: "success",
-    description: "Attacker calls withdraw() — checks pass, balance set to 0 BEFORE send",
+    description:
+      "Attacker calls withdraw() — checks pass, balance set to 0 BEFORE send",
   });
 
   frames.push({

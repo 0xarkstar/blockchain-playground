@@ -24,7 +24,7 @@ const DEFAULT_PATH_PREFIX = "m/44'/60'/0'/0";
 export function deriveAccountsFromMnemonic(
   mnemonic: string,
   count = 5,
-  pathPrefix = DEFAULT_PATH_PREFIX
+  pathPrefix = DEFAULT_PATH_PREFIX,
 ): HDWalletInfo {
   const seed = mnemonicToSeedSync(mnemonic, "");
   const master = HDKey.fromMasterSeed(seed);
@@ -57,9 +57,8 @@ export function deriveAccountsFromMnemonic(
 }
 
 function publicKeyBytesToAddress(publicKey: Uint8Array): string {
-  const uncompressed = publicKey.length === 33
-    ? decompressPublicKey(publicKey)
-    : publicKey;
+  const uncompressed =
+    publicKey.length === 33 ? decompressPublicKey(publicKey) : publicKey;
   const keyWithoutPrefix = uncompressed.slice(1);
   const hashResult = keccak_256(keyWithoutPrefix);
   return bytesToHex(hashResult.slice(12));

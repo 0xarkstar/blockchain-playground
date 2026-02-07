@@ -44,7 +44,7 @@ function randomPath(): "A" | "B" {
  */
 export function simulateAliBabaCave(
   hasSecret: boolean,
-  numRounds: number
+  numRounds: number,
 ): CaveSimulation {
   const rounds: CaveRound[] = [];
   for (let i = 0; i < numRounds; i++) {

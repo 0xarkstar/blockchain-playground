@@ -41,10 +41,7 @@ export function TransactionBuilderDemo() {
         Base Sepolia testnet to actually send transactions.
       </Alert>
 
-      <Stepper
-        active={activeStep}
-        onStepClick={setActiveStep}
-      >
+      <Stepper active={activeStep} onStepClick={setActiveStep}>
         <Stepper.Step label="Build" description="Configure transaction">
           <Paper p="md" withBorder mt="md">
             <Stack gap="md">
@@ -80,9 +77,7 @@ export function TransactionBuilderDemo() {
                 <Text size="sm" fw={600}>
                   Transaction Object
                 </Text>
-                <Code block>
-                  {JSON.stringify(txData, null, 2)}
-                </Code>
+                <Code block>{JSON.stringify(txData, null, 2)}</Code>
                 <Group gap="xs">
                   <Badge variant="light">EIP-1559</Badge>
                   <Badge variant="light" color="green">
@@ -106,7 +101,8 @@ export function TransactionBuilderDemo() {
               </Alert>
               <Text size="sm" c="dimmed">
                 Transaction signing requires a connected wallet. The transaction
-                will be sent to Base Sepolia testnet. Get test ETH from a faucet.
+                will be sent to Base Sepolia testnet. Get test ETH from a
+                faucet.
               </Text>
             </Stack>
           </Paper>

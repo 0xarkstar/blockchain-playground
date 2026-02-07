@@ -177,9 +177,7 @@ export function BlockBuilderDemo() {
                 <Badge variant="light" color="green">
                   Block #{block.index}
                 </Badge>
-                <Badge variant="light">
-                  Nonce: {miningResult.nonce}
-                </Badge>
+                <Badge variant="light">Nonce: {miningResult.nonce}</Badge>
               </Group>
             </Group>
 
@@ -193,19 +191,25 @@ export function BlockBuilderDemo() {
             </Alert>
 
             <div>
-              <Text size="xs" c="dimmed">Block Hash</Text>
+              <Text size="xs" c="dimmed">
+                Block Hash
+              </Text>
               <Code block style={{ wordBreak: "break-all" }}>
                 {block.hash}
               </Code>
             </div>
             <div>
-              <Text size="xs" c="dimmed">Previous Hash</Text>
+              <Text size="xs" c="dimmed">
+                Previous Hash
+              </Text>
               <Code block style={{ wordBreak: "break-all" }}>
                 {block.header.previousHash}
               </Code>
             </div>
             <div>
-              <Text size="xs" c="dimmed">Merkle Root</Text>
+              <Text size="xs" c="dimmed">
+                Merkle Root
+              </Text>
               <Code block style={{ wordBreak: "break-all" }}>
                 {block.header.merkleRoot}
               </Code>

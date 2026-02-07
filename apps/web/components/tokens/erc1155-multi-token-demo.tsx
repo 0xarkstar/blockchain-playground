@@ -2,12 +2,25 @@
 
 import { useState, useMemo } from "react";
 import {
-  Stack, Paper, TextInput, NumberInput, Button, Table, Code, Badge, Group, Text, Alert,
+  Stack,
+  Paper,
+  TextInput,
+  NumberInput,
+  Button,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Alert,
   SegmentedControl,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
-  createERC1155, mintERC1155, transferERC1155, balanceOfERC1155,
+  createERC1155,
+  mintERC1155,
+  transferERC1155,
+  balanceOfERC1155,
   type ERC1155State,
 } from "../../lib/tokens/erc1155";
 
@@ -16,7 +29,9 @@ export function ERC1155MultiTokenDemo() {
   const [mintTo, setMintTo] = useState("alice");
   const [mintTokenId, setMintTokenId] = useState(1);
   const [mintAmount, setMintAmount] = useState(100);
-  const [mintType, setMintType] = useState<"fungible" | "non-fungible">("fungible");
+  const [mintType, setMintType] = useState<"fungible" | "non-fungible">(
+    "fungible",
+  );
   const [mintUri, setMintUri] = useState("");
 
   const [tfFrom, setTfFrom] = useState("alice");
@@ -26,7 +41,9 @@ export function ERC1155MultiTokenDemo() {
   const [lastMessage, setLastMessage] = useState("");
 
   const allTokenIds = useMemo(() => {
-    return Array.from(new Set(Object.keys(state.totalSupply).map(Number))).sort((a, b) => a - b);
+    return Array.from(new Set(Object.keys(state.totalSupply).map(Number))).sort(
+      (a, b) => a - b,
+    );
   }, [state.totalSupply]);
 
   const allAddresses = useMemo(() => {
@@ -34,13 +51,30 @@ export function ERC1155MultiTokenDemo() {
   }, [state.balances]);
 
   const handleMint = () => {
-    const result = mintERC1155(state, mintTo, mintTokenId, BigInt(mintAmount), mintType, mintUri || undefined);
+    const result = mintERC1155(
+      state,
+      mintTo,
+      mintTokenId,
+      BigInt(mintAmount),
+      mintType,
+      mintUri || undefined,
+    );
     setState(result.newState);
-    setLastMessage(result.success ? `Minted ${mintAmount} of token #${mintTokenId} to ${mintTo}` : result.message);
+    setLastMessage(
+      result.success
+        ? `Minted ${mintAmount} of token #${mintTokenId} to ${mintTo}`
+        : result.message,
+    );
   };
 
   const handleTransfer = () => {
-    const result = transferERC1155(state, tfFrom, tfTo, tfTokenId, BigInt(tfAmount));
+    const result = transferERC1155(
+      state,
+      tfFrom,
+      tfTo,
+      tfTokenId,
+      BigInt(tfAmount),
+    );
     setState(result.newState);
     setLastMessage(result.message);
   };
@@ -49,7 +83,9 @@ export function ERC1155MultiTokenDemo() {
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Mint Token</Text>
+          <Text size="sm" fw={600}>
+            Mint Token
+          </Text>
           <SegmentedControl
             value={mintType}
             onChange={(v) => {
@@ -62,8 +98,17 @@ export function ERC1155MultiTokenDemo() {
             ]}
           />
           <Group grow>
-            <TextInput label="To" value={mintTo} onChange={(e) => setMintTo(e.currentTarget.value)} />
-            <NumberInput label="Token ID" value={mintTokenId} onChange={(v) => setMintTokenId(Number(v) || 0)} min={1} />
+            <TextInput
+              label="To"
+              value={mintTo}
+              onChange={(e) => setMintTo(e.currentTarget.value)}
+            />
+            <NumberInput
+              label="Token ID"
+              value={mintTokenId}
+              onChange={(v) => setMintTokenId(Number(v) || 0)}
+              min={1}
+            />
             <NumberInput
               label="Amount"
               value={mintAmount}
@@ -72,21 +117,50 @@ export function ERC1155MultiTokenDemo() {
               disabled={mintType === "non-fungible"}
             />
           </Group>
-          <TextInput label="URI (optional)" value={mintUri} onChange={(e) => setMintUri(e.currentTarget.value)} placeholder="ipfs://..." />
-          <Button onClick={handleMint} variant="light" color="green">Mint</Button>
+          <TextInput
+            label="URI (optional)"
+            value={mintUri}
+            onChange={(e) => setMintUri(e.currentTarget.value)}
+            placeholder="ipfs://..."
+          />
+          <Button onClick={handleMint} variant="light" color="green">
+            Mint
+          </Button>
         </Stack>
       </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Transfer</Text>
+          <Text size="sm" fw={600}>
+            Transfer
+          </Text>
           <Group grow>
-            <TextInput label="From" value={tfFrom} onChange={(e) => setTfFrom(e.currentTarget.value)} />
-            <TextInput label="To" value={tfTo} onChange={(e) => setTfTo(e.currentTarget.value)} />
-            <NumberInput label="Token ID" value={tfTokenId} onChange={(v) => setTfTokenId(Number(v) || 0)} min={1} />
-            <NumberInput label="Amount" value={tfAmount} onChange={(v) => setTfAmount(Number(v) || 0)} min={1} />
+            <TextInput
+              label="From"
+              value={tfFrom}
+              onChange={(e) => setTfFrom(e.currentTarget.value)}
+            />
+            <TextInput
+              label="To"
+              value={tfTo}
+              onChange={(e) => setTfTo(e.currentTarget.value)}
+            />
+            <NumberInput
+              label="Token ID"
+              value={tfTokenId}
+              onChange={(v) => setTfTokenId(Number(v) || 0)}
+              min={1}
+            />
+            <NumberInput
+              label="Amount"
+              value={tfAmount}
+              onChange={(v) => setTfAmount(Number(v) || 0)}
+              min={1}
+            />
           </Group>
-          <Button onClick={handleTransfer} variant="light" color="blue">Transfer</Button>
+          <Button onClick={handleTransfer} variant="light" color="blue">
+            Transfer
+          </Button>
         </Stack>
       </Paper>
 
@@ -98,23 +172,31 @@ export function ERC1155MultiTokenDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Token Balances</Text>
+          <Text size="sm" fw={600}>
+            Token Balances
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
                 <Table.Th>Address</Table.Th>
                 {allTokenIds.map((id) => (
-                  <Table.Th key={id} ta="right">ID #{id}</Table.Th>
+                  <Table.Th key={id} ta="right">
+                    ID #{id}
+                  </Table.Th>
                 ))}
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
               {allAddresses.map((addr) => (
                 <Table.Tr key={addr}>
-                  <Table.Td><Code>{addr}</Code></Table.Td>
+                  <Table.Td>
+                    <Code>{addr}</Code>
+                  </Table.Td>
                   {allTokenIds.map((id) => (
                     <Table.Td key={id} ta="right">
-                      <Code>{balanceOfERC1155(state, addr, id).toString()}</Code>
+                      <Code>
+                        {balanceOfERC1155(state, addr, id).toString()}
+                      </Code>
                     </Table.Td>
                   ))}
                 </Table.Tr>
@@ -122,7 +204,9 @@ export function ERC1155MultiTokenDemo() {
               {allAddresses.length === 0 && (
                 <Table.Tr>
                   <Table.Td colSpan={allTokenIds.length + 1} ta="center">
-                    <Text size="sm" c="dimmed">No tokens minted</Text>
+                    <Text size="sm" c="dimmed">
+                      No tokens minted
+                    </Text>
                   </Table.Td>
                 </Table.Tr>
               )}
@@ -134,7 +218,9 @@ export function ERC1155MultiTokenDemo() {
       {allTokenIds.length > 0 && (
         <Paper p="md" withBorder>
           <Stack gap="md">
-            <Text size="sm" fw={600}>Token Info</Text>
+            <Text size="sm" fw={600}>
+              Token Info
+            </Text>
             <Table striped>
               <Table.Thead>
                 <Table.Tr>
@@ -147,18 +233,28 @@ export function ERC1155MultiTokenDemo() {
               <Table.Tbody>
                 {allTokenIds.map((id) => (
                   <Table.Tr key={id}>
-                    <Table.Td><Badge variant="light">#{id}</Badge></Table.Td>
+                    <Table.Td>
+                      <Badge variant="light">#{id}</Badge>
+                    </Table.Td>
                     <Table.Td>
                       <Badge
                         variant="light"
-                        color={state.tokenTypes[id] === "non-fungible" ? "violet" : "blue"}
+                        color={
+                          state.tokenTypes[id] === "non-fungible"
+                            ? "violet"
+                            : "blue"
+                        }
                       >
                         {state.tokenTypes[id] ?? "fungible"}
                       </Badge>
                     </Table.Td>
-                    <Table.Td ta="right"><Code>{state.totalSupply[id]?.toString() ?? "0"}</Code></Table.Td>
+                    <Table.Td ta="right">
+                      <Code>{state.totalSupply[id]?.toString() ?? "0"}</Code>
+                    </Table.Td>
                     <Table.Td>
-                      <Code style={{ fontSize: 11 }}>{state.uris[id] ?? "—"}</Code>
+                      <Code style={{ fontSize: 11 }}>
+                        {state.uris[id] ?? "—"}
+                      </Code>
                     </Table.Td>
                   </Table.Tr>
                 ))}

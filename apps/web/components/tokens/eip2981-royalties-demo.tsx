@@ -2,7 +2,15 @@
 
 import { useState, useMemo } from "react";
 import {
-  Stack, Paper, NumberInput, Table, Code, Badge, Group, Text, Progress,
+  Stack,
+  Paper,
+  NumberInput,
+  Table,
+  Code,
+  Badge,
+  Group,
+  Text,
+  Progress,
 } from "@mantine/core";
 import { calculatePriceBreakdown } from "../../lib/tokens/marketplace";
 
@@ -12,37 +20,64 @@ export function EIP2981RoyaltiesDemo() {
   const [platformFeePercent, setPlatformFeePercent] = useState(2.5);
 
   const breakdown = useMemo(
-    () => calculatePriceBreakdown(salePrice, royaltyPercent, platformFeePercent),
-    [salePrice, royaltyPercent, platformFeePercent]
+    () =>
+      calculatePriceBreakdown(salePrice, royaltyPercent, platformFeePercent),
+    [salePrice, royaltyPercent, platformFeePercent],
   );
 
   const scenarios = useMemo(() => {
     const prices = [1, 5, 10, 50, 100];
     return prices.map((price) =>
-      calculatePriceBreakdown(price, royaltyPercent, platformFeePercent)
+      calculatePriceBreakdown(price, royaltyPercent, platformFeePercent),
     );
   }, [royaltyPercent, platformFeePercent]);
 
-  const sellerPct = salePrice > 0 ? (breakdown.sellerProceeds / salePrice) * 100 : 0;
-  const royaltyPct = salePrice > 0 ? (breakdown.royaltyAmount / salePrice) * 100 : 0;
+  const sellerPct =
+    salePrice > 0 ? (breakdown.sellerProceeds / salePrice) * 100 : 0;
+  const royaltyPct =
+    salePrice > 0 ? (breakdown.royaltyAmount / salePrice) * 100 : 0;
   const feePct = salePrice > 0 ? (breakdown.platformFee / salePrice) * 100 : 0;
 
   return (
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Configuration</Text>
+          <Text size="sm" fw={600}>
+            Configuration
+          </Text>
           <Group grow>
-            <NumberInput label="Sale Price (ETH)" value={salePrice} onChange={(v) => setSalePrice(Number(v) || 0)} min={0.01} decimalScale={4} />
-            <NumberInput label="Royalty %" value={royaltyPercent} onChange={(v) => setRoyaltyPercent(Number(v) || 0)} min={0} max={50} decimalScale={2} />
-            <NumberInput label="Platform Fee %" value={platformFeePercent} onChange={(v) => setPlatformFeePercent(Number(v) || 0)} min={0} max={50} decimalScale={2} />
+            <NumberInput
+              label="Sale Price (ETH)"
+              value={salePrice}
+              onChange={(v) => setSalePrice(Number(v) || 0)}
+              min={0.01}
+              decimalScale={4}
+            />
+            <NumberInput
+              label="Royalty %"
+              value={royaltyPercent}
+              onChange={(v) => setRoyaltyPercent(Number(v) || 0)}
+              min={0}
+              max={50}
+              decimalScale={2}
+            />
+            <NumberInput
+              label="Platform Fee %"
+              value={platformFeePercent}
+              onChange={(v) => setPlatformFeePercent(Number(v) || 0)}
+              min={0}
+              max={50}
+              decimalScale={2}
+            />
           </Group>
         </Stack>
       </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Payment Distribution</Text>
+          <Text size="sm" fw={600}>
+            Payment Distribution
+          </Text>
           <Progress.Root size="xl">
             <Progress.Section value={sellerPct} color="green">
               <Progress.Label>Seller {sellerPct.toFixed(1)}%</Progress.Label>
@@ -58,34 +93,50 @@ export function EIP2981RoyaltiesDemo() {
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>Sale Price</Table.Td>
-                <Table.Td ta="right"><Code>{breakdown.price.toFixed(4)} ETH</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{breakdown.price.toFixed(4)} ETH</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>
                   <Group gap="xs">
-                    <Badge variant="light" color="violet" size="xs">Creator</Badge>
+                    <Badge variant="light" color="violet" size="xs">
+                      Creator
+                    </Badge>
                     Royalty ({royaltyPercent}%)
                   </Group>
                 </Table.Td>
-                <Table.Td ta="right"><Code>{breakdown.royaltyAmount.toFixed(4)} ETH</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{breakdown.royaltyAmount.toFixed(4)} ETH</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>
                   <Group gap="xs">
-                    <Badge variant="light" color="orange" size="xs">Platform</Badge>
+                    <Badge variant="light" color="orange" size="xs">
+                      Platform
+                    </Badge>
                     Fee ({platformFeePercent}%)
                   </Group>
                 </Table.Td>
-                <Table.Td ta="right"><Code>{breakdown.platformFee.toFixed(4)} ETH</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code>{breakdown.platformFee.toFixed(4)} ETH</Code>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>
                   <Group gap="xs">
-                    <Badge variant="light" color="green" size="xs">Seller</Badge>
+                    <Badge variant="light" color="green" size="xs">
+                      Seller
+                    </Badge>
                     Proceeds
                   </Group>
                 </Table.Td>
-                <Table.Td ta="right"><Code fw={600}>{breakdown.sellerProceeds.toFixed(4)} ETH</Code></Table.Td>
+                <Table.Td ta="right">
+                  <Code fw={600}>
+                    {breakdown.sellerProceeds.toFixed(4)} ETH
+                  </Code>
+                </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>
@@ -94,7 +145,9 @@ export function EIP2981RoyaltiesDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Royalty at Different Price Points</Text>
+          <Text size="sm" fw={600}>
+            Royalty at Different Price Points
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -107,10 +160,18 @@ export function EIP2981RoyaltiesDemo() {
             <Table.Tbody>
               {scenarios.map((s) => (
                 <Table.Tr key={s.price}>
-                  <Table.Td><Code>{s.price.toFixed(2)}</Code></Table.Td>
-                  <Table.Td ta="right"><Code>{s.royaltyAmount.toFixed(4)}</Code></Table.Td>
-                  <Table.Td ta="right"><Code>{s.platformFee.toFixed(4)}</Code></Table.Td>
-                  <Table.Td ta="right"><Code>{s.sellerProceeds.toFixed(4)}</Code></Table.Td>
+                  <Table.Td>
+                    <Code>{s.price.toFixed(2)}</Code>
+                  </Table.Td>
+                  <Table.Td ta="right">
+                    <Code>{s.royaltyAmount.toFixed(4)}</Code>
+                  </Table.Td>
+                  <Table.Td ta="right">
+                    <Code>{s.platformFee.toFixed(4)}</Code>
+                  </Table.Td>
+                  <Table.Td ta="right">
+                    <Code>{s.sellerProceeds.toFixed(4)}</Code>
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
@@ -120,15 +181,18 @@ export function EIP2981RoyaltiesDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>EIP-2981 Standard</Text>
+          <Text size="sm" fw={600}>
+            EIP-2981 Standard
+          </Text>
           <Text size="sm" c="dimmed">
-            EIP-2981 defines a standard interface for querying royalty payment information.
-            Marketplaces call <Code>royaltyInfo(tokenId, salePrice)</Code> which returns
-            the royalty receiver address and payment amount. This is an on-chain standard
-            that works across any NFT marketplace that implements it.
+            EIP-2981 defines a standard interface for querying royalty payment
+            information. Marketplaces call{" "}
+            <Code>royaltyInfo(tokenId, salePrice)</Code> which returns the
+            royalty receiver address and payment amount. This is an on-chain
+            standard that works across any NFT marketplace that implements it.
           </Text>
           <Code block>
-{`// EIP-2981 Interface
+            {`// EIP-2981 Interface
 function royaltyInfo(
   uint256 tokenId,
   uint256 salePrice

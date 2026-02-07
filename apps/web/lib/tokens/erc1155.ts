@@ -1,6 +1,8 @@
 export interface ERC1155State {
   readonly balances: Readonly<Record<string, Readonly<Record<number, bigint>>>>;
-  readonly operatorApprovals: Readonly<Record<string, Readonly<Record<string, boolean>>>>;
+  readonly operatorApprovals: Readonly<
+    Record<string, Readonly<Record<string, boolean>>>
+  >;
   readonly uris: Readonly<Record<number, string>>;
   readonly tokenTypes: Readonly<Record<number, "fungible" | "non-fungible">>;
   readonly totalSupply: Readonly<Record<number, bigint>>;
@@ -28,17 +30,29 @@ export function mintERC1155(
   tokenId: number,
   amount: bigint,
   tokenType: "fungible" | "non-fungible" = "fungible",
-  uri: string = ""
+  uri: string = "",
 ): ERC1155Result {
   if (amount <= BigInt(0)) {
-    return { success: false, newState: state, message: "Amount must be positive" };
+    return {
+      success: false,
+      newState: state,
+      message: "Amount must be positive",
+    };
   }
   if (tokenType === "non-fungible" && amount !== BigInt(1)) {
-    return { success: false, newState: state, message: "Non-fungible tokens must have amount of 1" };
+    return {
+      success: false,
+      newState: state,
+      message: "Non-fungible tokens must have amount of 1",
+    };
   }
   const existingSupply = state.totalSupply[tokenId] ?? BigInt(0);
   if (tokenType === "non-fungible" && existingSupply > BigInt(0)) {
-    return { success: false, newState: state, message: `Non-fungible token #${tokenId} already minted` };
+    return {
+      success: false,
+      newState: state,
+      message: `Non-fungible token #${tokenId} already minted`,
+    };
   }
 
   const accountBalances = state.balances[to] ?? {};
@@ -65,13 +79,21 @@ export function transferERC1155(
   from: string,
   to: string,
   tokenId: number,
-  amount: bigint
+  amount: bigint,
 ): ERC1155Result {
   if (amount <= BigInt(0)) {
-    return { success: false, newState: state, message: "Amount must be positive" };
+    return {
+      success: false,
+      newState: state,
+      message: "Amount must be positive",
+    };
   }
   if (from === to) {
-    return { success: false, newState: state, message: "Cannot transfer to self" };
+    return {
+      success: false,
+      newState: state,
+      message: "Cannot transfer to self",
+    };
   }
 
   const fromBalances = state.balances[from] ?? {};
@@ -102,16 +124,30 @@ export function batchTransferERC1155(
   from: string,
   to: string,
   tokenIds: readonly number[],
-  amounts: readonly bigint[]
+  amounts: readonly bigint[],
 ): ERC1155Result {
   if (tokenIds.length !== amounts.length) {
-    return { success: false, newState: state, message: "Token IDs and amounts length mismatch" };
+    return {
+      success: false,
+      newState: state,
+      message: "Token IDs and amounts length mismatch",
+    };
   }
   let current = state;
   for (let i = 0; i < tokenIds.length; i++) {
-    const result = transferERC1155(current, from, to, tokenIds[i]!, amounts[i]!);
+    const result = transferERC1155(
+      current,
+      from,
+      to,
+      tokenIds[i]!,
+      amounts[i]!,
+    );
     if (!result.success) {
-      return { success: false, newState: state, message: `Batch failed at index ${i}: ${result.message}` };
+      return {
+        success: false,
+        newState: state,
+        message: `Batch failed at index ${i}: ${result.message}`,
+      };
     }
     current = result.newState;
   }
@@ -125,7 +161,7 @@ export function batchTransferERC1155(
 export function balanceOfERC1155(
   state: ERC1155State,
   account: string,
-  tokenId: number
+  tokenId: number,
 ): bigint {
   return state.balances[account]?.[tokenId] ?? BigInt(0);
 }
@@ -133,9 +169,9 @@ export function balanceOfERC1155(
 export function balanceOfBatchERC1155(
   state: ERC1155State,
   accounts: readonly string[],
-  tokenIds: readonly number[]
+  tokenIds: readonly number[],
 ): readonly bigint[] {
-  return accounts.map((account, i) =>
-    state.balances[account]?.[tokenIds[i]!] ?? BigInt(0)
+  return accounts.map(
+    (account, i) => state.balances[account]?.[tokenIds[i]!] ?? BigInt(0),
   );
 }

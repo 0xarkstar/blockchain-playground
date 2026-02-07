@@ -11,14 +11,22 @@ const hashFunctions: Record<HashAlgorithm, (data: Uint8Array) => Uint8Array> = {
   blake2b: (data) => blake2b(data, { dkLen: 32 }),
 };
 
-export function hash(data: string | Uint8Array, algorithm: HashAlgorithm): string {
-  const input = typeof data === "string" ? new TextEncoder().encode(data) : data;
+export function hash(
+  data: string | Uint8Array,
+  algorithm: HashAlgorithm,
+): string {
+  const input =
+    typeof data === "string" ? new TextEncoder().encode(data) : data;
   const result = hashFunctions[algorithm](input);
   return bytesToHex(result);
 }
 
-export function hashBytes(data: string | Uint8Array, algorithm: HashAlgorithm): Uint8Array {
-  const input = typeof data === "string" ? new TextEncoder().encode(data) : data;
+export function hashBytes(
+  data: string | Uint8Array,
+  algorithm: HashAlgorithm,
+): Uint8Array {
+  const input =
+    typeof data === "string" ? new TextEncoder().encode(data) : data;
   return hashFunctions[algorithm](input);
 }
 
@@ -33,8 +41,15 @@ export function toBinaryString(hex: string): string {
 export function computeAvalancheEffect(
   input1: string,
   input2: string,
-  algorithm: HashAlgorithm
-): { hash1: string; hash2: string; binary1: string; binary2: string; diffBits: number[]; diffPercent: number } {
+  algorithm: HashAlgorithm,
+): {
+  hash1: string;
+  hash2: string;
+  binary1: string;
+  binary2: string;
+  diffBits: number[];
+  diffPercent: number;
+} {
   const hash1 = hash(input1, algorithm);
   const hash2 = hash(input2, algorithm);
   const binary1 = toBinaryString(hash1);

@@ -30,21 +30,24 @@ export function ContractInteractionsDemo() {
 
   const result = useMemo(
     () => simulateCall({ callType, from, to, value }),
-    [callType, from, to, value]
+    [callType, from, to, value],
   );
 
   const allResults = useMemo(
-    () => (["call", "delegatecall", "staticcall"] as const).map((ct) =>
-      simulateCall({ callType: ct, from, to, value })
-    ),
-    [from, to, value]
+    () =>
+      (["call", "delegatecall", "staticcall"] as const).map((ct) =>
+        simulateCall({ callType: ct, from, to, value }),
+      ),
+    [from, to, value],
   );
 
   return (
     <Stack gap="lg">
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Call Configuration</Text>
+          <Text size="sm" fw={600}>
+            Call Configuration
+          </Text>
           <SegmentedControl
             data={CALL_TYPES}
             value={callType}
@@ -81,15 +84,25 @@ export function ContractInteractionsDemo() {
             <Table.Tbody>
               <Table.Tr>
                 <Table.Td>msg.sender</Table.Td>
-                <Table.Td ta="right"><Badge variant="light">{result.msgSender}</Badge></Table.Td>
+                <Table.Td ta="right">
+                  <Badge variant="light">{result.msgSender}</Badge>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Storage Context</Table.Td>
-                <Table.Td ta="right"><Badge variant="light" color="blue">{result.storageContext}</Badge></Table.Td>
+                <Table.Td ta="right">
+                  <Badge variant="light" color="blue">
+                    {result.storageContext}
+                  </Badge>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Code Source</Table.Td>
-                <Table.Td ta="right"><Badge variant="light" color="violet">{result.codeSource}</Badge></Table.Td>
+                <Table.Td ta="right">
+                  <Badge variant="light" color="violet">
+                    {result.codeSource}
+                  </Badge>
+                </Table.Td>
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Value Transferred</Table.Td>
@@ -98,14 +111,21 @@ export function ContractInteractionsDemo() {
               <Table.Tr>
                 <Table.Td>Can Modify State</Table.Td>
                 <Table.Td ta="right">
-                  <Badge color={result.canModifyState ? "green" : "red"} variant="light">
+                  <Badge
+                    color={result.canModifyState ? "green" : "red"}
+                    variant="light"
+                  >
                     {result.canModifyState ? "Yes" : "No"}
                   </Badge>
                 </Table.Td>
               </Table.Tr>
             </Table.Tbody>
           </Table>
-          <Alert icon={<IconInfoCircle size={16} />} color="blue" variant="light">
+          <Alert
+            icon={<IconInfoCircle size={16} />}
+            color="blue"
+            variant="light"
+          >
             {result.description}
           </Alert>
         </Stack>
@@ -113,7 +133,9 @@ export function ContractInteractionsDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Side-by-Side Comparison</Text>
+          <Text size="sm" fw={600}>
+            Side-by-Side Comparison
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -127,14 +149,18 @@ export function ContractInteractionsDemo() {
               <Table.Tr>
                 <Table.Td>msg.sender</Table.Td>
                 {allResults.map((r, i) => (
-                  <Table.Td key={i}><Text size="xs">{r.msgSender}</Text></Table.Td>
+                  <Table.Td key={i}>
+                    <Text size="xs">{r.msgSender}</Text>
+                  </Table.Td>
                 ))}
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Storage</Table.Td>
                 {allResults.map((r, i) => (
                   <Table.Td key={i}>
-                    <Badge size="xs" variant="light" color="blue">{r.storageContext}</Badge>
+                    <Badge size="xs" variant="light" color="blue">
+                      {r.storageContext}
+                    </Badge>
                   </Table.Td>
                 ))}
               </Table.Tr>
@@ -142,21 +168,29 @@ export function ContractInteractionsDemo() {
                 <Table.Td>Code</Table.Td>
                 {allResults.map((r, i) => (
                   <Table.Td key={i}>
-                    <Badge size="xs" variant="light" color="violet">{r.codeSource}</Badge>
+                    <Badge size="xs" variant="light" color="violet">
+                      {r.codeSource}
+                    </Badge>
                   </Table.Td>
                 ))}
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>Value</Table.Td>
                 {allResults.map((r, i) => (
-                  <Table.Td key={i}><Text size="xs">{r.valueTransferred}</Text></Table.Td>
+                  <Table.Td key={i}>
+                    <Text size="xs">{r.valueTransferred}</Text>
+                  </Table.Td>
                 ))}
               </Table.Tr>
               <Table.Tr>
                 <Table.Td>State Mutable</Table.Td>
                 {allResults.map((r, i) => (
                   <Table.Td key={i}>
-                    <Badge size="xs" color={r.canModifyState ? "green" : "red"} variant="light">
+                    <Badge
+                      size="xs"
+                      color={r.canModifyState ? "green" : "red"}
+                      variant="light"
+                    >
                       {r.canModifyState ? "Yes" : "No"}
                     </Badge>
                   </Table.Td>
@@ -169,8 +203,9 @@ export function ContractInteractionsDemo() {
 
       {callType === "delegatecall" && (
         <Alert icon={<IconInfoCircle size={16} />} color="yellow">
-          DELEGATECALL is used by proxy contracts. The target&apos;s code runs with the caller&apos;s
-          storage, so storage layout must match between proxy and implementation.
+          DELEGATECALL is used by proxy contracts. The target&apos;s code runs
+          with the caller&apos;s storage, so storage layout must match between
+          proxy and implementation.
         </Alert>
       )}
     </Stack>

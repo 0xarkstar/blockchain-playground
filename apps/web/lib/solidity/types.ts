@@ -99,7 +99,13 @@ export function getSolidityTypeInfo(typeName: string): TypeInfo | null {
 export function encodeValue(value: string, typeName: string): EncodedValue {
   const info = getSolidityTypeInfo(typeName);
   if (!info) {
-    return { hex: "", paddedHex: "", decimal: "", valid: false, error: `Unknown type: ${typeName}` };
+    return {
+      hex: "",
+      paddedHex: "",
+      decimal: "",
+      valid: false,
+      error: `Unknown type: ${typeName}`,
+    };
   }
 
   try {
@@ -117,7 +123,13 @@ export function encodeValue(value: string, typeName: string): EncodedValue {
     if (info.category === "address") {
       const cleaned = value.startsWith("0x") ? value.slice(2) : value;
       if (cleaned.length !== 40 || !/^[0-9a-fA-F]+$/.test(cleaned)) {
-        return { hex: "", paddedHex: "", decimal: "", valid: false, error: "Invalid address format" };
+        return {
+          hex: "",
+          paddedHex: "",
+          decimal: "",
+          valid: false,
+          error: "Invalid address format",
+        };
       }
       return {
         hex: "0x" + cleaned.toLowerCase(),
@@ -130,7 +142,13 @@ export function encodeValue(value: string, typeName: string): EncodedValue {
     if (info.category === "bytes") {
       const cleaned = value.startsWith("0x") ? value.slice(2) : value;
       if (!/^[0-9a-fA-F]*$/.test(cleaned)) {
-        return { hex: "", paddedHex: "", decimal: "", valid: false, error: "Invalid hex value" };
+        return {
+          hex: "",
+          paddedHex: "",
+          decimal: "",
+          valid: false,
+          error: "Invalid hex value",
+        };
       }
       const padded = cleaned.padEnd(info.size * 2, "0").slice(0, info.size * 2);
       return {
@@ -147,7 +165,13 @@ export function encodeValue(value: string, typeName: string): EncodedValue {
     const maxVal = BigInt(info.max);
 
     if (num < minVal || num > maxVal) {
-      return { hex: "", paddedHex: "", decimal: "", valid: false, error: `Value out of range [${info.min}, ${info.max}]` };
+      return {
+        hex: "",
+        paddedHex: "",
+        decimal: "",
+        valid: false,
+        error: `Value out of range [${info.min}, ${info.max}]`,
+      };
     }
 
     let hexStr: string;
@@ -166,7 +190,13 @@ export function encodeValue(value: string, typeName: string): EncodedValue {
       valid: true,
     };
   } catch {
-    return { hex: "", paddedHex: "", decimal: "", valid: false, error: "Failed to encode value" };
+    return {
+      hex: "",
+      paddedHex: "",
+      decimal: "",
+      valid: false,
+      error: "Failed to encode value",
+    };
   }
 }
 

@@ -40,7 +40,7 @@ export interface QAPVerification {
 export function evaluatePolynomial(
   poly: Polynomial,
   x: bigint,
-  p: bigint
+  p: bigint,
 ): bigint {
   let result = 0n;
   let xPow = 1n;
@@ -54,7 +54,7 @@ export function evaluatePolynomial(
 export function addPolynomials(
   a: Polynomial,
   b: Polynomial,
-  p: bigint
+  p: bigint,
 ): bigint[] {
   const maxLen = Math.max(a.length, b.length);
   const result: bigint[] = [];
@@ -67,7 +67,7 @@ export function addPolynomials(
 export function multiplyPolynomials(
   a: Polynomial,
   b: Polynomial,
-  p: bigint
+  p: bigint,
 ): bigint[] {
   if (a.length === 0 || b.length === 0) return [0n];
   const result: bigint[] = new Array(a.length + b.length - 1).fill(0n);
@@ -82,7 +82,7 @@ export function multiplyPolynomials(
 export function subtractPolynomials(
   a: Polynomial,
   b: Polynomial,
-  p: bigint
+  p: bigint,
 ): bigint[] {
   const maxLen = Math.max(a.length, b.length);
   const result: bigint[] = [];
@@ -96,7 +96,7 @@ export function subtractPolynomials(
 export function dividePolynomials(
   num: Polynomial,
   den: Polynomial,
-  p: bigint
+  p: bigint,
 ): [bigint[], bigint[]] {
   const numerator = [...num];
   const denDeg = den.length - 1;
@@ -114,7 +114,7 @@ export function dividePolynomials(
       numerator[i - denDeg + j] = modSub(
         numerator[i - denDeg + j],
         modMul(coeff, den[j], p),
-        p
+        p,
       );
     }
   }
@@ -129,7 +129,7 @@ export function dividePolynomials(
 /** Lagrange interpolation through a set of (x, y) points. */
 export function lagrangeInterpolation(
   points: readonly { x: bigint; y: bigint }[],
-  p: bigint
+  p: bigint,
 ): bigint[] {
   const n = points.length;
   let result: bigint[] = [0n];
@@ -163,7 +163,7 @@ export function r1csToQAP(r1cs: R1CS, p: bigint): QAP {
   const numConstraints = r1cs.numConstraints;
   const numWires = r1cs.wireNames.length;
   const evalPoints = Array.from({ length: numConstraints }, (_, i) =>
-    BigInt(i + 1)
+    BigInt(i + 1),
   );
 
   // For each wire j, interpolate a polynomial through (i+1, A[i][j])
@@ -197,7 +197,7 @@ export function verifyQAP(
   qap: QAP,
   witness: readonly bigint[],
   p: bigint,
-  evalAt?: bigint
+  evalAt?: bigint,
 ): QAPVerification {
   // A(x) = Σ wi * Ai(x), similarly for B, C
   let Apoly: bigint[] = [0n];

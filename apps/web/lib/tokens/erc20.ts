@@ -4,7 +4,9 @@ export interface ERC20State {
   readonly decimals: number;
   readonly totalSupply: bigint;
   readonly balances: Readonly<Record<string, bigint>>;
-  readonly allowances: Readonly<Record<string, Readonly<Record<string, bigint>>>>;
+  readonly allowances: Readonly<
+    Record<string, Readonly<Record<string, bigint>>>
+  >;
 }
 
 export interface TransferResult {
@@ -16,18 +18,29 @@ export interface TransferResult {
 export function createERC20(
   name: string,
   symbol: string,
-  decimals: number = 18
+  decimals: number = 18,
 ): ERC20State {
-  return { name, symbol, decimals, totalSupply: BigInt(0), balances: {}, allowances: {} };
+  return {
+    name,
+    symbol,
+    decimals,
+    totalSupply: BigInt(0),
+    balances: {},
+    allowances: {},
+  };
 }
 
 export function mint(
   state: ERC20State,
   to: string,
-  amount: bigint
+  amount: bigint,
 ): TransferResult {
   if (amount <= BigInt(0)) {
-    return { success: false, newState: state, message: "Amount must be positive" };
+    return {
+      success: false,
+      newState: state,
+      message: "Amount must be positive",
+    };
   }
   const toBalance = state.balances[to] ?? BigInt(0);
   return {
@@ -44,10 +57,14 @@ export function mint(
 export function burn(
   state: ERC20State,
   from: string,
-  amount: bigint
+  amount: bigint,
 ): TransferResult {
   if (amount <= BigInt(0)) {
-    return { success: false, newState: state, message: "Amount must be positive" };
+    return {
+      success: false,
+      newState: state,
+      message: "Amount must be positive",
+    };
   }
   const fromBalance = state.balances[from] ?? BigInt(0);
   if (fromBalance < amount) {
@@ -68,13 +85,21 @@ export function transfer(
   state: ERC20State,
   from: string,
   to: string,
-  amount: bigint
+  amount: bigint,
 ): TransferResult {
   if (amount <= BigInt(0)) {
-    return { success: false, newState: state, message: "Amount must be positive" };
+    return {
+      success: false,
+      newState: state,
+      message: "Amount must be positive",
+    };
   }
   if (from === to) {
-    return { success: false, newState: state, message: "Cannot transfer to self" };
+    return {
+      success: false,
+      newState: state,
+      message: "Cannot transfer to self",
+    };
   }
   const fromBalance = state.balances[from] ?? BigInt(0);
   if (fromBalance < amount) {
@@ -99,10 +124,14 @@ export function approve(
   state: ERC20State,
   owner: string,
   spender: string,
-  amount: bigint
+  amount: bigint,
 ): TransferResult {
   if (amount < BigInt(0)) {
-    return { success: false, newState: state, message: "Amount cannot be negative" };
+    return {
+      success: false,
+      newState: state,
+      message: "Amount cannot be negative",
+    };
   }
   const ownerAllowances = state.allowances[owner] ?? {};
   return {
@@ -123,14 +152,22 @@ export function transferFrom(
   spender: string,
   from: string,
   to: string,
-  amount: bigint
+  amount: bigint,
 ): TransferResult {
   if (amount <= BigInt(0)) {
-    return { success: false, newState: state, message: "Amount must be positive" };
+    return {
+      success: false,
+      newState: state,
+      message: "Amount must be positive",
+    };
   }
   const allowance = state.allowances[from]?.[spender] ?? BigInt(0);
   if (allowance < amount) {
-    return { success: false, newState: state, message: `Insufficient allowance: ${allowance} < ${amount}` };
+    return {
+      success: false,
+      newState: state,
+      message: `Insufficient allowance: ${allowance} < ${amount}`,
+    };
   }
   const fromBalance = state.balances[from] ?? BigInt(0);
   if (fromBalance < amount) {
@@ -160,7 +197,11 @@ export function balanceOf(state: ERC20State, account: string): bigint {
   return state.balances[account] ?? BigInt(0);
 }
 
-export function allowance(state: ERC20State, owner: string, spender: string): bigint {
+export function allowance(
+  state: ERC20State,
+  owner: string,
+  spender: string,
+): bigint {
   return state.allowances[owner]?.[spender] ?? BigInt(0);
 }
 

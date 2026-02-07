@@ -30,7 +30,7 @@ export function calculateTWAP(snapshots: readonly PriceSnapshot[]): number {
 export function detectPriceDeviation(
   currentPrice: number,
   twap: number,
-  threshold: number
+  threshold: number,
 ): DeviationResult {
   if (twap <= 0) return { deviated: false, deviation: 0 };
 
@@ -44,7 +44,7 @@ export function detectPriceDeviation(
 export function isHeartbeatStale(
   lastUpdate: number,
   heartbeatInterval: number,
-  currentTime?: number
+  currentTime?: number,
 ): boolean {
   const now = currentTime ?? Date.now();
   return now - lastUpdate > heartbeatInterval;

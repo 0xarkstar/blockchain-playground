@@ -10,7 +10,10 @@ import {
   Group,
   Table,
 } from "@mantine/core";
-import { calculateBorrowRate, calculateSupplyRate } from "../../lib/defi/lending";
+import {
+  calculateBorrowRate,
+  calculateSupplyRate,
+} from "../../lib/defi/lending";
 
 export function InterestRateExplorerDemo() {
   const [utilization, setUtilization] = useState<number>(50);
@@ -22,7 +25,13 @@ export function InterestRateExplorerDemo() {
 
   const currentRates = useMemo(() => {
     const u = utilization / 100;
-    const bRate = calculateBorrowRate(u, baseRate / 100, slope1 / 100, slope2 / 100, kink / 100);
+    const bRate = calculateBorrowRate(
+      u,
+      baseRate / 100,
+      slope1 / 100,
+      slope2 / 100,
+      kink / 100,
+    );
     const sRate = calculateSupplyRate(u, bRate, reserveFactor / 100);
     return { borrowRate: bRate * 100, supplyRate: sRate * 100 };
   }, [utilization, baseRate, slope1, slope2, kink, reserveFactor]);
@@ -31,7 +40,13 @@ export function InterestRateExplorerDemo() {
     const points = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100];
     return points.map((u) => {
       const util = u / 100;
-      const bRate = calculateBorrowRate(util, baseRate / 100, slope1 / 100, slope2 / 100, kink / 100);
+      const bRate = calculateBorrowRate(
+        util,
+        baseRate / 100,
+        slope1 / 100,
+        slope2 / 100,
+        kink / 100,
+      );
       const sRate = calculateSupplyRate(util, bRate, reserveFactor / 100);
       return {
         utilization: u,
@@ -63,10 +78,16 @@ export function InterestRateExplorerDemo() {
           />
           <Group>
             <Text size="sm">
-              Borrow Rate: <Text span fw={600} c="red">{currentRates.borrowRate.toFixed(2)}%</Text>
+              Borrow Rate:{" "}
+              <Text span fw={600} c="red">
+                {currentRates.borrowRate.toFixed(2)}%
+              </Text>
             </Text>
             <Text size="sm">
-              Supply Rate: <Text span fw={600} c="green">{currentRates.supplyRate.toFixed(2)}%</Text>
+              Supply Rate:{" "}
+              <Text span fw={600} c="green">
+                {currentRates.supplyRate.toFixed(2)}%
+              </Text>
             </Text>
           </Group>
         </Stack>
@@ -74,7 +95,9 @@ export function InterestRateExplorerDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Model Parameters (%)</Text>
+          <Text size="sm" fw={600}>
+            Model Parameters (%)
+          </Text>
           <Group grow>
             <NumberInput
               label="Base Rate"
@@ -108,7 +131,9 @@ export function InterestRateExplorerDemo() {
             <NumberInput
               label="Kink Point"
               value={kink}
-              onChange={(v) => setKink(Math.max(1, Math.min(99, Number(v) || 1)))}
+              onChange={(v) =>
+                setKink(Math.max(1, Math.min(99, Number(v) || 1)))
+              }
               min={1}
               max={99}
               suffix="%"
@@ -129,7 +154,9 @@ export function InterestRateExplorerDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
-          <Text size="sm" fw={600}>Rate Curve</Text>
+          <Text size="sm" fw={600}>
+            Rate Curve
+          </Text>
           <Table striped>
             <Table.Thead>
               <Table.Tr>
@@ -151,8 +178,12 @@ export function InterestRateExplorerDemo() {
                   }}
                 >
                   <Table.Td>{row.utilization}%</Table.Td>
-                  <Table.Td ta="right" c="red">{row.borrowRate.toFixed(2)}%</Table.Td>
-                  <Table.Td ta="right" c="green">{row.supplyRate.toFixed(2)}%</Table.Td>
+                  <Table.Td ta="right" c="red">
+                    {row.borrowRate.toFixed(2)}%
+                  </Table.Td>
+                  <Table.Td ta="right" c="green">
+                    {row.supplyRate.toFixed(2)}%
+                  </Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

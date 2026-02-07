@@ -1,7 +1,14 @@
 import { describe, it, expect } from "vitest";
 import {
-  createERC20, mint, burn, transfer, approve, transferFrom,
-  balanceOf, allowance, formatTokenAmount,
+  createERC20,
+  mint,
+  burn,
+  transfer,
+  approve,
+  transferFrom,
+  balanceOf,
+  allowance,
+  formatTokenAmount,
 } from "../lib/tokens/erc20";
 
 describe("createERC20", () => {
@@ -91,7 +98,9 @@ describe("approve and transferFrom", () => {
     let state = createERC20("T", "T");
     state = mint(state, "alice", BigInt(1000)).newState;
     state = approve(state, "alice", "spender", BigInt(100)).newState;
-    expect(transferFrom(state, "spender", "alice", "bob", BigInt(200)).success).toBe(false);
+    expect(
+      transferFrom(state, "spender", "alice", "bob", BigInt(200)).success,
+    ).toBe(false);
   });
 
   it("rejects negative approval", () => {
