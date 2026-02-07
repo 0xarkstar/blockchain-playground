@@ -4,22 +4,22 @@ test.describe("DeFi Track", () => {
   test("displays DeFi track listing with all 11 demos", async ({ page }) => {
     await page.goto("/en/defi");
     await expect(page.getByRole("heading", { level: 1, name: "DeFi" })).toBeVisible();
-    await expect(page.getByText("Simple Swap")).toBeVisible();
-    await expect(page.getByText("Liquidity Pool")).toBeVisible();
-    await expect(page.getByText("Impermanent Loss")).toBeVisible();
-    await expect(page.getByText("Lending Protocol")).toBeVisible();
-    await expect(page.getByText("Interest Rate Explorer")).toBeVisible();
-    await expect(page.getByText("Staking Rewards")).toBeVisible();
-    await expect(page.getByText("Flash Loan")).toBeVisible();
-    await expect(page.getByText("Arbitrage Simulator")).toBeVisible();
-    await expect(page.getByText("Oracle Price Feed")).toBeVisible();
-    await expect(page.getByText("Liquidation Simulator")).toBeVisible();
-    await expect(page.getByText("Yield Calculator")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Simple Swap" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Liquidity Pool" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Impermanent Loss" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Lending Protocol" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Interest Rate Explorer" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Staking Rewards" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Flash Loan" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Arbitrage Simulator" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Oracle Price Feed" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Liquidation Simulator" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Yield Calculator" })).toBeVisible();
   });
 
   test("navigates to Simple Swap demo", async ({ page }) => {
     await page.goto("/en/defi");
-    await page.getByText("Simple Swap").click();
+    await page.getByRole("heading", { name: "Simple Swap" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Simple Swap" })).toBeVisible();
     await expect(page.getByText("Pool Reserves")).toBeVisible();
   });
