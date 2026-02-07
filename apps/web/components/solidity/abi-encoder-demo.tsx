@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import {
   Stack,
   Paper,
@@ -19,11 +19,16 @@ import { encodeCalldata, type AbiParam } from "../../lib/solidity/abi";
 
 const PARAM_TYPES = ["uint256", "address", "bool", "bytes32", "uint8"];
 
+interface ParamWithId extends AbiParam {
+  readonly id: number;
+}
+
 export function AbiEncoderDemo() {
+  const nextId = useRef(2);
   const [funcName, setFuncName] = useState("transfer");
-  const [params, setParams] = useState<AbiParam[]>([
-    { name: "to", type: "address", value: "0x0000000000000000000000000000000000000001" },
-    { name: "amount", type: "uint256", value: "1000" },
+  const [params, setParams] = useState<ParamWithId[]>([
+    { id: 0, name: "to", type: "address", value: "0x0000000000000000000000000000000000000001" },
+    { id: 1, name: "amount", type: "uint256", value: "1000" },
   ]);
 
   const result = useMemo(() => {
@@ -35,14 +40,14 @@ export function AbiEncoderDemo() {
   }, [funcName, params]);
 
   const addParam = () => {
-    setParams([...params, { name: "", type: "uint256", value: "0" }]);
+    setParams([...params, { id: nextId.current++, name: "", type: "uint256", value: "0" }]);
   };
 
   const removeParam = (index: number) => {
     setParams(params.filter((_, i) => i !== index));
   };
 
-  const updateParam = (index: number, field: keyof AbiParam, value: string) => {
+  const updateParam = (index: number, field: keyof ParamWithId, value: string) => {
     setParams(params.map((p, i) =>
       i === index ? { ...p, [field]: value } : p
     ));
@@ -65,7 +70,7 @@ export function AbiEncoderDemo() {
           />
           <Text size="xs" fw={600}>Parameters</Text>
           {params.map((param, i) => (
-            <Group key={i} align="flex-end">
+            <Group key={param.id} align="flex-end">
               <Select
                 label="Type"
                 data={PARAM_TYPES}

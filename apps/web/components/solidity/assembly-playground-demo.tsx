@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import {
   Stack,
   Paper,
@@ -22,6 +22,10 @@ import {
   type Instruction,
   type EvmState,
 } from "../../lib/solidity/evm";
+
+interface InstructionWithId extends Instruction {
+  readonly id: number;
+}
 
 const EXAMPLE_PROGRAMS: { label: string; instructions: Instruction[] }[] = [
   {
@@ -69,8 +73,9 @@ const needsOperand = (opcode: string) =>
   opcode === "PUSH1" || opcode === "PUSH32";
 
 export function AssemblyPlaygroundDemo() {
-  const [instructions, setInstructions] = useState<Instruction[]>(
-    EXAMPLE_PROGRAMS[0]!.instructions
+  const nextInstrId = useRef(EXAMPLE_PROGRAMS[0]!.instructions.length);
+  const [instructions, setInstructions] = useState<InstructionWithId[]>(
+    EXAMPLE_PROGRAMS[0]!.instructions.map((instr, i) => ({ ...instr, id: i }))
   );
   const [newOpcode, setNewOpcode] = useState("PUSH1");
   const [newOperand, setNewOperand] = useState("0");
@@ -83,9 +88,9 @@ export function AssemblyPlaygroundDemo() {
   );
 
   const addInstruction = () => {
-    const instr: Instruction = needsOperand(newOpcode)
-      ? { opcode: newOpcode, operand: newOperand }
-      : { opcode: newOpcode };
+    const instr: InstructionWithId = needsOperand(newOpcode)
+      ? { id: nextInstrId.current++, opcode: newOpcode, operand: newOperand }
+      : { id: nextInstrId.current++, opcode: newOpcode };
     setInstructions([...instructions, instr]);
   };
 
@@ -116,7 +121,9 @@ export function AssemblyPlaygroundDemo() {
   };
 
   const loadExample = (index: number) => {
-    setInstructions(EXAMPLE_PROGRAMS[index]!.instructions);
+    const prog = EXAMPLE_PROGRAMS[index]!.instructions;
+    nextInstrId.current = prog.length;
+    setInstructions(prog.map((instr, i) => ({ ...instr, id: i })));
     reset();
   };
 
@@ -177,7 +184,7 @@ export function AssemblyPlaygroundDemo() {
             <Table.Tbody>
               {instructions.map((instr, i) => (
                 <Table.Tr
-                  key={i}
+                  key={instr.id}
                   style={{
                     backgroundColor: i === currentStep
                       ? "var(--mantine-color-blue-light)"

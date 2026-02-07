@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import {
   Stack,
   Paper,
@@ -20,18 +20,20 @@ import { encodeLogEntry, type EventParam } from "../../lib/solidity/abi";
 const PARAM_TYPES = ["uint256", "address", "bool", "bytes32", "uint8"];
 
 interface ParamInput {
-  name: string;
-  type: string;
-  value: string;
-  indexed: boolean;
+  readonly id: number;
+  readonly name: string;
+  readonly type: string;
+  readonly value: string;
+  readonly indexed: boolean;
 }
 
 export function EventLogInspectorDemo() {
   const [eventName, setEventName] = useState("Transfer");
+  const nextId = useRef(3);
   const [params, setParams] = useState<ParamInput[]>([
-    { name: "from", type: "address", value: "0x0000000000000000000000000000000000000001", indexed: true },
-    { name: "to", type: "address", value: "0x0000000000000000000000000000000000000002", indexed: true },
-    { name: "value", type: "uint256", value: "1000", indexed: false },
+    { id: 0, name: "from", type: "address", value: "0x0000000000000000000000000000000000000001", indexed: true },
+    { id: 1, name: "to", type: "address", value: "0x0000000000000000000000000000000000000002", indexed: true },
+    { id: 2, name: "value", type: "uint256", value: "1000", indexed: false },
   ]);
 
   const log = useMemo(() => {
@@ -49,7 +51,7 @@ export function EventLogInspectorDemo() {
   }, [eventName, params]);
 
   const addParam = () => {
-    setParams([...params, { name: "", type: "uint256", value: "0", indexed: false }]);
+    setParams([...params, { id: nextId.current++, name: "", type: "uint256", value: "0", indexed: false }]);
   };
 
   const removeParam = (index: number) => {
@@ -62,7 +64,10 @@ export function EventLogInspectorDemo() {
     ));
   };
 
-  const indexedCount = params.filter((p) => p.indexed).length;
+  const indexedCount = useMemo(
+    () => params.filter((p) => p.indexed).length,
+    [params]
+  );
 
   return (
     <Stack gap="lg">
@@ -78,7 +83,7 @@ export function EventLogInspectorDemo() {
             Parameters ({params.length}) — Indexed: {indexedCount}/3 max
           </Text>
           {params.map((param, i) => (
-            <Group key={i} align="flex-end">
+            <Group key={param.id} align="flex-end">
               <Select
                 label="Type"
                 data={PARAM_TYPES}

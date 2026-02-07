@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import {
   Stack,
   Paper,
@@ -33,12 +33,17 @@ const SLOT_COLORS = [
   "blue", "green", "orange", "violet", "cyan", "pink", "teal", "yellow", "grape", "indigo",
 ];
 
+interface VariableWithId extends StorageVariable {
+  readonly id: number;
+}
+
 export function StorageLayoutDemo() {
-  const [variables, setVariables] = useState<StorageVariable[]>([
-    { name: "owner", type: "address" },
-    { name: "balance", type: "uint256" },
-    { name: "active", type: "bool" },
-    { name: "count", type: "uint8" },
+  const nextId = useRef(4);
+  const [variables, setVariables] = useState<VariableWithId[]>([
+    { id: 0, name: "owner", type: "address" },
+    { id: 1, name: "balance", type: "uint256" },
+    { id: 2, name: "active", type: "bool" },
+    { id: 3, name: "count", type: "uint8" },
   ]);
   const [newName, setNewName] = useState("");
   const [newType, setNewType] = useState<SolidityStorageType>("uint256");
@@ -58,7 +63,7 @@ export function StorageLayoutDemo() {
 
   const addVariable = () => {
     if (!newName.trim()) return;
-    setVariables([...variables, { name: newName.trim(), type: newType }]);
+    setVariables([...variables, { id: nextId.current++, name: newName.trim(), type: newType }]);
     setNewName("");
   };
 
@@ -107,7 +112,7 @@ export function StorageLayoutDemo() {
             </Table.Thead>
             <Table.Tbody>
               {variables.map((v, i) => (
-                <Table.Tr key={i}>
+                <Table.Tr key={v.id}>
                   <Table.Td>{v.name}</Table.Td>
                   <Table.Td><Badge variant="light">{v.type}</Badge></Table.Td>
                   <Table.Td>{getTypeSize(v.type)} bytes</Table.Td>
@@ -156,7 +161,7 @@ export function StorageLayoutDemo() {
                     <Progress.Root size={24}>
                       {slotAssignments.map((a, i) => (
                         <Progress.Section
-                          key={i}
+                          key={a.variable.name}
                           value={(a.size / 32) * 100}
                           color={SLOT_COLORS[i % SLOT_COLORS.length]}
                         >

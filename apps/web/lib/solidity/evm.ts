@@ -66,7 +66,7 @@ const OPCODE_MAP: Record<string, OpcodeInfo> = {
   MSTORE: { opcode: "MSTORE", name: "MSTORE", description: "Store word to memory", gas: 3, stackIn: 2, stackOut: 0 },
   MLOAD: { opcode: "MLOAD", name: "MLOAD", description: "Load word from memory", gas: 3, stackIn: 1, stackOut: 1 },
   SSTORE: { opcode: "SSTORE", name: "SSTORE", description: "Store word to storage", gas: 20000, stackIn: 2, stackOut: 0 },
-  SLOAD: { opcode: "SLOAD", name: "SLOAD", description: "Load word from storage", gas: 2100, stackIn: 1, stackOut: 0 },
+  SLOAD: { opcode: "SLOAD", name: "SLOAD", description: "Load word from storage", gas: 2100, stackIn: 1, stackOut: 1 },
   DUP1: { opcode: "DUP1", name: "DUP1", description: "Duplicate 1st stack item", gas: 3, stackIn: 1, stackOut: 2 },
   DUP2: { opcode: "DUP2", name: "DUP2", description: "Duplicate 2nd stack item", gas: 3, stackIn: 2, stackOut: 3 },
   SWAP1: { opcode: "SWAP1", name: "SWAP1", description: "Swap top two stack items", gas: 3, stackIn: 2, stackOut: 2 },

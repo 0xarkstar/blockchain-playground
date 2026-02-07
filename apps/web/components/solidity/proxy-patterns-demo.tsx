@@ -33,7 +33,6 @@ const PROXY_TYPES: { value: ProxyType; label: string }[] = [
 
 export function ProxyPatternsDemo() {
   const [proxyType, setProxyType] = useState<ProxyType>("transparent");
-  const [admin, setAdmin] = useState("0xAdmin");
   const [newImpl, setNewImpl] = useState("0xImplV2");
   const [caller, setCaller] = useState("0xAdmin");
   const [state, setState] = useState<ProxyState>(
@@ -50,7 +49,7 @@ export function ProxyPatternsDemo() {
 
   const handleTypeChange = (type: ProxyType) => {
     setProxyType(type);
-    setState(createProxyState(type, admin.toLowerCase()));
+    setState(createProxyState(type, state.admin));
   };
 
   const handleUpgrade = () => {
@@ -99,8 +98,9 @@ export function ProxyPatternsDemo() {
           <Group grow>
             <TextInput
               label="Admin"
-              value={admin}
-              onChange={(e) => setAdmin(e.currentTarget.value)}
+              value={state.admin}
+              readOnly
+              variant="filled"
             />
             <TextInput
               label="Caller"

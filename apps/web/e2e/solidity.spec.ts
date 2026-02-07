@@ -33,8 +33,8 @@ test.describe("Solidity Track", () => {
   test("displays Korean translations", async ({ page }) => {
     await page.goto("/ko/solidity");
     await expect(page.getByRole("heading", { level: 1, name: "솔리디티 심화" })).toBeVisible();
-    await expect(page.getByText("스토리지 레이아웃")).toBeVisible();
-    await expect(page.getByText("어셈블리 플레이그라운드")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "스토리지 레이아웃" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "어셈블리 플레이그라운드" })).toBeVisible();
   });
 
   test("home page shows Solidity as clickable (no Coming Soon)", async ({ page }) => {

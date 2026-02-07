@@ -51,7 +51,13 @@ export function encodeParameter(value: string, type: string): string {
 
   if (type.startsWith("uint") || type.startsWith("int")) {
     const num = BigInt(value);
-    const hex = num.toString(16);
+    let hex: string;
+    if (num < BigInt(0)) {
+      const twosComplement = (BigInt(1) << BigInt(256)) + num;
+      hex = twosComplement.toString(16);
+    } else {
+      hex = num.toString(16);
+    }
     return hex.padStart(64, "0");
   }
 
@@ -72,7 +78,7 @@ export function encodeCalldata(
   const selector = computeFunctionSelector(functionSignature);
   const encodedParams = params.map((p) => encodeParameter(p.value, p.type));
   const fullCalldata =
-    selector + encodedParams.map((p) => p).join("");
+    selector + encodedParams.join("");
 
   return { selector, encodedParams, fullCalldata, functionSignature };
 }

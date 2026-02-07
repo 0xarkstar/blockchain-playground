@@ -67,8 +67,8 @@ export function ReentrancyAttackDemo() {
             <NumberInput
               label="Attacker Deposit (ETH)"
               value={attackerDeposit}
-              onChange={(v) => setAttackerDeposit(Number(v) || 0)}
-              min={0}
+              onChange={(v) => setAttackerDeposit(Number(v) || 1)}
+              min={1}
             />
             {defense === "vulnerable" && (
               <NumberInput
