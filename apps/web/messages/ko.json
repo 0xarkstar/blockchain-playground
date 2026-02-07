@@ -47,7 +47,7 @@
       "title": "토큰 & NFT",
       "description": "ERC-20, ERC-721, ERC-1155, 마켓플레이스, 경매, 베스팅, 로열티",
       "demos": "11개 인터랙티브 데모",
-      "modules": "준비 중"
+      "modules": "11개 인터랙티브 데모"
     },
     "zk": {
       "title": "영지식 증명",
@@ -212,6 +212,59 @@
       "assemblyPlayground": {
         "title": "어셈블리 플레이그라운드",
         "description": "시뮬레이션된 스택 머신에서 EVM 옵코드를 단계별로 실행합니다"
+      }
+    }
+  },
+  "tokens": {
+    "pageTitle": "토큰 & NFT",
+    "pageDescription": "토큰 표준, NFT 메커니즘, 마켓플레이스, 경매, 베스팅, 거버넌스, 로열티를 인터랙티브 시뮬레이션으로 탐험하세요.",
+    "beginner": "초급",
+    "intermediate": "중급",
+    "advanced": "고급",
+    "demos": {
+      "erc20Creator": {
+        "title": "ERC-20 토큰 생성기",
+        "description": "시뮬레이션된 ERC-20 컨트랙트에서 발행, 소각, 전송 작업으로 대체 가능 토큰을 생성합니다"
+      },
+      "tokenAllowance": {
+        "title": "토큰 허용량 플로우",
+        "description": "소유자, 지출자, 수신자 역할로 approve와 transferFrom 패턴을 시각화합니다"
+      },
+      "erc721Minter": {
+        "title": "ERC-721 NFT 민터",
+        "description": "메타데이터와 함께 NFT를 발행하고 소유권을 전송하며 주소별 토큰 잔액을 추적합니다"
+      },
+      "erc1155MultiToken": {
+        "title": "ERC-1155 멀티 토큰",
+        "description": "단일 컨트랙트에서 대체 가능 토큰과 대체 불가능 토큰을 일괄 전송으로 관리합니다"
+      },
+      "tokenVesting": {
+        "title": "토큰 베스팅",
+        "description": "선형, 클리프, 등급별 베스팅 스케줄을 설정하고 릴리스 추적 및 곡선 시각화를 확인합니다"
+      },
+      "nftMetadata": {
+        "title": "NFT 메타데이터",
+        "description": "OpenSea 표준에 따라 이름, 설명, 이미지, 속성을 포함한 ERC-721 메타데이터 JSON을 빌드합니다"
+      },
+      "nftMarketplace": {
+        "title": "NFT 마켓플레이스",
+        "description": "플랫폼 수수료와 로열티 분배가 포함된 NFT 리스팅, 구매, 취소를 시뮬레이션합니다"
+      },
+      "dutchAuction": {
+        "title": "더치 경매",
+        "description": "설정 가능한 시작/종료 가격과 시간 감소 시각화로 하향식 가격 경매를 시뮬레이션합니다"
+      },
+      "eip2981Royalties": {
+        "title": "EIP-2981 로열티",
+        "description": "판매자, 크리에이터, 플랫폼을 위한 가격 내역으로 온체인 로열티 지불을 계산합니다"
+      },
+      "tokenGovernance": {
+        "title": "토큰 거버넌스",
+        "description": "제안 생성, 투표권 위임, 투표 실행, 정족수 요건으로 확정까지 시뮬레이션합니다"
+      },
+      "soulboundTokens": {
+        "title": "소울바운드 토큰",
+        "description": "신원, 자격증, 평판 시스템을 위한 전송 불가능 토큰(SBT)을 발행합니다"
       }
     }
   },

@@ -47,7 +47,7 @@
       "title": "Tokens & NFTs",
       "description": "ERC-20, ERC-721, ERC-1155, marketplaces, auctions, vesting, and royalties",
       "demos": "11 Interactive Demos",
-      "modules": "Coming Soon"
+      "modules": "11 Interactive Demos"
     },
     "zk": {
       "title": "ZK Proofs",
@@ -212,6 +212,59 @@
       "assemblyPlayground": {
         "title": "Assembly Playground",
         "description": "Execute EVM opcodes on a simulated stack machine with step-by-step visualization"
+      }
+    }
+  },
+  "tokens": {
+    "pageTitle": "Tokens & NFTs",
+    "pageDescription": "Explore token standards, NFT mechanics, marketplaces, auctions, vesting, governance, and royalties through interactive simulations.",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "demos": {
+      "erc20Creator": {
+        "title": "ERC-20 Token Creator",
+        "description": "Create fungible tokens with mint, burn, and transfer operations on a simulated ERC-20 contract"
+      },
+      "tokenAllowance": {
+        "title": "Token Allowance Flow",
+        "description": "Visualize the approve and transferFrom pattern with owner, spender, and recipient roles"
+      },
+      "erc721Minter": {
+        "title": "ERC-721 NFT Minter",
+        "description": "Mint NFTs with metadata, transfer ownership, and track token balances per address"
+      },
+      "erc1155MultiToken": {
+        "title": "ERC-1155 Multi-Token",
+        "description": "Manage fungible and non-fungible tokens in a single contract with batch transfers"
+      },
+      "tokenVesting": {
+        "title": "Token Vesting",
+        "description": "Configure linear, cliff, and graded vesting schedules with release tracking and curve visualization"
+      },
+      "nftMetadata": {
+        "title": "NFT Metadata",
+        "description": "Build ERC-721 metadata JSON with name, description, image, and attributes following OpenSea standards"
+      },
+      "nftMarketplace": {
+        "title": "NFT Marketplace",
+        "description": "List, buy, and cancel NFT listings with platform fees and royalty distribution"
+      },
+      "dutchAuction": {
+        "title": "Dutch Auction",
+        "description": "Simulate descending-price auctions with configurable start/end prices and time decay visualization"
+      },
+      "eip2981Royalties": {
+        "title": "EIP-2981 Royalties",
+        "description": "Calculate on-chain royalty payments with price breakdowns for sellers, creators, and platforms"
+      },
+      "tokenGovernance": {
+        "title": "Token Governance",
+        "description": "Create proposals, delegate voting power, cast votes, and finalize with quorum requirements"
+      },
+      "soulboundTokens": {
+        "title": "Soulbound Tokens",
+        "description": "Mint non-transferable tokens (SBTs) for identity, credentials, and reputation systems"
       }
     }
   },

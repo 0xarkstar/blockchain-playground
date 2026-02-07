@@ -45,7 +45,7 @@ const tracks = [
     icon: IconDiamond,
     color: "violet",
     href: "/tokens",
-    ready: false,
+    ready: true,
   },
   {
     key: "zk" as const,
