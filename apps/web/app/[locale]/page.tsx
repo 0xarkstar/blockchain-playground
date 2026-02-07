@@ -52,7 +52,7 @@ const tracks = [
     icon: IconLock,
     color: "red",
     href: "/zk",
-    ready: false,
+    ready: true,
   },
 ];
 

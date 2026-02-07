@@ -53,7 +53,7 @@
       "title": "ZK Proofs",
       "description": "Zero-knowledge proofs, circuits, on-chain verification, and privacy protocols",
       "demos": "11 Interactive Demos",
-      "modules": "Coming Soon"
+      "modules": "11 Interactive Demos"
     }
   },
   "fundamentals": {
@@ -265,6 +265,59 @@
       "soulboundTokens": {
         "title": "Soulbound Tokens",
         "description": "Mint non-transferable tokens (SBTs) for identity, credentials, and reputation systems"
+      }
+    }
+  },
+  "zk": {
+    "pageTitle": "ZK Proofs",
+    "pageDescription": "Explore zero-knowledge proofs through interactive simulations — commitments, sigma protocols, circuits, SNARKs, rollups, and privacy.",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "demos": {
+      "hashCommitment": {
+        "title": "Hash Commitment",
+        "description": "Commit to a secret value using hash functions, then reveal and verify without trust"
+      },
+      "zkConcepts": {
+        "title": "ZK Proof Concepts",
+        "description": "Learn completeness, soundness, and zero-knowledge through the Ali Baba Cave analogy"
+      },
+      "schnorrProtocol": {
+        "title": "Schnorr Identification",
+        "description": "Interactive sigma protocol proving knowledge of a discrete logarithm without revealing it"
+      },
+      "pedersenCommitment": {
+        "title": "Pedersen Commitment",
+        "description": "Information-theoretically hiding commitment with homomorphic addition property"
+      },
+      "rangeProof": {
+        "title": "Range Proof",
+        "description": "Prove a committed value lies in a range without revealing the value itself"
+      },
+      "zkSetMembership": {
+        "title": "ZK Set Membership",
+        "description": "Prove group membership using Merkle commitments without revealing your identity"
+      },
+      "arithmeticCircuits": {
+        "title": "Arithmetic Circuits",
+        "description": "Parse expressions into addition and multiplication gates, build R1CS constraints"
+      },
+      "r1csQap": {
+        "title": "R1CS to QAP",
+        "description": "Transform constraint matrices into polynomials and verify divisibility"
+      },
+      "snarkPipeline": {
+        "title": "SNARK Pipeline",
+        "description": "End-to-end SNARK: expression to circuit to R1CS to QAP to trusted setup to proof"
+      },
+      "zkRollup": {
+        "title": "ZK Rollup Simulator",
+        "description": "Batch L2 transactions off-chain and verify validity proofs with gas compression analysis"
+      },
+      "privateTransfer": {
+        "title": "Private Transfer",
+        "description": "Shielded UTXO transfers with commitments, nullifiers, and double-spend prevention"
       }
     }
   },

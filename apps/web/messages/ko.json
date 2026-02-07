@@ -53,7 +53,7 @@
       "title": "영지식 증명",
       "description": "영지식 증명, 회로, 온체인 검증, 프라이버시 프로토콜",
       "demos": "11개 인터랙티브 데모",
-      "modules": "준비 중"
+      "modules": "11개 인터랙티브 데모"
     }
   },
   "fundamentals": {
@@ -265,6 +265,59 @@
       "soulboundTokens": {
         "title": "소울바운드 토큰",
         "description": "신원, 자격증, 평판 시스템을 위한 전송 불가능 토큰(SBT)을 발행합니다"
+      }
+    }
+  },
+  "zk": {
+    "pageTitle": "영지식 증명",
+    "pageDescription": "커밋먼트, 시그마 프로토콜, 회로, SNARK, 롤업, 프라이버시 등을 인터랙티브 시뮬레이션으로 탐험하세요.",
+    "beginner": "초급",
+    "intermediate": "중급",
+    "advanced": "고급",
+    "demos": {
+      "hashCommitment": {
+        "title": "해시 커밋먼트",
+        "description": "해시 함수를 사용해 비밀 값을 커밋하고, 나중에 공개하여 신뢰 없이 검증합니다"
+      },
+      "zkConcepts": {
+        "title": "ZK 증명 개념",
+        "description": "알리바바 동굴 비유를 통해 완전성, 건전성, 영지식성을 배웁니다"
+      },
+      "schnorrProtocol": {
+        "title": "슈노르 식별",
+        "description": "이산 로그 지식을 노출하지 않고 증명하는 인터랙티브 시그마 프로토콜"
+      },
+      "pedersenCommitment": {
+        "title": "페더센 커밋먼트",
+        "description": "동형 덧셈 속성을 가진 정보 이론적으로 은닉되는 커밋먼트"
+      },
+      "rangeProof": {
+        "title": "범위 증명",
+        "description": "커밋된 값이 특정 범위 내에 있음을 값 자체를 공개하지 않고 증명합니다"
+      },
+      "zkSetMembership": {
+        "title": "ZK 집합 멤버십",
+        "description": "머클 커밋먼트를 사용해 신원을 밝히지 않고 그룹 멤버십을 증명합니다"
+      },
+      "arithmeticCircuits": {
+        "title": "산술 회로",
+        "description": "수식을 덧셈 및 곱셈 게이트로 파싱하고 R1CS 제약 조건을 생성합니다"
+      },
+      "r1csQap": {
+        "title": "R1CS에서 QAP로",
+        "description": "제약 행렬을 다항식으로 변환하고 나눗셈 가능성을 검증합니다"
+      },
+      "snarkPipeline": {
+        "title": "SNARK 파이프라인",
+        "description": "수식에서 회로, R1CS, QAP, 신뢰 설정, 증명까지 엔드투엔드 SNARK"
+      },
+      "zkRollup": {
+        "title": "ZK 롤업 시뮬레이터",
+        "description": "L2 트랜잭션을 오프체인에서 배치 처리하고 가스 압축 분석과 함께 유효성 증명을 검증합니다"
+      },
+      "privateTransfer": {
+        "title": "프라이빗 전송",
+        "description": "커밋먼트, 널리파이어, 이중 지불 방지를 갖춘 차폐된 UTXO 전송"
       }
     }
   },
