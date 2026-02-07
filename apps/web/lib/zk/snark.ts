@@ -179,9 +179,9 @@ export function getFullPipeline(
 
   // 5. Setup
   const maxDeg = Math.max(
-    ...qap.Ai.map((p) => p.length),
-    ...qap.Bi.map((p) => p.length),
-    ...qap.Ci.map((p) => p.length),
+    ...qap.Ai.map((poly) => poly.length),
+    ...qap.Bi.map((poly) => poly.length),
+    ...qap.Ci.map((poly) => poly.length),
     qap.target.length
   );
   const setup = performTrustedSetup(maxDeg + 2, p);

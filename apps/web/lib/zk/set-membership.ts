@@ -108,10 +108,6 @@ export function proveZKMembership(
   const n = nextPow2(group.members.length);
   const commitment = group.members[memberIndex].commitment;
 
-  // Verify the secret matches
-  const memberIds = group.members.map((_, i) => i);
-  void memberIds; // unused, just for clarity
-
   // Build Merkle path
   const path: MerklePathNode[] = [];
   let idx = n + memberIndex; // leaf position in tree

@@ -76,7 +76,7 @@ export function ZKConceptsDemo() {
           </Group>
           <Group>
             <Button
-              onClick={() => { setHasSecret(true); handleSimulate(); }}
+              onClick={() => { setHasSecret(true); setSimulation(simulateAliBabaCave(true, numRounds)); }}
               variant={hasSecret ? "filled" : "light"}
               color="green"
             >
