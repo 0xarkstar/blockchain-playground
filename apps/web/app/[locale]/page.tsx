@@ -31,7 +31,7 @@ const tracks = [
     icon: IconCoin,
     color: "green",
     href: "/defi",
-    ready: false,
+    ready: true,
   },
   {
     key: "solidity" as const,

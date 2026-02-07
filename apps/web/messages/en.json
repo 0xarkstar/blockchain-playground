@@ -35,7 +35,7 @@
       "title": "DeFi",
       "description": "Swaps, liquidity pools, lending, staking, flash loans, oracles, and yield farming",
       "demos": "11 Interactive Demos",
-      "modules": "Coming Soon"
+      "modules": "11 Interactive Demos"
     },
     "solidity": {
       "title": "Solidity",
@@ -106,6 +106,59 @@
       "gasEstimator": {
         "title": "Gas Estimator",
         "description": "Estimate gas for various operations and compare costs"
+      }
+    }
+  },
+  "defi": {
+    "pageTitle": "DeFi",
+    "pageDescription": "Explore decentralized finance through interactive simulations — AMM swaps, lending, flash loans, oracles, and yield strategies.",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "demos": {
+      "simpleSwap": {
+        "title": "Simple Swap",
+        "description": "Constant product AMM (x*y=k) swap simulator with price impact, slippage, and fee calculations"
+      },
+      "liquidityPool": {
+        "title": "Liquidity Pool",
+        "description": "Add and remove liquidity, mint LP tokens, and track pool share percentages"
+      },
+      "impermanentLoss": {
+        "title": "Impermanent Loss",
+        "description": "Visualize impermanent loss with price ratio slider and HODL vs LP comparison"
+      },
+      "lendingProtocol": {
+        "title": "Lending Protocol",
+        "description": "Supply collateral, borrow assets, and monitor health factor and liquidation price"
+      },
+      "interestRateExplorer": {
+        "title": "Interest Rate Explorer",
+        "description": "Explore utilization-to-interest-rate curves with linear, kinked, and exponential models"
+      },
+      "stakingRewards": {
+        "title": "Staking Rewards",
+        "description": "Stake tokens, earn rewards over time, and compare APR vs APY with compounding"
+      },
+      "flashLoan": {
+        "title": "Flash Loan",
+        "description": "Simulate atomic borrow-arbitrage-repay transactions with fee calculation and revert logic"
+      },
+      "arbitrageSimulator": {
+        "title": "Arbitrage Simulator",
+        "description": "Find price discrepancies between two pools and calculate profit after gas costs"
+      },
+      "oraclePriceFeed": {
+        "title": "Oracle Price Feed",
+        "description": "Calculate TWAP, detect price deviations, and monitor oracle heartbeat freshness"
+      },
+      "liquidationSimulator": {
+        "title": "Liquidation Simulator",
+        "description": "Simulate collateral price crashes, health factor drops, and liquidation bonus calculations"
+      },
+      "yieldCalculator": {
+        "title": "Yield Calculator",
+        "description": "Compare compounding frequencies, convert APR to APY, and model yield farming strategies"
       }
     }
   },
