@@ -96,7 +96,9 @@ export function CredentialPanel({
             label="Minimum Age Threshold"
             description="The age requirement to prove (e.g., 18 for adult content, 21 for alcohol)"
             value={minAge}
-            onChange={(val) => onMinAgeChange(typeof val === "number" ? val : "")}
+            onChange={(val) =>
+              onMinAgeChange(typeof val === "number" ? val : "")
+            }
             min={1}
             max={150}
             disabled={phase !== "input"}
@@ -133,7 +135,11 @@ export function CredentialPanel({
                 {({ copied, copy }) => (
                   <Tooltip label={copied ? "Copied" : "Copy"}>
                     <ActionIcon variant="subtle" onClick={copy}>
-                      {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                      {copied ? (
+                        <IconCheck size={16} />
+                      ) : (
+                        <IconCopy size={16} />
+                      )}
                     </ActionIcon>
                   </Tooltip>
                 )}

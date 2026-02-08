@@ -42,7 +42,11 @@ export function MerkleTreeView({
                 {({ copied, copy }) => (
                   <Tooltip label={copied ? "Copied" : "Copy"}>
                     <ActionIcon variant="subtle" onClick={copy}>
-                      {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
+                      {copied ? (
+                        <IconCheck size={16} />
+                      ) : (
+                        <IconCopy size={16} />
+                      )}
                     </ActionIcon>
                   </Tooltip>
                 )}

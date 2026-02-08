@@ -91,8 +91,9 @@ export function VerificationPanel({
               </Badge>
             </Group>
             <Text size="xs" c="dimmed">
-              The proof shows age &ge; {typeof minAge === "number" ? minAge : 18}{" "}
-              without revealing the exact birthday.
+              The proof shows age &ge;{" "}
+              {typeof minAge === "number" ? minAge : 18} without revealing the
+              exact birthday.
             </Text>
             <Code block>
               {`pi_a: [${proofResult.proof.pi_a

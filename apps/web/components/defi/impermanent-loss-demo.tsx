@@ -1,14 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Stack,
-  NumberInput,
-  Slider,
-  Text,
-  Paper,
-  Table,
-} from "@mantine/core";
+import { Stack, NumberInput, Slider, Text, Paper, Table } from "@mantine/core";
 import { calculateImpermanentLoss } from "../../lib/defi/amm";
 import { SimpleAreaChart, EducationPanel } from "../../components/shared";
 

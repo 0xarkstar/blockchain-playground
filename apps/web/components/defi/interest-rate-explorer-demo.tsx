@@ -1,14 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Stack,
-  NumberInput,
-  Slider,
-  Text,
-  Paper,
-  Group,
-} from "@mantine/core";
+import { Stack, NumberInput, Slider, Text, Paper, Group } from "@mantine/core";
 import {
   calculateBorrowRate,
   calculateSupplyRate,

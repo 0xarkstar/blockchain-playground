@@ -1,6 +1,18 @@
 "use client";
 
-import { Stack, Button, Text, Paper, Table, Badge, Group, Code, CopyButton, ActionIcon, Tooltip } from "@mantine/core";
+import {
+  Stack,
+  Button,
+  Text,
+  Paper,
+  Table,
+  Badge,
+  Group,
+  Code,
+  CopyButton,
+  ActionIcon,
+  Tooltip,
+} from "@mantine/core";
 import { IconThumbUp, IconCheck, IconCopy } from "@tabler/icons-react";
 
 function truncateHex(hex: string, chars: number = 10): string {

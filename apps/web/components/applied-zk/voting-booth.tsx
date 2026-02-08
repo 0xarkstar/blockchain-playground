@@ -1,6 +1,14 @@
 "use client";
 
-import { Stack, TextInput, Button, Text, Group, Paper, SegmentedControl } from "@mantine/core";
+import {
+  Stack,
+  TextInput,
+  Button,
+  Text,
+  Group,
+  Paper,
+  SegmentedControl,
+} from "@mantine/core";
 import { IconLoader2 } from "@tabler/icons-react";
 
 type VoteChoice = "yes" | "no";
