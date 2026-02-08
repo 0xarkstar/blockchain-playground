@@ -46,6 +46,7 @@ test.describe("Fundamentals Track", () => {
   test("navigates to Hash Explorer demo", async ({ page }) => {
     await page.goto("/en/fundamentals");
     await page.getByRole("heading", { name: "Hash Explorer" }).click();
+    await page.waitForURL("**/fundamentals/demo/hash-explorer");
     await expect(
       page.getByRole("heading", { level: 1, name: "Hash Explorer" }),
     ).toBeVisible();

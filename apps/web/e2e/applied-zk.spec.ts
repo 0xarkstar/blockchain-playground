@@ -25,6 +25,7 @@ test.describe("Applied ZK Track", () => {
   test("navigates to Hash Preimage demo", async ({ page }) => {
     await page.goto("/en/applied-zk");
     await page.getByRole("heading", { name: "Hash Preimage Proof" }).click();
+    await page.waitForURL("**/applied-zk/demo/hash-preimage");
     await expect(
       page.getByRole("heading", { level: 1, name: "Hash Preimage Proof" }),
     ).toBeVisible();
