@@ -1,3 +1,6 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import {
   Container,
@@ -10,7 +13,14 @@ import {
   Anchor,
   Paper,
 } from "@mantine/core";
-import { HashPreimageDemo } from "../../../../../../components/applied-zk/hash-preimage-demo";
+
+const HashPreimageDemo = dynamic(
+  () =>
+    import("../../../../../../components/applied-zk/hash-preimage-demo").then(
+      (m) => m.HashPreimageDemo,
+    ),
+  { ssr: false },
+);
 
 export default function HashPreimagePage() {
   const t = useTranslations("appliedZk.demos.hashPreimage");

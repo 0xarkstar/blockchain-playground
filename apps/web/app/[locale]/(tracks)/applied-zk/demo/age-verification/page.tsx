@@ -1,3 +1,6 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import {
   Container,
@@ -10,7 +13,14 @@ import {
   Anchor,
   Paper,
 } from "@mantine/core";
-import { AgeVerificationDemo } from "../../../../../../components/applied-zk/age-verification-demo";
+
+const AgeVerificationDemo = dynamic(
+  () =>
+    import("../../../../../../components/applied-zk/age-verification-demo").then(
+      (m) => m.AgeVerificationDemo,
+    ),
+  { ssr: false },
+);
 
 export default function AgeVerificationPage() {
   const t = useTranslations("appliedZk.demos.ageVerification");

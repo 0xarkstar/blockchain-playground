@@ -1,3 +1,6 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import {
   Container,
@@ -10,7 +13,14 @@ import {
   Anchor,
   Paper,
 } from "@mantine/core";
-import { SecretVotingDemo } from "../../../../../../components/applied-zk/secret-voting-demo";
+
+const SecretVotingDemo = dynamic(
+  () =>
+    import("../../../../../../components/applied-zk/secret-voting-demo").then(
+      (m) => m.SecretVotingDemo,
+    ),
+  { ssr: false },
+);
 
 export default function SecretVotingPage() {
   const t = useTranslations("appliedZk.demos.secretVoting");

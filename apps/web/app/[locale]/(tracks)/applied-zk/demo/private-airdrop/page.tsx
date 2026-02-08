@@ -1,3 +1,6 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import {
   Container,
@@ -10,7 +13,14 @@ import {
   Anchor,
   Paper,
 } from "@mantine/core";
-import { PrivateAirdropDemo } from "../../../../../../components/applied-zk/private-airdrop-demo";
+
+const PrivateAirdropDemo = dynamic(
+  () =>
+    import("../../../../../../components/applied-zk/private-airdrop-demo").then(
+      (m) => m.PrivateAirdropDemo,
+    ),
+  { ssr: false },
+);
 
 export default function PrivateAirdropPage() {
   const t = useTranslations("appliedZk.demos.privateAirdrop");
