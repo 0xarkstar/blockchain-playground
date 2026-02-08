@@ -47,7 +47,7 @@ test.describe("ZK Proofs Track", () => {
     await expect(
       page.getByRole("heading", { level: 1, name: "Hash Commitment" }),
     ).toBeVisible();
-    await expect(page.getByText("Secret value")).toBeVisible();
+    await expect(page.getByLabel("Secret value").first()).toBeVisible();
   });
 
   test("displays Korean translations", async ({ page }) => {

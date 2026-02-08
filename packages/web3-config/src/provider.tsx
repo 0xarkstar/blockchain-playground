@@ -21,7 +21,7 @@ export function Web3Provider({ children }: Web3ProviderProps) {
   }, []);
 
   if (!mounted) {
-    return null;
+    return <>{children}</>;
   }
 
   return (
