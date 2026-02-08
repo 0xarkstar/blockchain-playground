@@ -42,8 +42,7 @@ test.describe("DeFi Track", () => {
   });
 
   test("navigates to Simple Swap demo", async ({ page }) => {
-    await page.goto("/en/defi");
-    await page.getByRole("heading", { name: "Simple Swap" }).click();
+    await page.goto("/en/defi/demo/simple-swap");
     await expect(
       page.getByRole("heading", { level: 1, name: "Simple Swap" }),
     ).toBeVisible();

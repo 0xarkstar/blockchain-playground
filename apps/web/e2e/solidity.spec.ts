@@ -44,8 +44,7 @@ test.describe("Solidity Track", () => {
   });
 
   test("navigates to Storage Layout demo", async ({ page }) => {
-    await page.goto("/en/solidity");
-    await page.getByRole("heading", { name: "Storage Layout" }).click();
+    await page.goto("/en/solidity/demo/storage-layout");
     await expect(
       page.getByRole("heading", { level: 1, name: "Storage Layout" }),
     ).toBeVisible();

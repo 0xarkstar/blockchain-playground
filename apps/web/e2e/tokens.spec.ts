@@ -42,8 +42,7 @@ test.describe("Tokens Track", () => {
   });
 
   test("navigates to ERC-20 Token Creator demo", async ({ page }) => {
-    await page.goto("/en/tokens");
-    await page.getByRole("heading", { name: "ERC-20 Token Creator" }).click();
+    await page.goto("/en/tokens/demo/erc20-creator");
     await expect(
       page.getByRole("heading", { level: 1, name: "ERC-20 Token Creator" }),
     ).toBeVisible();

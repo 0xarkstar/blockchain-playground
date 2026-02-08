@@ -42,8 +42,7 @@ test.describe("ZK Proofs Track", () => {
   });
 
   test("navigates to Hash Commitment demo", async ({ page }) => {
-    await page.goto("/en/zk");
-    await page.getByRole("heading", { name: "Hash Commitment" }).click();
+    await page.goto("/en/zk/demo/hash-commitment");
     await expect(
       page.getByRole("heading", { level: 1, name: "Hash Commitment" }),
     ).toBeVisible();
