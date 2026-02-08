@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { useState, useEffect, type ReactNode } from "react";
 
-import { wagmiConfig } from "./config";
+import { getWagmiConfig } from "./config";
 
 const queryClient = new QueryClient();
 
@@ -21,11 +21,11 @@ export function Web3Provider({ children }: Web3ProviderProps) {
   }, []);
 
   if (!mounted) {
-    return <>{children}</>;
+    return null;
   }
 
   return (
-    <WagmiProvider config={wagmiConfig}>
+    <WagmiProvider config={getWagmiConfig()}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>{children}</RainbowKitProvider>
       </QueryClientProvider>
