@@ -23,6 +23,7 @@ import {
   balanceOfERC1155,
   type ERC1155State,
 } from "../../lib/tokens/erc1155";
+import { SimpleBarChart } from "../shared";
 
 export function ERC1155MultiTokenDemo() {
   const [state, setState] = useState<ERC1155State>(() => createERC1155());
@@ -214,6 +215,29 @@ export function ERC1155MultiTokenDemo() {
           </Table>
         </Stack>
       </Paper>
+
+      {allAddresses.length > 0 && allTokenIds.length > 0 && (
+        <Paper p="md" withBorder>
+          <Stack gap="md">
+            <Text size="sm" fw={600}>
+              Balance Distribution
+            </Text>
+            <SimpleBarChart
+              data={allAddresses.map((addr) => {
+                const row: Record<string, unknown> = { address: addr };
+                for (const id of allTokenIds) {
+                  row[`ID #${id}`] = Number(balanceOfERC1155(state, addr, id));
+                }
+                return row;
+              })}
+              xKey="address"
+              yKeys={allTokenIds.map((id) => `ID #${id}`)}
+              grouped
+              height={250}
+            />
+          </Stack>
+        </Paper>
+      )}
 
       {allTokenIds.length > 0 && (
         <Paper p="md" withBorder>

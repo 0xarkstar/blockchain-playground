@@ -16,6 +16,7 @@ import {
 } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { encodeLogEntry, type EventParam } from "../../lib/solidity/abi";
+import { EducationPanel } from "../../components/shared";
 
 const PARAM_TYPES = ["uint256", "address", "bool", "bytes32", "uint8"];
 
@@ -235,6 +236,97 @@ export function EventLogInspectorDemo() {
           </Paper>
         </>
       )}
+
+      {log && (
+        <Paper p="md" withBorder>
+          <Stack gap="md">
+            <Text size="sm" fw={600}>
+              Event Timeline
+            </Text>
+            <Stack
+              gap="xs"
+              style={{
+                borderLeft: "3px solid var(--mantine-color-blue-3)",
+                paddingLeft: 16,
+              }}
+            >
+              <Paper p="xs" withBorder bg="blue.0">
+                <Group gap="xs">
+                  <Badge size="xs" color="blue">
+                    topic[0]
+                  </Badge>
+                  <Text size="xs" fw={600}>
+                    Event Signature Hash
+                  </Text>
+                </Group>
+                <Code style={{ fontSize: 10 }}>
+                  {log.topics[0]?.slice(0, 20)}...
+                </Code>
+              </Paper>
+              {params
+                .filter((p) => p.indexed)
+                .map((p, i) => (
+                  <Paper key={p.id} p="xs" withBorder bg="green.0">
+                    <Group gap="xs">
+                      <Badge size="xs" color="green">
+                        topic[{i + 1}]
+                      </Badge>
+                      <Text size="xs" fw={600}>
+                        {p.name} (indexed {p.type})
+                      </Text>
+                    </Group>
+                    <Text size="xs" c="dimmed">
+                      {p.value}
+                    </Text>
+                  </Paper>
+                ))}
+              {params
+                .filter((p) => !p.indexed)
+                .map((p) => (
+                  <Paper key={p.id} p="xs" withBorder bg="gray.0">
+                    <Group gap="xs">
+                      <Badge size="xs" color="gray">
+                        data
+                      </Badge>
+                      <Text size="xs" fw={600}>
+                        {p.name} (non-indexed {p.type})
+                      </Text>
+                    </Group>
+                    <Text size="xs" c="dimmed">
+                      {p.value}
+                    </Text>
+                  </Paper>
+                ))}
+            </Stack>
+          </Stack>
+        </Paper>
+      )}
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Event Topics",
+            description:
+              "topic[0] is the keccak256 hash of the event signature. Indexed parameters go in topic[1-3]. Max 3 indexed params.",
+          },
+          {
+            title: "Event Data",
+            description:
+              "Non-indexed parameters are ABI-encoded in the data field. Cheaper to store but not directly searchable.",
+          },
+          {
+            title: "Log Filtering",
+            description:
+              "Indexed parameters enable eth_getLogs filtering. You can search for specific Transfer events by sender or receiver.",
+          },
+        ]}
+        whyItMatters="Events are the primary way smart contracts communicate with off-chain applications. They're much cheaper than storage and enable efficient real-time monitoring of contract activity."
+        tips={[
+          "Index parameters you need to search/filter by (e.g., sender, receiver)",
+          "Events cost ~375 gas base + 375 per indexed topic + 8 per data byte",
+          "Anonymous events omit topic[0] — saves gas but harder to filter",
+        ]}
+      />
     </Stack>
   );
 }

@@ -11,6 +11,7 @@ import {
   SegmentedControl,
 } from "@mantine/core";
 import { aprToApy, calculateCompoundedValue } from "../../lib/defi/yield";
+import { SimpleBarChart, EducationPanel } from "../../components/shared";
 
 const DURATION_MAP: Record<string, number> = {
   "1M": 1 / 12,
@@ -183,6 +184,56 @@ export function YieldCalculatorDemo() {
           </Table>
         </Stack>
       </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Yield Comparison by Strategy
+          </Text>
+          <SimpleBarChart
+            data={rows
+              .filter((r) => r.freq > 0)
+              .map((r) => ({
+                strategy: r.label,
+                totalReturn: Math.round(r.totalReturn * 100) / 100,
+              }))}
+            xKey="strategy"
+            yKeys={["totalReturn"]}
+            colors={["#40c057"]}
+            height={220}
+          />
+          <Text size="xs" c="dimmed" ta="center">
+            Total return ($) by compounding frequency over {durationKey}
+          </Text>
+        </Stack>
+      </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Simple vs Compound",
+            description:
+              "Simple interest: principal * rate * time. Compound interest: principal * (1 + rate/n)^(n*t), where n is compounding frequency.",
+          },
+          {
+            title: "Continuous Compounding",
+            description:
+              "As frequency approaches infinity, compound interest converges to principal * e^(rate*time). Hourly compounding approximates this.",
+          },
+          {
+            title: "DeFi Yield Sources",
+            description:
+              "Lending interest, LP fees, staking rewards, token emissions, and protocol revenue sharing.",
+          },
+        ]}
+        whyItMatters="Understanding yield calculations prevents falling for misleading APY claims. A 1000% APR with no compounding is very different from 1000% APY."
+        tips={[
+          "Always compare APY (not APR) across different protocols",
+          "Higher compounding frequency has diminishing returns — daily vs hourly difference is minimal",
+          "Factor in gas costs for manual compounding — auto-compounders save gas",
+          "Sustainable yield comes from real economic activity, not just token emissions",
+        ]}
+      />
     </Stack>
   );
 }

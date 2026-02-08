@@ -10,8 +10,10 @@ import {
   Badge,
   Text,
   Alert,
+  Group,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
+import { EducationPanel } from "../../components/shared";
 
 type VariableContext = "state" | "parameter" | "local" | "return";
 
@@ -183,6 +185,79 @@ export function DataLocationsDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
+            Data Location Overview
+          </Text>
+          <Group grow gap="md">
+            <Paper p="sm" withBorder bg="red.0" style={{ textAlign: "center" }}>
+              <Badge color="red" variant="filled" mb={4}>
+                Storage
+              </Badge>
+              <Text size="xs">Persistent on-chain</Text>
+              <Text size="xs" fw={600}>
+                20,000 gas (write)
+              </Text>
+              <Text size="xs" c="dimmed">
+                State variables
+              </Text>
+            </Paper>
+            <Paper
+              p="sm"
+              withBorder
+              bg="blue.0"
+              style={{ textAlign: "center" }}
+            >
+              <Badge color="blue" variant="filled" mb={4}>
+                Memory
+              </Badge>
+              <Text size="xs">Temporary, mutable</Text>
+              <Text size="xs" fw={600}>
+                3 gas (read/write)
+              </Text>
+              <Text size="xs" c="dimmed">
+                Local ref types
+              </Text>
+            </Paper>
+            <Paper
+              p="sm"
+              withBorder
+              bg="green.0"
+              style={{ textAlign: "center" }}
+            >
+              <Badge color="green" variant="filled" mb={4}>
+                Calldata
+              </Badge>
+              <Text size="xs">Read-only input</Text>
+              <Text size="xs" fw={600}>
+                4-16 gas/byte
+              </Text>
+              <Text size="xs" c="dimmed">
+                Function params
+              </Text>
+            </Paper>
+            <Paper
+              p="sm"
+              withBorder
+              bg="yellow.0"
+              style={{ textAlign: "center" }}
+            >
+              <Badge color="yellow" variant="filled" mb={4}>
+                Stack
+              </Badge>
+              <Text size="xs">Cheapest, limited</Text>
+              <Text size="xs" fw={600}>
+                2-3 gas
+              </Text>
+              <Text size="xs" c="dimmed">
+                Value types
+              </Text>
+            </Paper>
+          </Group>
+        </Stack>
+      </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
             Variable Context
           </Text>
           <SegmentedControl
@@ -343,6 +418,33 @@ export function DataLocationsDemo() {
           </Table>
         </Stack>
       </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Storage",
+            description:
+              "Permanent on-chain state. Persists across transactions. Most expensive — 20,000 gas for first write, 5,000 for updates.",
+          },
+          {
+            title: "Memory",
+            description:
+              "Temporary during function execution. Cleared when function returns. Linear gas cost with expansion.",
+          },
+          {
+            title: "Calldata",
+            description:
+              "Immutable function input data. Read-only and cheapest for reference-type parameters. Use instead of memory when possible.",
+          },
+        ]}
+        whyItMatters="Choosing the wrong data location is a common gas waste. Using calldata instead of memory for read-only parameters saves significant gas. Understanding locations prevents costly mistakes."
+        tips={[
+          "Use calldata for external function params you don't need to modify",
+          "Memory arrays must be fixed-size at creation — no dynamic push",
+          "Storage references in local variables point to state — modifying them changes state",
+          "Stack is limited to 16 accessible slots — causes 'stack too deep' errors",
+        ]}
+      />
     </Stack>
   );
 }

@@ -23,6 +23,7 @@ import {
   type VestingSchedule,
   type VestingType,
 } from "../../lib/tokens/vesting";
+import { SimpleAreaChart } from "../shared";
 
 export function TokenVestingDemo() {
   const [beneficiary, setBeneficiary] = useState("alice");
@@ -211,28 +212,16 @@ export function TokenVestingDemo() {
           <Text size="sm" fw={600}>
             Vesting Curve
           </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Time</Table.Th>
-                <Table.Th ta="right">Vested %</Table.Th>
-                <Table.Th ta="right">Amount</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {curve.map((point, i) => (
-                <Table.Tr key={i}>
-                  <Table.Td>{point.time}</Table.Td>
-                  <Table.Td ta="right">
-                    {point.vestedPercent.toFixed(1)}%
-                  </Table.Td>
-                  <Table.Td ta="right">
-                    <Code>{point.vestedAmount}</Code>
-                  </Table.Td>
-                </Table.Tr>
-              ))}
-            </Table.Tbody>
-          </Table>
+          <SimpleAreaChart
+            data={curve.map((point) => ({
+              time: `Day ${point.time}`,
+              "Vested Amount": point.vestedAmount,
+              "Vested %": Number(point.vestedPercent.toFixed(1)),
+            }))}
+            xKey="time"
+            yKeys={["Vested Amount"]}
+            height={280}
+          />
         </Stack>
       </Paper>
     </Stack>

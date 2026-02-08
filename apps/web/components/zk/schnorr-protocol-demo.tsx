@@ -167,6 +167,187 @@ export function SchnorrProtocolDemo() {
           </Paper>
 
           <Paper p="md" withBorder>
+            <Stack gap="md">
+              <Text size="sm" fw={600}>
+                Protocol Visualization
+              </Text>
+              <svg
+                width="100%"
+                height={result.rounds.length * 130 + 60}
+                viewBox={`0 0 460 ${result.rounds.length * 130 + 60}`}
+              >
+                <rect
+                  x={40}
+                  y={10}
+                  width={100}
+                  height={30}
+                  rx={6}
+                  fill="var(--mantine-color-blue-light)"
+                  stroke="var(--mantine-color-blue-6)"
+                  strokeWidth={1.5}
+                />
+                <text
+                  x={90}
+                  y={30}
+                  textAnchor="middle"
+                  fontSize={13}
+                  fontWeight={600}
+                  fill="var(--mantine-color-blue-9)"
+                >
+                  Prover
+                </text>
+                <rect
+                  x={320}
+                  y={10}
+                  width={100}
+                  height={30}
+                  rx={6}
+                  fill="var(--mantine-color-green-light)"
+                  stroke="var(--mantine-color-green-6)"
+                  strokeWidth={1.5}
+                />
+                <text
+                  x={370}
+                  y={30}
+                  textAnchor="middle"
+                  fontSize={13}
+                  fontWeight={600}
+                  fill="var(--mantine-color-green-9)"
+                >
+                  Verifier
+                </text>
+                <line
+                  x1={90}
+                  y1={40}
+                  x2={90}
+                  y2={result.rounds.length * 130 + 50}
+                  stroke="var(--mantine-color-blue-3)"
+                  strokeWidth={2}
+                  strokeDasharray="4 4"
+                />
+                <line
+                  x1={370}
+                  y1={40}
+                  x2={370}
+                  y2={result.rounds.length * 130 + 50}
+                  stroke="var(--mantine-color-green-3)"
+                  strokeWidth={2}
+                  strokeDasharray="4 4"
+                />
+                {result.rounds.map((round, i) => {
+                  const baseY = 60 + i * 130;
+                  return (
+                    <g key={round.round}>
+                      <text
+                        x={10}
+                        y={baseY + 20}
+                        fontSize={10}
+                        fill="var(--mantine-color-dimmed)"
+                      >
+                        R{round.round}
+                      </text>
+                      <line
+                        x1={100}
+                        y1={baseY + 15}
+                        x2={310}
+                        y2={baseY + 15}
+                        stroke="var(--mantine-color-blue-5)"
+                        strokeWidth={1.5}
+                        markerEnd="url(#schnorr-arrow)"
+                      />
+                      <text
+                        x={200}
+                        y={baseY + 10}
+                        textAnchor="middle"
+                        fontSize={10}
+                        fill="var(--mantine-color-blue-7)"
+                      >
+                        R = g^r = {round.commitment.toString()}
+                      </text>
+                      <line
+                        x1={310}
+                        y1={baseY + 55}
+                        x2={100}
+                        y2={baseY + 55}
+                        stroke="var(--mantine-color-green-5)"
+                        strokeWidth={1.5}
+                        markerEnd="url(#schnorr-arrow-rev)"
+                      />
+                      <text
+                        x={200}
+                        y={baseY + 50}
+                        textAnchor="middle"
+                        fontSize={10}
+                        fill="var(--mantine-color-green-7)"
+                      >
+                        e = {round.challenge.toString()}
+                      </text>
+                      <line
+                        x1={100}
+                        y1={baseY + 95}
+                        x2={310}
+                        y2={baseY + 95}
+                        stroke="var(--mantine-color-blue-5)"
+                        strokeWidth={1.5}
+                        markerEnd="url(#schnorr-arrow)"
+                      />
+                      <text
+                        x={200}
+                        y={baseY + 90}
+                        textAnchor="middle"
+                        fontSize={10}
+                        fill="var(--mantine-color-blue-7)"
+                      >
+                        s = {round.response.toString()}
+                      </text>
+                      <text
+                        x={380}
+                        y={baseY + 105}
+                        fontSize={10}
+                        fill={
+                          round.verified
+                            ? "var(--mantine-color-green-7)"
+                            : "var(--mantine-color-red-7)"
+                        }
+                      >
+                        {round.verified ? "OK" : "FAIL"}
+                      </text>
+                    </g>
+                  );
+                })}
+                <defs>
+                  <marker
+                    id="schnorr-arrow"
+                    markerWidth="8"
+                    markerHeight="6"
+                    refX="8"
+                    refY="3"
+                    orient="auto"
+                  >
+                    <polygon
+                      points="0 0, 8 3, 0 6"
+                      fill="var(--mantine-color-blue-5)"
+                    />
+                  </marker>
+                  <marker
+                    id="schnorr-arrow-rev"
+                    markerWidth="8"
+                    markerHeight="6"
+                    refX="8"
+                    refY="3"
+                    orient="auto"
+                  >
+                    <polygon
+                      points="0 0, 8 3, 0 6"
+                      fill="var(--mantine-color-green-5)"
+                    />
+                  </marker>
+                </defs>
+              </svg>
+            </Stack>
+          </Paper>
+
+          <Paper p="md" withBorder>
             <Stack gap="sm">
               <Text size="sm" fw={600}>
                 Protocol Steps

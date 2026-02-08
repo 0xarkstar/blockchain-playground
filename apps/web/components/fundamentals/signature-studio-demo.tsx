@@ -28,6 +28,10 @@ import {
   verifySignature,
   type KeyPair,
 } from "../../lib/blockchain/signature";
+import { DemoLayout } from "../shared/demo-layout";
+import { EducationPanel } from "../shared/education-panel";
+import { StepCard } from "../shared/step-card";
+import { OnChainSection } from "../shared/on-chain-section";
 
 export function SignatureStudioDemo() {
   const [keyPair, setKeyPair] = useState<KeyPair | null>(null);
@@ -70,8 +74,11 @@ export function SignatureStudioDemo() {
     }
   }, [verifyMsg, verifySig, verifyPubKey]);
 
-  return (
-    <Stack gap="lg">
+  const currentStep =
+    verifyResult !== null ? 3 : signature ? 2 : keyPair ? 1 : 0;
+
+  const inputPanel = (
+    <Stack gap="md">
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -176,6 +183,118 @@ export function SignatureStudioDemo() {
         </Stack>
       </Paper>
     </Stack>
+  );
+
+  const resultPanel = (
+    <Stack gap="md" data-testid="signature-process-visual">
+      <Paper p="md" withBorder>
+        <Text size="sm" fw={600} mb="md">
+          Signature Process
+        </Text>
+        <Stack gap="xs">
+          <StepCard
+            stepNumber={1}
+            title="Generate Key Pair"
+            description="Create a random private key and derive the public key using secp256k1 elliptic curve."
+            color={currentStep >= 1 ? "green" : "gray"}
+            details={
+              keyPair
+                ? [`Address: ${keyPair.address.slice(0, 20)}...`]
+                : undefined
+            }
+          />
+          <StepCard
+            stepNumber={2}
+            title="Sign Message"
+            description="Hash the message, then use the private key to produce a digital signature (r, s values)."
+            color={currentStep >= 2 ? "green" : "gray"}
+            details={
+              signature
+                ? [`Signature: ${signature.slice(0, 24)}...`]
+                : undefined
+            }
+          />
+          <StepCard
+            stepNumber={3}
+            title="Verify Signature"
+            description="Using only the public key, message, and signature, anyone can verify the signer's identity."
+            color={currentStep >= 3 ? (verifyResult ? "green" : "red") : "gray"}
+            isLast
+            details={
+              verifyResult !== null
+                ? [
+                    verifyResult
+                      ? "Verification: PASSED"
+                      : "Verification: FAILED",
+                  ]
+                : undefined
+            }
+          />
+        </Stack>
+      </Paper>
+    </Stack>
+  );
+
+  return (
+    <DemoLayout
+      inputPanel={inputPanel}
+      resultPanel={resultPanel}
+      learnContent={
+        <EducationPanel
+          howItWorks={[
+            {
+              title: "Key Generation",
+              description:
+                "A random 256-bit private key is generated. The public key is derived by multiplying the private key with the secp256k1 generator point.",
+            },
+            {
+              title: "Message Hashing",
+              description:
+                "The message is hashed (keccak256) to produce a fixed-length digest that represents the original data.",
+            },
+            {
+              title: "ECDSA Signing",
+              description:
+                "The private key signs the message hash using the Elliptic Curve Digital Signature Algorithm, producing (r, s) values.",
+            },
+            {
+              title: "Verification",
+              description:
+                "Anyone with the public key can verify the signature. This proves the private key holder signed the message without revealing the key.",
+            },
+          ]}
+          whyItMatters="Digital signatures are how blockchains prove ownership and authorize transactions. Your private key signs transactions, and the network verifies them using your public key — no trusted third party needed."
+          tips={[
+            "The private key must NEVER be shared — it's the only thing that can produce valid signatures",
+            "Try modifying the message slightly after signing and verify again — it will fail",
+            "Ethereum addresses are derived from the last 20 bytes of keccak256(publicKey)",
+          ]}
+        />
+      }
+      onChainContent={
+        <OnChainSection
+          contractName="SignatureVerifier"
+          contractDescription="An on-chain ECDSA signature verifier that uses the EVM's built-in ecrecover precompile. It recovers the signer's address from a message hash and signature, then compares it to the expected signer. This is the same mechanism used by smart contracts to verify signed messages and meta-transactions."
+          network="Base Sepolia"
+          functions={[
+            {
+              name: "verify",
+              signature:
+                "function verify(bytes32 messageHash, bytes calldata signature, address expectedSigner) external returns (bool valid)",
+              description:
+                "Verify an ECDSA signature on-chain. Extracts r, s, v from the 65-byte signature, calls ecrecover, and compares the recovered address to the expected signer. Emits a SignatureVerified event.",
+            },
+            {
+              name: "getEthSignedMessageHash",
+              signature:
+                "function getEthSignedMessageHash(bytes calldata message) external pure returns (bytes32)",
+              description:
+                "Compute the Ethereum signed message hash by prepending the standard '\\x19Ethereum Signed Message:\\n' prefix. Use this to match the hash format produced by wallet signing (e.g., personal_sign).",
+            },
+          ]}
+        />
+      }
+    />
   );
 }
 

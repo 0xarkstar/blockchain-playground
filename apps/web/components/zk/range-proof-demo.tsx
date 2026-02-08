@@ -72,6 +72,45 @@ export function RangeProofDemo() {
             Binary: {bits.slice().reverse().join("")} (value {value}, {numBits}
             -bit)
           </Text>
+          <Group gap="xs" justify="center">
+            {bits
+              .slice()
+              .reverse()
+              .map((bit, i) => {
+                const pos = numBits - 1 - i;
+                return (
+                  <Paper
+                    key={i}
+                    p="xs"
+                    withBorder
+                    style={{
+                      minWidth: 52,
+                      textAlign: "center",
+                      background:
+                        bit === 1
+                          ? "var(--mantine-color-blue-light)"
+                          : "var(--mantine-color-gray-light)",
+                      borderColor:
+                        bit === 1
+                          ? "var(--mantine-color-blue-6)"
+                          : "var(--mantine-color-gray-4)",
+                    }}
+                  >
+                    <Stack gap={2} align="center">
+                      <Text size="xs" c="dimmed">
+                        2^{pos}
+                      </Text>
+                      <Text size="lg" fw={700} c={bit === 1 ? "blue" : "gray"}>
+                        {bit}
+                      </Text>
+                      <Text size="xs" c="dimmed">
+                        ={1 << pos}
+                      </Text>
+                    </Stack>
+                  </Paper>
+                );
+              })}
+          </Group>
           <Button onClick={handleProve} variant="light">
             Generate Range Proof
           </Button>

@@ -23,6 +23,7 @@ import {
   generatePriceCurve,
   type DutchAuctionState,
 } from "../../lib/tokens/auction";
+import { SimpleLineChart } from "../shared";
 
 export function DutchAuctionDemo() {
   const [seller, setSeller] = useState("alice");
@@ -239,24 +240,16 @@ export function DutchAuctionDemo() {
           <Text size="sm" fw={600}>
             Price Curve
           </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Time</Table.Th>
-                <Table.Th ta="right">Price (ETH)</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {curve.map((point, i) => (
-                <Table.Tr key={i}>
-                  <Table.Td>{point.time.toFixed(0)}</Table.Td>
-                  <Table.Td ta="right">
-                    <Code>{point.price.toFixed(4)}</Code>
-                  </Table.Td>
-                </Table.Tr>
-              ))}
-            </Table.Tbody>
-          </Table>
+          <SimpleLineChart
+            data={curve.map((point) => ({
+              time: Number(point.time.toFixed(0)),
+              price: Number(point.price.toFixed(4)),
+            }))}
+            xKey="time"
+            yKeys={["price"]}
+            colors={["#fa5252"]}
+            height={280}
+          />
         </Stack>
       </Paper>
     </Stack>

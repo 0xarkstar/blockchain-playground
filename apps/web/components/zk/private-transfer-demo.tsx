@@ -199,6 +199,70 @@ export function PrivateTransferDemo() {
       )}
 
       <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            UTXO Flow
+          </Text>
+          <svg width="100%" height={80} viewBox="0 0 520 80">
+            {[
+              { label: "Mint", x: 10, color: "green", desc: "Create Note" },
+              {
+                label: "Transfer",
+                x: 140,
+                color: "blue",
+                desc: "Spend + Create",
+              },
+              { label: "Nullify", x: 270, color: "red", desc: "Mark Spent" },
+              { label: "Verify", x: 400, color: "violet", desc: "ZK Proof" },
+            ].map((step, i) => (
+              <g key={step.label}>
+                <rect
+                  x={step.x}
+                  y={10}
+                  width={100}
+                  height={55}
+                  rx={8}
+                  fill={`var(--mantine-color-${step.color}-light)`}
+                  stroke={`var(--mantine-color-${step.color}-6)`}
+                  strokeWidth={1.5}
+                />
+                <text
+                  x={step.x + 50}
+                  y={32}
+                  textAnchor="middle"
+                  fontSize={12}
+                  fontWeight={600}
+                  fill={`var(--mantine-color-${step.color}-9)`}
+                >
+                  {step.label}
+                </text>
+                <text
+                  x={step.x + 50}
+                  y={50}
+                  textAnchor="middle"
+                  fontSize={10}
+                  fill={`var(--mantine-color-${step.color}-7)`}
+                >
+                  {step.desc}
+                </text>
+                {i < 3 && (
+                  <text
+                    x={step.x + 120}
+                    y={42}
+                    textAnchor="middle"
+                    fontSize={16}
+                    fill="var(--mantine-color-dimmed)"
+                  >
+                    {"\u2192"}
+                  </text>
+                )}
+              </g>
+            ))}
+          </svg>
+        </Stack>
+      </Paper>
+
+      <Paper p="md" withBorder>
         <Stack gap="sm">
           <Text size="sm" fw={600}>
             Public State (what the blockchain sees)

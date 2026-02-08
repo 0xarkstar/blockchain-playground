@@ -15,6 +15,7 @@ import {
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { simulateCall, type CallContext } from "../../lib/solidity/evm";
+import { EducationPanel } from "../../components/shared";
 
 const CALL_TYPES: { value: CallContext["callType"]; label: string }[] = [
   { value: "call", label: "CALL" },
@@ -43,6 +44,65 @@ export function ContractInteractionsDemo() {
 
   return (
     <Stack gap="lg">
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Inter-Contract Call Flow
+          </Text>
+          <Paper p="md" withBorder bg="gray.0" style={{ textAlign: "center" }}>
+            <Group gap="md" justify="center" align="center">
+              <Paper
+                p="sm"
+                withBorder
+                bg="blue.1"
+                style={{ minWidth: 100, textAlign: "center" }}
+              >
+                <Text size="xs" fw={600}>
+                  {from}
+                </Text>
+                <Text size="xs" c="dimmed">
+                  Caller
+                </Text>
+              </Paper>
+              <Stack gap={2} align="center">
+                <Badge
+                  size="sm"
+                  color={
+                    callType === "call"
+                      ? "blue"
+                      : callType === "delegatecall"
+                        ? "violet"
+                        : "cyan"
+                  }
+                >
+                  {callType.toUpperCase()}
+                </Badge>
+                <Text size="xs" c="dimmed">
+                  {value > 0 ? `${value} wei` : "no value"}
+                </Text>
+              </Stack>
+              <Paper
+                p="sm"
+                withBorder
+                bg="green.1"
+                style={{ minWidth: 100, textAlign: "center" }}
+              >
+                <Text size="xs" fw={600}>
+                  {to}
+                </Text>
+                <Text size="xs" c="dimmed">
+                  Target
+                </Text>
+              </Paper>
+            </Group>
+            <Text size="xs" c="dimmed" mt="xs">
+              Storage: {result.storageContext} | Code: {result.codeSource} |
+              msg.sender: {result.msgSender}
+            </Text>
+          </Paper>
+        </Stack>
+      </Paper>
+
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -208,6 +268,32 @@ export function ContractInteractionsDemo() {
           proxy and implementation.
         </Alert>
       )}
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "CALL",
+            description:
+              "Standard external call. Target's code runs with target's storage. msg.sender = caller contract.",
+          },
+          {
+            title: "DELEGATECALL",
+            description:
+              "Target's code runs with CALLER's storage and context. Used by proxy patterns for upgradeable contracts.",
+          },
+          {
+            title: "STATICCALL",
+            description:
+              "Read-only call that reverts on any state modification. Used for view/pure function calls.",
+          },
+        ]}
+        whyItMatters="Understanding call types is essential for proxy patterns and cross-contract composability. DELEGATECALL enables upgradeability but introduces storage layout risks."
+        tips={[
+          "Always use interfaces for type-safe external calls",
+          "DELEGATECALL storage layout must match between proxy and implementation",
+          "Use STATICCALL for oracle reads to prevent unexpected state changes",
+        ]}
+      />
     </Stack>
   );
 }

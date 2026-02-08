@@ -16,6 +16,7 @@ import {
   IconCode,
   IconDiamond,
   IconLock,
+  IconShieldLock,
 } from "@tabler/icons-react";
 
 const tracks = [
@@ -52,6 +53,13 @@ const tracks = [
     icon: IconLock,
     color: "red",
     href: "/zk",
+    ready: true,
+  },
+  {
+    key: "appliedZk" as const,
+    icon: IconShieldLock,
+    color: "pink",
+    href: "/applied-zk",
     ready: true,
   },
 ];

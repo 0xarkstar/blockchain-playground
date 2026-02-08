@@ -21,6 +21,7 @@ import {
   generateNonce,
   type HashScheme,
 } from "../../lib/zk/commitment";
+import { StepCard } from "../shared";
 
 type Phase = "commit" | "reveal";
 
@@ -151,6 +152,57 @@ export function HashCommitmentDemo() {
           {result}
         </Alert>
       )}
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Commit-Reveal Process
+          </Text>
+          <StepCard
+            stepNumber={1}
+            title="Commit"
+            description="Hash your secret with a random nonce. Publish only the hash."
+            color={phase === "commit" ? "blue" : commitHash ? "green" : "gray"}
+          />
+          <StepCard
+            stepNumber={2}
+            title="Wait"
+            description="The commitment is public but reveals nothing about the secret."
+            color={
+              phase === "reveal" && !resultValid
+                ? "blue"
+                : resultValid !== null
+                  ? "green"
+                  : "gray"
+            }
+          />
+          <StepCard
+            stepNumber={3}
+            title="Reveal"
+            description="Publish your secret and nonce. Anyone can verify they match."
+            color={
+              resultValid === true
+                ? "green"
+                : resultValid === false
+                  ? "red"
+                  : "gray"
+            }
+          />
+          <StepCard
+            stepNumber={4}
+            title="Verify"
+            description="Recompute hash(secret || nonce) and compare with the commitment."
+            isLast
+            color={
+              resultValid === true
+                ? "green"
+                : resultValid === false
+                  ? "red"
+                  : "gray"
+            }
+          />
+        </Stack>
+      </Paper>
 
       <Paper p="md" withBorder>
         <Stack gap="sm">

@@ -22,6 +22,26 @@ import {
   type HashAlgorithm,
 } from "../../lib/blockchain/hash";
 import { HashAvalancheVisualizer } from "./hash-avalanche-visualizer";
+import { DemoLayout } from "../shared/demo-layout";
+import { EducationPanel } from "../shared/education-panel";
+import { SimpleBarChart } from "../shared/charts";
+
+function computeHexDistribution(hexHash: string): Record<string, unknown>[] {
+  const hex = hexHash.startsWith("0x") ? hexHash.slice(2) : hexHash;
+  const counts: Record<string, number> = {};
+  for (let i = 0; i < 16; i++) {
+    counts[i.toString(16)] = 0;
+  }
+  for (const ch of hex.toLowerCase()) {
+    if (counts[ch] !== undefined) {
+      counts[ch]++;
+    }
+  }
+  return Object.entries(counts).map(([char, count]) => ({
+    char: char.toUpperCase(),
+    count,
+  }));
+}
 
 export function HashExplorerDemo() {
   const [input, setInput] = useState("Hello, Blockchain!");
@@ -39,13 +59,18 @@ export function HashExplorerDemo() {
 
   const currentHash = hashes[algorithm];
 
+  const hexDistribution = useMemo(
+    () => computeHexDistribution(currentHash),
+    [currentHash],
+  );
+
   const avalanche = useMemo(
     () => computeAvalancheEffect(input, compareInput, algorithm),
     [input, compareInput, algorithm],
   );
 
-  return (
-    <Stack gap="lg">
+  const inputPanel = (
+    <Stack gap="md">
       <TextInput
         label="Input Text"
         description="Type anything — see how the hash changes instantly"
@@ -112,12 +137,32 @@ export function HashExplorerDemo() {
           </Paper>
         ))}
       </SimpleGrid>
+    </Stack>
+  );
+
+  const resultPanel = (
+    <Stack gap="md">
+      <Paper p="md" withBorder data-testid="hex-distribution-chart">
+        <Text size="sm" fw={600} mb="xs">
+          Hex Character Distribution
+        </Text>
+        <SimpleBarChart
+          data={hexDistribution}
+          xKey="char"
+          yKeys={["count"]}
+          height={200}
+        />
+        <Text size="xs" c="dimmed" mt="xs">
+          A good hash function distributes hex characters uniformly (each ~4 for
+          64-char hash)
+        </Text>
+      </Paper>
 
       <Paper p="md" withBorder>
         <Text size="sm" fw={600} mb="md">
           Avalanche Effect Comparison
         </Text>
-        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
+        <SimpleGrid cols={{ base: 1 }} spacing="md">
           <TextInput
             label="Original Input"
             value={input}
@@ -155,5 +200,53 @@ export function HashExplorerDemo() {
         </Box>
       </Paper>
     </Stack>
+  );
+
+  return (
+    <DemoLayout
+      inputPanel={inputPanel}
+      resultPanel={resultPanel}
+      learnContent={
+        <EducationPanel
+          howItWorks={[
+            {
+              title: "Input Processing",
+              description:
+                "The hash function takes any input and converts it to bytes.",
+              details: [
+                "Text is encoded as UTF-8 bytes",
+                "Any length input is accepted",
+              ],
+            },
+            {
+              title: "Compression Function",
+              description:
+                "The algorithm processes blocks of data through rounds of mathematical operations.",
+              details: [
+                "SHA-256 uses 64 rounds per block",
+                "Keccak-256 uses a sponge construction",
+                "BLAKE2b uses a tree-based structure",
+              ],
+            },
+            {
+              title: "Fixed-Size Output",
+              description:
+                "Regardless of input size, the output is always the same length (256 bits / 64 hex chars).",
+            },
+            {
+              title: "Avalanche Effect",
+              description:
+                "Changing even 1 bit of input flips ~50% of output bits, making it impossible to predict changes.",
+            },
+          ]}
+          whyItMatters="Hash functions are the backbone of blockchain security. They create unique digital fingerprints for blocks, transactions, and addresses. Without collision-resistant hashes, blockchains couldn't guarantee data integrity."
+          tips={[
+            "A good hash function produces uniformly distributed output — check the hex distribution chart",
+            "Try changing just one character and observe how the entire hash changes (avalanche effect)",
+            "SHA-256 is used in Bitcoin, Keccak-256 in Ethereum",
+          ]}
+        />
+      }
+    />
   );
 }

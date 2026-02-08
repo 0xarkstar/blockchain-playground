@@ -12,6 +12,7 @@ import {
   SimpleGrid,
 } from "@mantine/core";
 import { calculateArbitrageProfit } from "../../lib/defi/flash-loan";
+import { SimpleBarChart, EducationPanel } from "../../components/shared";
 
 export function ArbitrageSimulatorDemo() {
   const [priceA, setPriceA] = useState<number>(2000);
@@ -185,6 +186,56 @@ export function ArbitrageSimulatorDemo() {
           </Table>
         </Stack>
       </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Price Comparison
+          </Text>
+          <SimpleBarChart
+            data={[
+              { pool: "Pool A", price: priceA },
+              { pool: "Pool B", price: priceB },
+            ]}
+            xKey="pool"
+            yKeys={["price"]}
+            grouped
+            height={200}
+          />
+          <Text size="xs" c="dimmed" ta="center">
+            Price spread: {result.spreadPercent.toFixed(3)}% —{" "}
+            {result.profitable
+              ? "Profitable after gas"
+              : "Unprofitable after gas"}
+          </Text>
+        </Stack>
+      </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Spot the Spread",
+            description:
+              "Find the same token priced differently on two exchanges. Buy low on one, sell high on the other.",
+          },
+          {
+            title: "Calculate Profitability",
+            description:
+              "Profit = (priceDiff / buyPrice) * tradeAmount - gasCost. Must exceed gas to be worthwhile.",
+          },
+          {
+            title: "Execute Atomically",
+            description:
+              "Use flash loans to execute both legs in a single transaction, eliminating capital requirements and execution risk.",
+          },
+        ]}
+        whyItMatters="Arbitrageurs keep prices consistent across DeFi protocols. They're essential for market efficiency — when prices diverge, arbs bring them back in line."
+        tips={[
+          "MEV (Maximal Extractable Value) bots compete for the same opportunities",
+          "Gas costs on Ethereum L1 often exceed small arbitrage profits",
+          "L2s and alternative chains offer lower gas for smaller arb opportunities",
+        ]}
+      />
     </Stack>
   );
 }

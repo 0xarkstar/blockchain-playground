@@ -17,6 +17,7 @@ import {
   calculateLiquidationPrice,
   calculateUtilizationRate,
 } from "../../lib/defi/lending";
+import { EducationPanel } from "../../components/shared";
 
 function healthColor(hf: number): string {
   if (hf >= 2) return "green";
@@ -198,6 +199,32 @@ export function LendingProtocolDemo() {
           </Table>
         </Stack>
       </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Health Factor",
+            description:
+              "HF = (collateralValue * liquidationThreshold) / debtValue. When HF < 1, the position can be liquidated.",
+          },
+          {
+            title: "Collateral Ratio",
+            description:
+              "The ratio of collateral value to borrowed value. Over-collateralization (>100%) is required in DeFi since there's no credit scoring.",
+          },
+          {
+            title: "Liquidation",
+            description:
+              "When HF drops below 1, anyone can repay part of the debt and claim collateral at a discount (liquidation bonus).",
+          },
+        ]}
+        whyItMatters="Lending protocols like Aave and Compound enable permissionless borrowing. Understanding health factors prevents unexpected liquidations that can cost you the liquidation bonus."
+        tips={[
+          "Keep health factor above 1.5 for a safety margin against volatility",
+          "Monitor collateral price — a sudden drop can trigger liquidation",
+          "Higher liquidation thresholds allow more borrowing but less safety margin",
+        ]}
+      />
     </Stack>
   );
 }

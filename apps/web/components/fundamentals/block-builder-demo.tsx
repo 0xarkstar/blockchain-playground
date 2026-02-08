@@ -15,6 +15,7 @@ import {
   Slider,
   Alert,
   Progress,
+  Box,
 } from "@mantine/core";
 import { IconCube, IconPick, IconPlus } from "@tabler/icons-react";
 import {
@@ -27,6 +28,101 @@ import {
   type Transaction,
   type MiningResult,
 } from "../../lib/blockchain/block";
+import { DemoLayout } from "../shared/demo-layout";
+import { EducationPanel } from "../shared/education-panel";
+
+function BlockchainVisual({ block }: { block: Block }) {
+  const genesis = {
+    index: 0,
+    hash: block.header.previousHash,
+  };
+
+  return (
+    <Paper p="md" withBorder data-testid="blockchain-visual">
+      <Text size="sm" fw={600} mb="md">
+        Blockchain Structure
+      </Text>
+      <Group gap={0} wrap="nowrap" style={{ overflowX: "auto" }}>
+        {/* Genesis block */}
+        <Paper
+          p="sm"
+          withBorder
+          style={{
+            minWidth: 160,
+            borderColor: "var(--mantine-color-gray-5)",
+          }}
+        >
+          <Badge size="xs" color="gray" mb={4}>
+            Genesis
+          </Badge>
+          <Text size="xs" c="dimmed">
+            Hash
+          </Text>
+          <Code style={{ fontSize: "0.55rem" }}>
+            {genesis.hash.slice(0, 16)}...
+          </Code>
+        </Paper>
+
+        {/* Arrow connecting blocks */}
+        <Box px="xs" style={{ display: "flex", alignItems: "center" }}>
+          <svg width="40" height="24" viewBox="0 0 40 24">
+            <line
+              x1="0"
+              y1="12"
+              x2="30"
+              y2="12"
+              stroke="var(--mantine-color-blue-5)"
+              strokeWidth="2"
+            />
+            <polygon
+              points="30,6 40,12 30,18"
+              fill="var(--mantine-color-blue-5)"
+            />
+          </svg>
+        </Box>
+
+        {/* Mined block */}
+        <Paper
+          p="sm"
+          withBorder
+          style={{
+            minWidth: 160,
+            borderColor: "var(--mantine-color-green-5)",
+            borderWidth: 2,
+          }}
+        >
+          <Badge size="xs" color="green" mb={4}>
+            Block #{block.index}
+          </Badge>
+          <Text size="xs" c="dimmed">
+            Prev Hash
+          </Text>
+          <Code style={{ fontSize: "0.55rem" }} color="blue">
+            {block.header.previousHash.slice(0, 16)}...
+          </Code>
+          <Text size="xs" c="dimmed" mt={4}>
+            Hash
+          </Text>
+          <Code style={{ fontSize: "0.55rem" }}>
+            {block.hash.slice(0, 16)}...
+          </Code>
+          <Group gap={4} mt={4}>
+            <Badge size="xs" variant="light">
+              {block.transactions.length} TXs
+            </Badge>
+            <Badge size="xs" variant="light">
+              Nonce: {block.header.nonce}
+            </Badge>
+          </Group>
+        </Paper>
+      </Group>
+      <Text size="xs" c="dimmed" mt="xs">
+        The previous hash in Block #{block.index} matches the genesis block
+        hash, creating a cryptographic link
+      </Text>
+    </Paper>
+  );
+}
 
 export function BlockBuilderDemo() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -63,8 +159,8 @@ export function BlockBuilderDemo() {
     setMiningResult(null);
   }, []);
 
-  return (
-    <Stack gap="lg">
+  const inputPanel = (
+    <Stack gap="md">
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -165,72 +261,125 @@ export function BlockBuilderDemo() {
           Reset
         </Button>
       </Group>
+    </Stack>
+  );
 
-      {miningResult && block && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Group justify="space-between">
-              <Text size="sm" fw={600}>
-                Mined Block
-              </Text>
-              <Group gap="xs">
-                <Badge variant="light" color="green">
-                  Block #{block.index}
-                </Badge>
-                <Badge variant="light">Nonce: {miningResult.nonce}</Badge>
+  const resultPanel = (
+    <Stack gap="md">
+      {miningResult && block ? (
+        <>
+          <BlockchainVisual block={block} />
+
+          <Paper p="md" withBorder>
+            <Stack gap="md">
+              <Group justify="space-between">
+                <Text size="sm" fw={600}>
+                  Mined Block
+                </Text>
+                <Group gap="xs">
+                  <Badge variant="light" color="green">
+                    Block #{block.index}
+                  </Badge>
+                  <Badge variant="light">Nonce: {miningResult.nonce}</Badge>
+                </Group>
               </Group>
-            </Group>
 
-            <Alert
-              icon={<IconCube size={16} />}
-              color="green"
-              title="Block Mined Successfully"
-            >
-              Found valid nonce after {miningResult.hashesComputed} hashes in{" "}
-              {miningResult.timeMs.toFixed(1)}ms
-            </Alert>
+              <Alert
+                icon={<IconCube size={16} />}
+                color="green"
+                title="Block Mined Successfully"
+              >
+                Found valid nonce after {miningResult.hashesComputed} hashes in{" "}
+                {miningResult.timeMs.toFixed(1)}ms
+              </Alert>
 
-            <div>
-              <Text size="xs" c="dimmed">
-                Block Hash
-              </Text>
-              <Code block style={{ wordBreak: "break-all" }}>
-                {block.hash}
-              </Code>
-            </div>
-            <div>
-              <Text size="xs" c="dimmed">
-                Previous Hash
-              </Text>
-              <Code block style={{ wordBreak: "break-all" }}>
-                {block.header.previousHash}
-              </Code>
-            </div>
-            <div>
-              <Text size="xs" c="dimmed">
-                Merkle Root
-              </Text>
-              <Code block style={{ wordBreak: "break-all" }}>
-                {block.header.merkleRoot}
-              </Code>
-            </div>
+              <div>
+                <Text size="xs" c="dimmed">
+                  Block Hash
+                </Text>
+                <Code block style={{ wordBreak: "break-all" }}>
+                  {block.hash}
+                </Code>
+              </div>
+              <div>
+                <Text size="xs" c="dimmed">
+                  Previous Hash
+                </Text>
+                <Code block style={{ wordBreak: "break-all" }}>
+                  {block.header.previousHash}
+                </Code>
+              </div>
+              <div>
+                <Text size="xs" c="dimmed">
+                  Merkle Root
+                </Text>
+                <Code block style={{ wordBreak: "break-all" }}>
+                  {block.header.merkleRoot}
+                </Code>
+              </div>
 
-            <Group gap="md">
-              <Badge>Difficulty: {block.header.difficulty}</Badge>
-              <Badge>Nonce: {block.header.nonce}</Badge>
-              <Badge>TXs: {block.transactions.length}</Badge>
-              <Badge>
-                Hash Rate:{" "}
-                {(
-                  miningResult.hashesComputed /
-                  (miningResult.timeMs / 1000)
-                ).toFixed(0)}{" "}
-                H/s
-              </Badge>
-            </Group>
-          </Stack>
+              <Group gap="md">
+                <Badge>Difficulty: {block.header.difficulty}</Badge>
+                <Badge>Nonce: {block.header.nonce}</Badge>
+                <Badge>TXs: {block.transactions.length}</Badge>
+                <Badge>
+                  Hash Rate:{" "}
+                  {(
+                    miningResult.hashesComputed /
+                    (miningResult.timeMs / 1000)
+                  ).toFixed(0)}{" "}
+                  H/s
+                </Badge>
+              </Group>
+            </Stack>
+          </Paper>
+        </>
+      ) : (
+        <Paper p="md" withBorder>
+          <Text size="sm" c="dimmed" ta="center" py="xl">
+            Add transactions and mine a block to see the blockchain structure
+          </Text>
         </Paper>
       )}
     </Stack>
+  );
+
+  return (
+    <DemoLayout
+      inputPanel={inputPanel}
+      resultPanel={resultPanel}
+      learnContent={
+        <EducationPanel
+          howItWorks={[
+            {
+              title: "Collect Transactions",
+              description:
+                "Miners gather pending transactions from the mempool into a candidate block.",
+            },
+            {
+              title: "Build Block Header",
+              description:
+                "The header includes previous block hash, merkle root of transactions, timestamp, and difficulty target.",
+            },
+            {
+              title: "Mine (Proof of Work)",
+              description:
+                "The miner increments the nonce until the block hash meets the difficulty target (starts with N zeros).",
+            },
+            {
+              title: "Chain the Block",
+              description:
+                "The new block's previous hash field links it to the last block, forming an immutable chain.",
+            },
+          ]}
+          whyItMatters="Blocks are the fundamental data structure of a blockchain. Each block cryptographically references its predecessor, making it computationally infeasible to alter past transactions without redoing all subsequent proof-of-work."
+          tips={[
+            "Higher difficulty exponentially increases mining time — try difficulty 4 vs 2",
+            "The merkle root is a single hash summarizing all transactions in the block",
+            "Notice how the previous hash in the mined block exactly matches the genesis hash",
+          ]}
+        />
+      }
+    />
   );
 }

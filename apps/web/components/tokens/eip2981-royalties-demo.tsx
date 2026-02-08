@@ -13,6 +13,7 @@ import {
   Progress,
 } from "@mantine/core";
 import { calculatePriceBreakdown } from "../../lib/tokens/marketplace";
+import { SimplePieChart } from "../shared";
 
 export function EIP2981RoyaltiesDemo() {
   const [salePrice, setSalePrice] = useState(10);
@@ -140,6 +141,27 @@ export function EIP2981RoyaltiesDemo() {
               </Table.Tr>
             </Table.Tbody>
           </Table>
+
+          <SimplePieChart
+            data={[
+              {
+                recipient: "Seller",
+                amount: Number(breakdown.sellerProceeds.toFixed(4)),
+              },
+              {
+                recipient: "Royalty",
+                amount: Number(breakdown.royaltyAmount.toFixed(4)),
+              },
+              {
+                recipient: "Platform",
+                amount: Number(breakdown.platformFee.toFixed(4)),
+              },
+            ]}
+            nameKey="recipient"
+            valueKey="amount"
+            colors={["#40c057", "#7950f2", "#fd7e14"]}
+            height={250}
+          />
         </Stack>
       </Paper>
 

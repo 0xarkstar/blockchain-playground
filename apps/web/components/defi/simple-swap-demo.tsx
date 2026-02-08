@@ -14,6 +14,11 @@ import {
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { calculateSwapOutput, calculateSpotPrice } from "../../lib/defi/amm";
+import {
+  SimpleLineChart,
+  DemoLayout,
+  EducationPanel,
+} from "../../components/shared";
 
 export function SimpleSwapDemo() {
   const [reserveA, setReserveA] = useState<number>(10000);
@@ -36,8 +41,54 @@ export function SimpleSwapDemo() {
 
   const highImpact = result.priceImpact > 5;
 
-  return (
-    <Stack gap="lg">
+  const k = reserveA * reserveB;
+
+  const curveData = useMemo(() => {
+    if (k <= 0) return [];
+    const points: Record<string, unknown>[] = [];
+    const maxX = Math.max(reserveA * 3, 1000);
+    const step = Math.max(maxX / 50, 1);
+    for (let x = step; x <= maxX; x += step) {
+      points.push({ x: Math.round(x), y: Math.round(k / x) });
+    }
+    return points;
+  }, [k, reserveA]);
+
+  const rIn = direction === "AtoB" ? reserveA : reserveB;
+  const rOut = direction === "AtoB" ? reserveB : reserveA;
+  const newRIn = rIn + amountIn;
+  const newROut = k > 0 ? k / newRIn : 0;
+
+  const swapPoints = useMemo(() => {
+    const pts: Record<string, unknown>[] = [];
+    if (direction === "AtoB") {
+      pts.push({
+        x: Math.round(reserveA),
+        y: Math.round(reserveB),
+        label: "Before",
+      });
+      pts.push({
+        x: Math.round(newRIn),
+        y: Math.round(newROut),
+        label: "After",
+      });
+    } else {
+      pts.push({
+        x: Math.round(reserveA),
+        y: Math.round(reserveB),
+        label: "Before",
+      });
+      pts.push({
+        x: Math.round(newROut),
+        y: Math.round(newRIn),
+        label: "After",
+      });
+    }
+    return pts;
+  }, [reserveA, reserveB, newRIn, newROut, direction]);
+
+  const inputPanel = (
+    <Stack gap="md">
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -60,11 +111,10 @@ export function SimpleSwapDemo() {
             />
           </Group>
           <Text size="xs" c="dimmed">
-            Constant Product (k): {(reserveA * reserveB).toLocaleString()}
+            Constant Product (k): {k.toLocaleString()}
           </Text>
         </Stack>
       </Paper>
-
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -98,7 +148,27 @@ export function SimpleSwapDemo() {
           </Group>
         </Stack>
       </Paper>
+    </Stack>
+  );
 
+  const resultPanel = (
+    <Stack gap="md">
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Constant Product Curve (x * y = k)
+          </Text>
+          <SimpleLineChart
+            data={[...curveData, ...swapPoints]}
+            xKey="x"
+            yKeys={["y"]}
+            height={250}
+          />
+          <Text size="xs" c="dimmed" ta="center">
+            Token A (x-axis) vs Token B (y-axis). Swap moves along the curve.
+          </Text>
+        </Stack>
+      </Paper>
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -136,7 +206,6 @@ export function SimpleSwapDemo() {
               </Table.Tr>
             </Table.Tbody>
           </Table>
-
           {highImpact && (
             <Alert
               icon={<IconInfoCircle size={16} />}
@@ -150,6 +219,42 @@ export function SimpleSwapDemo() {
           )}
         </Stack>
       </Paper>
+    </Stack>
+  );
+
+  return (
+    <Stack gap="lg">
+      <DemoLayout
+        inputPanel={inputPanel}
+        resultPanel={resultPanel}
+        learnContent={
+          <EducationPanel
+            howItWorks={[
+              {
+                title: "Constant Product Formula",
+                description:
+                  "AMMs use x * y = k, where x and y are token reserves and k is a constant. Every swap must maintain this invariant.",
+              },
+              {
+                title: "Price Determination",
+                description:
+                  "The spot price is the ratio of reserves (y/x). Larger trades move further along the curve, causing more price impact.",
+              },
+              {
+                title: "Fees",
+                description:
+                  "A small fee is deducted from each swap. This fee rewards liquidity providers and slightly increases k over time.",
+              },
+            ]}
+            whyItMatters="AMMs like Uniswap replaced traditional order books, enabling permissionless, 24/7 token trading without intermediaries. Understanding the constant product formula is fundamental to DeFi."
+            tips={[
+              "Larger trades relative to pool size cause higher price impact",
+              "Deep liquidity pools offer better prices for large trades",
+              "Fees typically range from 0.01% to 1% depending on the pool",
+            ]}
+          />
+        }
+      />
     </Stack>
   );
 }

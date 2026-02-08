@@ -186,6 +186,90 @@ export function NFTMetadataDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Metadata Tree
+          </Text>
+          <Paper
+            p="sm"
+            withBorder
+            style={{
+              background:
+                "var(--mantine-color-dark-7, var(--mantine-color-gray-0))",
+            }}
+          >
+            <Stack gap={4}>
+              <Text size="sm" ff="monospace">
+                <Badge size="xs" variant="light" color="blue" mr={4}>
+                  object
+                </Badge>
+                metadata
+              </Text>
+              <Paper p="xs" ml="lg" withBorder>
+                <Stack gap={2}>
+                  <Text size="xs" ff="monospace">
+                    <Badge size="xs" variant="light" color="green" mr={4}>
+                      string
+                    </Badge>
+                    name: <Code>{metadata.name}</Code>
+                  </Text>
+                  <Text size="xs" ff="monospace">
+                    <Badge size="xs" variant="light" color="green" mr={4}>
+                      string
+                    </Badge>
+                    description:{" "}
+                    <Code>
+                      {metadata.description.slice(0, 40)}
+                      {metadata.description.length > 40 ? "..." : ""}
+                    </Code>
+                  </Text>
+                  <Text size="xs" ff="monospace">
+                    <Badge size="xs" variant="light" color="green" mr={4}>
+                      string
+                    </Badge>
+                    image: <Code>{metadata.image}</Code>
+                  </Text>
+                  {metadata.externalUrl && (
+                    <Text size="xs" ff="monospace">
+                      <Badge size="xs" variant="light" color="green" mr={4}>
+                        string
+                      </Badge>
+                      external_url: <Code>{metadata.externalUrl}</Code>
+                    </Text>
+                  )}
+                  <Text size="xs" ff="monospace">
+                    <Badge size="xs" variant="light" color="violet" mr={4}>
+                      array[{metadata.attributes?.length ?? 0}]
+                    </Badge>
+                    attributes
+                  </Text>
+                  {metadata.attributes && metadata.attributes.length > 0 && (
+                    <Paper p="xs" ml="lg" withBorder>
+                      <Stack gap={2}>
+                        {metadata.attributes.map((attr, i) => (
+                          <Text key={i} size="xs" ff="monospace">
+                            <Badge
+                              size="xs"
+                              variant="outline"
+                              color="violet"
+                              mr={4}
+                            >
+                              {i}
+                            </Badge>
+                            {attr.trait_type}: <Code>{attr.value}</Code>
+                          </Text>
+                        ))}
+                      </Stack>
+                    </Paper>
+                  )}
+                </Stack>
+              </Paper>
+            </Stack>
+          </Paper>
+        </Stack>
+      </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
           <Group justify="space-between">
             <Text size="sm" fw={600}>
               Generated JSON

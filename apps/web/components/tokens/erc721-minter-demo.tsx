@@ -12,6 +12,7 @@ import {
   Group,
   Text,
   Alert,
+  SimpleGrid,
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
@@ -148,6 +149,44 @@ export function ERC721MinterDemo() {
         <Alert icon={<IconInfoCircle size={16} />} variant="light">
           {lastMessage}
         </Alert>
+      )}
+
+      {Object.keys(state.owners).length > 0 && (
+        <Paper p="md" withBorder>
+          <Stack gap="md">
+            <Text size="sm" fw={600}>
+              NFT Gallery
+            </Text>
+            <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} spacing="sm">
+              {Object.entries(state.owners).map(([id, owner]) => {
+                const meta = state.metadata[Number(id)];
+                const hue = (Number(id) * 67) % 360;
+                return (
+                  <Paper
+                    key={id}
+                    p="sm"
+                    withBorder
+                    style={{
+                      background: `linear-gradient(135deg, hsl(${hue}, 60%, 85%), hsl(${(hue + 40) % 360}, 50%, 75%))`,
+                    }}
+                  >
+                    <Stack gap={4} align="center">
+                      <Badge variant="filled" size="lg">
+                        #{id}
+                      </Badge>
+                      <Text size="xs" fw={600} ta="center">
+                        {meta?.name ?? `Token #${id}`}
+                      </Text>
+                      <Text size="xs" c="dimmed">
+                        {owner}
+                      </Text>
+                    </Stack>
+                  </Paper>
+                );
+              })}
+            </SimpleGrid>
+          </Stack>
+        </Paper>
       )}
 
       <Paper p="md" withBorder>

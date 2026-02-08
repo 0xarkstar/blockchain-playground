@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { calculateImpermanentLoss } from "../../lib/defi/amm";
+import { SimpleAreaChart, EducationPanel } from "../../components/shared";
 
 export function ImpermanentLossDemo() {
   const [totalValue, setTotalValue] = useState<number>(10000);
@@ -40,8 +41,37 @@ export function ImpermanentLossDemo() {
     };
   }, [totalValue, priceRatio]);
 
+  const ilCurveData = useMemo(() => {
+    const points: Record<string, unknown>[] = [];
+    const ratios = [0.1, 0.2, 0.3, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4, 5, 7, 10];
+    for (const r of ratios) {
+      const il = calculateImpermanentLoss(r);
+      points.push({ ratio: `${r}x`, ilPercent: Math.round(il * -10000) / 100 });
+    }
+    return points;
+  }, []);
+
   return (
     <Stack gap="lg">
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Impermanent Loss Curve
+          </Text>
+          <SimpleAreaChart
+            data={ilCurveData}
+            xKey="ratio"
+            yKeys={["ilPercent"]}
+            colors={["#fa5252"]}
+            height={250}
+          />
+          <Text size="xs" c="dimmed" ta="center">
+            IL % (y-axis) vs Price Ratio Change (x-axis). Loss increases with
+            divergence from 1x.
+          </Text>
+        </Stack>
+      </Paper>
+
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -157,18 +187,31 @@ export function ImpermanentLossDemo() {
         </Stack>
       </Paper>
 
-      <Alert
-        icon={<IconInfoCircle size={16} />}
-        color="blue"
-        title="What is Impermanent Loss?"
-      >
-        Impermanent loss occurs when the price ratio of pooled tokens changes
-        from when you deposited. The greater the divergence, the more IL you
-        experience. It is &quot;impermanent&quot; because if prices return to
-        the original ratio, the loss disappears. Trading fees earned may offset
-        IL. This calculator assumes a standard 50/50 constant product pool
-        (x*y=k).
-      </Alert>
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "IL Formula",
+            description:
+              "IL = 2*sqrt(r)/(1+r) - 1, where r is the price ratio. At r=1 (no change), IL=0.",
+          },
+          {
+            title: "Why It Happens",
+            description:
+              "AMM pools rebalance automatically. When prices diverge, arbitrageurs extract value, leaving LPs with less than if they had held.",
+          },
+          {
+            title: "When It Disappears",
+            description:
+              "If prices return to original ratio, IL goes to zero. Hence 'impermanent' — it only locks in when you withdraw.",
+          },
+        ]}
+        whyItMatters="Impermanent loss is the hidden cost of providing liquidity. At 2x price change, IL is ~5.7%. At 5x, it's ~25.5%. Trading fees must exceed IL for LPs to profit."
+        tips={[
+          "Stablecoin pairs (USDC/USDT) have minimal IL due to low price divergence",
+          "High-volume pools generate more fees to offset IL",
+          "Concentrated liquidity (Uniswap v3) amplifies both fees AND IL",
+        ]}
+      />
     </Stack>
   );
 }

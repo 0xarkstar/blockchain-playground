@@ -12,6 +12,7 @@ import {
   Alert,
   Textarea,
   SimpleGrid,
+  Box,
 } from "@mantine/core";
 import {
   IconLink,
@@ -26,6 +27,125 @@ import {
   computeBlockHash,
   type Block,
 } from "../../lib/blockchain/block";
+import { DemoLayout } from "../shared/demo-layout";
+import { EducationPanel } from "../shared/education-panel";
+
+function ChainLinkArrow({ broken }: { broken: boolean }) {
+  return (
+    <Box
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        minWidth: 36,
+      }}
+    >
+      <svg width="36" height="24" viewBox="0 0 36 24">
+        {broken ? (
+          <>
+            <line
+              x1="0"
+              y1="12"
+              x2="10"
+              y2="12"
+              stroke="var(--mantine-color-red-5)"
+              strokeWidth="2"
+            />
+            <line
+              x1="26"
+              y1="12"
+              x2="36"
+              y2="12"
+              stroke="var(--mantine-color-red-5)"
+              strokeWidth="2"
+            />
+            <text
+              x="18"
+              y="16"
+              textAnchor="middle"
+              fill="var(--mantine-color-red-5)"
+              fontSize="14"
+              fontWeight="bold"
+            >
+              ✕
+            </text>
+          </>
+        ) : (
+          <>
+            <line
+              x1="0"
+              y1="12"
+              x2="26"
+              y2="12"
+              stroke="var(--mantine-color-green-5)"
+              strokeWidth="2"
+            />
+            <polygon
+              points="26,6 36,12 26,18"
+              fill="var(--mantine-color-green-5)"
+            />
+          </>
+        )}
+      </svg>
+    </Box>
+  );
+}
+
+function ChainVisualDiagram({
+  chain,
+  validation,
+}: {
+  chain: Block[];
+  validation: { hashValid: boolean; linkValid: boolean; valid: boolean }[];
+}) {
+  if (chain.length === 0) return null;
+
+  return (
+    <Paper p="md" withBorder data-testid="chain-visual-diagram">
+      <Text size="sm" fw={600} mb="sm">
+        Chain Structure
+      </Text>
+      <Group gap={0} wrap="nowrap" style={{ overflowX: "auto" }}>
+        {chain.map((block, i) => {
+          const v = validation[i];
+          const showBrokenLink = i > 0 && !v?.linkValid;
+
+          return (
+            <Group key={i} gap={0} wrap="nowrap">
+              {i > 0 && <ChainLinkArrow broken={showBrokenLink} />}
+              <Paper
+                p="xs"
+                withBorder
+                style={{
+                  minWidth: 100,
+                  borderColor: v?.valid
+                    ? "var(--mantine-color-green-5)"
+                    : "var(--mantine-color-red-5)",
+                  borderWidth: v?.valid ? 1 : 2,
+                  backgroundColor: v?.valid
+                    ? undefined
+                    : "var(--mantine-color-red-light)",
+                }}
+              >
+                <Badge
+                  size="xs"
+                  color={v?.valid ? "green" : "red"}
+                  mb={2}
+                  fullWidth
+                >
+                  #{block.index}
+                </Badge>
+                <Code style={{ fontSize: "0.5rem", display: "block" }}>
+                  {block.hash.slice(0, 10)}...
+                </Code>
+              </Paper>
+            </Group>
+          );
+        })}
+      </Group>
+    </Paper>
+  );
+}
 
 export function ChainIntegrityDemo() {
   const [chain, setChain] = useState<Block[]>([]);
@@ -94,8 +214,8 @@ export function ChainIntegrityDemo() {
 
   const chainValid = validation.every((v) => v.valid);
 
-  return (
-    <Stack gap="lg">
+  const inputPanel = (
+    <Stack gap="md">
       <Group>
         <Button
           leftSection={<IconLink size={16} />}
@@ -124,7 +244,7 @@ export function ChainIntegrityDemo() {
               : `Chain integrity broken${tamperedIndex !== null ? ` — Block #${tamperedIndex} was tampered. Subsequent blocks have invalid previous hash links.` : "."}`}
           </Alert>
 
-          <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }} spacing="md">
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
             {chain.map((block, i) => {
               const v = validation[i];
               return (
@@ -205,5 +325,57 @@ export function ChainIntegrityDemo() {
         </>
       )}
     </Stack>
+  );
+
+  const resultPanel = (
+    <Stack gap="md">
+      <ChainVisualDiagram chain={chain} validation={validation} />
+      {chain.length === 0 && (
+        <Paper p="md" withBorder>
+          <Text size="sm" c="dimmed" ta="center" py="xl">
+            Build a chain to see the visual integrity diagram
+          </Text>
+        </Paper>
+      )}
+    </Stack>
+  );
+
+  return (
+    <DemoLayout
+      inputPanel={inputPanel}
+      resultPanel={resultPanel}
+      learnContent={
+        <EducationPanel
+          howItWorks={[
+            {
+              title: "Build Chain",
+              description:
+                "Each block stores the hash of the previous block in its header, forming a linked chain.",
+            },
+            {
+              title: "Tamper Detection",
+              description:
+                "If block data is modified, its hash changes but the next block still references the old hash.",
+            },
+            {
+              title: "Cascade Effect",
+              description:
+                "A single tampered block breaks the chain link for all subsequent blocks.",
+            },
+            {
+              title: "Immutability Guarantee",
+              description:
+                "To alter history, an attacker must redo the proof-of-work for every block after the tampered one.",
+            },
+          ]}
+          whyItMatters="Chain integrity is what makes blockchains immutable. The cryptographic linking of blocks means any modification to past data is immediately detectable, providing a tamper-evident audit trail."
+          tips={[
+            "Try tampering with Block #1 and notice how blocks #2-#4 all show broken links",
+            "The chain break visual shows exactly where integrity is compromised",
+            "In a real blockchain, re-mining all subsequent blocks is computationally infeasible",
+          ]}
+        />
+      }
+    />
   );
 }

@@ -20,6 +20,7 @@ import {
   simulateWithReentrancyGuard,
   simulateChecksEffectsInteractions,
 } from "../../lib/solidity/security";
+import { EducationPanel } from "../../components/shared";
 
 type Defense = "vulnerable" | "guard" | "cei";
 
@@ -169,6 +170,58 @@ export function ReentrancyAttackDemo() {
         </Stack>
       </Paper>
 
+      {simulation.totalReentrancyDepth > 0 && (
+        <Paper p="md" withBorder>
+          <Stack gap="md">
+            <Text size="sm" fw={600}>
+              Re-Entry Depth Visualization
+            </Text>
+            <Stack gap={4}>
+              {Array.from(
+                { length: simulation.totalReentrancyDepth },
+                (_, i) => (
+                  <Paper
+                    key={i}
+                    p="xs"
+                    withBorder
+                    style={{
+                      marginLeft: i * 24,
+                      borderColor:
+                        i === simulation.totalReentrancyDepth - 1
+                          ? "var(--mantine-color-red-5)"
+                          : "var(--mantine-color-orange-3)",
+                    }}
+                    bg={
+                      i === simulation.totalReentrancyDepth - 1
+                        ? "red.0"
+                        : "orange.0"
+                    }
+                  >
+                    <Group gap="xs">
+                      <Badge
+                        size="xs"
+                        color={
+                          i === simulation.totalReentrancyDepth - 1
+                            ? "red"
+                            : "orange"
+                        }
+                      >
+                        Depth {i + 1}
+                      </Badge>
+                      <Text size="xs">
+                        {i === 0
+                          ? "Initial withdraw() call"
+                          : `Re-entrant withdraw() call #${i}`}
+                      </Text>
+                    </Group>
+                  </Paper>
+                ),
+              )}
+            </Stack>
+          </Stack>
+        </Paper>
+      )}
+
       {simulation.frames.length > 0 && (
         <Paper p="md" withBorder>
           <Stack gap="md">
@@ -255,6 +308,32 @@ export function ReentrancyAttackDemo() {
           </>
         )}
       </Alert>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "The Attack",
+            description:
+              "Attacker deposits, then calls withdraw(). The victim sends ETH, triggering the attacker's receive(). The attacker re-calls withdraw() before state updates.",
+          },
+          {
+            title: "ReentrancyGuard",
+            description:
+              "A boolean mutex (_locked) prevents re-entry. On function entry, lock is set. Any re-entrant call sees the lock and reverts.",
+          },
+          {
+            title: "CEI Pattern",
+            description:
+              "Checks-Effects-Interactions: validate conditions, update state, THEN interact with external contracts. Re-entry finds state already updated.",
+          },
+        ]}
+        whyItMatters="The DAO hack (2016, $60M) exploited reentrancy. It remains one of the most common smart contract vulnerabilities. Understanding it is essential for any Solidity developer."
+        tips={[
+          "Always use ReentrancyGuard or CEI pattern for functions that send ETH",
+          "Use transfer() or send() instead of call() to limit gas forwarded",
+          "Audit all external calls — any can trigger re-entry via fallback/receive",
+        ]}
+      />
     </Stack>
   );
 }

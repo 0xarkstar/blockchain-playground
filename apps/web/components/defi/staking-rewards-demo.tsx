@@ -16,6 +16,11 @@ import {
   calculateStakingRewards,
   calculatePoolShare,
 } from "../../lib/defi/yield";
+import {
+  SimpleAreaChart,
+  SimpleBarChart,
+  EducationPanel,
+} from "../../components/shared";
 
 const DURATION_PRESETS: Record<string, number> = {
   "1M": 1 / 12,
@@ -62,6 +67,33 @@ export function StakingRewardsDemo() {
 
     return { simpleRewards, poolShare, compounding, apr };
   }, [stakeAmount, totalStaked, rewardRate, duration]);
+
+  const rewardGrowthData = useMemo(() => {
+    const apr_d = rewardRate / 100;
+    const months = Math.max(Math.round(duration * 12), 1);
+    const points: Record<string, unknown>[] = [];
+    for (let m = 0; m <= months; m++) {
+      const t = m / 12;
+      const simple =
+        stakeAmount + calculateStakingRewards(stakeAmount, apr_d, t);
+      const daily = calculateCompoundedValue(stakeAmount, apr_d, 365, t);
+      points.push({
+        month: `M${m}`,
+        simple: Math.round(simple),
+        daily: Math.round(daily),
+      });
+    }
+    return points;
+  }, [stakeAmount, rewardRate, duration]);
+
+  const aprVsApyData = useMemo(() => {
+    const rates = [5, 10, 20, 50, 100];
+    return rates.map((r) => ({
+      rate: `${r}%`,
+      APR: r,
+      APY: Math.round(aprToApy(r / 100, 365) * 10000) / 100,
+    }));
+  }, []);
 
   return (
     <Stack gap="lg">
@@ -168,6 +200,69 @@ export function StakingRewardsDemo() {
           </Table>
         </Stack>
       </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Reward Growth Over Time
+          </Text>
+          <SimpleAreaChart
+            data={rewardGrowthData}
+            xKey="month"
+            yKeys={["simple", "daily"]}
+            colors={["#228be6", "#40c057"]}
+            height={250}
+          />
+          <Text size="xs" c="dimmed" ta="center">
+            Simple (blue) vs Daily compound (green) reward accumulation
+          </Text>
+        </Stack>
+      </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            APR vs APY (Daily Compounding)
+          </Text>
+          <SimpleBarChart
+            data={aprVsApyData}
+            xKey="rate"
+            yKeys={["APR", "APY"]}
+            grouped
+            height={220}
+          />
+          <Text size="xs" c="dimmed" ta="center">
+            Higher APR rates show larger gap between APR and APY due to
+            compounding
+          </Text>
+        </Stack>
+      </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "APR vs APY",
+            description:
+              "APR is the simple annual rate. APY includes compounding effects. Daily compounding of 100% APR gives ~171.5% APY.",
+          },
+          {
+            title: "Pool Share",
+            description:
+              "Your rewards are proportional to your share of the total staked amount. More stakers = lower individual rewards.",
+          },
+          {
+            title: "Compounding Frequency",
+            description:
+              "More frequent compounding (daily > monthly > yearly) yields higher returns due to earning interest on interest.",
+          },
+        ]}
+        whyItMatters="Staking is a core DeFi primitive for earning passive yield. Understanding APR vs APY prevents misunderstanding actual returns — a common source of confusion."
+        tips={[
+          "Auto-compounding vaults save gas by batching compound transactions",
+          "Very high APRs often come with high inflation or token emission",
+          "Compare APY (not APR) across protocols for fair comparison",
+        ]}
+      />
     </Stack>
   );
 }

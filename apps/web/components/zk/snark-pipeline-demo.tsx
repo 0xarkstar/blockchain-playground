@@ -16,6 +16,7 @@ import {
 } from "@mantine/core";
 import { IconInfoCircle, IconAlertTriangle } from "@tabler/icons-react";
 import { getFullPipeline, type FullPipelineResult } from "../../lib/zk/snark";
+import { ProgressPipeline, EducationPanel } from "../shared";
 
 export function SNARKPipelineDemo() {
   const [expression, setExpression] = useState("x * y");
@@ -84,6 +85,66 @@ export function SNARKPipelineDemo() {
           </Button>
         </Stack>
       </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            SNARK Pipeline
+          </Text>
+          <ProgressPipeline
+            steps={[
+              { id: "circuit", label: "Circuit" },
+              { id: "r1cs", label: "R1CS" },
+              { id: "qap", label: "QAP" },
+              { id: "setup", label: "Setup" },
+              { id: "prove", label: "Prove" },
+              { id: "verify", label: "Verify" },
+            ]}
+            currentStepIndex={result ? 6 : 0}
+          />
+        </Stack>
+      </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Parse Expression into Circuit",
+            description:
+              "The arithmetic expression is decomposed into addition and multiplication gates.",
+          },
+          {
+            title: "Circuit to R1CS",
+            description:
+              "Each gate becomes a Rank-1 Constraint: A*B = C using sparse vectors.",
+          },
+          {
+            title: "R1CS to QAP",
+            description:
+              "Constraint vectors are interpolated into polynomials via Lagrange interpolation.",
+          },
+          {
+            title: "Trusted Setup",
+            description:
+              "Generate CRS (common reference string) with toxic waste that must be destroyed.",
+          },
+          {
+            title: "Prove",
+            description:
+              "The prover evaluates polynomials at a secret point to create a succinct proof.",
+          },
+          {
+            title: "Verify",
+            description:
+              "The verifier checks the polynomial identity using bilinear pairings (simulated here).",
+          },
+        ]}
+        whyItMatters="SNARKs compress arbitrary computation into constant-size proofs that can be verified in milliseconds, enabling scalable and private blockchain computation."
+        tips={[
+          "The trusted setup is a one-time ceremony — if compromised, fake proofs can be generated",
+          "Real SNARKs use elliptic curve pairings; this demo simulates with modular arithmetic",
+          "Groth16 produces the smallest proofs (~200 bytes) among SNARK constructions",
+        ]}
+      />
 
       {result && (
         <>

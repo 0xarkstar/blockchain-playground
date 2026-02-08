@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["@mantine/core", "@mantine/hooks"],
   },
+  serverExternalPackages: ["snarkjs", "circomlibjs"],
   transpilePackages: [
     "@blockchain-playground/ui",
     "@blockchain-playground/utils",

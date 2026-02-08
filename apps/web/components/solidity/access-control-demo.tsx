@@ -27,6 +27,7 @@ import {
   PAUSER_ROLE,
   type AccessControlState,
 } from "../../lib/solidity/access-control";
+import { EducationPanel } from "../../components/shared";
 
 const ROLES = [DEFAULT_ADMIN_ROLE, MINTER_ROLE, PAUSER_ROLE];
 const ROLE_LABELS: Record<string, string> = {
@@ -103,6 +104,48 @@ export function AccessControlDemo() {
 
   return (
     <Stack gap="lg">
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Role Hierarchy
+          </Text>
+          <Paper p="md" withBorder bg="gray.0" style={{ textAlign: "center" }}>
+            <Stack gap="xs" align="center">
+              <Badge size="lg" color="red" variant="filled">
+                DEFAULT_ADMIN
+              </Badge>
+              <Text size="xs" c="dimmed">
+                can grant/revoke all roles
+              </Text>
+              <Group gap="xl" justify="center">
+                <Stack gap={4} align="center">
+                  <Text size="xs" c="dimmed">
+                    |
+                  </Text>
+                  <Badge size="md" color="violet" variant="filled">
+                    MINTER
+                  </Badge>
+                  <Text size="xs" c="dimmed">
+                    can mint tokens
+                  </Text>
+                </Stack>
+                <Stack gap={4} align="center">
+                  <Text size="xs" c="dimmed">
+                    |
+                  </Text>
+                  <Badge size="md" color="orange" variant="filled">
+                    PAUSER
+                  </Badge>
+                  <Text size="xs" c="dimmed">
+                    can pause contract
+                  </Text>
+                </Stack>
+              </Group>
+            </Stack>
+          </Paper>
+        </Stack>
+      </Paper>
+
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -256,6 +299,32 @@ export function AccessControlDemo() {
           </Stack>
         </Paper>
       )}
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Ownable",
+            description:
+              "Simple owner-based access control. One address has full admin rights. Good for simple contracts.",
+          },
+          {
+            title: "Role-Based (RBAC)",
+            description:
+              "Multiple roles with different permissions. OpenZeppelin AccessControl provides hasRole(), grantRole(), revokeRole().",
+          },
+          {
+            title: "Admin Role",
+            description:
+              "Each role has an admin role that can grant/revoke it. DEFAULT_ADMIN_ROLE is the admin for all roles by default.",
+          },
+        ]}
+        whyItMatters="Access control vulnerabilities are among the most costly in DeFi. Proper role management prevents unauthorized minting, pausing, or upgrading of contracts."
+        tips={[
+          "Use renounceRole (not revokeRole) to remove your own role — prevents accidental lockout",
+          "Consider using a multisig (like Safe) as the admin for production contracts",
+          "Always test that unauthorized callers are properly rejected",
+        ]}
+      />
     </Stack>
   );
 }

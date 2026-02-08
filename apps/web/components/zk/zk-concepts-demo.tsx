@@ -20,6 +20,7 @@ import {
   getZKProperties,
   type CaveSimulation,
 } from "../../lib/zk/proof-concepts";
+import { EducationPanel } from "../shared";
 
 export function ZKConceptsDemo() {
   const [numRounds, setNumRounds] = useState(5);
@@ -119,6 +120,121 @@ export function ZKConceptsDemo() {
           <Progress value={100 - soundness * 100} color="green" size="lg" />
         </Stack>
       </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            SNARK vs STARK Comparison
+          </Text>
+          <Table striped>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>Feature</Table.Th>
+                <Table.Th>SNARK</Table.Th>
+                <Table.Th>STARK</Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              <Table.Tr>
+                <Table.Td>Trusted Setup</Table.Td>
+                <Table.Td>
+                  <Badge color="red" variant="light" size="sm">
+                    Required
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  <Badge color="green" variant="light" size="sm">
+                    Not needed
+                  </Badge>
+                </Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Proof Size</Table.Td>
+                <Table.Td>
+                  <Badge color="green" variant="light" size="sm">
+                    ~200 bytes
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  <Badge color="red" variant="light" size="sm">
+                    ~50 KB
+                  </Badge>
+                </Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Verification Time</Table.Td>
+                <Table.Td>
+                  <Badge color="green" variant="light" size="sm">
+                    ~10ms
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  <Badge color="yellow" variant="light" size="sm">
+                    ~50ms
+                  </Badge>
+                </Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Quantum Resistant</Table.Td>
+                <Table.Td>
+                  <Badge color="red" variant="light" size="sm">
+                    No
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  <Badge color="green" variant="light" size="sm">
+                    Yes
+                  </Badge>
+                </Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Prover Time</Table.Td>
+                <Table.Td>
+                  <Badge color="yellow" variant="light" size="sm">
+                    Moderate
+                  </Badge>
+                </Table.Td>
+                <Table.Td>
+                  <Badge color="green" variant="light" size="sm">
+                    Fast
+                  </Badge>
+                </Table.Td>
+              </Table.Tr>
+              <Table.Tr>
+                <Table.Td>Used In</Table.Td>
+                <Table.Td>Zcash, zkSync, Tornado Cash</Table.Td>
+                <Table.Td>StarkNet, Cairo, dYdX</Table.Td>
+              </Table.Tr>
+            </Table.Tbody>
+          </Table>
+        </Stack>
+      </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Interactive Proof System",
+            description:
+              "A prover convinces a verifier of a statement through a series of rounds without revealing the secret.",
+          },
+          {
+            title: "Soundness via Repetition",
+            description:
+              "Each round halves the chance of cheating. After n rounds, cheating probability is (1/2)^n.",
+          },
+          {
+            title: "Non-Interactive Proofs",
+            description:
+              "Fiat-Shamir heuristic converts interactive proofs into non-interactive ones using hash functions.",
+          },
+        ]}
+        whyItMatters="Zero-knowledge proofs enable privacy-preserving verification on public blockchains. They power private transactions (Zcash), scalable computation (zkRollups), and anonymous credentials."
+        tips={[
+          "SNARKs offer small proofs but need trusted setup",
+          "STARKs are quantum-resistant with no trusted setup",
+          "More rounds = higher confidence = lower cheating probability",
+        ]}
+      />
 
       {simulation && (
         <Paper p="md" withBorder>

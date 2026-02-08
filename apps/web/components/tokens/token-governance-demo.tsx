@@ -28,6 +28,7 @@ import {
   finalizeProposal,
   type GovernanceState,
 } from "../../lib/tokens/governance";
+import { SimpleBarChart } from "../shared";
 
 export function TokenGovernanceDemo() {
   const [state, setState] = useState<GovernanceState>(() => {
@@ -325,6 +326,29 @@ export function TokenGovernanceDemo() {
                 </Paper>
               );
             })}
+          </Stack>
+        </Paper>
+      )}
+
+      {state.proposals.length > 0 && (
+        <Paper p="md" withBorder>
+          <Stack gap="md">
+            <Text size="sm" fw={600}>
+              Voting Results
+            </Text>
+            <SimpleBarChart
+              data={state.proposals.map((p) => ({
+                proposal: `#${p.id}`,
+                For: p.votesFor,
+                Against: p.votesAgainst,
+                Abstain: p.votesAbstain,
+              }))}
+              xKey="proposal"
+              yKeys={["For", "Against", "Abstain"]}
+              colors={["#40c057", "#fa5252", "#868e96"]}
+              grouped
+              height={250}
+            />
           </Stack>
         </Paper>
       )}

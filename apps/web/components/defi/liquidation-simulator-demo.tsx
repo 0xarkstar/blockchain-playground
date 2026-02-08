@@ -18,6 +18,7 @@ import {
   calculateHealthFactor,
   calculateLiquidationPrice,
 } from "../../lib/defi/lending";
+import { EducationPanel } from "../../components/shared";
 
 export function LiquidationSimulatorDemo() {
   const [initialPrice, setInitialPrice] = useState<number>(2000);
@@ -50,6 +51,9 @@ export function LiquidationSimulatorDemo() {
     const priceDropToLiquidation =
       initialPrice > 0 ? ((initialPrice - liqPrice) / initialPrice) * 100 : 0;
 
+    const collateralRatio =
+      debtAmount > 0 ? (collateralValue / debtAmount) * 100 : Infinity;
+
     return {
       collateralValue,
       healthFactor,
@@ -57,6 +61,7 @@ export function LiquidationSimulatorDemo() {
       liquidatable,
       bonusValue,
       priceDropToLiquidation,
+      collateralRatio,
     };
   }, [
     collateralAmount,
@@ -161,6 +166,49 @@ export function LiquidationSimulatorDemo() {
 
       <Paper p="md" withBorder>
         <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Collateral Ratio Gauge
+          </Text>
+          <Progress.Root size={32}>
+            {isFinite(result.collateralRatio) ? (
+              <Progress.Section
+                value={Math.min(result.collateralRatio / 2, 100)}
+                color={
+                  result.collateralRatio >= 150
+                    ? "green"
+                    : result.collateralRatio >= 125
+                      ? "yellow"
+                      : "red"
+                }
+              >
+                <Progress.Label>
+                  {isFinite(result.collateralRatio)
+                    ? `${result.collateralRatio.toFixed(0)}%`
+                    : "N/A"}
+                </Progress.Label>
+              </Progress.Section>
+            ) : (
+              <Progress.Section value={100} color="green">
+                <Progress.Label>No Debt</Progress.Label>
+              </Progress.Section>
+            )}
+          </Progress.Root>
+          <Group gap="xl" justify="center">
+            <Badge color="red" variant="light" size="sm">
+              &lt;125% Danger
+            </Badge>
+            <Badge color="yellow" variant="light" size="sm">
+              125-150% Warning
+            </Badge>
+            <Badge color="green" variant="light" size="sm">
+              &gt;150% Safe
+            </Badge>
+          </Group>
+        </Stack>
+      </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
           <Group justify="space-between">
             <Text size="sm" fw={600}>
               Position Status
@@ -252,6 +300,32 @@ export function LiquidationSimulatorDemo() {
           )}
         </Stack>
       </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Price Drop Simulation",
+            description:
+              "As collateral price drops, health factor decreases. When HF < 1, the position becomes liquidatable.",
+          },
+          {
+            title: "Liquidation Process",
+            description:
+              "A liquidator repays part of the debt and receives collateral at a discount (liquidation bonus), typically 5-15%.",
+          },
+          {
+            title: "Collateral Ratio",
+            description:
+              "The ratio of collateral value to debt. Below ~125% is dangerous territory. Most protocols require >150% for safety.",
+          },
+        ]}
+        whyItMatters="Liquidations protect lending protocols from bad debt. Understanding liquidation mechanics helps you manage positions safely and avoid losing the liquidation bonus penalty."
+        tips={[
+          "Set price alerts for your collateral assets near the liquidation price",
+          "Use stablecoins as collateral to reduce liquidation risk from price volatility",
+          "Some protocols offer self-liquidation to avoid the bonus penalty",
+        ]}
+      />
     </Stack>
   );
 }

@@ -24,6 +24,7 @@ import {
   type ProxyType,
   type ProxyState,
 } from "../../lib/solidity/proxy";
+import { EducationPanel } from "../../components/shared";
 
 const PROXY_TYPES: { value: ProxyType; label: string }[] = [
   { value: "transparent", label: "Transparent" },
@@ -64,6 +65,81 @@ export function ProxyPatternsDemo() {
 
   return (
     <Stack gap="lg">
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Proxy Architecture
+          </Text>
+          <Paper p="md" withBorder bg="gray.0">
+            <Group gap="md" justify="center" align="flex-start">
+              <Paper
+                p="sm"
+                withBorder
+                bg="blue.1"
+                style={{ minWidth: 120, textAlign: "center" }}
+              >
+                <Text size="xs" fw={700}>
+                  Proxy Contract
+                </Text>
+                <Text size="xs" c="dimmed">
+                  Stores state
+                </Text>
+                <Text size="xs" c="dimmed">
+                  Fixed address
+                </Text>
+                <Badge size="xs" variant="light" color="blue" mt={4}>
+                  {proxyType}
+                </Badge>
+              </Paper>
+              <Stack
+                gap={2}
+                align="center"
+                justify="center"
+                style={{ paddingTop: 20 }}
+              >
+                <Text size="xs" fw={600}>
+                  DELEGATECALL
+                </Text>
+                <Text size="xs" c="dimmed">
+                  ----&gt;
+                </Text>
+              </Stack>
+              <Paper
+                p="sm"
+                withBorder
+                bg="green.1"
+                style={{ minWidth: 120, textAlign: "center" }}
+              >
+                <Text size="xs" fw={700}>
+                  Implementation
+                </Text>
+                <Text size="xs" c="dimmed">
+                  Contains logic
+                </Text>
+                <Text size="xs" c="dimmed">
+                  Replaceable
+                </Text>
+                <Badge size="xs" variant="light" color="green" mt={4}>
+                  {state.implementation}
+                </Badge>
+              </Paper>
+            </Group>
+            <Paper
+              p="xs"
+              mt="sm"
+              withBorder
+              bg="yellow.0"
+              style={{ textAlign: "center" }}
+            >
+              <Text size="xs" c="dimmed">
+                Storage lives in Proxy, not Implementation. Upgrades only change
+                the logic pointer.
+              </Text>
+            </Paper>
+          </Paper>
+        </Stack>
+      </Paper>
+
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -273,6 +349,33 @@ export function ProxyPatternsDemo() {
           </Table>
         </Stack>
       </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Transparent Proxy",
+            description:
+              "Admin calls go to proxy (upgrade logic). User calls are delegated to implementation. Admin cannot call implementation functions.",
+          },
+          {
+            title: "UUPS Proxy",
+            description:
+              "Upgrade logic lives in the implementation contract itself. Cheaper to deploy but requires implementation to include upgrade function.",
+          },
+          {
+            title: "Diamond (EIP-2535)",
+            description:
+              "Multiple implementation contracts (facets). Enables modular upgrades — change one facet without affecting others.",
+          },
+        ]}
+        whyItMatters="Smart contracts are immutable by default. Proxy patterns enable upgradeable contracts, allowing teams to fix bugs and add features while preserving state and contract address."
+        tips={[
+          "EIP-1967 standardizes storage slots to prevent proxy-implementation collisions",
+          "Always use initializers (not constructors) in implementation contracts",
+          "Test upgrades thoroughly — storage layout changes can corrupt state",
+          "Consider using OpenZeppelin Upgrades plugins for safe deployments",
+        ]}
+      />
     </Stack>
   );
 }

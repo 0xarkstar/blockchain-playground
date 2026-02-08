@@ -28,6 +28,7 @@ import {
   type Instruction,
   type EvmState,
 } from "../../lib/solidity/evm";
+import { SimpleBarChart, EducationPanel } from "../../components/shared";
 
 interface InstructionWithId extends Instruction {
   readonly id: number;
@@ -92,6 +93,20 @@ export function AssemblyPlaygroundDemo() {
     () => executeProgram(instructions),
     [instructions],
   );
+
+  const stackHeightData = useMemo(() => {
+    const data: Record<string, unknown>[] = [{ step: "Init", height: 0 }];
+    let tempState = createInitialEvmState();
+    for (let i = 0; i < instructions.length; i++) {
+      if (tempState.halted) break;
+      tempState = executeInstruction(tempState, instructions[i]!);
+      data.push({
+        step: `${i}: ${instructions[i]!.opcode}`,
+        height: tempState.stack.length,
+      });
+    }
+    return data;
+  }, [instructions]);
 
   const addInstruction = () => {
     const instr: InstructionWithId = needsOperand(newOpcode)
@@ -366,6 +381,53 @@ export function AssemblyPlaygroundDemo() {
           </Stack>
         </Paper>
       </Group>
+
+      {stackHeightData.length > 1 && (
+        <Paper p="md" withBorder>
+          <Stack gap="md">
+            <Text size="sm" fw={600}>
+              Stack Height After Each Operation
+            </Text>
+            <SimpleBarChart
+              data={stackHeightData}
+              xKey="step"
+              yKeys={["height"]}
+              colors={["#7950f2"]}
+              height={200}
+            />
+            <Text size="xs" c="dimmed" ta="center">
+              PUSH increases stack height, operations like ADD/MUL consume and
+              produce values
+            </Text>
+          </Stack>
+        </Paper>
+      )}
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "EVM Stack Machine",
+            description:
+              "The EVM is a stack-based machine. Operations pop inputs from the stack and push results. Max depth: 1024.",
+          },
+          {
+            title: "PUSH/POP",
+            description:
+              "PUSH1-PUSH32 place constants on the stack. POP removes the top element. DUP and SWAP manipulate stack positions.",
+          },
+          {
+            title: "Storage vs Memory",
+            description:
+              "SLOAD/SSTORE access persistent storage (expensive). MLOAD/MSTORE access temporary memory (cheap). Stack is cheapest.",
+          },
+        ]}
+        whyItMatters="Understanding EVM assembly helps optimize gas costs and debug low-level contract behavior. Solidity compiles to these opcodes — knowing them reveals what's actually happening on-chain."
+        tips={[
+          "Each opcode has a fixed gas cost — see the reference table below",
+          "Stack depth errors (>16 local vars) are a common Solidity compilation issue",
+          "Use Yul (inline assembly) for gas-critical optimizations in Solidity",
+        ]}
+      />
     </Stack>
   );
 }

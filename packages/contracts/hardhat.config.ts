@@ -11,6 +11,10 @@ const config: HardhatUserConfig = {
       },
     },
   },
+  paths: {
+    sources: "./src",
+    tests: "./test",
+  },
   networks: {
     baseSepolia: {
       url: process.env.BASE_SEPOLIA_RPC_URL ?? "https://sepolia.base.org",

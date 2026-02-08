@@ -19,6 +19,7 @@ import {
   compareMappingVsArray,
   getGasConstantsTable,
 } from "../../lib/solidity/gas";
+import { SimpleBarChart, EducationPanel } from "../../components/shared";
 
 const CATEGORIES = [
   { value: "storage-memory", label: "Storage vs Memory" },
@@ -91,6 +92,20 @@ export function GasOptimizerDemo() {
           <Text size="sm" fw={600}>
             Gas Comparison
           </Text>
+          <SimpleBarChart
+            data={[
+              {
+                label: "Gas Used",
+                unoptimized: comparison.unoptimized.totalGas,
+                optimized: comparison.optimized.totalGas,
+              },
+            ]}
+            xKey="label"
+            yKeys={["unoptimized", "optimized"]}
+            colors={["#fa5252", "#40c057"]}
+            grouped
+            height={200}
+          />
           <Group grow>
             <Paper p="sm" withBorder>
               <Stack gap="xs" align="center">
@@ -238,6 +253,33 @@ export function GasOptimizerDemo() {
           </Table>
         </Stack>
       </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Storage vs Memory",
+            description:
+              "SSTORE costs 20,000 gas vs MSTORE at 3 gas. Cache storage reads in memory variables for repeated access.",
+          },
+          {
+            title: "Struct Packing",
+            description:
+              "Pack multiple small values into a single storage slot. Reading one slot is cheaper than reading multiple.",
+          },
+          {
+            title: "Call Types",
+            description:
+              "CALL (2,600 base gas) vs STATICCALL (cheaper, read-only) vs DELEGATECALL (used by proxies, same gas as CALL).",
+          },
+        ]}
+        whyItMatters="Gas optimization directly reduces user costs. A 50% gas reduction means 50% cheaper transactions. On Ethereum L1, this can save hundreds of dollars per complex transaction."
+        tips={[
+          "Use view/pure functions — they're free when called off-chain",
+          "Prefer mappings over arrays for key-value lookups",
+          "Use events instead of storage for data only needed off-chain",
+          "Short-circuit conditions: put cheap checks before expensive ones",
+        ]}
+      />
     </Stack>
   );
 }

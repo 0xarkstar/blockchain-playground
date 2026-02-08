@@ -135,6 +135,141 @@ export function ArithmeticCircuitsDemo() {
         </Paper>
       )}
 
+      {gates.length > 0 && (
+        <Paper p="md" withBorder>
+          <Stack gap="md">
+            <Text size="sm" fw={600}>
+              Circuit Diagram
+            </Text>
+            <svg
+              width="100%"
+              height={Math.max(120, gates.length * 80 + 40)}
+              viewBox={`0 0 420 ${Math.max(120, gates.length * 80 + 40)}`}
+            >
+              {gates.map((g, i) => {
+                const y = 30 + i * 80;
+                const isMul = g.op === "mul";
+                return (
+                  <g key={i}>
+                    <rect
+                      x={30}
+                      y={y}
+                      width={80}
+                      height={30}
+                      rx={4}
+                      fill="var(--mantine-color-blue-light)"
+                      stroke="var(--mantine-color-blue-5)"
+                      strokeWidth={1}
+                    />
+                    <text
+                      x={70}
+                      y={y + 19}
+                      textAnchor="middle"
+                      fontSize={11}
+                      fill="var(--mantine-color-blue-9)"
+                    >
+                      {g.left}
+                    </text>
+                    <line
+                      x1={110}
+                      y1={y + 15}
+                      x2={160}
+                      y2={y + 15}
+                      stroke="var(--mantine-color-gray-5)"
+                      strokeWidth={1.5}
+                    />
+                    <rect
+                      x={130}
+                      y={y}
+                      width={80}
+                      height={30}
+                      rx={4}
+                      fill="var(--mantine-color-violet-light)"
+                      stroke="var(--mantine-color-violet-5)"
+                      strokeWidth={1}
+                    />
+                    <text
+                      x={170}
+                      y={y + 19}
+                      textAnchor="middle"
+                      fontSize={11}
+                      fill="var(--mantine-color-violet-9)"
+                    >
+                      {g.right}
+                    </text>
+                    <line
+                      x1={210}
+                      y1={y + 15}
+                      x2={240}
+                      y2={y + 15}
+                      stroke="var(--mantine-color-gray-5)"
+                      strokeWidth={1.5}
+                    />
+                    <circle
+                      cx={260}
+                      cy={y + 15}
+                      r={18}
+                      fill={
+                        isMul
+                          ? "var(--mantine-color-orange-light)"
+                          : "var(--mantine-color-teal-light)"
+                      }
+                      stroke={
+                        isMul
+                          ? "var(--mantine-color-orange-6)"
+                          : "var(--mantine-color-teal-6)"
+                      }
+                      strokeWidth={1.5}
+                    />
+                    <text
+                      x={260}
+                      y={y + 20}
+                      textAnchor="middle"
+                      fontSize={16}
+                      fontWeight={700}
+                      fill={
+                        isMul
+                          ? "var(--mantine-color-orange-9)"
+                          : "var(--mantine-color-teal-9)"
+                      }
+                    >
+                      {isMul ? "\u00d7" : "+"}
+                    </text>
+                    <line
+                      x1={278}
+                      y1={y + 15}
+                      x2={310}
+                      y2={y + 15}
+                      stroke="var(--mantine-color-gray-5)"
+                      strokeWidth={1.5}
+                    />
+                    <rect
+                      x={310}
+                      y={y}
+                      width={80}
+                      height={30}
+                      rx={4}
+                      fill="var(--mantine-color-green-light)"
+                      stroke="var(--mantine-color-green-5)"
+                      strokeWidth={1}
+                    />
+                    <text
+                      x={350}
+                      y={y + 19}
+                      textAnchor="middle"
+                      fontSize={11}
+                      fill="var(--mantine-color-green-9)"
+                    >
+                      {g.output}
+                    </text>
+                  </g>
+                );
+              })}
+            </svg>
+          </Stack>
+        </Paper>
+      )}
+
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>

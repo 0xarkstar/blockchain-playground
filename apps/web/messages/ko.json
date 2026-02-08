@@ -54,6 +54,12 @@
       "description": "영지식 증명, 회로, 온체인 검증, 프라이버시 프로토콜",
       "demos": "11개 인터랙티브 데모",
       "modules": "11개 인터랙티브 데모"
+    },
+    "appliedZk": {
+      "title": "응용 ZK",
+      "description": "snarkjs, Circom 회로, 온체인 검증을 통한 실제 영지식 증명",
+      "demos": "4개 인터랙티브 데모",
+      "modules": "4개 교육 모듈"
     }
   },
   "fundamentals": {
@@ -321,12 +327,38 @@
       }
     }
   },
+  "appliedZk": {
+    "pageTitle": "응용 영지식 증명",
+    "pageDescription": "snarkjs를 사용하여 브라우저에서 실제 영지식 증명을 생성하고 Groth16 검증자로 온체인 검증합니다",
+    "beginner": "초급",
+    "intermediate": "중급",
+    "advanced": "고급",
+    "demos": {
+      "hashPreimage": {
+        "title": "해시 프리이미지 증명",
+        "description": "비밀을 공개하지 않고 특정 값으로 해시되는 비밀을 알고 있음을 증명합니다"
+      },
+      "ageVerification": {
+        "title": "나이 인증",
+        "description": "정확한 생년월일을 공개하지 않고 나이가 기준을 충족함을 증명합니다"
+      },
+      "secretVoting": {
+        "title": "비밀 투표",
+        "description": "ZK 증명과 머클 트리 멤버십으로 검증된 익명 투표를 합니다"
+      },
+      "privateAirdrop": {
+        "title": "프라이빗 에어드롭",
+        "description": "머클 트리 포함 증명을 사용하여 비공개로 토큰 에어드롭을 청구합니다"
+      }
+    }
+  },
   "nav": {
     "home": "홈",
     "fundamentals": "기초",
     "defi": "디파이",
     "solidity": "솔리디티",
     "tokens": "토큰",
-    "zk": "ZK 증명"
+    "zk": "ZK 증명",
+    "appliedZk": "응용 ZK"
   }
 }

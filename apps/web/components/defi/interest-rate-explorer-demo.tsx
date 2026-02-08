@@ -14,6 +14,7 @@ import {
   calculateBorrowRate,
   calculateSupplyRate,
 } from "../../lib/defi/lending";
+import { SimpleLineChart, EducationPanel } from "../../components/shared";
 
 export function InterestRateExplorerDemo() {
   const [utilization, setUtilization] = useState<number>(50);
@@ -157,39 +158,49 @@ export function InterestRateExplorerDemo() {
           <Text size="sm" fw={600}>
             Rate Curve
           </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Utilization</Table.Th>
-                <Table.Th ta="right">Borrow Rate</Table.Th>
-                <Table.Th ta="right">Supply Rate</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {rateTable.map((row) => (
-                <Table.Tr
-                  key={row.utilization}
-                  style={{
-                    fontWeight: row.utilization === utilization ? 700 : 400,
-                    backgroundColor:
-                      row.utilization === utilization
-                        ? "var(--mantine-color-blue-light)"
-                        : undefined,
-                  }}
-                >
-                  <Table.Td>{row.utilization}%</Table.Td>
-                  <Table.Td ta="right" c="red">
-                    {row.borrowRate.toFixed(2)}%
-                  </Table.Td>
-                  <Table.Td ta="right" c="green">
-                    {row.supplyRate.toFixed(2)}%
-                  </Table.Td>
-                </Table.Tr>
-              ))}
-            </Table.Tbody>
-          </Table>
+          <SimpleLineChart
+            data={rateTable.map((r) => ({
+              utilization: `${r.utilization}%`,
+              borrowRate: Math.round(r.borrowRate * 100) / 100,
+              supplyRate: Math.round(r.supplyRate * 100) / 100,
+            }))}
+            xKey="utilization"
+            yKeys={["borrowRate", "supplyRate"]}
+            colors={["#fa5252", "#40c057"]}
+            height={280}
+          />
+          <Text size="xs" c="dimmed" ta="center">
+            Notice the kink at {kink}% utilization where borrow rates spike
+            sharply.
+          </Text>
         </Stack>
       </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Kinked Rate Model",
+            description:
+              "Below the kink, rates increase gradually (slope1). Above the kink, rates spike (slope2) to incentivize repayment.",
+          },
+          {
+            title: "Supply Rate",
+            description:
+              "supplyRate = borrowRate * utilization * (1 - reserveFactor). Suppliers earn from borrower interest.",
+          },
+          {
+            title: "Reserve Factor",
+            description:
+              "A portion of interest goes to the protocol treasury. Higher reserve factor means lower supplier APY.",
+          },
+        ]}
+        whyItMatters="Interest rate models balance supply and demand for capital. The kink mechanism prevents full utilization (which would block withdrawals) by making borrowing very expensive above the target."
+        tips={[
+          "Borrowers should watch utilization — rates spike above the kink point",
+          "Suppliers benefit from higher utilization (more fees) but face withdrawal risk",
+          "Different assets have different kink parameters based on risk profile",
+        ]}
+      />
     </Stack>
   );
 }

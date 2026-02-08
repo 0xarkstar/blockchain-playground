@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Stack,
   Text,
@@ -13,6 +13,10 @@ import {
   Alert,
 } from "@mantine/core";
 import { IconFlame, IconInfoCircle } from "@tabler/icons-react";
+import { DemoLayout } from "../shared/demo-layout";
+import { EducationPanel } from "../shared/education-panel";
+import { SimpleBarChart } from "../shared/charts";
+import { OnChainSection } from "../shared/on-chain-section";
 
 interface GasOperation {
   name: string;
@@ -113,9 +117,18 @@ export function GasEstimatorDemo() {
     return { ethCost, usdCost };
   };
 
-  return (
-    <Stack gap="lg">
-      <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
+  const chartData = useMemo(
+    () =>
+      GAS_OPERATIONS.filter((op) => op.gasUsed >= 1000).map((op) => ({
+        name: op.name,
+        gas: op.gasUsed,
+      })),
+    [],
+  );
+
+  const inputPanel = (
+    <Stack gap="md">
+      <SimpleGrid cols={{ base: 1 }} spacing="md">
         <NumberInput
           label="Gas Price (Gwei)"
           value={gasPrice}
@@ -192,9 +205,115 @@ export function GasEstimatorDemo() {
 
       <Alert icon={<IconInfoCircle size={16} />} color="gray" variant="light">
         Gas costs are approximate estimates. Actual costs depend on network
-        conditions, contract complexity, and EVM state. The EVM charges gas for
-        every operation to prevent abuse and compensate validators.
+        conditions, contract complexity, and EVM state.
       </Alert>
     </Stack>
+  );
+
+  const resultPanel = (
+    <Stack gap="md">
+      <Paper p="md" withBorder data-testid="gas-comparison-chart">
+        <Text size="sm" fw={600} mb="sm">
+          Gas Cost Comparison
+        </Text>
+        <SimpleBarChart
+          data={chartData}
+          xKey="name"
+          yKeys={["gas"]}
+          height={300}
+          grouped
+        />
+        <Text size="xs" c="dimmed" mt="xs">
+          Comparing gas costs across operations (1,000+ gas only). Contract
+          deployment is the most expensive.
+        </Text>
+      </Paper>
+    </Stack>
+  );
+
+  return (
+    <DemoLayout
+      inputPanel={inputPanel}
+      resultPanel={resultPanel}
+      learnContent={
+        <EducationPanel
+          howItWorks={[
+            {
+              title: "Gas Units",
+              description:
+                "Every EVM operation has a fixed gas cost. Simple operations cost few gas units; storage writes are expensive.",
+            },
+            {
+              title: "Gas Price",
+              description:
+                "Users bid a gas price (in Gwei) they are willing to pay per unit. Higher prices = faster inclusion.",
+            },
+            {
+              title: "Total Cost",
+              description:
+                "Total cost = gas used x gas price. This is paid in ETH from the sender's account.",
+              details: [
+                "1 Gwei = 0.000000001 ETH",
+                "Gas limit caps the maximum gas a tx can consume",
+              ],
+            },
+          ]}
+          whyItMatters="Gas is the EVM's resource metering system. It prevents infinite loops, compensates validators, and creates a fee market. Understanding gas costs is essential for writing efficient smart contracts and estimating transaction fees."
+          tips={[
+            "Storage operations (SSTORE) are among the most expensive — minimize on-chain storage",
+            "A simple ETH transfer always costs exactly 21,000 gas",
+            "L2 chains like Base offer significantly lower gas costs than Ethereum mainnet",
+          ]}
+        />
+      }
+      onChainContent={
+        <OnChainSection
+          contractName="GasTestContract"
+          contractDescription="A companion contract with various operations (storage read/write, hashing, loops, events) designed for measuring real gas costs on-chain. Deploy it and call each function to compare actual gas usage against the estimates shown in the demo."
+          network="Base Sepolia"
+          functions={[
+            {
+              name: "storageWrite",
+              signature:
+                "function storageWrite(uint256 key, uint256 value) external",
+              description:
+                "Write a value to a storage mapping slot (SSTORE operation).",
+            },
+            {
+              name: "storageRead",
+              signature:
+                "function storageRead(uint256 key) external view returns (uint256)",
+              description:
+                "Read a value from a storage mapping slot (SLOAD operation).",
+            },
+            {
+              name: "arrayPush",
+              signature: "function arrayPush(uint256 value) external",
+              description: "Push a value to a dynamic storage array.",
+            },
+            {
+              name: "hashData",
+              signature:
+                "function hashData(bytes calldata data) external pure returns (bytes32)",
+              description: "Compute keccak256 hash of input data.",
+            },
+            {
+              name: "computeLoop",
+              signature:
+                "function computeLoop(uint256 iterations) external pure returns (uint256)",
+              description:
+                "Execute a computation loop to measure gas scaling with iteration count.",
+            },
+            {
+              name: "storeWithEvent",
+              signature:
+                "function storeWithEvent(uint256 key, uint256 value) external",
+              description:
+                "Write to storage and emit a DataStored event, measuring combined gas cost.",
+            },
+          ]}
+        />
+      }
+    />
   );
 }

@@ -114,6 +114,175 @@ export function ZKSetMembershipDemo() {
           <Paper p="md" withBorder>
             <Stack gap="md">
               <Text size="sm" fw={600}>
+                Merkle Tree Diagram
+              </Text>
+              <svg width="100%" height={180} viewBox="0 0 500 180">
+                <rect
+                  x={200}
+                  y={10}
+                  width={100}
+                  height={32}
+                  rx={6}
+                  fill="var(--mantine-color-green-light)"
+                  stroke="var(--mantine-color-green-6)"
+                  strokeWidth={2}
+                />
+                <text
+                  x={250}
+                  y={30}
+                  textAnchor="middle"
+                  fontSize={10}
+                  fill="var(--mantine-color-green-9)"
+                >
+                  Root
+                </text>
+
+                <line
+                  x1={250}
+                  y1={42}
+                  x2={130}
+                  y2={65}
+                  stroke="var(--mantine-color-gray-5)"
+                  strokeWidth={1.5}
+                />
+                <line
+                  x1={250}
+                  y1={42}
+                  x2={370}
+                  y2={65}
+                  stroke="var(--mantine-color-gray-5)"
+                  strokeWidth={1.5}
+                />
+
+                <rect
+                  x={80}
+                  y={65}
+                  width={100}
+                  height={32}
+                  rx={6}
+                  fill="var(--mantine-color-blue-light)"
+                  stroke="var(--mantine-color-blue-5)"
+                  strokeWidth={1.5}
+                />
+                <text
+                  x={130}
+                  y={85}
+                  textAnchor="middle"
+                  fontSize={10}
+                  fill="var(--mantine-color-blue-8)"
+                >
+                  H(L0+L1)
+                </text>
+                <rect
+                  x={320}
+                  y={65}
+                  width={100}
+                  height={32}
+                  rx={6}
+                  fill="var(--mantine-color-blue-light)"
+                  stroke="var(--mantine-color-blue-5)"
+                  strokeWidth={1.5}
+                />
+                <text
+                  x={370}
+                  y={85}
+                  textAnchor="middle"
+                  fontSize={10}
+                  fill="var(--mantine-color-blue-8)"
+                >
+                  H(L2+L3)
+                </text>
+
+                <line
+                  x1={130}
+                  y1={97}
+                  x2={65}
+                  y2={120}
+                  stroke="var(--mantine-color-gray-4)"
+                  strokeWidth={1}
+                />
+                <line
+                  x1={130}
+                  y1={97}
+                  x2={195}
+                  y2={120}
+                  stroke="var(--mantine-color-gray-4)"
+                  strokeWidth={1}
+                />
+                <line
+                  x1={370}
+                  y1={97}
+                  x2={305}
+                  y2={120}
+                  stroke="var(--mantine-color-gray-4)"
+                  strokeWidth={1}
+                />
+                <line
+                  x1={370}
+                  y1={97}
+                  x2={435}
+                  y2={120}
+                  stroke="var(--mantine-color-gray-4)"
+                  strokeWidth={1}
+                />
+
+                {members.map((m, i) => {
+                  const x = 15 + i * 130;
+                  const isSelected = proof && String(i) === selectedMember;
+                  return (
+                    <g key={i}>
+                      <rect
+                        x={x}
+                        y={120}
+                        width={100}
+                        height={32}
+                        rx={6}
+                        fill={
+                          isSelected
+                            ? "var(--mantine-color-violet-light)"
+                            : "var(--mantine-color-gray-light)"
+                        }
+                        stroke={
+                          isSelected
+                            ? "var(--mantine-color-violet-6)"
+                            : "var(--mantine-color-gray-4)"
+                        }
+                        strokeWidth={isSelected ? 2 : 1}
+                      />
+                      <text
+                        x={x + 50}
+                        y={140}
+                        textAnchor="middle"
+                        fontSize={11}
+                        fill={
+                          isSelected
+                            ? "var(--mantine-color-violet-9)"
+                            : "var(--mantine-color-gray-8)"
+                        }
+                      >
+                        {m}
+                      </text>
+                      {isSelected && (
+                        <text
+                          x={x + 50}
+                          y={165}
+                          textAnchor="middle"
+                          fontSize={9}
+                          fill="var(--mantine-color-violet-6)"
+                        >
+                          (proving)
+                        </text>
+                      )}
+                    </g>
+                  );
+                })}
+              </svg>
+            </Stack>
+          </Paper>
+
+          <Paper p="md" withBorder>
+            <Stack gap="md">
+              <Text size="sm" fw={600}>
                 Prove Membership
               </Text>
               <Select

@@ -22,6 +22,7 @@ import {
   type RollupState,
   type BatchResult,
 } from "../../lib/zk/rollup";
+import { SimpleBarChart } from "../shared";
 
 const INITIAL_ACCOUNTS = [
   { address: "alice", balance: 1000n },
@@ -261,6 +262,66 @@ export function ZKRollupDemo() {
               </Table.Tr>
             </Table.Tbody>
           </Table>
+
+          <SimpleBarChart
+            data={[
+              { type: "L1 Individual", gas: compression.l1TotalGas },
+              { type: "L2 Rollup", gas: compression.l2TotalGas },
+            ]}
+            xKey="type"
+            yKeys={["gas"]}
+            colors={["#fa5252", "#40c057"]}
+            height={200}
+          />
+        </Stack>
+      </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Batch Processing Flow
+          </Text>
+          <svg width="100%" height={80} viewBox="0 0 520 80">
+            {[
+              { label: "Transactions", x: 10, color: "blue" },
+              { label: "Batch", x: 140, color: "violet" },
+              { label: "ZK Proof", x: 270, color: "orange" },
+              { label: "L1 Submit", x: 400, color: "green" },
+            ].map((step, i) => (
+              <g key={step.label}>
+                <rect
+                  x={step.x}
+                  y={20}
+                  width={100}
+                  height={40}
+                  rx={8}
+                  fill={`var(--mantine-color-${step.color}-light)`}
+                  stroke={`var(--mantine-color-${step.color}-6)`}
+                  strokeWidth={1.5}
+                />
+                <text
+                  x={step.x + 50}
+                  y={45}
+                  textAnchor="middle"
+                  fontSize={11}
+                  fill={`var(--mantine-color-${step.color}-9)`}
+                >
+                  {step.label}
+                </text>
+                {i < 3 && (
+                  <text
+                    x={step.x + 120}
+                    y={45}
+                    textAnchor="middle"
+                    fontSize={16}
+                    fill="var(--mantine-color-dimmed)"
+                  >
+                    {"\u2192"}
+                  </text>
+                )}
+              </g>
+            ))}
+          </svg>
         </Stack>
       </Paper>
     </Stack>

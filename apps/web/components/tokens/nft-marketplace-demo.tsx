@@ -24,6 +24,7 @@ import {
   getActiveListings,
   type MarketplaceState,
 } from "../../lib/tokens/marketplace";
+import { SimpleLineChart } from "../shared";
 
 export function NFTMarketplaceDemo() {
   const [state, setState] = useState<MarketplaceState>(() =>
@@ -289,6 +290,18 @@ export function NFTMarketplaceDemo() {
                 ))}
               </Table.Tbody>
             </Table>
+
+            {state.sales.length > 1 && (
+              <SimpleLineChart
+                data={state.sales.map((s, i) => ({
+                  trade: `Trade ${i + 1}`,
+                  price: Number(s.price.toFixed(4)),
+                }))}
+                xKey="trade"
+                yKeys={["price"]}
+                height={220}
+              />
+            )}
           </Stack>
         </Paper>
       )}

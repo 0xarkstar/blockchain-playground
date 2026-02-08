@@ -19,10 +19,31 @@ import {
   encodeValue,
   getAllSolidityTypes,
 } from "../../lib/solidity/types";
+import { SimpleBarChart, EducationPanel } from "../../components/shared";
 
 export function DataTypesDemo() {
   const allTypes = useMemo(() => getAllSolidityTypes(), []);
   const typeNames = useMemo(() => allTypes.map((t) => t.name), [allTypes]);
+
+  const sizeChartData = useMemo(() => {
+    const representative = [
+      "bool",
+      "uint8",
+      "uint16",
+      "uint32",
+      "uint64",
+      "uint128",
+      "uint256",
+      "address",
+      "bytes32",
+    ];
+    return representative
+      .map((name) => {
+        const info = getSolidityTypeInfo(name);
+        return info ? { type: name, bytes: info.size } : null;
+      })
+      .filter((d): d is { type: string; bytes: number } => d !== null);
+  }, []);
 
   const [selectedType, setSelectedType] = useState("uint256");
   const [inputValue, setInputValue] = useState("42");
@@ -165,6 +186,24 @@ export function DataTypesDemo() {
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
+            Memory Size Comparison
+          </Text>
+          <SimpleBarChart
+            data={sizeChartData}
+            xKey="type"
+            yKeys={["bytes"]}
+            colors={["#7950f2"]}
+            height={220}
+          />
+          <Text size="xs" c="dimmed" ta="center">
+            Bytes required per type. All types pad to 32 bytes in ABI encoding.
+          </Text>
+        </Stack>
+      </Paper>
+
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
             All Types Reference
           </Text>
           <Table striped>
@@ -195,6 +234,32 @@ export function DataTypesDemo() {
           </Table>
         </Stack>
       </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Value Types",
+            description:
+              "uint, int, bool, address, bytes1-32 — stored directly on stack or in storage. Always passed by value (copied).",
+          },
+          {
+            title: "Reference Types",
+            description:
+              "arrays, structs, mappings, string, bytes — stored in storage/memory. Passed by reference with explicit location.",
+          },
+          {
+            title: "ABI Encoding",
+            description:
+              "All values are padded to 32-byte words for encoding. A bool uses 1 byte but occupies 32 bytes in calldata.",
+          },
+        ]}
+        whyItMatters="Choosing the right data type directly impacts gas costs and contract security. Using uint8 instead of uint256 for small values enables storage packing."
+        tips={[
+          "Use uint256 for arithmetic — smaller types require extra gas for masking",
+          "Use bytes32 instead of string for fixed-length strings (much cheaper)",
+          "address payable is needed to send ETH; regular address cannot",
+        ]}
+      />
     </Stack>
   );
 }

@@ -246,6 +246,96 @@ export function SoulboundTokensDemo() {
         </Stack>
       </Paper>
 
+      {owners.length > 0 && (
+        <Paper p="md" withBorder>
+          <Stack gap="md">
+            <Text size="sm" fw={600}>
+              SBT Binding Diagram
+            </Text>
+            <svg
+              width="100%"
+              height={Math.max(120, owners.length * 90)}
+              viewBox={`0 0 480 ${Math.max(120, owners.length * 90)}`}
+            >
+              {owners.map((addr, i) => {
+                const y = 45 + i * 90;
+                const tokens = Object.entries(state.owners)
+                  .filter(([, o]) => o === addr)
+                  .map(([id]) => id);
+                return (
+                  <g key={addr}>
+                    <rect
+                      x={20}
+                      y={y - 22}
+                      width={130}
+                      height={44}
+                      rx={8}
+                      fill="var(--mantine-color-blue-light)"
+                      stroke="var(--mantine-color-blue-6)"
+                      strokeWidth={1.5}
+                    />
+                    <text
+                      x={85}
+                      y={y + 5}
+                      textAnchor="middle"
+                      fontSize={13}
+                      fill="var(--mantine-color-blue-9)"
+                    >
+                      {addr}
+                    </text>
+                    {tokens.map((tokenId, ti) => {
+                      const tx = 250 + ti * 70;
+                      return (
+                        <g key={tokenId}>
+                          <line
+                            x1={150}
+                            y1={y}
+                            x2={tx - 20}
+                            y2={y}
+                            stroke="var(--mantine-color-violet-5)"
+                            strokeWidth={2}
+                            strokeDasharray="6 3"
+                          />
+                          <rect
+                            x={tx - 20}
+                            y={y - 18}
+                            width={56}
+                            height={36}
+                            rx={6}
+                            fill="var(--mantine-color-violet-light)"
+                            stroke="var(--mantine-color-violet-6)"
+                            strokeWidth={1.5}
+                          />
+                          <text
+                            x={tx + 8}
+                            y={y - 3}
+                            textAnchor="middle"
+                            fontSize={10}
+                            fill="var(--mantine-color-violet-8)"
+                          >
+                            SBT
+                          </text>
+                          <text
+                            x={tx + 8}
+                            y={y + 12}
+                            textAnchor="middle"
+                            fontSize={12}
+                            fontWeight={700}
+                            fill="var(--mantine-color-violet-9)"
+                          >
+                            #{tokenId}
+                          </text>
+                        </g>
+                      );
+                    })}
+                  </g>
+                );
+              })}
+            </svg>
+          </Stack>
+        </Paper>
+      )}
+
       <Paper p="md" withBorder>
         <Stack gap="sm">
           <Text size="sm" fw={600}>

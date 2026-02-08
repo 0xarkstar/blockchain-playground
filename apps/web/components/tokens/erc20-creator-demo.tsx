@@ -24,6 +24,7 @@ import {
   formatTokenAmount,
   type ERC20State,
 } from "../../lib/tokens/erc20";
+import { SimplePieChart } from "../shared";
 
 export function ERC20CreatorDemo() {
   const [tokenName, setTokenName] = useState("MyToken");
@@ -243,6 +244,18 @@ export function ERC20CreatorDemo() {
               )}
             </Table.Tbody>
           </Table>
+
+          {addresses.length > 0 && (
+            <SimplePieChart
+              data={addresses.map((addr) => ({
+                holder: addr,
+                balance: Number(balanceOf(state, addr)),
+              }))}
+              nameKey="holder"
+              valueKey="balance"
+              height={250}
+            />
+          )}
         </Stack>
       </Paper>
     </Stack>

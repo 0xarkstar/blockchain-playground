@@ -16,6 +16,7 @@ import {
   calculateRemoveLiquidity,
   calculateSpotPrice,
 } from "../../lib/defi/amm";
+import { SimplePieChart, EducationPanel } from "../../components/shared";
 
 export function LiquidityPoolDemo() {
   const [reserveA, setReserveA] = useState<number>(10000);
@@ -67,8 +68,31 @@ export function LiquidityPoolDemo() {
     [reserveA, reserveB],
   );
 
+  const reservePieData = useMemo(() => {
+    const total = reserveA + reserveB;
+    if (total <= 0) return [];
+    return [
+      { name: "Token A", value: Math.round((reserveA / total) * 100) },
+      { name: "Token B", value: Math.round((reserveB / total) * 100) },
+    ];
+  }, [reserveA, reserveB]);
+
   return (
     <Stack gap="lg">
+      <Paper p="md" withBorder>
+        <Stack gap="md">
+          <Text size="sm" fw={600}>
+            Pool Reserve Ratio
+          </Text>
+          <SimplePieChart
+            data={reservePieData}
+            nameKey="name"
+            valueKey="value"
+            height={220}
+          />
+        </Stack>
+      </Paper>
+
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -216,6 +240,32 @@ export function LiquidityPoolDemo() {
           </Stack>
         </Paper>
       )}
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Adding Liquidity",
+            description:
+              "Deposit equal-value amounts of both tokens. You receive LP tokens representing your pool share.",
+          },
+          {
+            title: "LP Token Math",
+            description:
+              "LP tokens minted = min(amountA/reserveA, amountB/reserveB) * totalSupply. This ensures proportional deposits.",
+          },
+          {
+            title: "Removing Liquidity",
+            description:
+              "Burn LP tokens to withdraw proportional amounts of both tokens from the pool.",
+          },
+        ]}
+        whyItMatters="Liquidity providers earn trading fees proportional to their pool share. Understanding LP mechanics helps you evaluate risk vs reward before providing liquidity."
+        tips={[
+          "Always deposit tokens at the current pool ratio to avoid arbitrage losses",
+          "LP tokens are transferable ERC-20 tokens themselves",
+          "Impermanent loss can offset fee earnings — check the IL calculator",
+        ]}
+      />
     </Stack>
   );
 }

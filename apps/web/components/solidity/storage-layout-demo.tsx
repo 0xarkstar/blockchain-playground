@@ -21,6 +21,7 @@ import {
   type SolidityStorageType,
   type StorageVariable,
 } from "../../lib/solidity/storage";
+import { SimplePieChart, EducationPanel } from "../../components/shared";
 
 const TYPES: SolidityStorageType[] = [
   "uint8",
@@ -82,6 +83,16 @@ export function StorageLayoutDemo() {
   );
 
   const activeLayout = showOptimized ? optimized : layout;
+
+  const efficiencyPieData = useMemo(() => {
+    const used = activeLayout.usedBytes;
+    const wasted = activeLayout.wastedBytes;
+    if (used + wasted <= 0) return [];
+    return [
+      { name: "Used", value: used },
+      { name: "Wasted", value: wasted },
+    ];
+  }, [activeLayout.usedBytes, activeLayout.wastedBytes]);
 
   const addVariable = () => {
     if (!newName.trim()) return;
@@ -225,6 +236,28 @@ export function StorageLayoutDemo() {
         </Stack>
       </Paper>
 
+      {efficiencyPieData.length > 0 && (
+        <Paper p="md" withBorder>
+          <Stack gap="md">
+            <Text size="sm" fw={600}>
+              Slot Packing Efficiency (
+              {showOptimized ? "Optimized" : "Original"})
+            </Text>
+            <SimplePieChart
+              data={efficiencyPieData}
+              nameKey="name"
+              valueKey="value"
+              colors={["#40c057", "#868e96"]}
+              height={200}
+            />
+            <Text size="xs" c="dimmed" ta="center">
+              {activeLayout.efficiency.toFixed(1)}% of allocated storage is
+              utilized
+            </Text>
+          </Stack>
+        </Paper>
+      )}
+
       <Paper p="md" withBorder>
         <Stack gap="md">
           <Text size="sm" fw={600}>
@@ -296,6 +329,33 @@ export function StorageLayoutDemo() {
           </Table>
         </Stack>
       </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "32-Byte Slots",
+            description:
+              "EVM storage is organized into 32-byte slots. Each SSTORE costs 20,000 gas (new) or 5,000 gas (update).",
+          },
+          {
+            title: "Variable Packing",
+            description:
+              "Small variables (bool, uint8, address) can share a slot if they fit within 32 bytes together.",
+          },
+          {
+            title: "Optimization",
+            description:
+              "Order variables by size (smallest first) to maximize packing. This can save entire storage slots.",
+          },
+        ]}
+        whyItMatters="Storage is the most expensive resource on Ethereum. Packing variables efficiently can save thousands of gas per transaction, adding up to significant cost savings."
+        tips={[
+          "Group small variables together in your struct/contract declarations",
+          "uint256 always takes a full slot — no packing benefit",
+          "bool + uint8 + address = 1+1+20 = 22 bytes, fits in one slot",
+          "Mappings and dynamic arrays always start a new slot",
+        ]}
+      />
     </Stack>
   );
 }

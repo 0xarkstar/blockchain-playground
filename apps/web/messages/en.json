@@ -54,6 +54,12 @@
       "description": "Zero-knowledge proofs, circuits, on-chain verification, and privacy protocols",
       "demos": "11 Interactive Demos",
       "modules": "11 Interactive Demos"
+    },
+    "appliedZk": {
+      "title": "Applied ZK",
+      "description": "Real zero-knowledge proofs with snarkjs, Circom circuits, and on-chain verification",
+      "demos": "4 Interactive Demos",
+      "modules": "4 Education Modules"
     }
   },
   "fundamentals": {
@@ -321,12 +327,38 @@
       }
     }
   },
+  "appliedZk": {
+    "pageTitle": "Applied ZK Proofs",
+    "pageDescription": "Generate real zero-knowledge proofs in the browser using snarkjs, verify them on-chain with Groth16 verifiers",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "demos": {
+      "hashPreimage": {
+        "title": "Hash Preimage Proof",
+        "description": "Prove you know a secret that hashes to a specific value without revealing it"
+      },
+      "ageVerification": {
+        "title": "Age Verification",
+        "description": "Prove your age meets a threshold without revealing your exact birthday"
+      },
+      "secretVoting": {
+        "title": "Secret Voting",
+        "description": "Cast anonymous votes verified by ZK proofs and Merkle tree membership"
+      },
+      "privateAirdrop": {
+        "title": "Private Airdrop",
+        "description": "Claim token airdrops privately using ZK proofs of Merkle tree inclusion"
+      }
+    }
+  },
   "nav": {
     "home": "Home",
     "fundamentals": "Fundamentals",
     "defi": "DeFi",
     "solidity": "Solidity",
     "tokens": "Tokens",
-    "zk": "ZK Proofs"
+    "zk": "ZK Proofs",
+    "appliedZk": "Applied ZK"
   }
 }

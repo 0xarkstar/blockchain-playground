@@ -16,6 +16,7 @@ import {
 } from "@mantine/core";
 import { IconPlus, IconTrash, IconInfoCircle } from "@tabler/icons-react";
 import { encodeCalldata, type AbiParam } from "../../lib/solidity/abi";
+import { EducationPanel } from "../../components/shared";
 
 const PARAM_TYPES = ["uint256", "address", "bool", "bytes32", "uint8"];
 
@@ -170,14 +171,100 @@ export function AbiEncoderDemo() {
             )}
 
             <Text size="xs" fw={600}>
-              Full Calldata
+              Full Calldata (Color-Coded)
             </Text>
-            <Code block style={{ fontSize: 11, wordBreak: "break-all" }}>
-              {result.fullCalldata}
-            </Code>
+            <Paper
+              p="xs"
+              withBorder
+              style={{
+                fontFamily: "monospace",
+                fontSize: 11,
+                wordBreak: "break-all",
+                lineHeight: 1.8,
+              }}
+            >
+              <span
+                style={{
+                  backgroundColor: "var(--mantine-color-blue-1)",
+                  padding: "2px 0",
+                }}
+              >
+                {result.selector}
+              </span>
+              {result.encodedParams.map((encoded, i) => {
+                const colors = [
+                  "var(--mantine-color-green-1)",
+                  "var(--mantine-color-orange-1)",
+                  "var(--mantine-color-violet-1)",
+                  "var(--mantine-color-cyan-1)",
+                  "var(--mantine-color-pink-1)",
+                ];
+                return (
+                  <span
+                    key={i}
+                    style={{
+                      backgroundColor: colors[i % colors.length],
+                      padding: "2px 0",
+                    }}
+                  >
+                    {encoded.replace("0x", "")}
+                  </span>
+                );
+              })}
+            </Paper>
+            <Group gap="xs" mt="xs">
+              <Badge size="xs" color="blue" variant="light">
+                Selector (4B)
+              </Badge>
+              {params.map((p, i) => {
+                const badgeColors = [
+                  "green",
+                  "orange",
+                  "violet",
+                  "cyan",
+                  "pink",
+                ];
+                return (
+                  <Badge
+                    key={p.id}
+                    size="xs"
+                    color={badgeColors[i % badgeColors.length]}
+                    variant="light"
+                  >
+                    {p.name || `param${i}`} (32B)
+                  </Badge>
+                );
+              })}
+            </Group>
           </Stack>
         </Paper>
       )}
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "Function Selector",
+            description:
+              "First 4 bytes of keccak256(signature). Identifies which function to call (e.g., 0xa9059cbb for transfer).",
+          },
+          {
+            title: "Parameter Encoding",
+            description:
+              "Each parameter is padded to 32 bytes (256 bits). Addresses are left-padded with zeros, numbers are right-aligned.",
+          },
+          {
+            title: "Calldata Assembly",
+            description:
+              "selector + encoded_param1 + encoded_param2 + ... Forms the complete transaction input data.",
+          },
+        ]}
+        whyItMatters="ABI encoding is how your frontend talks to smart contracts. Understanding it helps debug failed transactions and verify contract interactions at the raw data level."
+        tips={[
+          "Function selectors can collide — different functions may share the same 4-byte selector",
+          "Dynamic types (string, bytes, arrays) use offset-based encoding with pointers",
+          "Tools like cast and Etherscan's decoder can parse calldata back to readable parameters",
+        ]}
+      />
     </Stack>
   );
 }

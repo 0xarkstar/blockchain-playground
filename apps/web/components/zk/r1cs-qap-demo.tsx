@@ -24,8 +24,10 @@ import {
   r1csToQAP,
   verifyQAP,
   formatPolynomial,
+  evaluatePolynomial,
   type QAPVerification,
 } from "../../lib/zk/polynomial";
+import { SimpleLineChart } from "../shared";
 
 export function R1CSQAPDemo() {
   const [expression, setExpression] = useState("x * y");
@@ -154,6 +156,41 @@ export function R1CSQAPDemo() {
             <Text size="sm">
               Target T(x) = <Code>{formatPolynomial(polys.target)}</Code>
             </Text>
+
+            {qapResult && (
+              <SimpleLineChart
+                data={Array.from({ length: 20 }, (_, i) => {
+                  const x = BigInt(i + 1);
+                  const sumA = wireNames.reduce(
+                    (acc, _, wi) =>
+                      acc +
+                      evaluatePolynomial(polys.Ai[wi] ?? [0n], x, p) *
+                        (qapResult ? 1n : 0n),
+                    0n,
+                  );
+                  const sumB = wireNames.reduce(
+                    (acc, _, wi) =>
+                      acc + evaluatePolynomial(polys.Bi[wi] ?? [0n], x, p) * 1n,
+                    0n,
+                  );
+                  const sumC = wireNames.reduce(
+                    (acc, _, wi) =>
+                      acc + evaluatePolynomial(polys.Ci[wi] ?? [0n], x, p) * 1n,
+                    0n,
+                  );
+                  return {
+                    x: i + 1,
+                    "A(x)": Number(((sumA % p) + p) % p),
+                    "B(x)": Number(((sumB % p) + p) % p),
+                    "C(x)": Number(((sumC % p) + p) % p),
+                  };
+                })}
+                xKey="x"
+                yKeys={["A(x)", "B(x)", "C(x)"]}
+                colors={["#228be6", "#fa5252", "#40c057"]}
+                height={250}
+              />
+            )}
           </Stack>
         </Paper>
       )}

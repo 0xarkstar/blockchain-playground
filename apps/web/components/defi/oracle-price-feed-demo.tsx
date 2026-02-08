@@ -19,6 +19,7 @@ import {
   isHeartbeatStale,
   type PriceSnapshot,
 } from "../../lib/defi/oracle";
+import { SimpleLineChart, EducationPanel } from "../../components/shared";
 
 export function OraclePriceFeedDemo() {
   const [snapshots, setSnapshots] = useState<readonly PriceSnapshot[]>([
@@ -72,6 +73,17 @@ export function OraclePriceFeedDemo() {
 
     return { twap, currentPrice, deviation, stale, lastUpdate, totalTime };
   }, [snapshots, deviationThreshold, heartbeatInterval]);
+
+  const priceChartData = useMemo(() => {
+    const twap = analysis.twap;
+    return snapshots.map((s) => ({
+      time: `${s.timestamp}s`,
+      price: s.price,
+      TWAP: Math.round(twap * 100) / 100,
+      upper: Math.round(twap * (1 + deviationThreshold / 100) * 100) / 100,
+      lower: Math.round(twap * (1 - deviationThreshold / 100) * 100) / 100,
+    }));
+  }, [snapshots, analysis.twap, deviationThreshold]);
 
   return (
     <Stack gap="lg">
@@ -130,6 +142,26 @@ export function OraclePriceFeedDemo() {
           </Group>
         </Stack>
       </Paper>
+
+      {priceChartData.length > 1 && (
+        <Paper p="md" withBorder>
+          <Stack gap="md">
+            <Text size="sm" fw={600}>
+              Price Feed Chart
+            </Text>
+            <SimpleLineChart
+              data={priceChartData}
+              xKey="time"
+              yKeys={["price", "TWAP", "upper", "lower"]}
+              colors={["#228be6", "#fab005", "#fa5252", "#fa5252"]}
+              height={250}
+            />
+            <Text size="xs" c="dimmed" ta="center">
+              Price (blue) with TWAP (yellow) and deviation bands (red)
+            </Text>
+          </Stack>
+        </Paper>
+      )}
 
       <Paper p="md" withBorder>
         <Stack gap="md">
@@ -225,6 +257,32 @@ export function OraclePriceFeedDemo() {
           )}
         </Stack>
       </Paper>
+
+      <EducationPanel
+        howItWorks={[
+          {
+            title: "TWAP (Time-Weighted Average Price)",
+            description:
+              "Averages prices over time, weighting each price by the duration it was valid. Resistant to flash manipulation.",
+          },
+          {
+            title: "Deviation Detection",
+            description:
+              "Compares current price to TWAP. Large deviations may indicate manipulation or extreme volatility.",
+          },
+          {
+            title: "Heartbeat Monitoring",
+            description:
+              "Oracles must update within a heartbeat interval. Stale data means the price feed may be unreliable.",
+          },
+        ]}
+        whyItMatters="Oracles are DeFi's connection to real-world data. Price manipulation through oracle attacks has caused hundreds of millions in losses. Understanding TWAP and deviation checks is critical for protocol security."
+        tips={[
+          "Chainlink is the most widely used decentralized oracle network",
+          "TWAP oracles (like Uniswap v3) derive prices from on-chain liquidity",
+          "Always check heartbeat freshness before using oracle prices",
+        ]}
+      />
     </Stack>
   );
 }
