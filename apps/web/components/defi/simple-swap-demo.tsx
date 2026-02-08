@@ -55,7 +55,6 @@ export function SimpleSwapDemo() {
   }, [k, reserveA]);
 
   const rIn = direction === "AtoB" ? reserveA : reserveB;
-  const rOut = direction === "AtoB" ? reserveB : reserveA;
   const newRIn = rIn + amountIn;
   const newROut = k > 0 ? k / newRIn : 0;
 

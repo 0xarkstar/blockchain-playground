@@ -1,32 +1,13 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import {
-  Stack,
-  TextInput,
-  Button,
-  Alert,
-  Code,
-  Text,
-  Group,
-  Badge,
-  Paper,
-  Tabs,
-  SegmentedControl,
-  CopyButton,
-  ActionIcon,
-  Tooltip,
-  Table,
-} from "@mantine/core";
-import {
-  IconCheck,
-  IconX,
-  IconThumbUp,
-  IconCopy,
-  IconLoader2,
-} from "@tabler/icons-react";
+import { Stack, Button, Alert, Text, Group, Paper, Tabs } from "@mantine/core";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ProgressPipeline, EducationPanel } from "../shared";
+import { VoterRegistration } from "./voter-registration";
+import { VotingBooth } from "./voting-booth";
+import { ResultsPanel } from "./results-panel";
 import {
   generateProof,
   verifyProof,
@@ -304,188 +285,26 @@ export function SecretVotingDemo() {
             </Alert>
           )}
 
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text fw={600} size="sm">
-                Step 1: Register as Voter
-              </Text>
-              <Text size="xs" c="dimmed">
-                Generate a secret identity and register your commitment in the
-                voter registry (Merkle tree). Three simulated voters are also
-                registered.
-              </Text>
-              <Button
-                onClick={handleRegister}
-                loading={phase === "registering"}
-                disabled={phase !== "setup"}
-                leftSection={<IconThumbUp size={16} />}
-              >
-                Register Identity
-              </Button>
-            </Stack>
-          </Paper>
+          <VoterRegistration
+            voter={voter}
+            otherVoters={otherVoters}
+            phase={phase}
+            onRegister={handleRegister}
+          />
 
-          {voter && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
-                  Voter Registry
-                </Text>
-                <Table>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Voter</Table.Th>
-                      <Table.Th>Identity Commitment</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    <Table.Tr>
-                      <Table.Td>
-                        <Badge color="blue" variant="light">
-                          You
-                        </Badge>
-                      </Table.Td>
-                      <Table.Td>
-                        <Group gap="xs">
-                          <Code>{truncateHex(voter.commitmentHex, 8)}</Code>
-                          <CopyButton value={voter.commitmentHex}>
-                            {({ copied, copy }) => (
-                              <Tooltip label={copied ? "Copied" : "Copy"}>
-                                <ActionIcon
-                                  variant="subtle"
-                                  size="xs"
-                                  onClick={copy}
-                                >
-                                  {copied ? (
-                                    <IconCheck size={12} />
-                                  ) : (
-                                    <IconCopy size={12} />
-                                  )}
-                                </ActionIcon>
-                              </Tooltip>
-                            )}
-                          </CopyButton>
-                        </Group>
-                      </Table.Td>
-                    </Table.Tr>
-                    {otherVoters.map((hex, i) => (
-                      <Table.Tr key={`voter-${i}`}>
-                        <Table.Td>
-                          <Badge color="gray" variant="light">
-                            Voter {i + 2}
-                          </Badge>
-                        </Table.Td>
-                        <Table.Td>
-                          <Code>{hex}</Code>
-                        </Table.Td>
-                      </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                </Table>
-              </Stack>
-            </Paper>
-          )}
+          <VotingBooth
+            voteChoice={voteChoice}
+            phase={phase}
+            progressMessage={progressMessage}
+            onVoteChoiceChange={setVoteChoice}
+            onVoteAndProve={handleVoteAndProve}
+          />
 
-          {voter && phase !== "setup" && phase !== "registering" && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
-                  Step 2: Cast Your Vote
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Your vote is private: the ZK proof shows you are a registered
-                  voter and your vote is valid, without revealing which voter
-                  you are.
-                </Text>
-                <TextInput
-                  label="Proposal"
-                  value="Should the DAO fund the ZK education initiative?"
-                  readOnly
-                />
-                <Text size="sm" fw={500}>
-                  Your Vote:
-                </Text>
-                <SegmentedControl
-                  value={voteChoice}
-                  onChange={(val) => setVoteChoice(val as VoteChoice)}
-                  data={[
-                    { label: "Yes", value: "yes" },
-                    { label: "No", value: "no" },
-                  ]}
-                  disabled={phase !== "registered"}
-                />
-                {progressMessage && (
-                  <Group gap="xs">
-                    <IconLoader2 size={14} className="animate-spin" />
-                    <Text size="xs" c="blue">
-                      {progressMessage}
-                    </Text>
-                  </Group>
-                )}
-                <Button
-                  onClick={handleVoteAndProve}
-                  loading={phase === "proving"}
-                  disabled={phase !== "registered"}
-                >
-                  Vote & Generate ZK Proof
-                </Button>
-              </Stack>
-            </Paper>
-          )}
-
-          {nullifierHash && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
-                  Nullifier (Anti-Double-Vote)
-                </Text>
-                <Text size="xs" c="dimmed">
-                  The nullifier is derived from your secret and the proposal ID.
-                  If submitted twice, it will be detected and rejected. It does
-                  not reveal your identity.
-                </Text>
-                <Group gap="xs">
-                  <Badge color="orange" variant="light">
-                    Unique per proposal
-                  </Badge>
-                </Group>
-                <Code block>{truncateHex(nullifierHash, 16)}</Code>
-              </Stack>
-            </Paper>
-          )}
-
-          {merkleRoot && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
-                  Merkle Root (Voter Registry)
-                </Text>
-                <Code block>{truncateHex(merkleRoot, 16)}</Code>
-              </Stack>
-            </Paper>
-          )}
-
-          {proofResult && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Group justify="space-between">
-                  <Text fw={600} size="sm">
-                    Vote Proof
-                  </Text>
-                  <Badge color="green" variant="light">
-                    Generated
-                  </Badge>
-                </Group>
-                <Code block>
-                  {`pi_a: [${proofResult.proof.pi_a
-                    .slice(0, 2)
-                    .map((v) => truncateHex(v, 8))
-                    .join(", ")}]\n`}
-                  {`public signals: ${proofResult.publicSignals.length} values`}
-                </Code>
-              </Stack>
-            </Paper>
-          )}
+          <ResultsPanel
+            nullifierHash={nullifierHash}
+            merkleRoot={merkleRoot}
+            proofResult={proofResult}
+          />
 
           {proofResult && (
             <Paper p="md" withBorder>

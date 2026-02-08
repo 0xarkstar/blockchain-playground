@@ -29,10 +29,6 @@ export function ZKConceptsDemo() {
 
   const properties = getZKProperties();
 
-  const handleSimulate = () => {
-    setSimulation(simulateAliBabaCave(hasSecret, numRounds));
-  };
-
   const soundness = calculateSoundness(numRounds);
   const cheatingProb = (soundness * 100).toFixed(soundness < 0.01 ? 4 : 2);
 

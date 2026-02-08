@@ -3,7 +3,6 @@
 import { useState, useCallback, useRef } from "react";
 import {
   Stack,
-  TextInput,
   Button,
   Alert,
   Code,
@@ -12,22 +11,13 @@ import {
   Badge,
   Paper,
   Tabs,
-  CopyButton,
-  ActionIcon,
-  Tooltip,
-  Table,
 } from "@mantine/core";
-import {
-  IconCheck,
-  IconX,
-  IconParachute,
-  IconCopy,
-  IconLoader2,
-  IconPlus,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ProgressPipeline, EducationPanel } from "../shared";
+import { AirdropSetupPanel } from "./airdrop-setup-panel";
+import { ClaimPanel } from "./claim-panel";
+import { MerkleTreeView } from "./merkle-tree-view";
 import {
   generateProof,
   verifyProof,
@@ -338,212 +328,31 @@ export function PrivateAirdropDemo() {
             </Alert>
           )}
 
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text fw={600} size="sm">
-                Step 1: Eligible Addresses
-              </Text>
-              <Text size="xs" c="dimmed">
-                These addresses are eligible for the airdrop. In production,
-                this list would be compiled off-chain (e.g., early users, token
-                holders at a snapshot).
-              </Text>
-              <Table>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>#</Table.Th>
-                    <Table.Th>Address</Table.Th>
-                    {addresses.some((a) => a.commitment) && (
-                      <Table.Th>Commitment</Table.Th>
-                    )}
-                    {phase === "setup" && <Table.Th></Table.Th>}
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                  {addresses.map((addr, idx) => (
-                    <Table.Tr key={addr.id}>
-                      <Table.Td>
-                        <Badge
-                          color={
-                            idx === claimIndex && phase !== "setup"
-                              ? "blue"
-                              : "gray"
-                          }
-                          variant="light"
-                          size="sm"
-                        >
-                          {idx + 1}
-                        </Badge>
-                      </Table.Td>
-                      <Table.Td>
-                        <Code>{truncateHex(addr.address, 8)}</Code>
-                      </Table.Td>
-                      {addresses.some((a) => a.commitment) && (
-                        <Table.Td>
-                          {addr.commitment ? (
-                            <Code>{truncateHex(addr.commitment, 6)}</Code>
-                          ) : (
-                            <Text size="xs" c="dimmed">
-                              pending
-                            </Text>
-                          )}
-                        </Table.Td>
-                      )}
-                      {phase === "setup" && (
-                        <Table.Td>
-                          <ActionIcon
-                            variant="subtle"
-                            color="red"
-                            size="xs"
-                            onClick={() => removeAddress(addr.id)}
-                            disabled={addresses.length <= 2}
-                          >
-                            <IconTrash size={12} />
-                          </ActionIcon>
-                        </Table.Td>
-                      )}
-                    </Table.Tr>
-                  ))}
-                </Table.Tbody>
-              </Table>
-              {phase === "setup" && (
-                <Group gap="xs">
-                  <TextInput
-                    placeholder="0x... (Ethereum address)"
-                    value={newAddress}
-                    onChange={(e) => setNewAddress(e.currentTarget.value)}
-                    style={{ flex: 1 }}
-                    size="xs"
-                  />
-                  <ActionIcon
-                    variant="light"
-                    onClick={addAddress}
-                    disabled={!newAddress.trim()}
-                  >
-                    <IconPlus size={14} />
-                  </ActionIcon>
-                </Group>
-              )}
-            </Stack>
-          </Paper>
+          <AirdropSetupPanel
+            addresses={addresses}
+            newAddress={newAddress}
+            claimIndex={claimIndex}
+            phase={phase}
+            onAddAddress={addAddress}
+            onRemoveAddress={removeAddress}
+            onNewAddressChange={setNewAddress}
+            onBuildTree={handleBuildTree}
+            progressMessage={progressMessage}
+          />
 
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text fw={600} size="sm">
-                Step 2: Build Eligibility Tree
-              </Text>
-              <Text size="xs" c="dimmed">
-                Hash each address with Poseidon and insert into a Merkle tree.
-                Only the Merkle root is published on-chain.
-              </Text>
-              {progressMessage && phase === "building" && (
-                <Group gap="xs">
-                  <IconLoader2 size={14} className="animate-spin" />
-                  <Text size="xs" c="blue">
-                    {progressMessage}
-                  </Text>
-                </Group>
-              )}
-              <Button
-                onClick={handleBuildTree}
-                loading={phase === "building"}
-                disabled={phase !== "setup" || addresses.length < 2}
-                leftSection={<IconParachute size={16} />}
-              >
-                Build Merkle Tree
-              </Button>
-            </Stack>
-          </Paper>
+          <MerkleTreeView
+            merkleRoot={merkleRoot}
+            nullifierHash={nullifierHash}
+          />
 
-          {merkleRoot && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
-                  Merkle Root (On-chain)
-                </Text>
-                <Group gap="xs">
-                  <Code block style={{ flex: 1 }}>
-                    {truncateHex(merkleRoot, 16)}
-                  </Code>
-                  <CopyButton value={merkleRoot}>
-                    {({ copied, copy }) => (
-                      <Tooltip label={copied ? "Copied" : "Copy"}>
-                        <ActionIcon variant="subtle" onClick={copy}>
-                          {copied ? (
-                            <IconCheck size={16} />
-                          ) : (
-                            <IconCopy size={16} />
-                          )}
-                        </ActionIcon>
-                      </Tooltip>
-                    )}
-                  </CopyButton>
-                </Group>
-              </Stack>
-            </Paper>
-          )}
-
-          {phase === "ready" ||
-          phase === "proving" ||
-          phase === "proved" ||
-          phase === "verifying" ||
-          phase === "verified" ? (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
-                  Step 3: Claim Airdrop Privately
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Prove you are in the eligibility list without revealing which
-                  address is yours. Select which address to claim as:
-                </Text>
-                <Group gap="xs" wrap="wrap">
-                  {addresses.map((addr, idx) => (
-                    <Button
-                      key={addr.id}
-                      variant={idx === claimIndex ? "filled" : "outline"}
-                      size="xs"
-                      onClick={() => setClaimIndex(idx)}
-                      disabled={phase !== "ready"}
-                    >
-                      Address {idx + 1}
-                    </Button>
-                  ))}
-                </Group>
-                {progressMessage && phase === "proving" && (
-                  <Group gap="xs">
-                    <IconLoader2 size={14} className="animate-spin" />
-                    <Text size="xs" c="blue">
-                      {progressMessage}
-                    </Text>
-                  </Group>
-                )}
-                <Button
-                  onClick={handleClaim}
-                  loading={phase === "proving"}
-                  disabled={phase !== "ready"}
-                >
-                  Generate Claim Proof
-                </Button>
-              </Stack>
-            </Paper>
-          ) : null}
-
-          {nullifierHash && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
-                  Nullifier (Anti-Double-Claim)
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Derived from the address and airdrop ID. Prevents the same
-                  address from claiming twice without revealing which address
-                  claimed.
-                </Text>
-                <Code block>{truncateHex(nullifierHash, 16)}</Code>
-              </Stack>
-            </Paper>
-          )}
+          <ClaimPanel
+            addresses={addresses}
+            claimIndex={claimIndex}
+            phase={phase}
+            progressMessage={progressMessage}
+            onClaimIndexChange={setClaimIndex}
+            onClaim={handleClaim}
+          />
 
           {proofResult && (
             <Paper p="md" withBorder>

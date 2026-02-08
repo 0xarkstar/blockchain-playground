@@ -1,30 +1,12 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import {
-  Stack,
-  NumberInput,
-  Button,
-  Alert,
-  Code,
-  Text,
-  Group,
-  Badge,
-  Paper,
-  Tabs,
-  CopyButton,
-  ActionIcon,
-  Tooltip,
-} from "@mantine/core";
-import {
-  IconCheck,
-  IconX,
-  IconShieldCheck,
-  IconCopy,
-  IconLoader2,
-} from "@tabler/icons-react";
+import { Stack, Button, Alert, Group, Paper, Tabs } from "@mantine/core";
+import { IconX } from "@tabler/icons-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ProgressPipeline, EducationPanel } from "../shared";
+import { CredentialPanel } from "./credential-panel";
+import { VerificationPanel } from "./verification-panel";
 import {
   generateProof,
   verifyProof,
@@ -90,11 +72,6 @@ function getPipelineStatuses(phase: DemoPhase) {
     statuses["verify"] = "complete";
   }
   return statuses;
-}
-
-function truncateHex(hex: string, chars: number = 10): string {
-  if (hex.length <= chars * 2 + 2) return hex;
-  return `${hex.slice(0, chars + 2)}...${hex.slice(-chars)}`;
 }
 
 export function AgeVerificationDemo() {
@@ -263,211 +240,31 @@ export function AgeVerificationDemo() {
             </Alert>
           )}
 
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text fw={600} size="sm">
-                Step 1: Enter Birthday (Private)
-              </Text>
-              <Text size="xs" c="dimmed">
-                Your birthday is the private input. It will never be revealed to
-                the verifier.
-              </Text>
-              <Group grow>
-                <NumberInput
-                  label="Birth Year"
-                  value={birthYear}
-                  onChange={(val) =>
-                    setBirthYear(typeof val === "number" ? val : "")
-                  }
-                  min={1900}
-                  max={new Date().getFullYear()}
-                  disabled={phase !== "input"}
-                />
-                <NumberInput
-                  label="Birth Month"
-                  value={birthMonth}
-                  onChange={(val) =>
-                    setBirthMonth(typeof val === "number" ? val : "")
-                  }
-                  min={1}
-                  max={12}
-                  disabled={phase !== "input"}
-                />
-                <NumberInput
-                  label="Birth Day"
-                  value={birthDay}
-                  onChange={(val) =>
-                    setBirthDay(typeof val === "number" ? val : "")
-                  }
-                  min={1}
-                  max={31}
-                  disabled={phase !== "input"}
-                />
-              </Group>
-              <NumberInput
-                label="Minimum Age Threshold"
-                description="The age requirement to prove (e.g., 18 for adult content, 21 for alcohol)"
-                value={minAge}
-                onChange={(val) =>
-                  setMinAge(typeof val === "number" ? val : "")
-                }
-                min={1}
-                max={150}
-                disabled={phase !== "input"}
-              />
-              <Button
-                onClick={computeCommitment}
-                disabled={phase !== "input" || !isInputValid}
-                leftSection={<IconShieldCheck size={16} />}
-              >
-                Compute Identity Commitment
-              </Button>
-            </Stack>
-          </Paper>
+          <CredentialPanel
+            birthYear={birthYear}
+            birthMonth={birthMonth}
+            birthDay={birthDay}
+            minAge={minAge}
+            phase={phase}
+            identityCommitment={identityCommitment}
+            isInputValid={isInputValid}
+            onBirthYearChange={setBirthYear}
+            onBirthMonthChange={setBirthMonth}
+            onBirthDayChange={setBirthDay}
+            onMinAgeChange={setMinAge}
+            onComputeCommitment={computeCommitment}
+          />
 
-          {identityCommitment && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
-                  Step 2: Identity Commitment (Public)
-                </Text>
-                <Group gap="xs">
-                  <Badge color="blue" variant="light">
-                    Public
-                  </Badge>
-                  <Text size="xs" c="dimmed">
-                    Poseidon hash of (year, month, day). Hides actual birthday.
-                  </Text>
-                </Group>
-                <Group gap="xs">
-                  <Code block style={{ flex: 1 }}>
-                    {truncateHex(identityCommitment, 16)}
-                  </Code>
-                  <CopyButton value={identityCommitment}>
-                    {({ copied, copy }) => (
-                      <Tooltip label={copied ? "Copied" : "Copy"}>
-                        <ActionIcon variant="subtle" onClick={copy}>
-                          {copied ? (
-                            <IconCheck size={16} />
-                          ) : (
-                            <IconCopy size={16} />
-                          )}
-                        </ActionIcon>
-                      </Tooltip>
-                    )}
-                  </CopyButton>
-                </Group>
-              </Stack>
-            </Paper>
-          )}
-
-          {identityCommitment && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
-                  Step 3: Generate Age Proof
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Prove that your age meets the threshold without revealing your
-                  exact birthday.
-                </Text>
-                {progressMessage && (
-                  <Group gap="xs">
-                    <IconLoader2 size={14} className="animate-spin" />
-                    <Text size="xs" c="blue">
-                      {progressMessage}
-                    </Text>
-                  </Group>
-                )}
-                <Button
-                  onClick={handleGenerateProof}
-                  loading={phase === "proving"}
-                  disabled={
-                    phase !== "proving" &&
-                    phase !== "proved" &&
-                    phase !== "verified"
-                  }
-                >
-                  Prove Age &ge; {typeof minAge === "number" ? minAge : 18}
-                </Button>
-              </Stack>
-            </Paper>
-          )}
-
-          {proofResult && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Group justify="space-between">
-                  <Text fw={600} size="sm">
-                    Proof Data
-                  </Text>
-                  <Badge color="green" variant="light">
-                    Generated
-                  </Badge>
-                </Group>
-                <Text size="xs" c="dimmed">
-                  The proof shows age &ge;{" "}
-                  {typeof minAge === "number" ? minAge : 18} without revealing
-                  the exact birthday.
-                </Text>
-                <Code block>
-                  {`pi_a: [${proofResult.proof.pi_a
-                    .slice(0, 2)
-                    .map((v) => truncateHex(v, 8))
-                    .join(", ")}]\n`}
-                  {`pi_c: [${proofResult.proof.pi_c
-                    .slice(0, 2)
-                    .map((v) => truncateHex(v, 8))
-                    .join(", ")}]\n`}
-                  {`public signals: ${proofResult.publicSignals.length} values`}
-                </Code>
-              </Stack>
-            </Paper>
-          )}
-
-          {proofResult && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
-                  Step 4: Verify Age Proof
-                </Text>
-                <Button
-                  onClick={handleVerifyProof}
-                  loading={phase === "verifying"}
-                  disabled={phase === "verifying"}
-                  color={
-                    verificationResult === true
-                      ? "green"
-                      : verificationResult === false
-                        ? "red"
-                        : "blue"
-                  }
-                >
-                  {verificationResult === null
-                    ? "Verify Proof"
-                    : verificationResult
-                      ? "Age Verified"
-                      : "Verification Failed"}
-                </Button>
-                {verificationResult !== null && (
-                  <Alert
-                    color={verificationResult ? "green" : "red"}
-                    icon={
-                      verificationResult ? (
-                        <IconCheck size={16} />
-                      ) : (
-                        <IconX size={16} />
-                      )
-                    }
-                  >
-                    {verificationResult
-                      ? `Age verification passed! The prover is at least ${typeof minAge === "number" ? minAge : 18} years old, without revealing their exact birthday.`
-                      : "Age verification failed. The prover could not prove they meet the age threshold."}
-                  </Alert>
-                )}
-              </Stack>
-            </Paper>
-          )}
+          <VerificationPanel
+            identityCommitment={identityCommitment}
+            minAge={minAge}
+            phase={phase}
+            progressMessage={progressMessage}
+            proofResult={proofResult}
+            verificationResult={verificationResult}
+            onGenerateProof={handleGenerateProof}
+            onVerifyProof={handleVerifyProof}
+          />
         </Stack>
       </Tabs.Panel>
 

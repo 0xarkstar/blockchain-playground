@@ -21,7 +21,6 @@ import {
   approve,
   transferFrom,
   balanceOf,
-  allowance,
   type ERC20State,
 } from "../../lib/tokens/erc20";
 
@@ -173,7 +172,7 @@ export function TokenAllowanceDemo() {
                 </marker>
               </defs>
               {Object.entries(state.allowances).flatMap(
-                ([owner, spenders], _oi) => {
+                ([owner, spenders]) => {
                   let rowIdx = 0;
                   for (const entries of Object.entries(state.allowances)) {
                     if (entries[0] === owner) break;

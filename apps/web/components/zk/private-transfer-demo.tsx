@@ -21,7 +21,6 @@ import {
   privateTransfer,
   getPrivacyAnalysis,
   type PrivateState,
-  type ShieldedNote,
 } from "../../lib/zk/private-transfer";
 
 export function PrivateTransferDemo() {

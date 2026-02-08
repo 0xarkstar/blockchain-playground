@@ -8,9 +8,7 @@ import {
   Text,
   Paper,
   Table,
-  Alert,
 } from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
 import { calculateImpermanentLoss } from "../../lib/defi/amm";
 import { SimpleAreaChart, EducationPanel } from "../../components/shared";
 

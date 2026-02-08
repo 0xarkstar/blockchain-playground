@@ -11,7 +11,6 @@ import {
   Slider,
   Code,
   Progress,
-  Alert,
   SimpleGrid,
 } from "@mantine/core";
 import { IconPick, IconPlayerStop } from "@tabler/icons-react";
@@ -21,7 +20,6 @@ import {
   createTransaction,
   computeBlockHash,
   meetsTarget,
-  type Block,
 } from "../../lib/blockchain/block";
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
@@ -48,13 +46,11 @@ export function MiningSimulatorDemo() {
   const [difficulty, setDifficulty] = useState(3);
   const [mining, setMining] = useState(false);
   const [stats, setStats] = useState<MiningStats | null>(null);
-  const [minedBlock, setMinedBlock] = useState<Block | null>(null);
   const [miningHistory, setMiningHistory] = useState<MiningHistoryEntry[]>([]);
   const cancelRef = useRef(false);
 
   const handleStartMining = useCallback(() => {
     setMining(true);
-    setMinedBlock(null);
     cancelRef.current = false;
 
     const genesis = createGenesisBlock();
@@ -98,11 +94,6 @@ export function MiningSimulatorDemo() {
               hashRate: Math.round(rate),
             },
           ]);
-          setMinedBlock({
-            ...block,
-            header,
-            hash: blockHash,
-          });
           setMining(false);
           return;
         }

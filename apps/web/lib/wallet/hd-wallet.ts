@@ -1,6 +1,5 @@
 import { HDKey } from "@scure/bip32";
 import { mnemonicToSeedSync } from "@scure/bip39";
-import { wordlist } from "@scure/bip39/wordlists/english";
 import { keccak_256 } from "@noble/hashes/sha3";
 import { bytesToHex } from "@blockchain-playground/utils";
 

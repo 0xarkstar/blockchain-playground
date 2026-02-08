@@ -1,4 +1,4 @@
-import { hash, type HashAlgorithm } from "./hash";
+import { hash } from "./hash";
 import { MerkleTree } from "./merkle";
 
 export interface Transaction {

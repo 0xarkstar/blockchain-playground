@@ -10,7 +10,6 @@ import {
   Text,
   Paper,
   Group,
-  Badge,
   CopyButton,
   ActionIcon,
   Alert,

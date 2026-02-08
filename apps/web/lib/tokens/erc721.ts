@@ -99,7 +99,8 @@ export function transferNFT(
   if (!to) {
     return { success: false, newState: state, message: "Invalid recipient" };
   }
-  const { [tokenId]: _removed, ...restApprovals } = state.approvals;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { [tokenId]: _, ...restApprovals } = state.approvals;
   return {
     success: true,
     newState: {

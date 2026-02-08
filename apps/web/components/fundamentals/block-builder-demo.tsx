@@ -14,7 +14,6 @@ import {
   Table,
   Slider,
   Alert,
-  Progress,
   Box,
 } from "@mantine/core";
 import { IconCube, IconPick, IconPlus } from "@tabler/icons-react";
@@ -23,7 +22,6 @@ import {
   createBlock,
   createTransaction,
   mineBlock,
-  meetsTarget,
   type Block,
   type Transaction,
   type MiningResult,

@@ -182,9 +182,6 @@ describe("finalizeProposal", () => {
   });
 
   it("rejects when against > for", () => {
-    let state = setupForFinalize();
-    state = vote(state, 1, "alice", "for", 1050).newState;
-    state = vote(state, 1, "bob", "against", 1060).newState;
     // alice: 60 for, bob: 40 against → passes (for > against)
     // Need more against than for — let's adjust
     let state2 = createGovernance(10, 100);

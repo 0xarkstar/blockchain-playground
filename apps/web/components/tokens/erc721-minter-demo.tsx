@@ -19,7 +19,6 @@ import {
   createERC721,
   mintNFT,
   transferNFT,
-  ownerOf,
   balanceOfNFT,
   tokensOfOwner,
   totalSupplyNFT,

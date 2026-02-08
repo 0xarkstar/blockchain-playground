@@ -5,14 +5,13 @@ import {
   Stack,
   Text,
   Paper,
-  Group,
   Badge,
   Table,
   NumberInput,
   SimpleGrid,
   Alert,
 } from "@mantine/core";
-import { IconFlame, IconInfoCircle } from "@tabler/icons-react";
+import { IconInfoCircle } from "@tabler/icons-react";
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
 import { SimpleBarChart } from "../shared/charts";

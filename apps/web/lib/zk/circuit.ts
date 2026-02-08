@@ -9,7 +9,7 @@
  * computes witnesses, and builds/verifies R1CS.
  */
 
-import { modAdd, modMul, modSub } from "./field";
+import { modAdd, modMul } from "./field";
 
 // ── Types ──────────────────────────────────────────────────────────────
 

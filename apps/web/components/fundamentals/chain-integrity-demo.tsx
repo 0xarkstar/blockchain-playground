@@ -10,7 +10,6 @@ import {
   Group,
   Badge,
   Alert,
-  Textarea,
   SimpleGrid,
   Box,
 } from "@mantine/core";

@@ -67,7 +67,8 @@ export function delegate(
 ): GovernanceResult {
   if (from === to) {
     // Self-delegation removes delegation
-    const { [from]: _removed, ...restDelegations } = state.delegations;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { [from]: _, ...restDelegations } = state.delegations;
     return {
       success: true,
       newState: { ...state, delegations: restDelegations },

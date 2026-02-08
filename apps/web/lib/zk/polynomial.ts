@@ -8,7 +8,7 @@
  * This is the key algebraic trick that enables succinct verification.
  */
 
-import { modAdd, modSub, modMul, modInverse, modPow } from "./field";
+import { modAdd, modSub, modMul, modInverse } from "./field";
 import type { R1CS } from "./circuit";
 
 // ── Types ──────────────────────────────────────────────────────────────

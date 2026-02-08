@@ -41,10 +41,8 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
   const [opened, { toggle, close }] = useDisclosure();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const t = useTranslations("nav");
-  const tCommon = useTranslations("common");
   const pathname = usePathname();
 
-  const localePrefix = pathname.startsWith("/ko") ? "/ko" : "/en";
   const pathWithoutLocale = pathname.replace(/^\/(en|ko)/, "") || "/";
 
   return (

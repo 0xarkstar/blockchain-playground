@@ -8,7 +8,6 @@ import {
   Text,
   Paper,
   Group,
-  Table,
 } from "@mantine/core";
 import {
   calculateBorrowRate,
