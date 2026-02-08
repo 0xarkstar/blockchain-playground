@@ -13,6 +13,8 @@
   },
   "devDependencies": {
     "@blockchain-playground/tsconfig": "workspace:*",
-    "typescript": "^5"
+    "@vitest/coverage-v8": "^4.0.18",
+    "typescript": "^5",
+    "vitest": "^4.0.18"
   }
 }
