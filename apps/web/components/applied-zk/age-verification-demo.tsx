@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import confetti from "canvas-confetti";
 import { X } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ProgressPipeline, EducationPanel } from "../shared";
@@ -94,6 +96,7 @@ export function AgeVerificationDemo() {
   );
   const [error, setError] = useState("");
   const [progressMessage, setProgressMessage] = useState("");
+  const confettiFiredRef = useRef(false);
 
   const computeCommitment = useCallback(async () => {
     try {
@@ -181,6 +184,10 @@ export function AgeVerificationDemo() {
 
       setVerificationResult(isValid);
       setPhase("verified");
+      if (isValid && !confettiFiredRef.current) {
+        confettiFiredRef.current = true;
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Verification failed");
       setPhase("proved");
@@ -194,6 +201,7 @@ export function AgeVerificationDemo() {
     setVerificationResult(null);
     setError("");
     setProgressMessage("");
+    confettiFiredRef.current = false;
   }, []);
 
   const isInputValid =
@@ -231,7 +239,7 @@ export function AgeVerificationDemo() {
               steps={pipelineSteps}
               currentStepIndex={getPipelineIndex(phase)}
               stepStatuses={getPipelineStatuses(phase)}
-              showElapsedTime={phase === "proving" || phase === "verifying"}
+              showElapsedTime={true}
             />
           </div>
 
@@ -242,31 +250,42 @@ export function AgeVerificationDemo() {
             </Alert>
           )}
 
-          <CredentialPanel
-            birthYear={birthYear}
-            birthMonth={birthMonth}
-            birthDay={birthDay}
-            minAge={minAge}
-            phase={phase}
-            identityCommitment={identityCommitment}
-            isInputValid={isInputValid}
-            onBirthYearChange={setBirthYear}
-            onBirthMonthChange={setBirthMonth}
-            onBirthDayChange={setBirthDay}
-            onMinAgeChange={setMinAge}
-            onComputeCommitment={computeCommitment}
-          />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={phase}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col gap-4"
+            >
+              <CredentialPanel
+                birthYear={birthYear}
+                birthMonth={birthMonth}
+                birthDay={birthDay}
+                minAge={minAge}
+                phase={phase}
+                identityCommitment={identityCommitment}
+                isInputValid={isInputValid}
+                onBirthYearChange={setBirthYear}
+                onBirthMonthChange={setBirthMonth}
+                onBirthDayChange={setBirthDay}
+                onMinAgeChange={setMinAge}
+                onComputeCommitment={computeCommitment}
+              />
 
-          <VerificationPanel
-            identityCommitment={identityCommitment}
-            minAge={minAge}
-            phase={phase}
-            progressMessage={progressMessage}
-            proofResult={proofResult}
-            verificationResult={verificationResult}
-            onGenerateProof={handleGenerateProof}
-            onVerifyProof={handleVerifyProof}
-          />
+              <VerificationPanel
+                identityCommitment={identityCommitment}
+                minAge={minAge}
+                phase={phase}
+                progressMessage={progressMessage}
+                proofResult={proofResult}
+                verificationResult={verificationResult}
+                onGenerateProof={handleGenerateProof}
+                onVerifyProof={handleVerifyProof}
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
       </TabsContent>
 

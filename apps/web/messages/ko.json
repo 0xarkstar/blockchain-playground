@@ -58,8 +58,8 @@
     "appliedZk": {
       "title": "응용 ZK",
       "description": "snarkjs, Circom 회로, 온체인 검증을 통한 실제 영지식 증명",
-      "demos": "4개 인터랙티브 데모",
-      "modules": "4개 교육 모듈"
+      "demos": "11개 인터랙티브 데모",
+      "modules": "8개 교육 모듈"
     }
   },
   "fundamentals": {
@@ -349,6 +349,62 @@
       "privateAirdrop": {
         "title": "프라이빗 에어드롭",
         "description": "머클 트리 포함 증명을 사용하여 비공개로 토큰 에어드롭을 청구합니다"
+      },
+      "passwordProof": {
+        "title": "비밀번호 증명",
+        "description": "비밀번호를 공개하지 않고 알고 있음을 증명합니다. 솔트된 포세이돈 해싱을 사용한 ZK 인증."
+      },
+      "sudoku": {
+        "title": "스도쿠 검증기",
+        "description": "풀이를 공개하지 않고 스도쿠 퍼즐을 올바르게 풀었음을 증명합니다. 게임 검증을 위한 ZK 데모."
+      },
+      "credential": {
+        "title": "자격증명 증명",
+        "description": "자격증명의 세부사항을 공개하지 않고 유효한 자격증명을 보유하고 있음을 증명합니다. 익명 자격 검증."
+      },
+      "mastermind": {
+        "title": "마스터마인드 게임",
+        "description": "ZK로 검증된 힌트로 코드 해독 게임을 플레이합니다. 비밀 코드를 공개하지 않고 힌트 정확성을 증명합니다."
+      },
+      "mixer": {
+        "title": "프라이버시 믹서",
+        "description": "프라이빗 트랜잭션의 교육용 데모. 커밋먼트를 예치하고 ZK 멤버십 증명으로 출금합니다."
+      },
+      "privateClub": {
+        "title": "프라이빗 클럽",
+        "description": "티어 기반 접근 제어가 있는 익명 멤버십 검증. 신원을 공개하지 않고 멤버십을 증명합니다."
+      },
+      "sealedAuction": {
+        "title": "비밀 입찰 경매",
+        "description": "ZK 범위 증명이 있는 커밋-리빌 경매. 비밀리에 입찰하고 유효 범위 내임을 증명합니다."
+      }
+    },
+    "education": {
+      "snark": {
+        "title": "SNARK 이해하기",
+        "description": "신뢰 설정부터 증명 검증까지, 간결한 비대화식 지식 논증의 작동 원리를 배웁니다."
+      },
+      "stark": {
+        "title": "STARK 이해하기",
+        "description": "확장 가능한 투명 지식 논증을 탐구합니다 — 신뢰 설정 없음, 해시 기반 보안, 양자 내성."
+      },
+      "comparison": {
+        "title": "SNARK vs STARK",
+        "description": "두 주요 영지식 증명 시스템을 핵심 지표와 사용 사례로 비교합니다."
+      }
+    },
+    "visualization": {
+      "circuit": {
+        "title": "회로 시각화",
+        "description": "영지식 증명에 사용되는 인터랙티브 회로 그래프를 탐색합니다. 신호 흐름과 제약 조건을 이해합니다."
+      },
+      "proof": {
+        "title": "증명 애니메이션",
+        "description": "ZK 증명 생성 파이프라인의 동작을 관찰합니다. 입력 → 위트니스 → 증명 → 검증 단계를 시각화합니다."
+      },
+      "comparison": {
+        "title": "SNARK vs STARK",
+        "description": "증명 크기, 검증 시간, 양자 내성 등 주요 지표로 SNARK과 STARK 증명 시스템을 비교합니다."
       }
     }
   },

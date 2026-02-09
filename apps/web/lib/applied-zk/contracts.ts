@@ -8,6 +8,13 @@ export interface ZkContractAddresses {
   readonly ageVerifier: Address | null;
   readonly secretVotingVerifier: Address | null;
   readonly merkleAirdropVerifier: Address | null;
+  readonly passwordVerifier: Address | null;
+  readonly sudokuVerifier: Address | null;
+  readonly credentialVerifier: Address | null;
+  readonly mastermindVerifier: Address | null;
+  readonly mixerVerifier: Address | null;
+  readonly privateClubVerifier: Address | null;
+  readonly sealedAuctionVerifier: Address | null;
 }
 
 // Set to null until contracts are deployed
@@ -17,4 +24,11 @@ export const ZK_CONTRACTS: ZkContractAddresses = {
   ageVerifier: null,
   secretVotingVerifier: null,
   merkleAirdropVerifier: null,
+  passwordVerifier: null,
+  sudokuVerifier: null,
+  credentialVerifier: null,
+  mastermindVerifier: null,
+  mixerVerifier: null,
+  privateClubVerifier: null,
+  sealedAuctionVerifier: null,
 };

@@ -58,8 +58,8 @@
     "appliedZk": {
       "title": "Applied ZK",
       "description": "Real zero-knowledge proofs with snarkjs, Circom circuits, and on-chain verification",
-      "demos": "4 Interactive Demos",
-      "modules": "4 Education Modules"
+      "demos": "11 Interactive Demos",
+      "modules": "8 Education Modules"
     }
   },
   "fundamentals": {
@@ -349,6 +349,62 @@
       "privateAirdrop": {
         "title": "Private Airdrop",
         "description": "Claim token airdrops privately using ZK proofs of Merkle tree inclusion"
+      },
+      "passwordProof": {
+        "title": "Password Proof",
+        "description": "Prove you know a password without revealing it. Uses salted Poseidon hashing for secure ZK authentication."
+      },
+      "sudoku": {
+        "title": "Sudoku Verifier",
+        "description": "Prove you solved a Sudoku puzzle correctly without revealing the solution. Demonstrates ZK for game verification."
+      },
+      "credential": {
+        "title": "Credential Proof",
+        "description": "Prove you hold a valid credential without revealing its details. Anonymous verification of qualifications."
+      },
+      "mastermind": {
+        "title": "Mastermind Game",
+        "description": "Play the classic code-breaking game with ZK-verified hints. Prove hint accuracy without revealing the secret code."
+      },
+      "mixer": {
+        "title": "Privacy Mixer",
+        "description": "Educational demonstration of private transactions. Deposit commitments and withdraw with ZK membership proofs."
+      },
+      "privateClub": {
+        "title": "Private Club",
+        "description": "Anonymous membership verification with tier-based access control. Prove your membership without revealing your identity."
+      },
+      "sealedAuction": {
+        "title": "Sealed Bid Auction",
+        "description": "Commit-reveal auction with ZK range proofs. Bid secretly and prove your bid is within valid bounds."
+      }
+    },
+    "education": {
+      "snark": {
+        "title": "Understanding SNARKs",
+        "description": "Learn how Succinct Non-interactive Arguments of Knowledge work, from trusted setup to proof verification."
+      },
+      "stark": {
+        "title": "Understanding STARKs",
+        "description": "Explore Scalable Transparent Arguments of Knowledge — no trusted setup, hash-based security, quantum resistance."
+      },
+      "comparison": {
+        "title": "SNARK vs STARK",
+        "description": "Compare the two major zero-knowledge proof systems across key metrics and use cases."
+      }
+    },
+    "visualization": {
+      "circuit": {
+        "title": "Circuit Visualization",
+        "description": "Explore interactive circuit graphs used in zero-knowledge proofs. Understand signal flow and constraints."
+      },
+      "proof": {
+        "title": "Proof Animation",
+        "description": "Watch the ZK proof generation pipeline in action. Visualize Input → Witness → Proof → Verify steps."
+      },
+      "comparison": {
+        "title": "SNARK vs STARK",
+        "description": "Compare SNARK and STARK proof systems across key metrics like proof size, verification time, and quantum resistance."
       }
     }
   },

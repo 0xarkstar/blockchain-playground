@@ -102,11 +102,18 @@ const demos: readonly Demo[] = [
   { track: "zk", slug: "snark-pipeline", label: "SNARK Pipeline" },
   { track: "zk", slug: "zk-rollup", label: "ZK Rollup" },
   { track: "zk", slug: "private-transfer", label: "Private Transfer" },
-  // Applied ZK (4)
+  // Applied ZK (11)
   { track: "applied-zk", slug: "hash-preimage", label: "Hash Preimage" },
   { track: "applied-zk", slug: "age-verification", label: "Age Verification" },
   { track: "applied-zk", slug: "secret-voting", label: "Secret Voting" },
   { track: "applied-zk", slug: "private-airdrop", label: "Private Airdrop" },
+  { track: "applied-zk", slug: "password-proof", label: "Password Proof" },
+  { track: "applied-zk", slug: "sudoku", label: "Sudoku Verifier" },
+  { track: "applied-zk", slug: "credential", label: "Credential Proof" },
+  { track: "applied-zk", slug: "mastermind", label: "Mastermind Game" },
+  { track: "applied-zk", slug: "mixer", label: "Privacy Mixer" },
+  { track: "applied-zk", slug: "private-club", label: "Private Club" },
+  { track: "applied-zk", slug: "sealed-auction", label: "Sealed Bid Auction" },
 ];
 
 const tracks = Object.keys(trackMeta);
@@ -141,6 +148,14 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     [locale, router, onOpenChange],
   );
 
+  const handleNavigate = useCallback(
+    (path: string) => {
+      onOpenChange(false);
+      router.push(`/${locale}${path}`);
+    },
+    [locale, router, onOpenChange],
+  );
+
   return (
     <CommandDialog
       open={open}
@@ -168,6 +183,50 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                   <span>{demo.label}</span>
                 </CommandItem>
               ))}
+              {track === "applied-zk" && (
+                <>
+                  <CommandItem
+                    key="applied-zk/education/snark"
+                    value="SNARK Education Applied ZK"
+                    onSelect={() => handleNavigate("/applied-zk/education/snark")}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>Education: SNARK</span>
+                  </CommandItem>
+                  <CommandItem
+                    key="applied-zk/education/stark"
+                    value="STARK Education Applied ZK"
+                    onSelect={() => handleNavigate("/applied-zk/education/stark")}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>Education: STARK</span>
+                  </CommandItem>
+                  <CommandItem
+                    key="applied-zk/education/comparison"
+                    value="Comparison Education Applied ZK"
+                    onSelect={() => handleNavigate("/applied-zk/education/comparison")}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>Education: Comparison</span>
+                  </CommandItem>
+                  <CommandItem
+                    key="applied-zk/visualization/circuit"
+                    value="Circuit Visualization Applied ZK"
+                    onSelect={() => handleNavigate("/applied-zk/visualization/circuit")}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>Visualization: Circuit</span>
+                  </CommandItem>
+                  <CommandItem
+                    key="applied-zk/visualization/proof"
+                    value="Proof Visualization Applied ZK"
+                    onSelect={() => handleNavigate("/applied-zk/visualization/proof")}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>Visualization: Proof</span>
+                  </CommandItem>
+                </>
+              )}
             </CommandGroup>
           );
         })}

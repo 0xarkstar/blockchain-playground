@@ -1,7 +1,12 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { Box, Coins, Code, Diamond, Lock, ShieldCheck } from "lucide-react";
-import { Card, CardContent } from "../../components/ui/card";
+import { CardContent } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
+import { MagicCard } from "../../components/ui/magic-card";
+import { BorderBeam } from "../../components/ui/border-beam";
+import { NumberTicker } from "../../components/ui/number-ticker";
 
 const tracks = [
   {
@@ -83,6 +88,20 @@ export default function HomePage() {
           <p className="max-w-[600px] text-xl text-muted-foreground">
             {t("hero.description")}
           </p>
+          <div className="flex justify-center gap-8 mt-6">
+            <div className="flex flex-col items-center">
+              <span className="text-3xl font-bold"><NumberTicker value={66} /></span>
+              <span className="text-sm text-muted-foreground">Interactive Demos</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-3xl font-bold"><NumberTicker value={6} /></span>
+              <span className="text-sm text-muted-foreground">Learning Tracks</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="text-3xl font-bold"><NumberTicker value={14} /></span>
+              <span className="text-sm text-muted-foreground">ZK Circuits</span>
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-col gap-4">
@@ -101,7 +120,7 @@ export default function HomePage() {
                   : "pointer-events-none opacity-70"
               }
             >
-              <Card className="h-full transition-shadow hover:shadow-md">
+              <MagicCard className="h-full rounded-xl">
                 <CardContent className="p-6">
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
@@ -136,7 +155,8 @@ export default function HomePage() {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
+                {track.key === "appliedZk" && <BorderBeam />}
+              </MagicCard>
             </a>
           ))}
         </div>

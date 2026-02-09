@@ -1,6 +1,6 @@
 # Blockchain Playground
 
-Interactive blockchain education platform with 6 learning tracks and 59 demos (all complete).
+Interactive blockchain education platform with 6 learning tracks and 66 demos (all complete).
 
 ## Tech Stack
 
@@ -12,7 +12,7 @@ Interactive blockchain education platform with 6 learning tracks and 59 demos (a
 - **ZK**: circom 2.1.0 + snarkjs (Groth16) + circomlibjs (Poseidon)
 - **Crypto**: @noble/hashes, @noble/secp256k1, @scure/bip32, @scure/bip39
 - **i18n**: next-intl (EN, KO)
-- **Testing**: Vitest (709 unit tests) + Playwright (54 E2E tests) + Hardhat (162 contract tests)
+- **Testing**: Vitest (532 unit tests) + Playwright (54 E2E tests) + Hardhat (281 contract tests)
 - **Linting**: ESLint + Prettier
 - **CI/CD**: GitHub Actions (quality + e2e)
 - **Chain**: Base Sepolia testnet
@@ -28,7 +28,7 @@ apps/web/              # Next.js app
       solidity/        # Track 3: 11 demos
       tokens/          # Track 4: 11 demos
       zk/              # Track 5: 11 demos
-      applied-zk/      # Track 6: 4 demos (on-chain ZK verification)
+      applied-zk/      # Track 6: 11 demos + 3 education + 2 visualization
   components/          # React components by track
     ui/                # shadcn/ui components (19 Radix-based)
     shared/            # Shared demo components (DemoLayout, EducationPanel, etc.)

@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import confetti from "canvas-confetti";
 import { Check, X } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ProgressPipeline, EducationPanel } from "../shared";
+import { ShineBorder } from "../ui/shine-border";
 import { VoterRegistration } from "./voter-registration";
 import { VotingBooth } from "./voting-booth";
 import { ResultsPanel } from "./results-panel";
@@ -122,6 +125,7 @@ export function SecretVotingDemo() {
   );
   const [error, setError] = useState("");
   const [progressMessage, setProgressMessage] = useState("");
+  const confettiFiredRef = useRef(false);
 
   function truncateHex(hex: string, chars: number = 10): string {
     if (hex.length <= chars * 2 + 2) return hex;
@@ -235,6 +239,10 @@ export function SecretVotingDemo() {
 
       setVerificationResult(isValid);
       setPhase("verified");
+      if (isValid && !confettiFiredRef.current) {
+        confettiFiredRef.current = true;
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Verification failed");
       setPhase("proved");
@@ -252,6 +260,7 @@ export function SecretVotingDemo() {
     setVerificationResult(null);
     setError("");
     setProgressMessage("");
+    confettiFiredRef.current = false;
   }, []);
 
   return (
@@ -276,7 +285,7 @@ export function SecretVotingDemo() {
               steps={pipelineSteps}
               currentStepIndex={getPipelineIndex(phase)}
               stepStatuses={getPipelineStatuses(phase)}
-              showElapsedTime={phase === "proving" || phase === "verifying"}
+              showElapsedTime={true}
             />
           </div>
 
@@ -287,71 +296,85 @@ export function SecretVotingDemo() {
             </Alert>
           )}
 
-          <VoterRegistration
-            voter={voter}
-            otherVoters={otherVoters}
-            phase={phase}
-            onRegister={handleRegister}
-          />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={phase}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col gap-4"
+            >
+              <VoterRegistration
+                voter={voter}
+                otherVoters={otherVoters}
+                phase={phase}
+                onRegister={handleRegister}
+              />
 
-          <VotingBooth
-            voteChoice={voteChoice}
-            phase={phase}
-            progressMessage={progressMessage}
-            onVoteChoiceChange={setVoteChoice}
-            onVoteAndProve={handleVoteAndProve}
-          />
+              <VotingBooth
+                voteChoice={voteChoice}
+                phase={phase}
+                progressMessage={progressMessage}
+                onVoteChoiceChange={setVoteChoice}
+                onVoteAndProve={handleVoteAndProve}
+              />
 
-          <ResultsPanel
-            nullifierHash={nullifierHash}
-            merkleRoot={merkleRoot}
-            proofResult={proofResult}
-          />
+              <ResultsPanel
+                nullifierHash={nullifierHash}
+                merkleRoot={merkleRoot}
+                proofResult={proofResult}
+              />
 
-          {proofResult && (
-            <div className="rounded-lg border border-border bg-card p-4">
-              <div className="flex flex-col gap-2">
-                <p className="text-sm font-semibold">
-                  Step 3: Verify Vote
-                </p>
-                <Button
-                  onClick={handleVerifyProof}
-                  disabled={phase === "verifying"}
-                  className={
-                    verificationResult === true
-                      ? "bg-green-600 hover:bg-green-700"
-                      : verificationResult === false
-                        ? "bg-red-600 hover:bg-red-700"
-                        : ""
-                  }
-                >
-                  {verificationResult === null
-                    ? "Verify Vote Proof"
-                    : verificationResult
-                      ? "Vote Verified"
-                      : "Verification Failed"}
-                </Button>
-                {verificationResult !== null && (
-                  <Alert className={
-                    verificationResult
-                      ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
-                      : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
-                  }>
-                    {verificationResult ? (
-                      <Check className="h-4 w-4" />
-                    ) : (
-                      <X className="h-4 w-4" />
+              {proofResult && (
+                <div className="relative rounded-lg border border-border bg-card p-4">
+                  {verificationResult === true && (
+                    <ShineBorder shineColor={["#22c55e", "#10b981"]} />
+                  )}
+                  <div className="flex flex-col gap-2">
+                    <p className="text-sm font-semibold">
+                      Step 3: Verify Vote
+                    </p>
+                    <Button
+                      onClick={handleVerifyProof}
+                      disabled={phase === "verifying"}
+                      className={
+                        verificationResult === true
+                          ? "bg-green-600 hover:bg-green-700"
+                          : verificationResult === false
+                            ? "bg-red-600 hover:bg-red-700"
+                            : ""
+                      }
+                    >
+                      {verificationResult === null
+                        ? "Verify Vote Proof"
+                        : verificationResult
+                          ? "Vote Verified"
+                          : "Verification Failed"}
+                    </Button>
+                    {verificationResult !== null && (
+                      <Alert className={
+                        verificationResult
+                          ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
+                          : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
+                      }>
+                        {verificationResult ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <X className="h-4 w-4" />
+                        )}
+                        <AlertDescription>
+                          {verificationResult
+                            ? "Vote is valid! The voter is registered, the vote is legitimate, and the nullifier prevents double-voting."
+                            : "Vote verification failed. The proof is invalid."}
+                        </AlertDescription>
+                      </Alert>
                     )}
-                    <AlertDescription>
-                      {verificationResult
-                        ? "Vote is valid! The voter is registered, the vote is legitimate, and the nullifier prevents double-voting."
-                        : "Vote verification failed. The proof is invalid."}
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </div>
-            </div>
-          )}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </TabsContent>
 

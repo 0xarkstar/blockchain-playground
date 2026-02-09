@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { Check, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import confetti from "canvas-confetti";
+import { Check, X, ChevronDown, ChevronUp } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ProgressPipeline, EducationPanel } from "../shared";
+import { ShineBorder } from "../ui/shine-border";
 import { AirdropSetupPanel } from "./airdrop-setup-panel";
 import { ClaimPanel } from "./claim-panel";
 import { MerkleTreeView } from "./merkle-tree-view";
@@ -136,7 +139,9 @@ export function PrivateAirdropDemo() {
   );
   const [error, setError] = useState("");
   const [progressMessage, setProgressMessage] = useState("");
+  const [proofExpanded, setProofExpanded] = useState(false);
   const nextIdRef = useRef(DEFAULT_ADDRESSES.length + 1);
+  const confettiFiredRef = useRef(false);
 
   const addAddress = useCallback(() => {
     if (!newAddress.trim()) return;
@@ -262,6 +267,10 @@ export function PrivateAirdropDemo() {
 
       setVerificationResult(isValid);
       setPhase("verified");
+      if (isValid && !confettiFiredRef.current) {
+        confettiFiredRef.current = true;
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Verification failed");
       setPhase("proved");
@@ -285,7 +294,9 @@ export function PrivateAirdropDemo() {
     setVerificationResult(null);
     setError("");
     setProgressMessage("");
+    setProofExpanded(false);
     nextIdRef.current = DEFAULT_ADDRESSES.length + 1;
+    confettiFiredRef.current = false;
   }, []);
 
   return (
@@ -310,7 +321,7 @@ export function PrivateAirdropDemo() {
               steps={pipelineSteps}
               currentStepIndex={getPipelineIndex(phase)}
               stepStatuses={getPipelineStatuses(phase)}
-              showElapsedTime={phase === "proving" || phase === "verifying"}
+              showElapsedTime={true}
             />
           </div>
 
@@ -321,101 +332,124 @@ export function PrivateAirdropDemo() {
             </Alert>
           )}
 
-          <AirdropSetupPanel
-            addresses={addresses}
-            newAddress={newAddress}
-            claimIndex={claimIndex}
-            phase={phase}
-            onAddAddress={addAddress}
-            onRemoveAddress={removeAddress}
-            onNewAddressChange={setNewAddress}
-            onBuildTree={handleBuildTree}
-            progressMessage={progressMessage}
-          />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={phase}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col gap-4"
+            >
+              <AirdropSetupPanel
+                addresses={addresses}
+                newAddress={newAddress}
+                claimIndex={claimIndex}
+                phase={phase}
+                onAddAddress={addAddress}
+                onRemoveAddress={removeAddress}
+                onNewAddressChange={setNewAddress}
+                onBuildTree={handleBuildTree}
+                progressMessage={progressMessage}
+              />
 
-          <MerkleTreeView
-            merkleRoot={merkleRoot}
-            nullifierHash={nullifierHash}
-          />
+              <MerkleTreeView
+                merkleRoot={merkleRoot}
+                nullifierHash={nullifierHash}
+              />
 
-          <ClaimPanel
-            addresses={addresses}
-            claimIndex={claimIndex}
-            phase={phase}
-            progressMessage={progressMessage}
-            onClaimIndexChange={setClaimIndex}
-            onClaim={handleClaim}
-          />
+              <ClaimPanel
+                addresses={addresses}
+                claimIndex={claimIndex}
+                phase={phase}
+                progressMessage={progressMessage}
+                onClaimIndexChange={setClaimIndex}
+                onClaim={handleClaim}
+              />
 
-          {proofResult && (
-            <div className="rounded-lg border border-border bg-card p-4">
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold">
-                    Claim Proof
-                  </p>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
-                    Generated
-                  </Badge>
-                </div>
-                <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
-                  <code>
-                    {`pi_a: [${proofResult.proof.pi_a
-                      .slice(0, 2)
-                      .map((v) => truncateHex(v, 8))
-                      .join(", ")}]\n`}
-                    {`public signals: ${proofResult.publicSignals.length} values\n`}
-                    {`nullifier + root = public, address = private`}
-                  </code>
-                </pre>
-              </div>
-            </div>
-          )}
-
-          {proofResult && (
-            <div className="rounded-lg border border-border bg-card p-4">
-              <div className="flex flex-col gap-2">
-                <p className="text-sm font-semibold">
-                  Step 4: Verify & Claim
-                </p>
-                <Button
-                  onClick={handleVerifyProof}
-                  disabled={phase === "verifying"}
-                  className={
-                    verificationResult === true
-                      ? "bg-green-600 hover:bg-green-700"
-                      : verificationResult === false
-                        ? "bg-red-600 hover:bg-red-700"
-                        : ""
-                  }
-                >
-                  {verificationResult === null
-                    ? "Verify Claim Proof"
-                    : verificationResult
-                      ? "Claim Verified"
-                      : "Verification Failed"}
-                </Button>
-                {verificationResult !== null && (
-                  <Alert className={
-                    verificationResult
-                      ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
-                      : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
-                  }>
-                    {verificationResult ? (
-                      <Check className="h-4 w-4" />
-                    ) : (
-                      <X className="h-4 w-4" />
+              {proofResult && (
+                <div className="rounded-lg border border-border bg-card p-4">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-semibold">
+                        Claim Proof
+                      </p>
+                      <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                        Generated
+                      </Badge>
+                    </div>
+                    <button
+                      onClick={() => setProofExpanded(!proofExpanded)}
+                      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                    >
+                      {proofExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                      {proofExpanded ? "Hide" : "Show"} proof data
+                    </button>
+                    {proofExpanded && (
+                      <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono max-h-32">
+                        <code>
+                          {`pi_a: [${proofResult.proof.pi_a
+                            .slice(0, 2)
+                            .map((v) => truncateHex(v, 8))
+                            .join(", ")}]\n`}
+                          {`public signals: ${proofResult.publicSignals.length} values\n`}
+                          {`nullifier + root = public, address = private`}
+                        </code>
+                      </pre>
                     )}
-                    <AlertDescription>
-                      {verificationResult
-                        ? "Claim verified! The claimer proved eligibility without revealing their address. The nullifier prevents double-claiming."
-                        : "Claim verification failed. The proof is invalid."}
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </div>
-            </div>
-          )}
+                  </div>
+                </div>
+              )}
+
+              {proofResult && (
+                <div className="relative rounded-lg border border-border bg-card p-4">
+                  {verificationResult === true && (
+                    <ShineBorder shineColor={["#22c55e", "#10b981"]} />
+                  )}
+                  <div className="flex flex-col gap-2">
+                    <p className="text-sm font-semibold">
+                      Step 4: Verify & Claim
+                    </p>
+                    <Button
+                      onClick={handleVerifyProof}
+                      disabled={phase === "verifying"}
+                      className={
+                        verificationResult === true
+                          ? "bg-green-600 hover:bg-green-700"
+                          : verificationResult === false
+                            ? "bg-red-600 hover:bg-red-700"
+                            : ""
+                      }
+                    >
+                      {verificationResult === null
+                        ? "Verify Claim Proof"
+                        : verificationResult
+                          ? "Claim Verified"
+                          : "Verification Failed"}
+                    </Button>
+                    {verificationResult !== null && (
+                      <Alert className={
+                        verificationResult
+                          ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
+                          : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
+                      }>
+                        {verificationResult ? (
+                          <Check className="h-4 w-4" />
+                        ) : (
+                          <X className="h-4 w-4" />
+                        )}
+                        <AlertDescription>
+                          {verificationResult
+                            ? "Claim verified! The claimer proved eligibility without revealing their address. The nullifier prevents double-claiming."
+                            : "Claim verification failed. The proof is invalid."}
+                        </AlertDescription>
+                      </Alert>
+                    )}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </TabsContent>
 

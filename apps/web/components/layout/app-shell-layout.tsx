@@ -72,19 +72,38 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
             ? pathWithoutLocale === "/"
             : pathWithoutLocale.startsWith(item.href);
         return (
-          <Link
-            key={item.key}
-            href={item.href}
-            onClick={() => setOpen(false)}
-            className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-              isActive
-                ? "bg-accent text-accent-foreground"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-            }`}
-          >
-            <item.icon className="h-4 w-4" />
-            {t(item.key)}
-          </Link>
+          <div key={item.key}>
+            <Link
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                isActive
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+              }`}
+            >
+              <item.icon className="h-4 w-4" />
+              {t(item.key)}
+            </Link>
+            {isActive && item.key === "appliedZk" && (
+              <div className="ml-7 flex flex-col gap-1">
+                <Link
+                  href="/applied-zk/education/snark"
+                  onClick={() => setOpen(false)}
+                  className="text-xs text-muted-foreground hover:text-foreground py-1"
+                >
+                  Education
+                </Link>
+                <Link
+                  href="/applied-zk/visualization/circuit"
+                  onClick={() => setOpen(false)}
+                  className="text-xs text-muted-foreground hover:text-foreground py-1"
+                >
+                  Visualization
+                </Link>
+              </div>
+            )}
+          </div>
         );
       })}
     </nav>
