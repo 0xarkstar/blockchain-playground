@@ -1,33 +1,31 @@
 "use client";
 
+import { useState } from "react";
+import { ThumbsUp, Check, Copy } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 import {
-  Stack,
-  Button,
-  Text,
-  Paper,
   Table,
-  Badge,
-  Group,
-  Code,
-  CopyButton,
-  ActionIcon,
-  Tooltip,
-} from "@mantine/core";
-import { IconThumbUp, IconCheck, IconCopy } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 function truncateHex(hex: string, chars: number = 10): string {
   if (hex.length <= chars * 2 + 2) return hex;
   return `${hex.slice(0, chars + 2)}...${hex.slice(-chars)}`;
 }
 
-interface VoterRegistration {
+interface VoterRegistrationData {
   readonly secret: bigint;
   readonly commitment: bigint;
   readonly commitmentHex: string;
 }
 
 interface VoterRegistrationProps {
-  readonly voter: VoterRegistration | null;
+  readonly voter: VoterRegistrationData | null;
   readonly otherVoters: readonly string[];
   readonly phase: string;
   readonly onRegister: () => void;
@@ -39,87 +37,90 @@ export function VoterRegistration({
   phase,
   onRegister,
 }: VoterRegistrationProps) {
+  const [copiedHex, setCopiedHex] = useState("");
+
+  const handleCopy = (hex: string) => {
+    navigator.clipboard.writeText(hex);
+    setCopiedHex(hex);
+    setTimeout(() => setCopiedHex(""), 2000);
+  };
+
   return (
     <>
-      <Paper p="md" withBorder>
-        <Stack gap="sm">
-          <Text fw={600} size="sm">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">
             Step 1: Register as Voter
-          </Text>
-          <Text size="xs" c="dimmed">
+          </p>
+          <p className="text-xs text-muted-foreground">
             Generate a secret identity and register your commitment in the voter
             registry (Merkle tree). Three simulated voters are also registered.
-          </Text>
+          </p>
           <Button
             onClick={onRegister}
-            loading={phase === "registering"}
             disabled={phase !== "setup"}
-            leftSection={<IconThumbUp size={16} />}
           >
+            <ThumbsUp className="mr-2 h-4 w-4" />
             Register Identity
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {voter && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Text fw={600} size="sm">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">
               Voter Registry
-            </Text>
+            </p>
             <Table>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Voter</Table.Th>
-                  <Table.Th>Identity Commitment</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>
-                    <Badge color="blue" variant="light">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Voter</TableHead>
+                  <TableHead>Identity Commitment</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                       You
                     </Badge>
-                  </Table.Td>
-                  <Table.Td>
-                    <Group gap="xs">
-                      <Code>{truncateHex(voter.commitmentHex, 8)}</Code>
-                      <CopyButton value={voter.commitmentHex}>
-                        {({ copied, copy }) => (
-                          <Tooltip label={copied ? "Copied" : "Copy"}>
-                            <ActionIcon
-                              variant="subtle"
-                              size="xs"
-                              onClick={copy}
-                            >
-                              {copied ? (
-                                <IconCheck size={12} />
-                              ) : (
-                                <IconCopy size={12} />
-                              )}
-                            </ActionIcon>
-                          </Tooltip>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{truncateHex(voter.commitmentHex, 8)}</code>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        onClick={() => handleCopy(voter.commitmentHex)}
+                        title={copiedHex === voter.commitmentHex ? "Copied" : "Copy"}
+                      >
+                        {copiedHex === voter.commitmentHex ? (
+                          <Check className="h-3 w-3" />
+                        ) : (
+                          <Copy className="h-3 w-3" />
                         )}
-                      </CopyButton>
-                    </Group>
-                  </Table.Td>
-                </Table.Tr>
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
                 {otherVoters.map((hex, i) => (
-                  <Table.Tr key={`voter-${i}`}>
-                    <Table.Td>
-                      <Badge color="gray" variant="light">
+                  <TableRow key={`voter-${i}`}>
+                    <TableCell>
+                      <Badge variant="secondary">
                         Voter {i + 2}
                       </Badge>
-                    </Table.Td>
-                    <Table.Td>
-                      <Code>{hex}</Code>
-                    </Table.Td>
-                  </Table.Tr>
+                    </TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{hex}</code>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Tbody>
+              </TableBody>
             </Table>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
     </>
   );

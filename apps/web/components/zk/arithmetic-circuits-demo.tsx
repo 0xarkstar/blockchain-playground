@@ -1,21 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Stack,
-  Paper,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  TextInput,
-  NumberInput,
-  Select,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Info } from "lucide-react";
 import {
   parseExpression,
   computeWitness,
@@ -24,6 +10,26 @@ import {
   getPresetExpressions,
   type WitnessResult,
 } from "../../lib/zk/circuit";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export function ArithmeticCircuitsDemo() {
   const presets = getPresetExpressions();
@@ -37,7 +43,7 @@ export function ArithmeticCircuitsDemo() {
   );
   const p = 23n;
 
-  const handlePresetChange = (presetName: string | null) => {
+  const handlePresetChange = (presetName: string) => {
     const preset = presets.find((p) => p.name === presetName);
     if (!preset) return;
     setExpression(preset.expression);
@@ -68,79 +74,88 @@ export function ArithmeticCircuitsDemo() {
   }
 
   return (
-    <Stack gap="lg">
-      <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        An arithmetic circuit expresses computation as addition and
-        multiplication gates over a finite field (p=23). This is the first step
-        in building a SNARK.
+    <div className="flex flex-col gap-6">
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          An arithmetic circuit expresses computation as addition and
+          multiplication gates over a finite field (p=23). This is the first step
+          in building a SNARK.
+        </AlertDescription>
       </Alert>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Expression
-          </Text>
-          <Select
-            label="Preset"
-            data={presets.map((p) => ({
-              value: p.name,
-              label: `${p.name}: ${p.expression}`,
-            }))}
-            onChange={handlePresetChange}
-            placeholder="Choose a preset..."
-          />
-          <TextInput
-            label="Custom expression"
-            value={expression}
-            onChange={(e) => {
-              setExpression(e.currentTarget.value);
-              setWitnessResult(null);
-            }}
-            description="Operators: + * ( ) — Variables: a-z — Constants: 0-9"
-          />
-        </Stack>
-      </Paper>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Expression</p>
+          <div>
+            <Label>Preset</Label>
+            <Select onValueChange={handlePresetChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Choose a preset..." />
+              </SelectTrigger>
+              <SelectContent>
+                {presets.map((p) => (
+                  <SelectItem key={p.name} value={p.name}>
+                    {p.name}: {p.expression}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label>Custom expression</Label>
+            <p className="text-xs text-muted-foreground mb-1">
+              Operators: + * ( ) — Variables: a-z — Constants: 0-9
+            </p>
+            <Input
+              value={expression}
+              onChange={(e) => {
+                setExpression(e.target.value);
+                setWitnessResult(null);
+              }}
+            />
+          </div>
+        </div>
+      </div>
 
       {gates.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">
               Gates ({gates.length})
-            </Text>
-            <Table striped>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>#</Table.Th>
-                  <Table.Th>Operation</Table.Th>
-                  <Table.Th>Output</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+            </p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>#</TableHead>
+                  <TableHead>Operation</TableHead>
+                  <TableHead>Output</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {gates.map((g, i) => (
-                  <Table.Tr key={i}>
-                    <Table.Td>{i + 1}</Table.Td>
-                    <Table.Td>
-                      <Code>
+                  <TableRow key={i}>
+                    <TableCell>{i + 1}</TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
                         {g.left} {g.op === "mul" ? "*" : "+"} {g.right}
-                      </Code>
-                    </Table.Td>
-                    <Table.Td>
-                      <Code>{g.output}</Code>
-                    </Table.Td>
-                  </Table.Tr>
+                      </code>
+                    </TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{g.output}</code>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Tbody>
+              </TableBody>
             </Table>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
       {gates.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Circuit Diagram
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Circuit Diagram</p>
             <svg
               width="100%"
               height={Math.max(120, gates.length * 80 + 40)}
@@ -151,195 +166,107 @@ export function ArithmeticCircuitsDemo() {
                 const isMul = g.op === "mul";
                 return (
                   <g key={i}>
-                    <rect
-                      x={30}
-                      y={y}
-                      width={80}
-                      height={30}
-                      rx={4}
-                      fill="var(--mantine-color-blue-light)"
-                      stroke="var(--mantine-color-blue-5)"
-                      strokeWidth={1}
-                    />
-                    <text
-                      x={70}
-                      y={y + 19}
-                      textAnchor="middle"
-                      fontSize={11}
-                      fill="var(--mantine-color-blue-9)"
-                    >
-                      {g.left}
-                    </text>
-                    <line
-                      x1={110}
-                      y1={y + 15}
-                      x2={160}
-                      y2={y + 15}
-                      stroke="var(--mantine-color-gray-5)"
-                      strokeWidth={1.5}
-                    />
-                    <rect
-                      x={130}
-                      y={y}
-                      width={80}
-                      height={30}
-                      rx={4}
-                      fill="var(--mantine-color-violet-light)"
-                      stroke="var(--mantine-color-violet-5)"
-                      strokeWidth={1}
-                    />
-                    <text
-                      x={170}
-                      y={y + 19}
-                      textAnchor="middle"
-                      fontSize={11}
-                      fill="var(--mantine-color-violet-9)"
-                    >
-                      {g.right}
-                    </text>
-                    <line
-                      x1={210}
-                      y1={y + 15}
-                      x2={240}
-                      y2={y + 15}
-                      stroke="var(--mantine-color-gray-5)"
-                      strokeWidth={1.5}
-                    />
+                    <rect x={30} y={y} width={80} height={30} rx={4} className="fill-blue-100 stroke-blue-500 dark:fill-blue-900 dark:stroke-blue-400" strokeWidth={1} />
+                    <text x={70} y={y + 19} textAnchor="middle" fontSize={11} className="fill-blue-900 dark:fill-blue-200">{g.left}</text>
+                    <line x1={110} y1={y + 15} x2={160} y2={y + 15} className="stroke-gray-400" strokeWidth={1.5} />
+                    <rect x={130} y={y} width={80} height={30} rx={4} className="fill-violet-100 stroke-violet-500 dark:fill-violet-900 dark:stroke-violet-400" strokeWidth={1} />
+                    <text x={170} y={y + 19} textAnchor="middle" fontSize={11} className="fill-violet-900 dark:fill-violet-200">{g.right}</text>
+                    <line x1={210} y1={y + 15} x2={240} y2={y + 15} className="stroke-gray-400" strokeWidth={1.5} />
                     <circle
                       cx={260}
                       cy={y + 15}
                       r={18}
-                      fill={
-                        isMul
-                          ? "var(--mantine-color-orange-light)"
-                          : "var(--mantine-color-teal-light)"
-                      }
-                      stroke={
-                        isMul
-                          ? "var(--mantine-color-orange-6)"
-                          : "var(--mantine-color-teal-6)"
-                      }
+                      className={isMul ? "fill-orange-100 stroke-orange-500 dark:fill-orange-900 dark:stroke-orange-400" : "fill-teal-100 stroke-teal-500 dark:fill-teal-900 dark:stroke-teal-400"}
                       strokeWidth={1.5}
                     />
-                    <text
-                      x={260}
-                      y={y + 20}
-                      textAnchor="middle"
-                      fontSize={16}
-                      fontWeight={700}
-                      fill={
-                        isMul
-                          ? "var(--mantine-color-orange-9)"
-                          : "var(--mantine-color-teal-9)"
-                      }
-                    >
+                    <text x={260} y={y + 20} textAnchor="middle" fontSize={16} fontWeight={700} className={isMul ? "fill-orange-900 dark:fill-orange-200" : "fill-teal-900 dark:fill-teal-200"}>
                       {isMul ? "\u00d7" : "+"}
                     </text>
-                    <line
-                      x1={278}
-                      y1={y + 15}
-                      x2={310}
-                      y2={y + 15}
-                      stroke="var(--mantine-color-gray-5)"
-                      strokeWidth={1.5}
-                    />
-                    <rect
-                      x={310}
-                      y={y}
-                      width={80}
-                      height={30}
-                      rx={4}
-                      fill="var(--mantine-color-green-light)"
-                      stroke="var(--mantine-color-green-5)"
-                      strokeWidth={1}
-                    />
-                    <text
-                      x={350}
-                      y={y + 19}
-                      textAnchor="middle"
-                      fontSize={11}
-                      fill="var(--mantine-color-green-9)"
-                    >
-                      {g.output}
-                    </text>
+                    <line x1={278} y1={y + 15} x2={310} y2={y + 15} className="stroke-gray-400" strokeWidth={1.5} />
+                    <rect x={310} y={y} width={80} height={30} rx={4} className="fill-green-100 stroke-green-500 dark:fill-green-900 dark:stroke-green-400" strokeWidth={1} />
+                    <text x={350} y={y + 19} textAnchor="middle" fontSize={11} className="fill-green-900 dark:fill-green-200">{g.output}</text>
                   </g>
                 );
               })}
             </svg>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Inputs (mod {p.toString()})
-          </Text>
-          <Group grow>
+          </p>
+          <div className="grid grid-cols-2 gap-4">
             {Array.from(variables).map((v) => (
-              <NumberInput
-                key={v}
-                label={v}
-                value={inputValues[v] ?? 0}
-                onChange={(val) =>
-                  setInputValues({ ...inputValues, [v]: Number(val) || 0 })
-                }
-                min={0}
-                max={22}
-              />
+              <div key={v}>
+                <Label>{v}</Label>
+                <Input
+                  type="number"
+                  value={inputValues[v] ?? 0}
+                  onChange={(e) =>
+                    setInputValues({ ...inputValues, [v]: Number(e.target.value) || 0 })
+                  }
+                  min={0}
+                  max={22}
+                />
+              </div>
             ))}
-          </Group>
-          <Button onClick={handleCompute} variant="light">
+          </div>
+          <Button variant="secondary" onClick={handleCompute}>
             Compute Witness
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {witnessResult && (
         <>
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Group justify="space-between">
-                <Text size="sm" fw={600}>
-                  Witness
-                </Text>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold">Witness</p>
                 <Badge
-                  variant="light"
-                  color={witnessResult.satisfied ? "green" : "red"}
+                  variant="secondary"
+                  className={
+                    witnessResult.satisfied
+                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                      : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                  }
                 >
                   {witnessResult.satisfied
                     ? "R1CS Satisfied"
                     : "R1CS Not Satisfied"}
                 </Badge>
-              </Group>
-              <Table striped>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Wire</Table.Th>
-                    <Table.Th>Value</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Wire</TableHead>
+                    <TableHead>Value</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {Object.entries(witnessResult.values).map(([wire, val]) => (
-                    <Table.Tr key={wire}>
-                      <Table.Td>
-                        <Code>{wire}</Code>
-                      </Table.Td>
-                      <Table.Td>
-                        <Code>{val.toString()}</Code>
-                      </Table.Td>
-                    </Table.Tr>
+                    <TableRow key={wire}>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{wire}</code>
+                      </TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{val.toString()}</code>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </Table.Tbody>
+                </TableBody>
               </Table>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text size="sm" fw={600}>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold">
                 R1CS Constraints (A·w * B·w = C·w)
-              </Text>
+              </p>
               {(() => {
                 const r1cs = gatesToR1CS(gates, p);
                 const checks = verifySatisfaction(
@@ -348,44 +275,47 @@ export function ArithmeticCircuitsDemo() {
                   p,
                 );
                 return (
-                  <Table striped>
-                    <Table.Thead>
-                      <Table.Tr>
-                        <Table.Th>#</Table.Th>
-                        <Table.Th>(A·w) * (B·w)</Table.Th>
-                        <Table.Th>C·w</Table.Th>
-                        <Table.Th>Satisfied</Table.Th>
-                      </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>#</TableHead>
+                        <TableHead>(A·w) * (B·w)</TableHead>
+                        <TableHead>C·w</TableHead>
+                        <TableHead>Satisfied</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
                       {checks.map((c) => (
-                        <Table.Tr key={c.index}>
-                          <Table.Td>{c.index + 1}</Table.Td>
-                          <Table.Td>
-                            <Code>{c.lhs.toString()}</Code>
-                          </Table.Td>
-                          <Table.Td>
-                            <Code>{c.rhs.toString()}</Code>
-                          </Table.Td>
-                          <Table.Td>
+                        <TableRow key={c.index}>
+                          <TableCell>{c.index + 1}</TableCell>
+                          <TableCell>
+                            <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{c.lhs.toString()}</code>
+                          </TableCell>
+                          <TableCell>
+                            <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{c.rhs.toString()}</code>
+                          </TableCell>
+                          <TableCell>
                             <Badge
-                              size="sm"
-                              variant="light"
-                              color={c.satisfied ? "green" : "red"}
+                              variant="secondary"
+                              className={
+                                c.satisfied
+                                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                              }
                             >
                               {c.satisfied ? "Yes" : "No"}
                             </Badge>
-                          </Table.Td>
-                        </Table.Tr>
+                          </TableCell>
+                        </TableRow>
                       ))}
-                    </Table.Tbody>
+                    </TableBody>
                   </Table>
                 );
               })()}
-            </Stack>
-          </Paper>
+            </div>
+          </div>
         </>
       )}
-    </Stack>
+    </div>
   );
 }

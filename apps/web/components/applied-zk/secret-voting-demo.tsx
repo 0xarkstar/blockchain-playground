@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Stack, Button, Alert, Text, Group, Paper, Tabs } from "@mantine/core";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { Check, X } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ProgressPipeline, EducationPanel } from "../shared";
 import { VoterRegistration } from "./voter-registration";
@@ -23,6 +22,9 @@ import {
   MerkleTree,
   formatMerkleProofForCircuit,
 } from "../../lib/applied-zk/merkle";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Button } from "../ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 type DemoPhase =
   | "setup"
@@ -36,7 +38,7 @@ type DemoPhase =
 
 type VoteChoice = "yes" | "no";
 
-interface VoterRegistration {
+interface VoterRegistrationData {
   readonly secret: bigint;
   readonly commitment: bigint;
   readonly commitmentHex: string;
@@ -100,16 +102,11 @@ function getPipelineStatuses(phase: DemoPhase) {
   return statuses;
 }
 
-function truncateHex(hex: string, chars: number = 10): string {
-  if (hex.length <= chars * 2 + 2) return hex;
-  return `${hex.slice(0, chars + 2)}...${hex.slice(-chars)}`;
-}
-
 const PROPOSAL_ID = 1n;
 
 export function SecretVotingDemo() {
   const [phase, setPhase] = useState<DemoPhase>("setup");
-  const [voter, setVoter] = useState<VoterRegistration | null>(null);
+  const [voter, setVoter] = useState<VoterRegistrationData | null>(null);
   const [otherVoters, setOtherVoters] = useState<readonly string[]>([]);
   const [voteChoice, setVoteChoice] = useState<VoteChoice>("yes");
   const [nullifierHash, setNullifierHash] = useState("");
@@ -122,6 +119,11 @@ export function SecretVotingDemo() {
   );
   const [error, setError] = useState("");
   const [progressMessage, setProgressMessage] = useState("");
+
+  function truncateHex(hex: string, chars: number = 10): string {
+    if (hex.length <= chars * 2 + 2) return hex;
+    return `${hex.slice(0, chars + 2)}...${hex.slice(-chars)}`;
+  }
 
   const handleRegister = useCallback(async () => {
     try {
@@ -251,37 +253,33 @@ export function SecretVotingDemo() {
 
   return (
     <Tabs defaultValue="demo">
-      <Tabs.List>
-        <Tabs.Tab value="demo">Demo</Tabs.Tab>
-        <Tabs.Tab value="learn">Learn</Tabs.Tab>
-      </Tabs.List>
+      <TabsList>
+        <TabsTrigger value="demo">Demo</TabsTrigger>
+        <TabsTrigger value="learn">Learn</TabsTrigger>
+      </TabsList>
 
-      <Tabs.Panel value="demo" pt="md">
-        <Stack gap="md">
-          <Group justify="space-between">
+      <TabsContent value="demo" className="mt-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
             <ConnectButton />
-            <Button variant="subtle" size="xs" onClick={handleReset}>
+            <Button variant="ghost" size="sm" onClick={handleReset}>
               Reset
             </Button>
-          </Group>
+          </div>
 
-          <Paper p="sm" withBorder>
+          <div className="rounded-lg border border-border bg-card p-3">
             <ProgressPipeline
               steps={pipelineSteps}
               currentStepIndex={getPipelineIndex(phase)}
               stepStatuses={getPipelineStatuses(phase)}
               showElapsedTime={phase === "proving" || phase === "verifying"}
             />
-          </Paper>
+          </div>
 
           {error && (
-            <Alert
-              color="red"
-              icon={<IconX size={16} />}
-              withCloseButton
-              onClose={() => setError("")}
-            >
-              {error}
+            <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+              <X className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
@@ -307,21 +305,20 @@ export function SecretVotingDemo() {
           />
 
           {proofResult && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-semibold">
                   Step 3: Verify Vote
-                </Text>
+                </p>
                 <Button
                   onClick={handleVerifyProof}
-                  loading={phase === "verifying"}
                   disabled={phase === "verifying"}
-                  color={
+                  className={
                     verificationResult === true
-                      ? "green"
+                      ? "bg-green-600 hover:bg-green-700"
                       : verificationResult === false
-                        ? "red"
-                        : "blue"
+                        ? "bg-red-600 hover:bg-red-700"
+                        : ""
                   }
                 >
                   {verificationResult === null
@@ -331,28 +328,30 @@ export function SecretVotingDemo() {
                       : "Verification Failed"}
                 </Button>
                 {verificationResult !== null && (
-                  <Alert
-                    color={verificationResult ? "green" : "red"}
-                    icon={
-                      verificationResult ? (
-                        <IconCheck size={16} />
-                      ) : (
-                        <IconX size={16} />
-                      )
-                    }
-                  >
-                    {verificationResult
-                      ? "Vote is valid! The voter is registered, the vote is legitimate, and the nullifier prevents double-voting."
-                      : "Vote verification failed. The proof is invalid."}
+                  <Alert className={
+                    verificationResult
+                      ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
+                      : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
+                  }>
+                    {verificationResult ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <X className="h-4 w-4" />
+                    )}
+                    <AlertDescription>
+                      {verificationResult
+                        ? "Vote is valid! The voter is registered, the vote is legitimate, and the nullifier prevents double-voting."
+                        : "Vote verification failed. The proof is invalid."}
+                    </AlertDescription>
                   </Alert>
                 )}
-              </Stack>
-            </Paper>
+              </div>
+            </div>
           )}
-        </Stack>
-      </Tabs.Panel>
+        </div>
+      </TabsContent>
 
-      <Tabs.Panel value="learn" pt="md">
+      <TabsContent value="learn" className="mt-4">
         <EducationPanel
           howItWorks={[
             {
@@ -392,7 +391,7 @@ export function SecretVotingDemo() {
           ]}
           defaultExpanded
         />
-      </Tabs.Panel>
+      </TabsContent>
     </Tabs>
   );
 }

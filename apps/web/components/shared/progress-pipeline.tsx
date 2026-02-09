@@ -1,13 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Group, Stack, Text, ThemeIcon, Box } from "@mantine/core";
-import {
-  IconCheck,
-  IconX,
-  IconCircleDot,
-  IconCircle,
-} from "@tabler/icons-react";
+import { Check, X, CircleDot, Circle } from "lucide-react";
 
 interface PipelineStep {
   id: string;
@@ -40,12 +34,12 @@ function getStatus(
 
 const statusConfig: Record<
   StepStatus,
-  { color: string; icon: typeof IconCheck }
+  { colorClass: string; bgClass: string; Icon: typeof Check }
 > = {
-  complete: { color: "green", icon: IconCheck },
-  active: { color: "blue", icon: IconCircleDot },
-  error: { color: "red", icon: IconX },
-  pending: { color: "gray", icon: IconCircle },
+  complete: { colorClass: "text-green-600 dark:text-green-400", bgClass: "bg-green-100 dark:bg-green-900", Icon: Check },
+  active: { colorClass: "text-blue-600 dark:text-blue-400", bgClass: "bg-blue-600 dark:bg-blue-500", Icon: CircleDot },
+  error: { colorClass: "text-red-600 dark:text-red-400", bgClass: "bg-red-100 dark:bg-red-900", Icon: X },
+  pending: { colorClass: "text-muted-foreground", bgClass: "bg-muted", Icon: Circle },
 };
 
 function ElapsedTimer() {
@@ -61,9 +55,7 @@ function ElapsedTimer() {
   }, []);
 
   return (
-    <Text size="xs" c="dimmed">
-      {elapsed}s
-    </Text>
+    <span className="text-xs text-muted-foreground">{elapsed}s</span>
   );
 }
 
@@ -74,61 +66,47 @@ export function ProgressPipeline({
   showElapsedTime = false,
 }: ProgressPipelineProps) {
   return (
-    <Group gap={0} wrap="nowrap" style={{ overflow: "auto" }}>
+    <div className="flex items-start gap-0 overflow-auto flex-nowrap">
       {steps.map((step, index) => {
         const status = getStatus(step, index, currentStepIndex, stepStatuses);
         const config = statusConfig[status];
-        const Icon = config.icon;
         const isLast = index === steps.length - 1;
 
         return (
-          <Group key={step.id} gap={0} wrap="nowrap" style={{ flex: 1 }}>
-            <Stack align="center" gap={4} style={{ minWidth: 80 }}>
-              <ThemeIcon
-                size={32}
-                radius="xl"
-                color={config.color}
-                variant={status === "active" ? "filled" : "light"}
-                style={
+          <div key={step.id} className="flex items-center flex-1" style={{ minWidth: 0 }}>
+            <div className="flex flex-col items-center gap-1" style={{ minWidth: 80 }}>
+              <div
+                className={`flex h-8 w-8 items-center justify-center rounded-full ${
                   status === "active"
-                    ? { animation: "pulse 2s ease-in-out infinite" }
-                    : undefined
-                }
+                    ? `${config.bgClass} text-white animate-pulse`
+                    : `${config.bgClass} ${config.colorClass}`
+                }`}
               >
-                <Icon size={16} />
-              </ThemeIcon>
-              <Text size="xs" fw={status === "active" ? 600 : 400} ta="center">
+                <config.Icon className="h-4 w-4" />
+              </div>
+              <span className={`text-xs text-center ${status === "active" ? "font-semibold" : ""}`}>
                 {step.label}
-              </Text>
+              </span>
               {step.description && (
-                <Text size="xs" c="dimmed" ta="center">
+                <span className="text-xs text-muted-foreground text-center">
                   {step.description}
-                </Text>
+                </span>
               )}
               {showElapsedTime && status === "active" && <ElapsedTimer />}
-            </Stack>
+            </div>
             {!isLast && (
-              <Box
-                h={2}
-                style={{
-                  flex: 1,
-                  minWidth: 20,
-                  backgroundColor:
-                    status === "complete"
-                      ? "var(--mantine-color-green-5)"
-                      : "var(--mantine-color-gray-3)",
-                }}
+              <div
+                className={`h-0.5 flex-1 ${
+                  status === "complete"
+                    ? "bg-green-500"
+                    : "bg-border"
+                }`}
+                style={{ minWidth: 20 }}
               />
             )}
-          </Group>
+          </div>
         );
       })}
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.6; }
-        }
-      `}</style>
-    </Group>
+    </div>
   );
 }

@@ -1,16 +1,8 @@
 "use client";
 
-import {
-  Stack,
-  Text,
-  Group,
-  Paper,
-  Code,
-  CopyButton,
-  ActionIcon,
-  Tooltip,
-} from "@mantine/core";
-import { IconCheck, IconCopy } from "@tabler/icons-react";
+import { useState } from "react";
+import { Check, Copy } from "lucide-react";
+import { Button } from "../ui/button";
 
 function truncateHex(hex: string, chars: number = 10): string {
   if (hex.length <= chars * 2 + 2) return hex;
@@ -26,49 +18,58 @@ export function MerkleTreeView({
   merkleRoot,
   nullifierHash,
 }: MerkleTreeViewProps) {
+  const [copiedField, setCopiedField] = useState("");
+
+  const handleCopy = (value: string, field: string) => {
+    navigator.clipboard.writeText(value);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(""), 2000);
+  };
+
   return (
     <>
       {merkleRoot && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Text fw={600} size="sm">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">
               Merkle Root (On-chain)
-            </Text>
-            <Group gap="xs">
-              <Code block style={{ flex: 1 }}>
-                {truncateHex(merkleRoot, 16)}
-              </Code>
-              <CopyButton value={merkleRoot}>
-                {({ copied, copy }) => (
-                  <Tooltip label={copied ? "Copied" : "Copy"}>
-                    <ActionIcon variant="subtle" onClick={copy}>
-                      {copied ? (
-                        <IconCheck size={16} />
-                      ) : (
-                        <IconCopy size={16} />
-                      )}
-                    </ActionIcon>
-                  </Tooltip>
+            </p>
+            <div className="flex items-center gap-1">
+              <pre className="flex-1 rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+                <code>{truncateHex(merkleRoot, 16)}</code>
+              </pre>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => handleCopy(merkleRoot, "root")}
+                title={copiedField === "root" ? "Copied" : "Copy"}
+              >
+                {copiedField === "root" ? (
+                  <Check className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
                 )}
-              </CopyButton>
-            </Group>
-          </Stack>
-        </Paper>
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
 
       {nullifierHash && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Text fw={600} size="sm">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">
               Nullifier (Anti-Double-Claim)
-            </Text>
-            <Text size="xs" c="dimmed">
+            </p>
+            <p className="text-xs text-muted-foreground">
               Derived from the address and airdrop ID. Prevents the same address
               from claiming twice without revealing which address claimed.
-            </Text>
-            <Code block>{truncateHex(nullifierHash, 16)}</Code>
-          </Stack>
-        </Paper>
+            </p>
+            <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+              <code>{truncateHex(nullifierHash, 16)}</code>
+            </pre>
+          </div>
+        </div>
       )}
     </>
   );

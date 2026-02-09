@@ -1,7 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
-import { Box, Text, Group, Tooltip } from "@mantine/core";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 interface HashAvalancheVisualizerProps {
   binary1: string;
@@ -20,58 +25,63 @@ export function HashAvalancheVisualizer({
   const cellSize = Math.max(4, Math.min(8, Math.floor(320 / gridSize)));
 
   return (
-    <Box>
-      <Text size="sm" fw={600} mb="xs">
+    <div>
+      <p className="text-sm font-semibold mb-1">
         Avalanche Effect Heat Map ({diffBits.length}/{binary1.length} bits
         changed)
-      </Text>
-      <Group gap={0} wrap="wrap" style={{ maxWidth: gridSize * cellSize + 2 }}>
-        {binary1.split("").map((_, i) => (
-          <Tooltip
-            key={i}
-            label={`Bit ${i}: ${binary1[i]} → ${binary2[i]}`}
-            withArrow
-            position="top"
-          >
-            <Box
-              style={{
-                width: cellSize,
-                height: cellSize,
-                backgroundColor: diffSet.has(i)
-                  ? "var(--mantine-color-red-6)"
-                  : "var(--mantine-color-green-6)",
-                opacity: diffSet.has(i) ? 1 : 0.3,
-                borderRadius: 1,
-              }}
-            />
-          </Tooltip>
-        ))}
-      </Group>
-      <Group mt="xs" gap="md">
-        <Group gap={4}>
-          <Box
+      </p>
+      <TooltipProvider>
+        <div
+          className="flex flex-wrap gap-0"
+          style={{ maxWidth: gridSize * cellSize + 2 }}
+        >
+          {binary1.split("").map((_, i) => (
+            <Tooltip key={i}>
+              <TooltipTrigger asChild>
+                <div
+                  style={{
+                    width: cellSize,
+                    height: cellSize,
+                    backgroundColor: diffSet.has(i)
+                      ? "hsl(var(--destructive))"
+                      : "hsl(142.1 76.2% 36.3%)",
+                    opacity: diffSet.has(i) ? 1 : 0.3,
+                    borderRadius: 1,
+                  }}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Bit {i}: {binary1[i]} → {binary2[i]}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </div>
+      </TooltipProvider>
+      <div className="flex items-center gap-4 mt-1">
+        <div className="flex items-center gap-1">
+          <div
+            className="rounded-sm"
             style={{
               width: 12,
               height: 12,
-              backgroundColor: "var(--mantine-color-red-6)",
-              borderRadius: 2,
+              backgroundColor: "hsl(var(--destructive))",
             }}
           />
-          <Text size="xs">Changed</Text>
-        </Group>
-        <Group gap={4}>
-          <Box
+          <p className="text-xs">Changed</p>
+        </div>
+        <div className="flex items-center gap-1">
+          <div
+            className="rounded-sm"
             style={{
               width: 12,
               height: 12,
-              backgroundColor: "var(--mantine-color-green-6)",
+              backgroundColor: "hsl(142.1 76.2% 36.3%)",
               opacity: 0.3,
-              borderRadius: 2,
             }}
           />
-          <Text size="xs">Unchanged</Text>
-        </Group>
-      </Group>
-    </Box>
+          <p className="text-xs">Unchanged</p>
+        </div>
+      </div>
+    </div>
   );
 }

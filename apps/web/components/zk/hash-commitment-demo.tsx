@@ -1,20 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Stack,
-  Paper,
-  TextInput,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  Select,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Info } from "lucide-react";
 import {
   createCommitment,
   verifyCommitment,
@@ -22,6 +9,24 @@ import {
   type HashScheme,
 } from "../../lib/zk/commitment";
 import { StepCard } from "../shared";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
 
 type Phase = "commit" | "reveal";
 
@@ -61,103 +66,120 @@ export function HashCommitmentDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        A commitment scheme lets you &quot;lock in&quot; a value without
-        revealing it. Later, you reveal the value and nonce to prove you
-        committed to it.
+    <div className="flex flex-col gap-6">
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          A commitment scheme lets you &quot;lock in&quot; a value without
+          revealing it. Later, you reveal the value and nonce to prove you
+          committed to it.
+        </AlertDescription>
       </Alert>
 
       {phase === "commit" ? (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Phase 1: Commit
-            </Text>
-            <TextInput
-              label="Secret value"
-              value={secret}
-              onChange={(e) => setSecret(e.currentTarget.value)}
-            />
-            <TextInput
-              label="Random nonce"
-              value={nonce}
-              onChange={(e) => setNonce(e.currentTarget.value)}
-              description="Random blinding factor prevents guessing"
-            />
-            <Select
-              label="Hash scheme"
-              value={scheme}
-              onChange={(v) => setScheme((v as HashScheme) ?? "sha256")}
-              data={[
-                { value: "sha256", label: "SHA-256" },
-                { value: "keccak256", label: "Keccak-256 (Ethereum)" },
-              ]}
-            />
-            <Button onClick={handleCommit} variant="light">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Phase 1: Commit</p>
+            <div>
+              <Label htmlFor="secret-value">Secret value</Label>
+              <Input
+                id="secret-value"
+                value={secret}
+                onChange={(e) => setSecret(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="random-nonce">Random nonce</Label>
+              <p className="text-xs text-muted-foreground mb-1">
+                Random blinding factor prevents guessing
+              </p>
+              <Input
+                id="random-nonce"
+                value={nonce}
+                onChange={(e) => setNonce(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Hash scheme</Label>
+              <Select value={scheme} onValueChange={(v) => setScheme(v as HashScheme)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="sha256">SHA-256</SelectItem>
+                  <SelectItem value="keccak256">Keccak-256 (Ethereum)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button variant="secondary" onClick={handleCommit}>
               Create Commitment
             </Button>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       ) : (
-        <Stack gap="md">
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text size="sm" fw={600}>
-                Commitment (public)
-              </Text>
-              <Code block>{commitHash}</Code>
-              <Badge variant="light" color="blue">
+        <div className="flex flex-col gap-4">
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold">Commitment (public)</p>
+              <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+                <code>{commitHash}</code>
+              </pre>
+              <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                 {scheme}
               </Badge>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
-          <Paper p="md" withBorder>
-            <Stack gap="md">
-              <Text size="sm" fw={600}>
-                Phase 2: Reveal
-              </Text>
-              <TextInput
-                label="Reveal secret"
-                value={revealSecret}
-                onChange={(e) => setRevealSecret(e.currentTarget.value)}
-                placeholder="Enter the original secret"
-              />
-              <TextInput
-                label="Reveal nonce"
-                value={revealNonce}
-                onChange={(e) => setRevealNonce(e.currentTarget.value)}
-                placeholder="Enter the original nonce"
-              />
-              <Group>
-                <Button onClick={handleReveal} variant="light" color="green">
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-4">
+              <p className="text-sm font-semibold">Phase 2: Reveal</p>
+              <div>
+                <Label>Reveal secret</Label>
+                <Input
+                  value={revealSecret}
+                  onChange={(e) => setRevealSecret(e.target.value)}
+                  placeholder="Enter the original secret"
+                />
+              </div>
+              <div>
+                <Label>Reveal nonce</Label>
+                <Input
+                  value={revealNonce}
+                  onChange={(e) => setRevealNonce(e.target.value)}
+                  placeholder="Enter the original nonce"
+                />
+              </div>
+              <div className="flex items-center gap-4">
+                <Button variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300" onClick={handleReveal}>
                   Verify
                 </Button>
-                <Button onClick={handleReset} variant="light" color="gray">
+                <Button variant="secondary" onClick={handleReset}>
                   Reset
                 </Button>
-              </Group>
-            </Stack>
-          </Paper>
-        </Stack>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {result && (
         <Alert
-          icon={<IconInfoCircle size={16} />}
-          variant="light"
-          color={resultValid === null ? "blue" : resultValid ? "green" : "red"}
+          className={
+            resultValid === null
+              ? "border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
+              : resultValid
+                ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
+                : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
+          }
         >
-          {result}
+          <Info className="h-4 w-4" />
+          <AlertDescription>{result}</AlertDescription>
         </Alert>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Commit-Reveal Process
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Commit-Reveal Process</p>
           <StepCard
             stepNumber={1}
             title="Commit"
@@ -201,56 +223,52 @@ export function HashCommitmentDemo() {
                   : "gray"
             }
           />
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="sm">
-          <Text size="sm" fw={600}>
-            How It Works
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">How It Works</p>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge variant="light" size="sm">
-                    Commit
-                  </Badge>
-                </Table.Td>
-                <Table.Td>hash(secret || nonce) → commitment</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge variant="light" size="sm" color="green">
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="secondary">Commit</Badge>
+                </TableCell>
+                <TableCell>hash(secret || nonce) → commitment</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                     Reveal
                   </Badge>
-                </Table.Td>
-                <Table.Td>
+                </TableCell>
+                <TableCell>
                   Publish (secret, nonce). Anyone can verify hash matches.
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge variant="light" size="sm" color="yellow">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
                     Hiding
                   </Badge>
-                </Table.Td>
-                <Table.Td>Commitment reveals nothing about the secret</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge variant="light" size="sm" color="red">
+                </TableCell>
+                <TableCell>Commitment reveals nothing about the secret</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="secondary" className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
                     Binding
                   </Badge>
-                </Table.Td>
-                <Table.Td>
+                </TableCell>
+                <TableCell>
                   Cannot find another (secret, nonce) that gives the same hash
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 }

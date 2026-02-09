@@ -1,7 +1,5 @@
 "use client";
 
-import { Paper, Group, Stack, Text, List, ThemeIcon, Box } from "@mantine/core";
-
 interface StepCardProps {
   stepNumber: number;
   title: string;
@@ -17,47 +15,33 @@ export function StepCard({
   description,
   details,
   isLast = false,
-  color = "blue",
 }: StepCardProps) {
   return (
-    <Box pos="relative">
-      <Group align="flex-start" gap="md" wrap="nowrap">
-        <Stack align="center" gap={0}>
-          <ThemeIcon size={36} radius="xl" color={color} variant="filled">
-            <Text size="sm" fw={700} c="white">
-              {stepNumber}
-            </Text>
-          </ThemeIcon>
+    <div className="relative">
+      <div className="flex items-start gap-3">
+        <div className="flex flex-col items-center">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+            {stepNumber}
+          </div>
           {!isLast && (
-            <Box
-              w={2}
-              style={{
-                flexGrow: 1,
-                minHeight: 24,
-                backgroundColor: `var(--mantine-color-${color}-3)`,
-              }}
-            />
+            <div className="w-0.5 grow bg-border" style={{ minHeight: 24 }} />
           )}
-        </Stack>
+        </div>
 
-        <Paper p="sm" style={{ flex: 1 }}>
-          <Stack gap="xs">
-            <Text fw={600} size="sm">
-              {title}
-            </Text>
-            <Text size="sm" c="dimmed">
-              {description}
-            </Text>
+        <div className="flex-1 pb-4">
+          <div className="flex flex-col gap-1">
+            <span className="text-sm font-semibold">{title}</span>
+            <span className="text-sm text-muted-foreground">{description}</span>
             {details && details.length > 0 && (
-              <List size="sm" spacing="xs">
+              <ul className="mt-1 list-disc pl-4 text-sm space-y-1">
                 {details.map((detail) => (
-                  <List.Item key={detail}>{detail}</List.Item>
+                  <li key={detail}>{detail}</li>
                 ))}
-              </List>
+              </ul>
             )}
-          </Stack>
-        </Paper>
-      </Group>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

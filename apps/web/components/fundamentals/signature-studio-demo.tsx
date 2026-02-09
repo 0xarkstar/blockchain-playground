@@ -1,26 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import {
-  Stack,
-  TextInput,
-  Textarea,
-  Button,
-  Code,
-  Text,
-  Paper,
-  Group,
-  CopyButton,
-  ActionIcon,
-  Alert,
-  SimpleGrid,
-} from "@mantine/core";
-import {
-  IconKey,
-  IconCheck,
-  IconCopy,
-  IconInfoCircle,
-} from "@tabler/icons-react";
+import { Key, Check, Copy, Info } from "lucide-react";
 import {
   generateKeyPair,
   signMessage,
@@ -31,6 +12,35 @@ import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
 import { StepCard } from "../shared/step-card";
 import { OnChainSection } from "../shared/on-chain-section";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+
+function CopyableCode({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="flex items-center gap-1">
+      <pre className="rounded-lg bg-muted p-3 overflow-x-auto flex-1 break-all" style={{ fontSize: "0.7rem" }}>
+        <code>{value}</code>
+      </pre>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-8 w-8"
+        onClick={handleCopy}
+      >
+        {copied ? <Check className="h-3.5 w-3.5 text-teal-500" /> : <Copy className="h-3.5 w-3.5" />}
+      </Button>
+    </div>
+  );
+}
 
 export function SignatureStudioDemo() {
   const [keyPair, setKeyPair] = useState<KeyPair | null>(null);
@@ -77,120 +87,124 @@ export function SignatureStudioDemo() {
     verifyResult !== null ? 3 : signature ? 2 : keyPair ? 1 : 0;
 
   const inputPanel = (
-    <Stack gap="md">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+    <div className="flex flex-col gap-4">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Step 1: Generate Key Pair
-          </Text>
-          <Button
-            leftSection={<IconKey size={16} />}
-            onClick={handleGenerateKeys}
-          >
+          </p>
+          <Button onClick={handleGenerateKeys}>
+            <Key className="h-4 w-4 mr-2" />
             Generate secp256k1 Key Pair
           </Button>
 
           {keyPair && (
-            <SimpleGrid cols={{ base: 1, md: 2 }} spacing="sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div>
-                <Text size="xs" c="dimmed">
+                <p className="text-xs text-muted-foreground">
                   Private Key
-                </Text>
+                </p>
                 <CopyableCode value={keyPair.privateKey} />
               </div>
               <div>
-                <Text size="xs" c="dimmed">
+                <p className="text-xs text-muted-foreground">
                   Public Key (compressed)
-                </Text>
+                </p>
                 <CopyableCode value={keyPair.publicKeyCompressed} />
               </div>
               <div>
-                <Text size="xs" c="dimmed">
+                <p className="text-xs text-muted-foreground">
                   Ethereum Address
-                </Text>
+                </p>
                 <CopyableCode value={keyPair.address} />
               </div>
-            </SimpleGrid>
+            </div>
           )}
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Step 2: Sign a Message
-          </Text>
-          <Textarea
-            label="Message"
-            value={message}
-            onChange={(e) => setMessage(e.currentTarget.value)}
-            minRows={2}
-          />
-          <Button onClick={handleSign} disabled={!keyPair} loading={signing}>
-            Sign Message
+          </p>
+          <div>
+            <Label>Message</Label>
+            <textarea
+              className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows={2}
+            />
+          </div>
+          <Button onClick={handleSign} disabled={!keyPair || signing}>
+            {signing ? "Signing..." : "Sign Message"}
           </Button>
 
           {signature && (
             <div>
-              <Text size="xs" c="dimmed">
+              <p className="text-xs text-muted-foreground">
                 Signature
-              </Text>
+              </p>
               <CopyableCode value={signature} />
             </div>
           )}
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Step 3: Verify Signature
-          </Text>
-          <TextInput
-            label="Message"
-            value={verifyMsg}
-            onChange={(e) => setVerifyMsg(e.currentTarget.value)}
-            size="sm"
-          />
-          <TextInput
-            label="Signature (hex)"
-            value={verifySig}
-            onChange={(e) => setVerifySig(e.currentTarget.value)}
-            size="sm"
-          />
-          <TextInput
-            label="Public Key (hex)"
-            value={verifyPubKey}
-            onChange={(e) => setVerifyPubKey(e.currentTarget.value)}
-            size="sm"
-          />
+          </p>
+          <div>
+            <Label>Message</Label>
+            <Input
+              value={verifyMsg}
+              onChange={(e) => setVerifyMsg(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Signature (hex)</Label>
+            <Input
+              value={verifySig}
+              onChange={(e) => setVerifySig(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Public Key (hex)</Label>
+            <Input
+              value={verifyPubKey}
+              onChange={(e) => setVerifyPubKey(e.target.value)}
+            />
+          </div>
           <Button onClick={handleVerify} variant="outline">
             Verify Signature
           </Button>
 
           {verifyResult !== null && (
-            <Alert
-              icon={<IconInfoCircle size={16} />}
-              color={verifyResult ? "green" : "red"}
-              title={verifyResult ? "Valid Signature" : "Invalid Signature"}
-            >
-              {verifyResult
-                ? "The signature is valid — the message was signed by the owner of this public key."
-                : "The signature is invalid — the message, signature, or public key does not match."}
+            <Alert className={verifyResult ? "border-green-500" : "border-red-500"}>
+              <Info className="h-4 w-4" />
+              <AlertTitle>{verifyResult ? "Valid Signature" : "Invalid Signature"}</AlertTitle>
+              <AlertDescription>
+                {verifyResult
+                  ? "The signature is valid — the message was signed by the owner of this public key."
+                  : "The signature is invalid — the message, signature, or public key does not match."}
+              </AlertDescription>
             </Alert>
           )}
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md" data-testid="signature-process-visual">
-      <Paper p="md" withBorder>
-        <Text size="sm" fw={600} mb="md">
+    <div className="flex flex-col gap-4" data-testid="signature-process-visual">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <p className="text-sm font-semibold mb-4">
           Signature Process
-        </Text>
-        <Stack gap="xs">
+        </p>
+        <div className="flex flex-col gap-1">
           <StepCard
             stepNumber={1}
             title="Generate Key Pair"
@@ -229,9 +243,9 @@ export function SignatureStudioDemo() {
                 : undefined
             }
           />
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 
   return (
@@ -294,30 +308,5 @@ export function SignatureStudioDemo() {
         />
       }
     />
-  );
-}
-
-function CopyableCode({ value }: { value: string }) {
-  return (
-    <Group gap="xs" align="center">
-      <Code
-        block
-        style={{ flex: 1, wordBreak: "break-all", fontSize: "0.7rem" }}
-      >
-        {value}
-      </Code>
-      <CopyButton value={value}>
-        {({ copied, copy }) => (
-          <ActionIcon
-            variant="subtle"
-            color={copied ? "teal" : "gray"}
-            onClick={copy}
-            size="sm"
-          >
-            {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
-          </ActionIcon>
-        )}
-      </CopyButton>
-    </Group>
   );
 }

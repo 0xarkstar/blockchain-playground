@@ -1,20 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Stack,
-  Paper,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  TextInput,
-  NumberInput,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Info } from "lucide-react";
 import {
   createPrivateState,
   mintShieldedCoin,
@@ -22,6 +9,19 @@ import {
   getPrivacyAnalysis,
   type PrivateState,
 } from "../../lib/zk/private-transfer";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export function PrivateTransferDemo() {
   const [state, setState] = useState<PrivateState>(createPrivateState);
@@ -65,154 +65,163 @@ export function PrivateTransferDemo() {
   );
 
   return (
-    <Stack gap="lg">
-      <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        Private transfers use commitments and nullifiers (Zcash/Tornado Cash
-        style). The verifier sees opaque hashes but NOT who sent what to whom or
-        how much.
+    <div className="flex flex-col gap-6">
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          Private transfers use commitments and nullifiers (Zcash/Tornado Cash
+          style). The verifier sees opaque hashes but NOT who sent what to whom or
+          how much.
+        </AlertDescription>
       </Alert>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">
               Mint Shielded Coin
-            </Text>
+            </p>
             <Button
               onClick={handleReset}
-              variant="light"
-              color="gray"
-              size="xs"
+              variant="secondary"
+              size="sm"
             >
               Reset
             </Button>
-          </Group>
-          <Group grow>
-            <TextInput
-              label="Owner"
-              value={mintOwner}
-              onChange={(e) => setMintOwner(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Value"
-              value={mintValue}
-              onChange={(v) => setMintValue(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Button onClick={handleMint} variant="light" color="green">
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Owner</Label>
+              <Input
+                value={mintOwner}
+                onChange={(e) => setMintOwner(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Value</Label>
+              <Input
+                type="number"
+                value={mintValue}
+                onChange={(e) => setMintValue(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300" onClick={handleMint}>
             Mint
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {unspentNotes.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">
               Unspent Notes (private view)
-            </Text>
-            <Table striped>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Select</Table.Th>
-                  <Table.Th>Owner</Table.Th>
-                  <Table.Th>Value</Table.Th>
-                  <Table.Th>Commitment</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+            </p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Select</TableHead>
+                  <TableHead>Owner</TableHead>
+                  <TableHead>Value</TableHead>
+                  <TableHead>Commitment</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {unspentNotes.map((note) => {
                   const idx = state.notes.indexOf(note);
                   return (
-                    <Table.Tr
+                    <TableRow
                       key={idx}
-                      style={{
-                        cursor: "pointer",
-                        background:
-                          selectedNote === idx
-                            ? "var(--mantine-color-blue-light)"
-                            : undefined,
-                      }}
+                      className={`cursor-pointer ${
+                        selectedNote === idx
+                          ? "bg-blue-50 dark:bg-blue-950"
+                          : ""
+                      }`}
                       onClick={() => setSelectedNote(idx)}
                     >
-                      <Table.Td>
+                      <TableCell>
                         <Badge
-                          variant={selectedNote === idx ? "filled" : "light"}
-                          size="sm"
-                          color="blue"
+                          variant="secondary"
+                          className={
+                            selectedNote === idx
+                              ? "bg-blue-500 text-white dark:bg-blue-600"
+                              : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                          }
                         >
                           {selectedNote === idx ? "Selected" : "Select"}
                         </Badge>
-                      </Table.Td>
-                      <Table.Td>{note.owner}</Table.Td>
-                      <Table.Td>
-                        <Code>{note.value.toString()}</Code>
-                      </Table.Td>
-                      <Table.Td>
-                        <Code>{note.commitment.slice(0, 16)}...</Code>
-                      </Table.Td>
-                    </Table.Tr>
+                      </TableCell>
+                      <TableCell>{note.owner}</TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{note.value.toString()}</code>
+                      </TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{note.commitment.slice(0, 16)}...</code>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </Table.Tbody>
+              </TableBody>
             </Table>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
       {selectedNote !== null && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">
               Transfer
-            </Text>
-            <Group grow>
-              <TextInput
-                label="Recipient"
-                value={recipient}
-                onChange={(e) => setRecipient(e.currentTarget.value)}
-              />
-              <NumberInput
-                label="Amount"
-                value={sendAmount}
-                onChange={(v) => setSendAmount(Number(v) || 0)}
-                min={1}
-              />
-            </Group>
-            <Button onClick={handleTransfer} variant="light" color="violet">
+            </p>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Recipient</Label>
+                <Input
+                  value={recipient}
+                  onChange={(e) => setRecipient(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label>Amount</Label>
+                <Input
+                  type="number"
+                  value={sendAmount}
+                  onChange={(e) => setSendAmount(Number(e.target.value) || 0)}
+                  min={1}
+                />
+              </div>
+            </div>
+            <Button variant="secondary" className="bg-violet-100 text-violet-800 hover:bg-violet-200 dark:bg-violet-900 dark:text-violet-300" onClick={handleTransfer}>
               Send Private Transfer
             </Button>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
       {lastMessage && (
-        <Alert
-          icon={<IconInfoCircle size={16} />}
-          variant="light"
-          color={lastSuccess ? "green" : "red"}
-        >
-          {lastMessage}
+        <Alert className={
+          lastSuccess
+            ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
+            : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
+        }>
+          <Info className="h-4 w-4" />
+          <AlertDescription>{lastMessage}</AlertDescription>
         </Alert>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             UTXO Flow
-          </Text>
+          </p>
           <svg width="100%" height={80} viewBox="0 0 520 80">
             {[
-              { label: "Mint", x: 10, color: "green", desc: "Create Note" },
-              {
-                label: "Transfer",
-                x: 140,
-                color: "blue",
-                desc: "Spend + Create",
-              },
-              { label: "Nullify", x: 270, color: "red", desc: "Mark Spent" },
-              { label: "Verify", x: 400, color: "violet", desc: "ZK Proof" },
+              { label: "Mint", x: 10, desc: "Create Note", fill: "fill-green-100 dark:fill-green-900", stroke: "stroke-green-500 dark:stroke-green-400", titleText: "fill-green-900 dark:fill-green-200", descText: "fill-green-700 dark:fill-green-300" },
+              { label: "Transfer", x: 140, desc: "Spend + Create", fill: "fill-blue-100 dark:fill-blue-900", stroke: "stroke-blue-500 dark:stroke-blue-400", titleText: "fill-blue-900 dark:fill-blue-200", descText: "fill-blue-700 dark:fill-blue-300" },
+              { label: "Nullify", x: 270, desc: "Mark Spent", fill: "fill-red-100 dark:fill-red-900", stroke: "stroke-red-500 dark:stroke-red-400", titleText: "fill-red-900 dark:fill-red-200", descText: "fill-red-700 dark:fill-red-300" },
+              { label: "Verify", x: 400, desc: "ZK Proof", fill: "fill-violet-100 dark:fill-violet-900", stroke: "stroke-violet-500 dark:stroke-violet-400", titleText: "fill-violet-900 dark:fill-violet-200", descText: "fill-violet-700 dark:fill-violet-300" },
             ].map((step, i) => (
               <g key={step.label}>
                 <rect
@@ -221,8 +230,7 @@ export function PrivateTransferDemo() {
                   width={100}
                   height={55}
                   rx={8}
-                  fill={`var(--mantine-color-${step.color}-light)`}
-                  stroke={`var(--mantine-color-${step.color}-6)`}
+                  className={`${step.fill} ${step.stroke}`}
                   strokeWidth={1.5}
                 />
                 <text
@@ -231,7 +239,7 @@ export function PrivateTransferDemo() {
                   textAnchor="middle"
                   fontSize={12}
                   fontWeight={600}
-                  fill={`var(--mantine-color-${step.color}-9)`}
+                  className={step.titleText}
                 >
                   {step.label}
                 </text>
@@ -240,7 +248,7 @@ export function PrivateTransferDemo() {
                   y={50}
                   textAnchor="middle"
                   fontSize={10}
-                  fill={`var(--mantine-color-${step.color}-7)`}
+                  className={step.descText}
                 >
                   {step.desc}
                 </text>
@@ -250,7 +258,7 @@ export function PrivateTransferDemo() {
                     y={42}
                     textAnchor="middle"
                     fontSize={16}
-                    fill="var(--mantine-color-dimmed)"
+                    className="fill-muted-foreground"
                   >
                     {"\u2192"}
                   </text>
@@ -258,89 +266,89 @@ export function PrivateTransferDemo() {
               </g>
             ))}
           </svg>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="sm">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Public State (what the blockchain sees)
-          </Text>
+          </p>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Commitments</Table.Td>
-                <Table.Td>
-                  <Code>{state.commitments.length}</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Nullifiers (spent)</Table.Td>
-                <Table.Td>
-                  <Code>{state.nullifiers.length}</Code>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+            <TableBody>
+              <TableRow>
+                <TableCell>Commitments</TableCell>
+                <TableCell>
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{state.commitments.length}</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Nullifiers (spent)</TableCell>
+                <TableCell>
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{state.nullifiers.length}</code>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
           {state.nullifiers.length > 0 && (
             <>
-              <Text size="xs" fw={600} c="dimmed">
+              <p className="text-xs font-semibold text-muted-foreground">
                 Spent nullifiers:
-              </Text>
+              </p>
               {state.nullifiers.map((n, i) => (
-                <Code key={i} block>
-                  {n.slice(0, 40)}...
-                </Code>
+                <pre key={i} className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+                  <code>{n.slice(0, 40)}...</code>
+                </pre>
               ))}
             </>
           )}
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="sm">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">
             Privacy Analysis
-          </Text>
+          </p>
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Category</Table.Th>
-                <Table.Th>Details</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge variant="light" color="green">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Category</TableHead>
+                <TableHead>Details</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                     Public
                   </Badge>
-                </Table.Td>
-                <Table.Td>{privacy.publicInfo.join(", ")}</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge variant="light" color="red">
+                </TableCell>
+                <TableCell>{privacy.publicInfo.join(", ")}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="secondary" className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
                     Hidden
                   </Badge>
-                </Table.Td>
-                <Table.Td>{privacy.hiddenInfo.join(", ")}</Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+                <TableCell>{privacy.hiddenInfo.join(", ")}</TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-          <Alert variant="light" color="green" p="xs">
-            <Text size="xs">
+          <Alert className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950 p-2">
+            <AlertDescription className="text-xs">
               <strong>Verifier knows:</strong> {privacy.verifierKnows}
-            </Text>
+            </AlertDescription>
           </Alert>
-          <Alert variant="light" color="red" p="xs">
-            <Text size="xs">
+          <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950 p-2">
+            <AlertDescription className="text-xs">
               <strong>Verifier does NOT know:</strong>{" "}
               {privacy.verifierDoesNotKnow}
-            </Text>
+            </AlertDescription>
           </Alert>
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 }

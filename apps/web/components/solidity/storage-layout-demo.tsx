@@ -1,19 +1,25 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
+import { Plus, Trash2 } from "lucide-react";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
 import {
-  Stack,
-  Paper,
   Select,
-  TextInput,
-  Button,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
   Table,
-  Progress,
-  Badge,
-  Group,
-  Text,
-} from "@mantine/core";
-import { IconPlus, IconTrash } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   calculateStorageLayout,
   optimizeStorageLayout,
@@ -47,16 +53,16 @@ const TYPES: SolidityStorageType[] = [
 ];
 
 const SLOT_COLORS = [
-  "blue",
-  "green",
-  "orange",
-  "violet",
-  "cyan",
-  "pink",
-  "teal",
-  "yellow",
-  "grape",
-  "indigo",
+  "bg-blue-500",
+  "bg-green-500",
+  "bg-orange-500",
+  "bg-violet-500",
+  "bg-cyan-500",
+  "bg-pink-500",
+  "bg-teal-500",
+  "bg-yellow-500",
+  "bg-purple-500",
+  "bg-indigo-500",
 ];
 
 interface VariableWithId extends StorageVariable {
@@ -108,87 +114,93 @@ export function StorageLayoutDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Add Variable
-          </Text>
-          <Group>
-            <TextInput
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Add Variable</p>
+          <div className="flex items-center gap-4">
+            <Input
               placeholder="Variable name"
               value={newName}
-              onChange={(e) => setNewName(e.currentTarget.value)}
-              style={{ flex: 1 }}
+              onChange={(e) => setNewName(e.target.value)}
+              className="flex-1"
             />
             <Select
-              data={TYPES}
               value={newType}
-              onChange={(v) => v && setNewType(v as SolidityStorageType)}
-              style={{ width: 150 }}
-            />
-            <Button leftSection={<IconPlus size={16} />} onClick={addVariable}>
+              onValueChange={(v) => setNewType(v as SolidityStorageType)}
+            >
+              <SelectTrigger className="w-[150px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {TYPES.map((t) => (
+                  <SelectItem key={t} value={t}>
+                    {t}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button onClick={addVariable}>
+              <Plus className="h-4 w-4 mr-1" />
               Add
             </Button>
-          </Group>
-        </Stack>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">
               Variables ({variables.length})
-            </Text>
-          </Group>
+            </p>
+          </div>
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Name</Table.Th>
-                <Table.Th>Type</Table.Th>
-                <Table.Th>Size</Table.Th>
-                <Table.Th />
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Size</TableHead>
+                <TableHead />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {variables.map((v, i) => (
-                <Table.Tr key={v.id}>
-                  <Table.Td>{v.name}</Table.Td>
-                  <Table.Td>
-                    <Badge variant="light">{v.type}</Badge>
-                  </Table.Td>
-                  <Table.Td>{getTypeSize(v.type)} bytes</Table.Td>
-                  <Table.Td>
+                <TableRow key={v.id}>
+                  <TableCell>{v.name}</TableCell>
+                  <TableCell>
+                    <Badge variant="secondary">{v.type}</Badge>
+                  </TableCell>
+                  <TableCell>{getTypeSize(v.type)} bytes</TableCell>
+                  <TableCell>
                     <Button
-                      size="xs"
-                      variant="subtle"
-                      color="red"
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-500 hover:text-red-700"
                       onClick={() => removeVariable(i)}
                     >
-                      <IconTrash size={14} />
+                      <Trash2 className="h-3.5 w-3.5" />
                     </Button>
-                  </Table.Td>
-                </Table.Tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Storage Layout
-            </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Storage Layout</p>
             <Button
-              size="xs"
-              variant={showOptimized ? "filled" : "outline"}
+              size="sm"
+              variant={showOptimized ? "default" : "outline"}
               onClick={() => setShowOptimized(!showOptimized)}
             >
               {showOptimized ? "Showing Optimized" : "Show Optimized"}
             </Button>
-          </Group>
+          </div>
 
           {activeLayout.assignments.length > 0 && (
             <>
@@ -203,46 +215,47 @@ export function StorageLayoutDemo() {
                 const wastedInSlot = 32 - usedInSlot;
 
                 return (
-                  <Paper key={slotIdx} p="xs" withBorder>
-                    <Text size="xs" c="dimmed" mb={4}>
+                  <div
+                    key={slotIdx}
+                    className="rounded-lg border border-border bg-card p-2"
+                  >
+                    <p className="text-xs text-muted-foreground mb-1">
                       Slot {slotIdx}
-                    </Text>
-                    <Progress.Root size={24}>
+                    </p>
+                    <div className="flex h-6 w-full overflow-hidden rounded-full">
                       {slotAssignments.map((a, i) => (
-                        <Progress.Section
+                        <div
                           key={a.variable.name}
-                          value={(a.size / 32) * 100}
-                          color={SLOT_COLORS[i % SLOT_COLORS.length]}
+                          className={`${SLOT_COLORS[i % SLOT_COLORS.length]} flex items-center justify-center text-xs text-white font-medium`}
+                          style={{ width: `${(a.size / 32) * 100}%` }}
                         >
-                          <Progress.Label>
-                            {a.variable.name} ({a.size}B)
-                          </Progress.Label>
-                        </Progress.Section>
+                          {a.variable.name} ({a.size}B)
+                        </div>
                       ))}
                       {wastedInSlot > 0 && (
-                        <Progress.Section
-                          value={(wastedInSlot / 32) * 100}
-                          color="gray"
+                        <div
+                          className="bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs font-medium"
+                          style={{ width: `${(wastedInSlot / 32) * 100}%` }}
                         >
-                          <Progress.Label>{wastedInSlot}B</Progress.Label>
-                        </Progress.Section>
+                          {wastedInSlot}B
+                        </div>
                       )}
-                    </Progress.Root>
-                  </Paper>
+                    </div>
+                  </div>
                 );
               })}
             </>
           )}
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {efficiencyPieData.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">
               Slot Packing Efficiency (
               {showOptimized ? "Optimized" : "Original"})
-            </Text>
+            </p>
             <SimplePieChart
               data={efficiencyPieData}
               nameKey="name"
@@ -250,85 +263,93 @@ export function StorageLayoutDemo() {
               colors={["#40c057", "#868e96"]}
               height={200}
             />
-            <Text size="xs" c="dimmed" ta="center">
+            <p className="text-xs text-muted-foreground text-center">
               {activeLayout.efficiency.toFixed(1)}% of allocated storage is
               utilized
-            </Text>
-          </Stack>
-        </Paper>
+            </p>
+          </div>
+        </div>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Comparison
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Comparison</p>
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Metric</Table.Th>
-                <Table.Th ta="right">Original</Table.Th>
-                <Table.Th ta="right">Optimized</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Total Slots</Table.Td>
-                <Table.Td ta="right">{layout.totalSlots}</Table.Td>
-                <Table.Td ta="right">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Metric</TableHead>
+                <TableHead className="text-right">Original</TableHead>
+                <TableHead className="text-right">Optimized</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>Total Slots</TableCell>
+                <TableCell className="text-right">
+                  {layout.totalSlots}
+                </TableCell>
+                <TableCell className="text-right">
                   <Badge
-                    color={
+                    variant="secondary"
+                    className={
                       optimized.totalSlots < layout.totalSlots
-                        ? "green"
-                        : "gray"
+                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                        : ""
                     }
-                    variant="light"
                   >
                     {optimized.totalSlots}
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Used Bytes</Table.Td>
-                <Table.Td ta="right">{layout.usedBytes}</Table.Td>
-                <Table.Td ta="right">{optimized.usedBytes}</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Wasted Bytes</Table.Td>
-                <Table.Td ta="right">{layout.wastedBytes}</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Used Bytes</TableCell>
+                <TableCell className="text-right">
+                  {layout.usedBytes}
+                </TableCell>
+                <TableCell className="text-right">
+                  {optimized.usedBytes}
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Wasted Bytes</TableCell>
+                <TableCell className="text-right">
+                  {layout.wastedBytes}
+                </TableCell>
+                <TableCell className="text-right">
                   <Badge
-                    color={
+                    variant="secondary"
+                    className={
                       optimized.wastedBytes < layout.wastedBytes
-                        ? "green"
-                        : "gray"
+                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                        : ""
                     }
-                    variant="light"
                   >
                     {optimized.wastedBytes}
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Efficiency</Table.Td>
-                <Table.Td ta="right">{layout.efficiency.toFixed(1)}%</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Efficiency</TableCell>
+                <TableCell className="text-right">
+                  {layout.efficiency.toFixed(1)}%
+                </TableCell>
+                <TableCell className="text-right">
                   <Badge
-                    color={
+                    variant="secondary"
+                    className={
                       optimized.efficiency > layout.efficiency
-                        ? "green"
-                        : "gray"
+                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                        : ""
                     }
-                    variant="light"
                   >
                     {optimized.efficiency.toFixed(1)}%
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -356,6 +377,6 @@ export function StorageLayoutDemo() {
           "Mappings and dynamic arrays always start a new slot",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

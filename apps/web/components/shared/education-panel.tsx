@@ -1,7 +1,13 @@
 "use client";
 
-import { Accordion, Alert, List, Stack, Text, ThemeIcon } from "@mantine/core";
-import { IconInfoCircle, IconBulb, IconListCheck } from "@tabler/icons-react";
+import { Info, Lightbulb, ListChecks } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
+import { Alert, AlertDescription } from "../ui/alert";
 import { StepCard } from "./step-card";
 
 interface EducationStep {
@@ -40,22 +46,19 @@ export function EducationPanel({
   if (!hasContent) return null;
 
   return (
-    <Accordion multiple defaultValue={defaultValue} variant="separated">
+    <Accordion type="multiple" defaultValue={defaultValue} className="space-y-2">
       {howItWorks && howItWorks.length > 0 && (
-        <Accordion.Item value="how-it-works">
-          <Accordion.Control
-            icon={
-              <ThemeIcon variant="light" color="blue" size="sm">
-                <IconListCheck size={14} />
-              </ThemeIcon>
-            }
-          >
-            <Text fw={600} size="sm">
-              How It Works
-            </Text>
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Stack gap="xs">
+        <AccordionItem value="how-it-works" className="rounded-lg border border-border px-4">
+          <AccordionTrigger>
+            <div className="flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                <ListChecks className="h-3.5 w-3.5" />
+              </span>
+              <span className="text-sm font-semibold">How It Works</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="flex flex-col gap-2">
               {howItWorks.map((step, index) => (
                 <StepCard
                   key={step.title}
@@ -66,65 +69,55 @@ export function EducationPanel({
                   isLast={index === howItWorks.length - 1}
                 />
               ))}
-            </Stack>
-          </Accordion.Panel>
-        </Accordion.Item>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
       )}
 
       {whyItMatters && (
-        <Accordion.Item value="why-it-matters">
-          <Accordion.Control
-            icon={
-              <ThemeIcon variant="light" color="teal" size="sm">
-                <IconInfoCircle size={14} />
-              </ThemeIcon>
-            }
-          >
-            <Text fw={600} size="sm">
-              Why It Matters
-            </Text>
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Alert
-              icon={<IconInfoCircle size={16} />}
-              color="teal"
-              variant="light"
-            >
-              {whyItMatters}
+        <AccordionItem value="why-it-matters" className="rounded-lg border border-border px-4">
+          <AccordionTrigger>
+            <div className="flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300">
+                <Info className="h-3.5 w-3.5" />
+              </span>
+              <span className="text-sm font-semibold">Why It Matters</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <Alert className="border-teal-200 bg-teal-50 dark:border-teal-800 dark:bg-teal-950">
+              <Info className="h-4 w-4 text-teal-600 dark:text-teal-400" />
+              <AlertDescription className="text-teal-800 dark:text-teal-200">
+                {whyItMatters}
+              </AlertDescription>
             </Alert>
-          </Accordion.Panel>
-        </Accordion.Item>
+          </AccordionContent>
+        </AccordionItem>
       )}
 
       {tips && tips.length > 0 && (
-        <Accordion.Item value="tips">
-          <Accordion.Control
-            icon={
-              <ThemeIcon variant="light" color="yellow" size="sm">
-                <IconBulb size={14} />
-              </ThemeIcon>
-            }
-          >
-            <Text fw={600} size="sm">
-              Tips
-            </Text>
-          </Accordion.Control>
-          <Accordion.Panel>
-            <List
-              spacing="xs"
-              size="sm"
-              icon={
-                <ThemeIcon color="yellow" variant="light" size={20} radius="xl">
-                  <IconBulb size={12} />
-                </ThemeIcon>
-              }
-            >
+        <AccordionItem value="tips" className="rounded-lg border border-border px-4">
+          <AccordionTrigger>
+            <div className="flex items-center gap-2">
+              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300">
+                <Lightbulb className="h-3.5 w-3.5" />
+              </span>
+              <span className="text-sm font-semibold">Tips</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <ul className="space-y-2">
               {tips.map((tip) => (
-                <List.Item key={tip}>{tip}</List.Item>
+                <li key={tip} className="flex items-start gap-2 text-sm">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300">
+                    <Lightbulb className="h-3 w-3" />
+                  </span>
+                  {tip}
+                </li>
               ))}
-            </List>
-          </Accordion.Panel>
-        </Accordion.Item>
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
       )}
     </Accordion>
   );

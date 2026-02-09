@@ -1,15 +1,17 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import {
-  Stack,
-  NumberInput,
-  Text,
-  Paper,
-  Group,
   Table,
-  SegmentedControl,
-} from "@mantine/core";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import { aprToApy, calculateCompoundedValue } from "../../lib/defi/yield";
 import { SimpleBarChart, EducationPanel } from "../../components/shared";
 
@@ -71,125 +73,120 @@ export function YieldCalculatorDemo() {
   );
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Parameters
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Principal"
-              value={principal}
-              onChange={(v) => setPrincipal(Number(v) || 0)}
-              min={0}
-              thousandSeparator=","
-              prefix="$"
-            />
-            <NumberInput
-              label="APR (%)"
-              value={apr}
-              onChange={(v) => setApr(Number(v) || 0)}
-              min={0}
-              max={1000}
-              suffix="%"
-              decimalScale={1}
-            />
-          </Group>
-          <div>
-            <Text size="xs" c="dimmed" mb={4}>
-              Duration
-            </Text>
-            <SegmentedControl
-              value={durationKey}
-              onChange={setDurationKey}
-              data={Object.keys(DURATION_MAP)}
-              fullWidth
-            />
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Parameters</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Principal</Label>
+              <Input
+                type="number"
+                value={principal}
+                onChange={(e) => setPrincipal(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+            <div>
+              <Label>APR (%)</Label>
+              <Input
+                type="number"
+                value={apr}
+                onChange={(e) => setApr(Number(e.target.value) || 0)}
+                min={0}
+                max={1000}
+              />
+            </div>
           </div>
-        </Stack>
-      </Paper>
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Duration</p>
+            <Tabs value={durationKey} onValueChange={setDurationKey}>
+              <TabsList className="w-full">
+                {Object.keys(DURATION_MAP).map((key) => (
+                  <TabsTrigger key={key} value={key} className="flex-1">
+                    {key}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            APR → APY Conversion
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Compounding</Table.Th>
-                <Table.Th ta="right">APY</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">APR → APY Conversion</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Compounding</TableHead>
+                <TableHead className="text-right">APY</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {rows.map((row) => (
-                <Table.Tr key={row.label}>
-                  <Table.Td>{row.label}</Table.Td>
-                  <Table.Td ta="right">{row.apy.toFixed(4)}%</Table.Td>
-                </Table.Tr>
+                <TableRow key={row.label}>
+                  <TableCell>{row.label}</TableCell>
+                  <TableCell className="text-right">{row.apy.toFixed(4)}%</TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Final Values ({durationKey})
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Compounding</Table.Th>
-                <Table.Th ta="right">Final Value</Table.Th>
-                <Table.Th ta="right">Total Return</Table.Th>
-                <Table.Th ta="right">Return %</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Final Values ({durationKey})</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Compounding</TableHead>
+                <TableHead className="text-right">Final Value</TableHead>
+                <TableHead className="text-right">Total Return</TableHead>
+                <TableHead className="text-right">Return %</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {rows.map((row) => (
-                <Table.Tr
+                <TableRow
                   key={row.label}
-                  style={{
-                    fontWeight: row.label === bestRow.label ? 700 : 400,
-                    backgroundColor:
-                      row.label === bestRow.label
-                        ? "var(--mantine-color-green-light)"
-                        : undefined,
-                  }}
+                  className={
+                    row.label === bestRow.label
+                      ? "font-bold bg-green-50 dark:bg-green-950"
+                      : ""
+                  }
                 >
-                  <Table.Td>{row.label}</Table.Td>
-                  <Table.Td ta="right">
+                  <TableCell>{row.label}</TableCell>
+                  <TableCell className="text-right">
                     $
                     {row.finalValue.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                     })}
-                  </Table.Td>
-                  <Table.Td ta="right">
-                    <Text c="green">
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <span className="text-green-600">
                       +$
                       {row.totalReturn.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
                       })}
-                    </Text>
-                  </Table.Td>
-                  <Table.Td ta="right">
+                    </span>
+                  </TableCell>
+                  <TableCell className="text-right">
                     {row.returnPercent.toFixed(2)}%
-                  </Table.Td>
-                </Table.Tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Yield Comparison by Strategy
-          </Text>
+          </p>
           <SimpleBarChart
             data={rows
               .filter((r) => r.freq > 0)
@@ -202,11 +199,11 @@ export function YieldCalculatorDemo() {
             colors={["#40c057"]}
             height={220}
           />
-          <Text size="xs" c="dimmed" ta="center">
+          <p className="text-xs text-muted-foreground text-center">
             Total return ($) by compounding frequency over {durationKey}
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -234,6 +231,6 @@ export function YieldCalculatorDemo() {
           "Sustainable yield comes from real economic activity, not just token emissions",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

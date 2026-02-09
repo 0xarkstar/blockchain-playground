@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import {
-  Stack,
-  NumberInput,
-  Text,
-  Paper,
-  Group,
-  Badge,
   Table,
-  SegmentedControl,
-  Alert,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { calculateSwapOutput, calculateSpotPrice } from "../../lib/defi/amm";
 import {
   SimpleLineChart,
@@ -87,142 +87,149 @@ export function SimpleSwapDemo() {
   }, [reserveA, reserveB, newRIn, newROut, direction]);
 
   const inputPanel = (
-    <Stack gap="md">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Pool Reserves
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Token A Reserve"
-              value={reserveA}
-              onChange={(v) => setReserveA(Number(v) || 0)}
-              min={0}
-              thousandSeparator=","
-            />
-            <NumberInput
-              label="Token B Reserve"
-              value={reserveB}
-              onChange={(v) => setReserveB(Number(v) || 0)}
-              min={0}
-              thousandSeparator=","
-            />
-          </Group>
-          <Text size="xs" c="dimmed">
+    <div className="flex flex-col gap-4">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Pool Reserves</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Token A Reserve</Label>
+              <Input
+                type="number"
+                value={reserveA}
+                onChange={(e) => setReserveA(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+            <div>
+              <Label>Token B Reserve</Label>
+              <Input
+                type="number"
+                value={reserveB}
+                onChange={(e) => setReserveB(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">
             Constant Product (k): {k.toLocaleString()}
-          </Text>
-        </Stack>
-      </Paper>
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Swap
-          </Text>
-          <SegmentedControl
-            value={direction}
-            onChange={setDirection}
-            data={[
-              { label: "A → B", value: "AtoB" },
-              { label: "B → A", value: "BtoA" },
-            ]}
-          />
-          <Group grow>
-            <NumberInput
-              label="Amount In"
-              value={amountIn}
-              onChange={(v) => setAmountIn(Number(v) || 0)}
-              min={0}
-              thousandSeparator=","
-            />
-            <NumberInput
-              label="Fee Rate (%)"
-              value={feeRate}
-              onChange={(v) => setFeeRate(Number(v) || 0)}
-              min={0}
-              max={99}
-              decimalScale={2}
-              step={0.1}
-            />
-          </Group>
-        </Stack>
-      </Paper>
-    </Stack>
+          </p>
+        </div>
+      </div>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Swap</p>
+          <Tabs value={direction} onValueChange={setDirection}>
+            <TabsList className="w-full">
+              <TabsTrigger value="AtoB" className="flex-1">A → B</TabsTrigger>
+              <TabsTrigger value="BtoA" className="flex-1">B → A</TabsTrigger>
+            </TabsList>
+          </Tabs>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Amount In</Label>
+              <Input
+                type="number"
+                value={amountIn}
+                onChange={(e) => setAmountIn(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+            <div>
+              <Label>Fee Rate (%)</Label>
+              <Input
+                type="number"
+                value={feeRate}
+                onChange={(e) => setFeeRate(Number(e.target.value) || 0)}
+                min={0}
+                max={99}
+                step={0.1}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+    <div className="flex flex-col gap-4">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Constant Product Curve (x * y = k)
-          </Text>
+          </p>
           <SimpleLineChart
             data={[...curveData, ...swapPoints]}
             xKey="x"
             yKeys={["y"]}
             height={250}
           />
-          <Text size="xs" c="dimmed" ta="center">
+          <p className="text-xs text-muted-foreground text-center">
             Token A (x-axis) vs Token B (y-axis). Swap moves along the curve.
-          </Text>
-        </Stack>
-      </Paper>
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Result
-          </Text>
+          </p>
+        </div>
+      </div>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Result</p>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Spot Price</Table.Td>
-                <Table.Td ta="right">{spotPrice.toFixed(6)}</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Amount Out</Table.Td>
-                <Table.Td ta="right">
-                  <Text fw={600}>{result.amountOut.toFixed(6)}</Text>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Effective Price</Table.Td>
-                <Table.Td ta="right">
+            <TableBody>
+              <TableRow>
+                <TableCell>Spot Price</TableCell>
+                <TableCell className="text-right">{spotPrice.toFixed(6)}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Amount Out</TableCell>
+                <TableCell className="text-right">
+                  <span className="font-semibold">{result.amountOut.toFixed(6)}</span>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Effective Price</TableCell>
+                <TableCell className="text-right">
                   {result.effectivePrice.toFixed(6)}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Price Impact</Table.Td>
-                <Table.Td ta="right">
-                  <Badge color={highImpact ? "red" : "green"} variant="light">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Price Impact</TableCell>
+                <TableCell className="text-right">
+                  <Badge
+                    variant="secondary"
+                    className={
+                      highImpact
+                        ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                        : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                    }
+                  >
                     {result.priceImpact.toFixed(2)}%
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Fee Paid</Table.Td>
-                <Table.Td ta="right">{result.fee.toFixed(6)}</Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Fee Paid</TableCell>
+                <TableCell className="text-right">{result.fee.toFixed(6)}</TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
           {highImpact && (
-            <Alert
-              icon={<IconInfoCircle size={16} />}
-              color="red"
-              title="High Price Impact"
-            >
-              This trade has a price impact of {result.priceImpact.toFixed(2)}%.
-              Consider reducing your trade size or using a pool with deeper
-              liquidity.
+            <Alert variant="destructive">
+              <Info className="h-4 w-4" />
+              <AlertTitle>High Price Impact</AlertTitle>
+              <AlertDescription>
+                This trade has a price impact of {result.priceImpact.toFixed(2)}%.
+                Consider reducing your trade size or using a pool with deeper
+                liquidity.
+              </AlertDescription>
             </Alert>
           )}
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 
   return (
-    <Stack gap="lg">
+    <div className="flex flex-col gap-6">
       <DemoLayout
         inputPanel={inputPanel}
         resultPanel={resultPanel}
@@ -254,6 +261,6 @@ export function SimpleSwapDemo() {
           />
         }
       />
-    </Stack>
+    </div>
   );
 }

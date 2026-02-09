@@ -1,16 +1,16 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Progress } from "../ui/progress";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import {
-  Stack,
-  NumberInput,
-  Text,
-  Paper,
-  Group,
   Table,
-  Progress,
-  SegmentedControl,
-} from "@mantine/core";
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
 import {
   calculateLPTokens,
   calculateRemoveLiquidity,
@@ -78,167 +78,166 @@ export function LiquidityPoolDemo() {
   }, [reserveA, reserveB]);
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Pool Reserve Ratio
-          </Text>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Pool Reserve Ratio</p>
           <SimplePieChart
             data={reservePieData}
             nameKey="name"
             valueKey="value"
             height={220}
           />
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Current Pool State
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Token A Reserve"
-              value={reserveA}
-              onChange={(v) => setReserveA(Number(v) || 0)}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Current Pool State</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Token A Reserve</Label>
+              <Input
+                type="number"
+                value={reserveA}
+                onChange={(e) => setReserveA(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+            <div>
+              <Label>Token B Reserve</Label>
+              <Input
+                type="number"
+                value={reserveB}
+                onChange={(e) => setReserveB(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+          </div>
+          <div>
+            <Label>Total LP Supply</Label>
+            <Input
+              type="number"
+              value={totalSupply}
+              onChange={(e) => setTotalSupply(Number(e.target.value) || 0)}
               min={0}
-              thousandSeparator=","
             />
-            <NumberInput
-              label="Token B Reserve"
-              value={reserveB}
-              onChange={(v) => setReserveB(Number(v) || 0)}
-              min={0}
-              thousandSeparator=","
-            />
-          </Group>
-          <NumberInput
-            label="Total LP Supply"
-            value={totalSupply}
-            onChange={(v) => setTotalSupply(Number(v) || 0)}
-            min={0}
-            thousandSeparator=","
-          />
-          <Text size="xs" c="dimmed">
+          </div>
+          <p className="text-xs text-muted-foreground">
             Spot Price (A/B): {spotPrice.toFixed(6)}
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
-      <SegmentedControl
-        value={mode}
-        onChange={setMode}
-        data={[
-          { label: "Add Liquidity", value: "add" },
-          { label: "Remove Liquidity", value: "remove" },
-        ]}
-      />
+      <Tabs value={mode} onValueChange={setMode}>
+        <TabsList className="w-full">
+          <TabsTrigger value="add" className="flex-1">Add Liquidity</TabsTrigger>
+          <TabsTrigger value="remove" className="flex-1">Remove Liquidity</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {mode === "add" ? (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Add Liquidity
-            </Text>
-            <Group grow>
-              <NumberInput
-                label="Token A Amount"
-                value={amountA}
-                onChange={(v) => setAmountA(Number(v) || 0)}
-                min={0}
-              />
-              <NumberInput
-                label="Token B Amount"
-                value={amountB}
-                onChange={(v) => setAmountB(Number(v) || 0)}
-                min={0}
-              />
-            </Group>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Add Liquidity</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Token A Amount</Label>
+                <Input
+                  type="number"
+                  value={amountA}
+                  onChange={(e) => setAmountA(Number(e.target.value) || 0)}
+                  min={0}
+                />
+              </div>
+              <div>
+                <Label>Token B Amount</Label>
+                <Input
+                  type="number"
+                  value={amountB}
+                  onChange={(e) => setAmountB(Number(e.target.value) || 0)}
+                  min={0}
+                />
+              </div>
+            </div>
             <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>LP Tokens Minted</Table.Td>
-                  <Table.Td ta="right">
-                    <Text fw={600}>{addResult.lpTokens.toFixed(4)}</Text>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Your Pool Share</Table.Td>
-                  <Table.Td ta="right">
+              <TableBody>
+                <TableRow>
+                  <TableCell>LP Tokens Minted</TableCell>
+                  <TableCell className="text-right">
+                    <span className="font-semibold">{addResult.lpTokens.toFixed(4)}</span>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Your Pool Share</TableCell>
+                  <TableCell className="text-right">
                     {addResult.poolShare.toFixed(2)}%
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>New Reserve A</Table.Td>
-                  <Table.Td ta="right">
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>New Reserve A</TableCell>
+                  <TableCell className="text-right">
                     {addResult.newReserveA.toLocaleString()}
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>New Reserve B</Table.Td>
-                  <Table.Td ta="right">
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>New Reserve B</TableCell>
+                  <TableCell className="text-right">
                     {addResult.newReserveB.toLocaleString()}
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
             </Table>
             <div>
-              <Text size="xs" c="dimmed" mb={4}>
-                Pool Share
-              </Text>
-              <Progress value={addResult.poolShare} color="blue" size="lg" />
+              <p className="text-xs text-muted-foreground mb-1">Pool Share</p>
+              <Progress value={addResult.poolShare} className="h-3" />
             </div>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       ) : (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Remove Liquidity
-            </Text>
-            <NumberInput
-              label="LP Tokens to Burn"
-              value={lpAmount}
-              onChange={(v) => setLpAmount(Number(v) || 0)}
-              min={0}
-              max={totalSupply}
-            />
-            <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>Token A Received</Table.Td>
-                  <Table.Td ta="right">
-                    <Text fw={600}>{removeResult.amountA.toFixed(4)}</Text>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Token B Received</Table.Td>
-                  <Table.Td ta="right">
-                    <Text fw={600}>{removeResult.amountB.toFixed(4)}</Text>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Share Removed</Table.Td>
-                  <Table.Td ta="right">
-                    {removeResult.shareRemoved.toFixed(2)}%
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
-            </Table>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Remove Liquidity</p>
             <div>
-              <Text size="xs" c="dimmed" mb={4}>
-                Share Being Removed
-              </Text>
-              <Progress
-                value={removeResult.shareRemoved}
-                color="orange"
-                size="lg"
+              <Label>LP Tokens to Burn</Label>
+              <Input
+                type="number"
+                value={lpAmount}
+                onChange={(e) => setLpAmount(Number(e.target.value) || 0)}
+                min={0}
+                max={totalSupply}
               />
             </div>
-          </Stack>
-        </Paper>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Token A Received</TableCell>
+                  <TableCell className="text-right">
+                    <span className="font-semibold">{removeResult.amountA.toFixed(4)}</span>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Token B Received</TableCell>
+                  <TableCell className="text-right">
+                    <span className="font-semibold">{removeResult.amountB.toFixed(4)}</span>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Share Removed</TableCell>
+                  <TableCell className="text-right">
+                    {removeResult.shareRemoved.toFixed(2)}%
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+            <div>
+              <p className="text-xs text-muted-foreground mb-1">
+                Share Being Removed
+              </p>
+              <Progress value={removeResult.shareRemoved} className="h-3" />
+            </div>
+          </div>
+        </div>
       )}
 
       <EducationPanel
@@ -266,6 +265,6 @@ export function LiquidityPoolDemo() {
           "Impermanent loss can offset fee earnings — check the IL calculator",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

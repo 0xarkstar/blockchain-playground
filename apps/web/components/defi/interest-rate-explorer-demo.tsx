@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Stack, NumberInput, Slider, Text, Paper, Group } from "@mantine/core";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Slider } from "../ui/slider";
 import {
   calculateBorrowRate,
   calculateSupplyRate,
@@ -50,106 +52,106 @@ export function InterestRateExplorerDemo() {
   }, [baseRate, slope1, slope2, kink, reserveFactor]);
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Current Utilization: {utilization}%
-          </Text>
+          </p>
           <Slider
-            value={utilization}
-            onChange={setUtilization}
+            value={[utilization]}
+            onValueChange={([v]) => setUtilization(v)}
             min={0}
             max={100}
             step={1}
-            marks={[
-              { value: 0, label: "0%" },
-              { value: kink, label: `${kink}% (kink)` },
-              { value: 100, label: "100%" },
-            ]}
-            label={(v) => `${v}%`}
           />
-          <Group>
-            <Text size="sm">
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>0%</span>
+            <span>{kink}% (kink)</span>
+            <span>100%</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <p className="text-sm">
               Borrow Rate:{" "}
-              <Text span fw={600} c="red">
+              <span className="font-semibold text-red-600">
                 {currentRates.borrowRate.toFixed(2)}%
-              </Text>
-            </Text>
-            <Text size="sm">
+              </span>
+            </p>
+            <p className="text-sm">
               Supply Rate:{" "}
-              <Text span fw={600} c="green">
+              <span className="font-semibold text-green-600">
                 {currentRates.supplyRate.toFixed(2)}%
-              </Text>
-            </Text>
-          </Group>
-        </Stack>
-      </Paper>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Model Parameters (%)
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Base Rate"
-              value={baseRate}
-              onChange={(v) => setBaseRate(Number(v) || 0)}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Model Parameters (%)</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Base Rate</Label>
+              <Input
+                type="number"
+                value={baseRate}
+                onChange={(e) => setBaseRate(Number(e.target.value) || 0)}
+                min={0}
+                max={100}
+              />
+            </div>
+            <div>
+              <Label>Slope 1 (below kink)</Label>
+              <Input
+                type="number"
+                value={slope1}
+                onChange={(e) => setSlope1(Number(e.target.value) || 0)}
+                min={0}
+                max={100}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Slope 2 (above kink)</Label>
+              <Input
+                type="number"
+                value={slope2}
+                onChange={(e) => setSlope2(Number(e.target.value) || 0)}
+                min={0}
+                max={500}
+              />
+            </div>
+            <div>
+              <Label>Kink Point</Label>
+              <Input
+                type="number"
+                value={kink}
+                onChange={(e) =>
+                  setKink(Math.max(1, Math.min(99, Number(e.target.value) || 1)))
+                }
+                min={1}
+                max={99}
+              />
+            </div>
+          </div>
+          <div>
+            <Label>Reserve Factor</Label>
+            <Input
+              type="number"
+              value={reserveFactor}
+              onChange={(e) => setReserveFactor(Number(e.target.value) || 0)}
               min={0}
               max={100}
-              suffix="%"
-              decimalScale={1}
             />
-            <NumberInput
-              label="Slope 1 (below kink)"
-              value={slope1}
-              onChange={(v) => setSlope1(Number(v) || 0)}
-              min={0}
-              max={100}
-              suffix="%"
-              decimalScale={1}
-            />
-          </Group>
-          <Group grow>
-            <NumberInput
-              label="Slope 2 (above kink)"
-              value={slope2}
-              onChange={(v) => setSlope2(Number(v) || 0)}
-              min={0}
-              max={500}
-              suffix="%"
-              decimalScale={1}
-            />
-            <NumberInput
-              label="Kink Point"
-              value={kink}
-              onChange={(v) =>
-                setKink(Math.max(1, Math.min(99, Number(v) || 1)))
-              }
-              min={1}
-              max={99}
-              suffix="%"
-              decimalScale={0}
-            />
-          </Group>
-          <NumberInput
-            label="Reserve Factor"
-            value={reserveFactor}
-            onChange={(v) => setReserveFactor(Number(v) || 0)}
-            min={0}
-            max={100}
-            suffix="%"
-            decimalScale={1}
-          />
-        </Stack>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Rate Curve
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Rate Curve</p>
           <SimpleLineChart
             data={rateTable.map((r) => ({
               utilization: `${r.utilization}%`,
@@ -161,12 +163,12 @@ export function InterestRateExplorerDemo() {
             colors={["#fa5252", "#40c057"]}
             height={280}
           />
-          <Text size="xs" c="dimmed" ta="center">
+          <p className="text-xs text-muted-foreground text-center">
             Notice the kink at {kink}% utilization where borrow rates spike
             sharply.
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -193,6 +195,6 @@ export function InterestRateExplorerDemo() {
           "Different assets have different kink parameters based on risk profile",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

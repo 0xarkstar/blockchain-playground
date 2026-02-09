@@ -1,21 +1,12 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import {
-  Stack,
-  Button,
-  Text,
-  Paper,
-  Group,
-  Badge,
-  SimpleGrid,
-  SegmentedControl,
-  Timeline,
-  Box,
-} from "@mantine/core";
-import { IconNetwork, IconPlayerPlay, IconRefresh } from "@tabler/icons-react";
+import { Network, Play, RefreshCw } from "lucide-react";
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 
 interface ConsensusNode {
   id: string;
@@ -44,11 +35,11 @@ function NodeNetworkVisual({ nodes }: { nodes: ConsensusNode[] }) {
   const nodeRadius = 28;
 
   return (
-    <Paper p="md" withBorder data-testid="node-network-visual">
-      <Text size="sm" fw={600} mb="sm">
+    <div className="rounded-lg border border-border bg-card p-4" data-testid="node-network-visual">
+      <p className="text-sm font-semibold mb-2">
         Network Topology
-      </Text>
-      <Box style={{ display: "flex", justifyContent: "center" }}>
+      </p>
+      <div className="flex justify-center">
         <svg width="300" height="300" viewBox="0 0 300 300">
           {/* Connection lines between all nodes */}
           {nodes.map((_, i) =>
@@ -61,7 +52,7 @@ function NodeNetworkVisual({ nodes }: { nodes: ConsensusNode[] }) {
                   y1={NODE_POSITIONS[i].y}
                   x2={NODE_POSITIONS[j].x}
                   y2={NODE_POSITIONS[j].y}
-                  stroke="var(--mantine-color-gray-3)"
+                  stroke="hsl(var(--muted-foreground) / 0.2)"
                   strokeWidth="1"
                   strokeDasharray="4 4"
                 />
@@ -72,18 +63,18 @@ function NodeNetworkVisual({ nodes }: { nodes: ConsensusNode[] }) {
           {/* Node circles */}
           {nodes.map((node, i) => {
             const pos = NODE_POSITIONS[i];
-            let fillColor = "var(--mantine-color-gray-1)";
-            let strokeColor = "var(--mantine-color-gray-4)";
+            let fillColor = "hsl(var(--muted))";
+            let strokeColor = "hsl(var(--muted-foreground) / 0.3)";
 
             if (node.isLeader) {
-              fillColor = "var(--mantine-color-yellow-1)";
-              strokeColor = "var(--mantine-color-yellow-6)";
+              fillColor = "hsl(47.9 95.8% 53.1% / 0.15)";
+              strokeColor = "hsl(47.9 95.8% 53.1%)";
             } else if (node.status === "accepted") {
-              fillColor = "var(--mantine-color-green-1)";
-              strokeColor = "var(--mantine-color-green-5)";
+              fillColor = "hsl(142.1 76.2% 36.3% / 0.15)";
+              strokeColor = "hsl(142.1 76.2% 36.3%)";
             } else if (node.status === "rejected") {
-              fillColor = "var(--mantine-color-red-1)";
-              strokeColor = "var(--mantine-color-red-5)";
+              fillColor = "hsl(var(--destructive) / 0.15)";
+              strokeColor = "hsl(var(--destructive))";
             }
 
             return (
@@ -94,7 +85,7 @@ function NodeNetworkVisual({ nodes }: { nodes: ConsensusNode[] }) {
                     cy={pos.y}
                     r={nodeRadius + 6}
                     fill="none"
-                    stroke="var(--mantine-color-yellow-4)"
+                    stroke="hsl(47.9 95.8% 53.1% / 0.5)"
                     strokeWidth="2"
                     strokeDasharray="4 2"
                   />
@@ -113,7 +104,7 @@ function NodeNetworkVisual({ nodes }: { nodes: ConsensusNode[] }) {
                   textAnchor="middle"
                   fontSize="10"
                   fontWeight="600"
-                  fill="var(--mantine-color-dark-6)"
+                  fill="hsl(var(--foreground))"
                 >
                   {node.id}
                 </text>
@@ -122,7 +113,7 @@ function NodeNetworkVisual({ nodes }: { nodes: ConsensusNode[] }) {
                   y={pos.y + 10}
                   textAnchor="middle"
                   fontSize="8"
-                  fill="var(--mantine-color-dimmed)"
+                  fill="hsl(var(--muted-foreground))"
                 >
                   {node.stake} ETH
                 </text>
@@ -130,22 +121,22 @@ function NodeNetworkVisual({ nodes }: { nodes: ConsensusNode[] }) {
             );
           })}
         </svg>
-      </Box>
-      <Group gap="xs" justify="center" mt="xs">
-        <Badge size="xs" color="yellow" variant="light">
+      </div>
+      <div className="flex items-center gap-1 justify-center mt-1">
+        <Badge variant="secondary" className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
           Leader
         </Badge>
-        <Badge size="xs" color="green" variant="light">
+        <Badge variant="secondary" className="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
           Accepted
         </Badge>
-        <Badge size="xs" color="red" variant="light">
+        <Badge variant="secondary" className="text-xs bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
           Rejected
         </Badge>
-        <Badge size="xs" color="gray" variant="light">
+        <Badge variant="secondary" className="text-xs">
           Idle
         </Badge>
-      </Group>
-    </Paper>
+      </div>
+    </div>
   );
 }
 
@@ -236,114 +227,119 @@ export function ConsensusPlaygroundDemo() {
   }, []);
 
   const inputPanel = (
-    <Stack gap="md">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+    <div className="flex flex-col gap-4">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Consensus Mechanism
-          </Text>
-          <SegmentedControl
+          </p>
+          <Tabs
             value={mechanism}
-            onChange={(v) => {
+            onValueChange={(v) => {
               setMechanism(v as "pow" | "pos");
               handleReset();
             }}
-            data={[
-              { label: "Proof of Stake (PoS)", value: "pos" },
-              { label: "Proof of Work (PoW)", value: "pow" },
-            ]}
-          />
-        </Stack>
-      </Paper>
+          >
+            <TabsList className="w-full">
+              <TabsTrigger value="pos" className="flex-1">Proof of Stake (PoS)</TabsTrigger>
+              <TabsTrigger value="pow" className="flex-1">Proof of Work (PoW)</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+      </div>
 
-      <SimpleGrid cols={{ base: 2 }} spacing="md">
+      <div className="grid grid-cols-2 gap-4">
         {nodes.map((node) => (
-          <Paper key={node.id} p="md" withBorder>
-            <Stack gap="xs">
-              <Group justify="space-between">
-                <Text size="sm" fw={600}>
+          <div key={node.id} className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold">
                   {node.id}
-                </Text>
+                </p>
                 {node.isLeader && (
-                  <Badge color="yellow" size="xs">
+                  <Badge className="text-xs bg-yellow-600 text-white">
                     Leader
                   </Badge>
                 )}
-              </Group>
+              </div>
               {mechanism === "pos" && (
-                <Text size="xs" c="dimmed">
+                <p className="text-xs text-muted-foreground">
                   Stake: {node.stake} ETH
-                </Text>
+                </p>
               )}
-              <Text size="xs" c="dimmed">
+              <p className="text-xs text-muted-foreground">
                 Blocks produced: {node.blocks.length}
-              </Text>
+              </p>
               <Badge
-                variant="light"
-                color={
+                variant="secondary"
+                className={`text-xs ${
                   node.status === "accepted"
-                    ? "green"
+                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
                     : node.status === "rejected"
-                      ? "red"
-                      : "gray"
-                }
-                size="sm"
+                      ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                      : ""
+                }`}
               >
                 {node.status}
               </Badge>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
         ))}
-      </SimpleGrid>
+      </div>
 
-      <Group>
+      <div className="flex items-center gap-2">
         <Button
-          leftSection={<IconPlayerPlay size={16} />}
           onClick={handleRunRound}
-          loading={running}
+          disabled={running}
         >
-          Run Consensus Round
+          <Play className="h-4 w-4 mr-2" />
+          {running ? "Running..." : "Run Consensus Round"}
         </Button>
         <Button
-          leftSection={<IconRefresh size={16} />}
           variant="outline"
           onClick={handleReset}
         >
+          <RefreshCw className="h-4 w-4 mr-2" />
           Reset
         </Button>
-      </Group>
-    </Stack>
+      </div>
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md">
+    <div className="flex flex-col gap-4">
       <NodeNetworkVisual nodes={nodes} />
 
       {rounds.length > 0 && (
-        <Paper p="md" withBorder>
-          <Text size="sm" fw={600} mb="md">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm font-semibold mb-4">
             Consensus History
-          </Text>
-          <Timeline active={rounds.length - 1} bulletSize={24}>
+          </p>
+          <div className="relative pl-6 border-l-2 border-border">
             {rounds.map((round) => (
-              <Timeline.Item
-                key={round.round}
-                bullet={<IconNetwork size={12} />}
-                title={`Round ${round.round}`}
-                color={round.accepted ? "green" : "red"}
-              >
-                <Text size="xs" c="dimmed">
+              <div key={round.round} className="mb-4 relative">
+                <div
+                  className={`absolute -left-[25px] h-6 w-6 rounded-full flex items-center justify-center ${
+                    round.accepted
+                      ? "bg-green-100 dark:bg-green-900"
+                      : "bg-red-100 dark:bg-red-900"
+                  }`}
+                >
+                  <Network className="h-3 w-3" />
+                </div>
+                <p className="text-sm font-semibold">Round {round.round}</p>
+                <p className="text-xs text-muted-foreground">
                   Leader: {round.leader} | Block #{round.blockNumber} |{" "}
                   {Object.values(round.votes).filter(Boolean).length}/
                   {nodes.length} votes |{" "}
                   {round.accepted ? "Accepted" : "Rejected"}
-                </Text>
-              </Timeline.Item>
+                </p>
+              </div>
             ))}
-          </Timeline>
-        </Paper>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 
   return (

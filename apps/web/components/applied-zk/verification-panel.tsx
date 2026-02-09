@@ -1,16 +1,9 @@
 "use client";
 
-import {
-  Stack,
-  Button,
-  Alert,
-  Code,
-  Text,
-  Group,
-  Badge,
-  Paper,
-} from "@mantine/core";
-import { IconCheck, IconX, IconLoader2 } from "@tabler/icons-react";
+import { Check, X, Loader2 } from "lucide-react";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 
 function truncateHex(hex: string, chars: number = 10): string {
   if (hex.length <= chars * 2 + 2) return hex;
@@ -50,82 +43,83 @@ export function VerificationPanel({
 
   return (
     <>
-      <Paper p="md" withBorder>
-        <Stack gap="sm">
-          <Text fw={600} size="sm">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">
             Step 3: Generate Age Proof
-          </Text>
-          <Text size="xs" c="dimmed">
+          </p>
+          <p className="text-xs text-muted-foreground">
             Prove that your age meets the threshold without revealing your exact
             birthday.
-          </Text>
+          </p>
           {progressMessage && (
-            <Group gap="xs">
-              <IconLoader2 size={14} className="animate-spin" />
-              <Text size="xs" c="blue">
+            <div className="flex items-center gap-1">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <p className="text-xs text-blue-600 dark:text-blue-400">
                 {progressMessage}
-              </Text>
-            </Group>
+              </p>
+            </div>
           )}
           <Button
             onClick={onGenerateProof}
-            loading={phase === "proving"}
             disabled={
-              phase !== "proving" && phase !== "proved" && phase !== "verified"
+              phase === "proving" ||
+              (phase !== "proving" && phase !== "proved" && phase !== "verified")
             }
           >
             Prove Age &ge; {typeof minAge === "number" ? minAge : 18}
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {proofResult && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Group justify="space-between">
-              <Text fw={600} size="sm">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">
                 Proof Data
-              </Text>
-              <Badge color="green" variant="light">
+              </p>
+              <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                 Generated
               </Badge>
-            </Group>
-            <Text size="xs" c="dimmed">
+            </div>
+            <p className="text-xs text-muted-foreground">
               The proof shows age &ge;{" "}
               {typeof minAge === "number" ? minAge : 18} without revealing the
               exact birthday.
-            </Text>
-            <Code block>
-              {`pi_a: [${proofResult.proof.pi_a
-                .slice(0, 2)
-                .map((v) => truncateHex(v, 8))
-                .join(", ")}]\n`}
-              {`pi_c: [${proofResult.proof.pi_c
-                .slice(0, 2)
-                .map((v) => truncateHex(v, 8))
-                .join(", ")}]\n`}
-              {`public signals: ${proofResult.publicSignals.length} values`}
-            </Code>
-          </Stack>
-        </Paper>
+            </p>
+            <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+              <code>
+                {`pi_a: [${proofResult.proof.pi_a
+                  .slice(0, 2)
+                  .map((v) => truncateHex(v, 8))
+                  .join(", ")}]\n`}
+                {`pi_c: [${proofResult.proof.pi_c
+                  .slice(0, 2)
+                  .map((v) => truncateHex(v, 8))
+                  .join(", ")}]\n`}
+                {`public signals: ${proofResult.publicSignals.length} values`}
+              </code>
+            </pre>
+          </div>
+        </div>
       )}
 
       {proofResult && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Text fw={600} size="sm">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">
               Step 4: Verify Age Proof
-            </Text>
+            </p>
             <Button
               onClick={onVerifyProof}
-              loading={phase === "verifying"}
               disabled={phase === "verifying"}
-              color={
+              className={
                 verificationResult === true
-                  ? "green"
+                  ? "bg-green-600 hover:bg-green-700"
                   : verificationResult === false
-                    ? "red"
-                    : "blue"
+                    ? "bg-red-600 hover:bg-red-700"
+                    : ""
               }
             >
               {verificationResult === null
@@ -135,23 +129,25 @@ export function VerificationPanel({
                   : "Verification Failed"}
             </Button>
             {verificationResult !== null && (
-              <Alert
-                color={verificationResult ? "green" : "red"}
-                icon={
-                  verificationResult ? (
-                    <IconCheck size={16} />
-                  ) : (
-                    <IconX size={16} />
-                  )
-                }
-              >
-                {verificationResult
-                  ? `Age verification passed! The prover is at least ${typeof minAge === "number" ? minAge : 18} years old, without revealing their exact birthday.`
-                  : "Age verification failed. The prover could not prove they meet the age threshold."}
+              <Alert className={
+                verificationResult
+                  ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
+                  : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
+              }>
+                {verificationResult ? (
+                  <Check className="h-4 w-4" />
+                ) : (
+                  <X className="h-4 w-4" />
+                )}
+                <AlertDescription>
+                  {verificationResult
+                    ? `Age verification passed! The prover is at least ${typeof minAge === "number" ? minAge : 18} years old, without revealing their exact birthday.`
+                    : "Age verification failed. The prover could not prove they meet the age threshold."}
+                </AlertDescription>
               </Alert>
             )}
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
     </>
   );

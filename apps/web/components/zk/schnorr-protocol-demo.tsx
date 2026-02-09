@@ -1,25 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Stack,
-  Paper,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  NumberInput,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Info } from "lucide-react";
 import {
   generateSchnorrKeys,
   runProtocol,
   type SchnorrProtocolResult,
 } from "../../lib/zk/schnorr";
 import { getSchnorrField } from "../../lib/zk/field";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export function SchnorrProtocolDemo() {
   const [numRounds, setNumRounds] = useState(3);
@@ -32,145 +33,148 @@ export function SchnorrProtocolDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        Schnorr&apos;s sigma protocol: prove &quot;I know x such that y = g^x
-        mod p&quot; without revealing x. Uses field p=23, subgroup generator
-        g=2, order q=11.
+    <div className="flex flex-col gap-6">
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          Schnorr&apos;s sigma protocol: prove &quot;I know x such that y = g^x
+          mod p&quot; without revealing x. Uses field p=23, subgroup generator
+          g=2, order q=11.
+        </AlertDescription>
       </Alert>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Protocol Parameters
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Protocol Parameters</p>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Prime p</Table.Td>
-                <Table.Td>
-                  <Code>23</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Generator g</Table.Td>
-                <Table.Td>
-                  <Code>2</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Subgroup order q</Table.Td>
-                <Table.Td>
-                  <Code>11</Code>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+            <TableBody>
+              <TableRow>
+                <TableCell>Prime p</TableCell>
+                <TableCell>
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">23</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Generator g</TableCell>
+                <TableCell>
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">2</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Subgroup order q</TableCell>
+                <TableCell>
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">11</code>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Run Protocol
-          </Text>
-          <NumberInput
-            label="Number of rounds"
-            value={numRounds}
-            onChange={(v) => setNumRounds(Number(v) || 1)}
-            min={1}
-            max={10}
-          />
-          <Button onClick={handleRun} variant="light">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Run Protocol</p>
+          <div>
+            <Label>Number of rounds</Label>
+            <Input
+              type="number"
+              value={numRounds}
+              onChange={(e) => setNumRounds(Number(e.target.value) || 1)}
+              min={1}
+              max={10}
+            />
+          </div>
+          <Button variant="secondary" onClick={handleRun}>
             Generate Keys & Run
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {result && (
         <>
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text size="sm" fw={600}>
-                Keys
-              </Text>
-              <Group>
-                <Text size="sm">
-                  Secret key x = <Code>{result.keys.secretKey.toString()}</Code>
-                </Text>
-                <Text size="sm">
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold">Keys</p>
+              <div className="flex items-center gap-4">
+                <p className="text-sm">
+                  Secret key x = <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{result.keys.secretKey.toString()}</code>
+                </p>
+                <p className="text-sm">
                   Public key y = g^x ={" "}
-                  <Code>{result.keys.publicKey.toString()}</Code>
-                </Text>
-              </Group>
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{result.keys.publicKey.toString()}</code>
+                </p>
+              </div>
               <Badge
-                variant="light"
-                color={result.allVerified ? "green" : "red"}
+                variant="secondary"
+                className={
+                  result.allVerified
+                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                    : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                }
               >
                 {result.allVerified
                   ? "All rounds verified"
                   : "Verification failed"}
               </Badge>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text size="sm" fw={600}>
-                Round Details
-              </Text>
-              <Table striped>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>#</Table.Th>
-                    <Table.Th>R = g^r</Table.Th>
-                    <Table.Th>Challenge e</Table.Th>
-                    <Table.Th>Response s</Table.Th>
-                    <Table.Th>g^s</Table.Th>
-                    <Table.Th>R*y^e</Table.Th>
-                    <Table.Th>Valid</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold">Round Details</p>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>#</TableHead>
+                    <TableHead>R = g^r</TableHead>
+                    <TableHead>Challenge e</TableHead>
+                    <TableHead>Response s</TableHead>
+                    <TableHead>g^s</TableHead>
+                    <TableHead>R*y^e</TableHead>
+                    <TableHead>Valid</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {result.rounds.map((round) => (
-                    <Table.Tr key={round.round}>
-                      <Table.Td>{round.round}</Table.Td>
-                      <Table.Td>
-                        <Code>{round.commitment.toString()}</Code>
-                      </Table.Td>
-                      <Table.Td>
-                        <Code>{round.challenge.toString()}</Code>
-                      </Table.Td>
-                      <Table.Td>
-                        <Code>{round.response.toString()}</Code>
-                      </Table.Td>
-                      <Table.Td>
-                        <Code>{round.lhs.toString()}</Code>
-                      </Table.Td>
-                      <Table.Td>
-                        <Code>{round.rhs.toString()}</Code>
-                      </Table.Td>
-                      <Table.Td>
+                    <TableRow key={round.round}>
+                      <TableCell>{round.round}</TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{round.commitment.toString()}</code>
+                      </TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{round.challenge.toString()}</code>
+                      </TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{round.response.toString()}</code>
+                      </TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{round.lhs.toString()}</code>
+                      </TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{round.rhs.toString()}</code>
+                      </TableCell>
+                      <TableCell>
                         <Badge
-                          size="sm"
-                          variant="light"
-                          color={round.verified ? "green" : "red"}
+                          variant="secondary"
+                          className={
+                            round.verified
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                              : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                          }
                         >
                           {round.verified ? "Yes" : "No"}
                         </Badge>
-                      </Table.Td>
-                    </Table.Tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </Table.Tbody>
+                </TableBody>
               </Table>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
-          <Paper p="md" withBorder>
-            <Stack gap="md">
-              <Text size="sm" fw={600}>
-                Protocol Visualization
-              </Text>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-4">
+              <p className="text-sm font-semibold">Protocol Visualization</p>
               <svg
                 width="100%"
                 height={result.rounds.length * 130 + 60}
@@ -182,8 +186,7 @@ export function SchnorrProtocolDemo() {
                   width={100}
                   height={30}
                   rx={6}
-                  fill="var(--mantine-color-blue-light)"
-                  stroke="var(--mantine-color-blue-6)"
+                  className="fill-blue-100 stroke-blue-500 dark:fill-blue-900 dark:stroke-blue-400"
                   strokeWidth={1.5}
                 />
                 <text
@@ -192,7 +195,7 @@ export function SchnorrProtocolDemo() {
                   textAnchor="middle"
                   fontSize={13}
                   fontWeight={600}
-                  fill="var(--mantine-color-blue-9)"
+                  className="fill-blue-900 dark:fill-blue-200"
                 >
                   Prover
                 </text>
@@ -202,8 +205,7 @@ export function SchnorrProtocolDemo() {
                   width={100}
                   height={30}
                   rx={6}
-                  fill="var(--mantine-color-green-light)"
-                  stroke="var(--mantine-color-green-6)"
+                  className="fill-green-100 stroke-green-500 dark:fill-green-900 dark:stroke-green-400"
                   strokeWidth={1.5}
                 />
                 <text
@@ -212,7 +214,7 @@ export function SchnorrProtocolDemo() {
                   textAnchor="middle"
                   fontSize={13}
                   fontWeight={600}
-                  fill="var(--mantine-color-green-9)"
+                  className="fill-green-900 dark:fill-green-200"
                 >
                   Verifier
                 </text>
@@ -221,7 +223,7 @@ export function SchnorrProtocolDemo() {
                   y1={40}
                   x2={90}
                   y2={result.rounds.length * 130 + 50}
-                  stroke="var(--mantine-color-blue-3)"
+                  className="stroke-blue-300 dark:stroke-blue-700"
                   strokeWidth={2}
                   strokeDasharray="4 4"
                 />
@@ -230,7 +232,7 @@ export function SchnorrProtocolDemo() {
                   y1={40}
                   x2={370}
                   y2={result.rounds.length * 130 + 50}
-                  stroke="var(--mantine-color-green-3)"
+                  className="stroke-green-300 dark:stroke-green-700"
                   strokeWidth={2}
                   strokeDasharray="4 4"
                 />
@@ -242,7 +244,7 @@ export function SchnorrProtocolDemo() {
                         x={10}
                         y={baseY + 20}
                         fontSize={10}
-                        fill="var(--mantine-color-dimmed)"
+                        className="fill-muted-foreground"
                       >
                         R{round.round}
                       </text>
@@ -251,7 +253,7 @@ export function SchnorrProtocolDemo() {
                         y1={baseY + 15}
                         x2={310}
                         y2={baseY + 15}
-                        stroke="var(--mantine-color-blue-5)"
+                        className="stroke-blue-500 dark:stroke-blue-400"
                         strokeWidth={1.5}
                         markerEnd="url(#schnorr-arrow)"
                       />
@@ -260,7 +262,7 @@ export function SchnorrProtocolDemo() {
                         y={baseY + 10}
                         textAnchor="middle"
                         fontSize={10}
-                        fill="var(--mantine-color-blue-7)"
+                        className="fill-blue-700 dark:fill-blue-300"
                       >
                         R = g^r = {round.commitment.toString()}
                       </text>
@@ -269,7 +271,7 @@ export function SchnorrProtocolDemo() {
                         y1={baseY + 55}
                         x2={100}
                         y2={baseY + 55}
-                        stroke="var(--mantine-color-green-5)"
+                        className="stroke-green-500 dark:stroke-green-400"
                         strokeWidth={1.5}
                         markerEnd="url(#schnorr-arrow-rev)"
                       />
@@ -278,7 +280,7 @@ export function SchnorrProtocolDemo() {
                         y={baseY + 50}
                         textAnchor="middle"
                         fontSize={10}
-                        fill="var(--mantine-color-green-7)"
+                        className="fill-green-700 dark:fill-green-300"
                       >
                         e = {round.challenge.toString()}
                       </text>
@@ -287,7 +289,7 @@ export function SchnorrProtocolDemo() {
                         y1={baseY + 95}
                         x2={310}
                         y2={baseY + 95}
-                        stroke="var(--mantine-color-blue-5)"
+                        className="stroke-blue-500 dark:stroke-blue-400"
                         strokeWidth={1.5}
                         markerEnd="url(#schnorr-arrow)"
                       />
@@ -296,7 +298,7 @@ export function SchnorrProtocolDemo() {
                         y={baseY + 90}
                         textAnchor="middle"
                         fontSize={10}
-                        fill="var(--mantine-color-blue-7)"
+                        className="fill-blue-700 dark:fill-blue-300"
                       >
                         s = {round.response.toString()}
                       </text>
@@ -304,10 +306,10 @@ export function SchnorrProtocolDemo() {
                         x={380}
                         y={baseY + 105}
                         fontSize={10}
-                        fill={
+                        className={
                           round.verified
-                            ? "var(--mantine-color-green-7)"
-                            : "var(--mantine-color-red-7)"
+                            ? "fill-green-700 dark:fill-green-300"
+                            : "fill-red-700 dark:fill-red-300"
                         }
                       >
                         {round.verified ? "OK" : "FAIL"}
@@ -326,7 +328,7 @@ export function SchnorrProtocolDemo() {
                   >
                     <polygon
                       points="0 0, 8 3, 0 6"
-                      fill="var(--mantine-color-blue-5)"
+                      className="fill-blue-500 dark:fill-blue-400"
                     />
                   </marker>
                   <marker
@@ -339,61 +341,57 @@ export function SchnorrProtocolDemo() {
                   >
                     <polygon
                       points="0 0, 8 3, 0 6"
-                      fill="var(--mantine-color-green-5)"
+                      className="fill-green-500 dark:fill-green-400"
                     />
                   </marker>
                 </defs>
               </svg>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text size="sm" fw={600}>
-                Protocol Steps
-              </Text>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold">Protocol Steps</p>
               <Table>
-                <Table.Tbody>
-                  <Table.Tr>
-                    <Table.Td>
-                      <Badge variant="light" size="sm">
-                        1
-                      </Badge>
-                    </Table.Td>
-                    <Table.Td>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>
+                      <Badge variant="secondary">1</Badge>
+                    </TableCell>
+                    <TableCell>
                       Prover picks random r, sends R = g^r mod p
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr>
-                    <Table.Td>
-                      <Badge variant="light" size="sm" color="blue">
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                         2
                       </Badge>
-                    </Table.Td>
-                    <Table.Td>Verifier sends random challenge e</Table.Td>
-                  </Table.Tr>
-                  <Table.Tr>
-                    <Table.Td>
-                      <Badge variant="light" size="sm" color="yellow">
+                    </TableCell>
+                    <TableCell>Verifier sends random challenge e</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
                         3
                       </Badge>
-                    </Table.Td>
-                    <Table.Td>Prover responds s = (r + e*x) mod q</Table.Td>
-                  </Table.Tr>
-                  <Table.Tr>
-                    <Table.Td>
-                      <Badge variant="light" size="sm" color="green">
+                    </TableCell>
+                    <TableCell>Prover responds s = (r + e*x) mod q</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>
+                      <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                         4
                       </Badge>
-                    </Table.Td>
-                    <Table.Td>Verifier checks: g^s ≡ R * y^e (mod p)</Table.Td>
-                  </Table.Tr>
-                </Table.Tbody>
+                    </TableCell>
+                    <TableCell>Verifier checks: g^s ≡ R * y^e (mod p)</TableCell>
+                  </TableRow>
+                </TableBody>
               </Table>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
         </>
       )}
-    </Stack>
+    </div>
   );
 }

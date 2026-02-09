@@ -1,19 +1,27 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  TextInput,
   Select,
-  Button,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
   Table,
-  Badge,
-  Group,
-  Text,
-  Alert,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   createInitialState,
   grantRole,
@@ -103,201 +111,233 @@ export function AccessControlDemo() {
   );
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Role Hierarchy
-          </Text>
-          <Paper p="md" withBorder bg="gray.0" style={{ textAlign: "center" }}>
-            <Stack gap="xs" align="center">
-              <Badge size="lg" color="red" variant="filled">
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Role Hierarchy</p>
+          <div className="rounded-lg border border-border bg-muted p-4 text-center">
+            <div className="flex flex-col gap-1 items-center">
+              <Badge className="bg-red-600 text-white text-sm px-3 py-1">
                 DEFAULT_ADMIN
               </Badge>
-              <Text size="xs" c="dimmed">
+              <p className="text-xs text-muted-foreground">
                 can grant/revoke all roles
-              </Text>
-              <Group gap="xl" justify="center">
-                <Stack gap={4} align="center">
-                  <Text size="xs" c="dimmed">
-                    |
-                  </Text>
-                  <Badge size="md" color="violet" variant="filled">
-                    MINTER
-                  </Badge>
-                  <Text size="xs" c="dimmed">
+              </p>
+              <div className="flex items-start gap-8 justify-center mt-2">
+                <div className="flex flex-col items-center gap-1">
+                  <p className="text-xs text-muted-foreground">|</p>
+                  <Badge className="bg-violet-600 text-white">MINTER</Badge>
+                  <p className="text-xs text-muted-foreground">
                     can mint tokens
-                  </Text>
-                </Stack>
-                <Stack gap={4} align="center">
-                  <Text size="xs" c="dimmed">
-                    |
-                  </Text>
-                  <Badge size="md" color="orange" variant="filled">
-                    PAUSER
-                  </Badge>
-                  <Text size="xs" c="dimmed">
+                  </p>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <p className="text-xs text-muted-foreground">|</p>
+                  <Badge className="bg-orange-600 text-white">PAUSER</Badge>
+                  <p className="text-xs text-muted-foreground">
                     can pause contract
-                  </Text>
-                </Stack>
-              </Group>
-            </Stack>
-          </Paper>
-        </Stack>
-      </Paper>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Contract State
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Contract State</p>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Owner</Table.Td>
-                <Table.Td ta="right">
-                  <Badge variant="light">{state.owner}</Badge>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+            <TableBody>
+              <TableRow>
+                <TableCell>Owner</TableCell>
+                <TableCell className="text-right">
+                  <Badge variant="secondary">{state.owner}</Badge>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-          <Text size="xs" fw={600}>
-            Role Memberships
-          </Text>
+          <p className="text-xs font-semibold">Role Memberships</p>
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Role</Table.Th>
-                <Table.Th>Members</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Role</TableHead>
+                <TableHead>Members</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {ROLES.map((roleId) => (
-                <Table.Tr key={roleId}>
-                  <Table.Td>
-                    <Badge size="sm" variant="outline">
+                <TableRow key={roleId}>
+                  <TableCell>
+                    <Badge variant="outline" className="text-xs">
                       {ROLE_LABELS[roleId]}
                     </Badge>
-                  </Table.Td>
-                  <Table.Td>
+                  </TableCell>
+                  <TableCell>
                     {hasRole(state, roleId, state.owner) ||
                     (state.roles[roleId]?.members.length ?? 0) > 0
                       ? (state.roles[roleId]?.members.join(", ") ?? "none")
                       : "none"}
-                  </Table.Td>
-                </Table.Tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Role Management
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Caller (msg.sender)"
-              value={caller}
-              onChange={(e) => setCaller(e.currentTarget.value)}
-            />
-            <TextInput
-              label="Target Account"
-              value={targetAccount}
-              onChange={(e) => setTargetAccount(e.currentTarget.value)}
-            />
-          </Group>
-          <Select
-            label="Role"
-            data={ROLES.map((r) => ({ value: r, label: ROLE_LABELS[r] ?? r }))}
-            value={selectedRole}
-            onChange={(v) => v && setSelectedRole(v)}
-          />
-          <Group>
-            <Button size="xs" color="green" onClick={handleGrant}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Role Management</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Caller (msg.sender)</Label>
+              <Input
+                value={caller}
+                onChange={(e) => setCaller(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Target Account</Label>
+              <Input
+                value={targetAccount}
+                onChange={(e) => setTargetAccount(e.target.value)}
+              />
+            </div>
+          </div>
+          <div>
+            <Label>Role</Label>
+            <Select
+              value={selectedRole}
+              onValueChange={(v) => setSelectedRole(v)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {ROLES.map((r) => (
+                  <SelectItem key={r} value={r}>
+                    {ROLE_LABELS[r] ?? r}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              className="bg-green-600 hover:bg-green-700 text-white"
+              onClick={handleGrant}
+            >
               Grant
             </Button>
-            <Button size="xs" color="red" onClick={handleRevoke}>
+            <Button
+              size="sm"
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={handleRevoke}
+            >
               Revoke
             </Button>
-            <Button size="xs" color="yellow" onClick={handleRenounce}>
+            <Button
+              size="sm"
+              className="bg-yellow-600 hover:bg-yellow-700 text-white"
+              onClick={handleRenounce}
+            >
               Renounce
             </Button>
-            <Button size="xs" color="violet" onClick={handleTransfer}>
+            <Button
+              size="sm"
+              className="bg-violet-600 hover:bg-violet-700 text-white"
+              onClick={handleTransfer}
+            >
               Transfer Ownership
             </Button>
-          </Group>
-        </Stack>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Function Access Check
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Caller"
-              value={checkCaller}
-              onChange={(e) => setCheckCaller(e.currentTarget.value)}
-            />
-            <Select
-              label="Required Role"
-              data={[
-                { value: "onlyOwner", label: "onlyOwner" },
-                ...ROLES.map((r) => ({ value: r, label: ROLE_LABELS[r] ?? r })),
-              ]}
-              value={checkRole}
-              onChange={(v) => v && setCheckRole(v)}
-            />
-          </Group>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Function Access Check</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Caller</Label>
+              <Input
+                value={checkCaller}
+                onChange={(e) => setCheckCaller(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Required Role</Label>
+              <Select
+                value={checkRole}
+                onValueChange={(v) => setCheckRole(v)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="onlyOwner">onlyOwner</SelectItem>
+                  {ROLES.map((r) => (
+                    <SelectItem key={r} value={r}>
+                      {ROLE_LABELS[r] ?? r}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
           <Alert
-            icon={<IconInfoCircle size={16} />}
-            color={accessCheck.allowed ? "green" : "red"}
+            className={
+              accessCheck.allowed
+                ? "border-green-500 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100"
+                : "border-red-500 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100"
+            }
           >
-            {accessCheck.allowed ? "ALLOWED" : "DENIED"}: {accessCheck.reason}
+            <Info className="h-4 w-4" />
+            <AlertDescription>
+              {accessCheck.allowed ? "ALLOWED" : "DENIED"}: {accessCheck.reason}
+            </AlertDescription>
           </Alert>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {logs.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Transaction Log
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Transaction Log</p>
             <Table>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Action</Table.Th>
-                  <Table.Th>Status</Table.Th>
-                  <Table.Th>Message</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Action</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Message</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {logs.map((log, i) => (
-                  <Table.Tr key={i}>
-                    <Table.Td>
-                      <Badge size="xs" variant="outline">
+                  <TableRow key={i}>
+                    <TableCell>
+                      <Badge variant="outline" className="text-xs">
                         {log.action}
                       </Badge>
-                    </Table.Td>
-                    <Table.Td>
-                      <Badge size="xs" color={log.success ? "green" : "red"}>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`text-xs ${log.success ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
+                      >
                         {log.success ? "PASS" : "REVERT"}
                       </Badge>
-                    </Table.Td>
-                    <Table.Td>
-                      <Text size="xs">{log.message}</Text>
-                    </Table.Td>
-                  </Table.Tr>
+                    </TableCell>
+                    <TableCell>
+                      <p className="text-xs">{log.message}</p>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Tbody>
+              </TableBody>
             </Table>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
       <EducationPanel
@@ -325,6 +365,6 @@ export function AccessControlDemo() {
           "Always test that unauthorized callers are properly rejected",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

@@ -1,18 +1,18 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import {
-  Stack,
-  Paper,
-  TextInput,
-  Button,
-  Code,
-  Group,
-  Text,
-  Textarea,
   Table,
-  Badge,
-} from "@mantine/core";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   buildMetadataJSON,
   buildTokenURI,
@@ -75,212 +75,206 @@ export function NFTMetadataDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            NFT Metadata
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Name"
-              value={name}
-              onChange={(e) => setName(e.currentTarget.value)}
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">NFT Metadata</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Name</Label>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Image URI</Label>
+              <Input
+                value={image}
+                onChange={(e) => setImage(e.target.value)}
+              />
+            </div>
+          </div>
+          <div>
+            <Label>Description</Label>
+            <textarea
+              className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={2}
             />
-            <TextInput
-              label="Image URI"
-              value={image}
-              onChange={(e) => setImage(e.currentTarget.value)}
+          </div>
+          <div>
+            <Label>External URL (optional)</Label>
+            <Input
+              value={externalUrl}
+              onChange={(e) => setExternalUrl(e.target.value)}
             />
-          </Group>
-          <Textarea
-            label="Description"
-            value={description}
-            onChange={(e) => setDescription(e.currentTarget.value)}
-            rows={2}
-          />
-          <TextInput
-            label="External URL (optional)"
-            value={externalUrl}
-            onChange={(e) => setExternalUrl(e.currentTarget.value)}
-          />
-        </Stack>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Attributes
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Trait Type</Table.Th>
-                <Table.Th>Value</Table.Th>
-                <Table.Th w={80}></Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Attributes</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Trait Type</TableHead>
+                <TableHead>Value</TableHead>
+                <TableHead className="w-20"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {attributes.map((attr) => (
-                <Table.Tr key={attr.id}>
-                  <Table.Td>
-                    <Code>{attr.traitType}</Code>
-                  </Table.Td>
-                  <Table.Td>
-                    <Code>{attr.value}</Code>
-                  </Table.Td>
-                  <Table.Td>
+                <TableRow key={attr.id}>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{attr.traitType}</code>
+                  </TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{attr.value}</code>
+                  </TableCell>
+                  <TableCell>
                     <Button
-                      size="xs"
-                      variant="light"
-                      color="red"
+                      size="sm"
+                      variant="secondary"
+                      className="bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800"
                       onClick={() => removeAttribute(attr.id)}
                     >
                       Remove
                     </Button>
-                  </Table.Td>
-                </Table.Tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-          <Group grow>
-            <TextInput
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
               placeholder="Trait type"
               value={newTraitType}
-              onChange={(e) => setNewTraitType(e.currentTarget.value)}
+              onChange={(e) => setNewTraitType(e.target.value)}
             />
-            <TextInput
+            <Input
               placeholder="Value"
               value={newTraitValue}
-              onChange={(e) => setNewTraitValue(e.currentTarget.value)}
+              onChange={(e) => setNewTraitValue(e.target.value)}
             />
-          </Group>
-          <Button onClick={addAttribute} variant="light" size="sm">
+          </div>
+          <Button variant="secondary" size="sm" onClick={addAttribute}>
             Add Attribute
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Token URI
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Base URI"
-              value={baseUri}
-              onChange={(e) => setBaseUri(e.currentTarget.value)}
-            />
-            <TextInput
-              label="Token ID"
-              value={tokenId}
-              onChange={(e) => setTokenId(e.currentTarget.value)}
-            />
-          </Group>
-          <Text size="sm">
-            Full URI: <Code>{uri}</Code>
-          </Text>
-        </Stack>
-      </Paper>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Token URI</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Base URI</Label>
+              <Input
+                value={baseUri}
+                onChange={(e) => setBaseUri(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Token ID</Label>
+              <Input
+                value={tokenId}
+                onChange={(e) => setTokenId(e.target.value)}
+              />
+            </div>
+          </div>
+          <p className="text-sm">
+            Full URI: <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{uri}</code>
+          </p>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Metadata Tree
-          </Text>
-          <Paper
-            p="sm"
-            withBorder
-            style={{
-              background:
-                "var(--mantine-color-dark-7, var(--mantine-color-gray-0))",
-            }}
-          >
-            <Stack gap={4}>
-              <Text size="sm" ff="monospace">
-                <Badge size="xs" variant="light" color="blue" mr={4}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Metadata Tree</p>
+          <div className="rounded-lg border border-border bg-muted/50 p-3">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm font-mono">
+                <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 text-xs mr-1">
                   object
                 </Badge>
                 metadata
-              </Text>
-              <Paper p="xs" ml="lg" withBorder>
-                <Stack gap={2}>
-                  <Text size="xs" ff="monospace">
-                    <Badge size="xs" variant="light" color="green" mr={4}>
+              </p>
+              <div className="rounded-lg border border-border p-2 ml-6">
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-xs font-mono">
+                    <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs mr-1">
                       string
                     </Badge>
-                    name: <Code>{metadata.name}</Code>
-                  </Text>
-                  <Text size="xs" ff="monospace">
-                    <Badge size="xs" variant="light" color="green" mr={4}>
+                    name: <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{metadata.name}</code>
+                  </p>
+                  <p className="text-xs font-mono">
+                    <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs mr-1">
                       string
                     </Badge>
                     description:{" "}
-                    <Code>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
                       {metadata.description.slice(0, 40)}
                       {metadata.description.length > 40 ? "..." : ""}
-                    </Code>
-                  </Text>
-                  <Text size="xs" ff="monospace">
-                    <Badge size="xs" variant="light" color="green" mr={4}>
+                    </code>
+                  </p>
+                  <p className="text-xs font-mono">
+                    <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs mr-1">
                       string
                     </Badge>
-                    image: <Code>{metadata.image}</Code>
-                  </Text>
+                    image: <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{metadata.image}</code>
+                  </p>
                   {metadata.externalUrl && (
-                    <Text size="xs" ff="monospace">
-                      <Badge size="xs" variant="light" color="green" mr={4}>
+                    <p className="text-xs font-mono">
+                      <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-xs mr-1">
                         string
                       </Badge>
-                      external_url: <Code>{metadata.externalUrl}</Code>
-                    </Text>
+                      external_url: <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{metadata.externalUrl}</code>
+                    </p>
                   )}
-                  <Text size="xs" ff="monospace">
-                    <Badge size="xs" variant="light" color="violet" mr={4}>
+                  <p className="text-xs font-mono">
+                    <Badge variant="secondary" className="bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300 text-xs mr-1">
                       array[{metadata.attributes?.length ?? 0}]
                     </Badge>
                     attributes
-                  </Text>
+                  </p>
                   {metadata.attributes && metadata.attributes.length > 0 && (
-                    <Paper p="xs" ml="lg" withBorder>
-                      <Stack gap={2}>
+                    <div className="rounded-lg border border-border p-2 ml-6">
+                      <div className="flex flex-col gap-0.5">
                         {metadata.attributes.map((attr, i) => (
-                          <Text key={i} size="xs" ff="monospace">
+                          <p key={i} className="text-xs font-mono">
                             <Badge
-                              size="xs"
                               variant="outline"
-                              color="violet"
-                              mr={4}
+                              className="text-violet-600 border-violet-300 dark:text-violet-400 dark:border-violet-600 text-xs mr-1"
                             >
                               {i}
                             </Badge>
-                            {attr.trait_type}: <Code>{attr.value}</Code>
-                          </Text>
+                            {attr.trait_type}: <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{attr.value}</code>
+                          </p>
                         ))}
-                      </Stack>
-                    </Paper>
+                      </div>
+                    </div>
                   )}
-                </Stack>
-              </Paper>
-            </Stack>
-          </Paper>
-        </Stack>
-      </Paper>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Generated JSON
-            </Text>
-            <Badge variant="light">{new Blob([json]).size} bytes</Badge>
-          </Group>
-          <Code block style={{ maxHeight: 300, overflow: "auto" }}>
-            {JSON.stringify(JSON.parse(json), null, 2)}
-          </Code>
-        </Stack>
-      </Paper>
-    </Stack>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Generated JSON</p>
+            <Badge variant="secondary">{new Blob([json]).size} bytes</Badge>
+          </div>
+          <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono" style={{ maxHeight: 300 }}>
+            <code>{JSON.stringify(JSON.parse(json), null, 2)}</code>
+          </pre>
+        </div>
+      </div>
+    </div>
   );
 }

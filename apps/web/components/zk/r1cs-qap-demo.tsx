@@ -1,20 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Stack,
-  Paper,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  TextInput,
-  NumberInput,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Info } from "lucide-react";
 import {
   parseExpression,
   gatesToR1CS,
@@ -28,6 +15,19 @@ import {
   type QAPVerification,
 } from "../../lib/zk/polynomial";
 import { SimpleLineChart } from "../shared";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export function R1CSQAPDemo() {
   const [expression, setExpression] = useState("x * y");
@@ -48,7 +48,6 @@ export function R1CSQAPDemo() {
     const gates = parseExpression(expression);
     if (gates.length === 0) return;
 
-    // Detect variables
     const vars = new Set<string>();
     for (const g of gates) {
       if (!/^\d+$/.test(g.left) && !g.left.startsWith("_")) vars.add(g.left);
@@ -70,92 +69,84 @@ export function R1CSQAPDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        R1CS → QAP: interpolate constraint matrices into polynomials. Then
-        verify A(x)*B(x) - C(x) = H(x)*T(x), turning discrete constraint checks
-        into a single polynomial divisibility check.
+    <div className="flex flex-col gap-6">
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          R1CS → QAP: interpolate constraint matrices into polynomials. Then
+          verify A(x)*B(x) - C(x) = H(x)*T(x), turning discrete constraint checks
+          into a single polynomial divisibility check.
+        </AlertDescription>
       </Alert>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Expression
-          </Text>
-          <TextInput
-            label="Arithmetic expression"
-            value={expression}
-            onChange={(e) => {
-              setExpression(e.currentTarget.value);
-              setQapResult(null);
-            }}
-          />
-          <Group grow>
-            <NumberInput
-              label="x"
-              value={xVal}
-              onChange={(v) => setXVal(Number(v) || 0)}
-              min={0}
-              max={22}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Expression</p>
+          <div>
+            <Label>Arithmetic expression</Label>
+            <Input
+              value={expression}
+              onChange={(e) => {
+                setExpression(e.target.value);
+                setQapResult(null);
+              }}
             />
-            <NumberInput
-              label="y"
-              value={yVal}
-              onChange={(v) => setYVal(Number(v) || 0)}
-              min={0}
-              max={22}
-            />
-            <NumberInput
-              label="z"
-              value={zVal}
-              onChange={(v) => setZVal(Number(v) || 0)}
-              min={0}
-              max={22}
-            />
-          </Group>
-          <Button onClick={handleRun} variant="light">
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <Label>x</Label>
+              <Input type="number" value={xVal} onChange={(e) => setXVal(Number(e.target.value) || 0)} min={0} max={22} />
+            </div>
+            <div>
+              <Label>y</Label>
+              <Input type="number" value={yVal} onChange={(e) => setYVal(Number(e.target.value) || 0)} min={0} max={22} />
+            </div>
+            <div>
+              <Label>z</Label>
+              <Input type="number" value={zVal} onChange={(e) => setZVal(Number(e.target.value) || 0)} min={0} max={22} />
+            </div>
+          </div>
+          <Button variant="secondary" onClick={handleRun}>
             R1CS → QAP → Verify
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {polys && wireNames.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Text size="sm" fw={600}>
-              QAP Polynomials
-            </Text>
-            <Table striped>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Wire</Table.Th>
-                  <Table.Th>A_i(x)</Table.Th>
-                  <Table.Th>B_i(x)</Table.Th>
-                  <Table.Th>C_i(x)</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">QAP Polynomials</p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Wire</TableHead>
+                  <TableHead>A_i(x)</TableHead>
+                  <TableHead>B_i(x)</TableHead>
+                  <TableHead>C_i(x)</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {wireNames.map((w, i) => (
-                  <Table.Tr key={w}>
-                    <Table.Td>
-                      <Code>{w}</Code>
-                    </Table.Td>
-                    <Table.Td>
-                      <Code>{formatPolynomial(polys.Ai[i] ?? [0n])}</Code>
-                    </Table.Td>
-                    <Table.Td>
-                      <Code>{formatPolynomial(polys.Bi[i] ?? [0n])}</Code>
-                    </Table.Td>
-                    <Table.Td>
-                      <Code>{formatPolynomial(polys.Ci[i] ?? [0n])}</Code>
-                    </Table.Td>
-                  </Table.Tr>
+                  <TableRow key={w}>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{w}</code>
+                    </TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{formatPolynomial(polys.Ai[i] ?? [0n])}</code>
+                    </TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{formatPolynomial(polys.Bi[i] ?? [0n])}</code>
+                    </TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{formatPolynomial(polys.Ci[i] ?? [0n])}</code>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Tbody>
+              </TableBody>
             </Table>
-            <Text size="sm">
-              Target T(x) = <Code>{formatPolynomial(polys.target)}</Code>
-            </Text>
+            <p className="text-sm">
+              Target T(x) = <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{formatPolynomial(polys.target)}</code>
+            </p>
 
             {qapResult && (
               <SimpleLineChart
@@ -191,61 +182,65 @@ export function R1CSQAPDemo() {
                 height={250}
               />
             )}
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
       {qapResult && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Group justify="space-between">
-              <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">
                 Verification at x = 7
-              </Text>
+              </p>
               <Badge
-                variant="light"
-                color={qapResult.verified ? "green" : "red"}
+                variant="secondary"
+                className={
+                  qapResult.verified
+                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                    : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                }
               >
                 {qapResult.verified ? "QAP Verified" : "QAP Failed"}
               </Badge>
-            </Group>
+            </div>
             <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>A(7)</Table.Td>
-                  <Table.Td>
-                    <Code>{qapResult.Ax.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>B(7)</Table.Td>
-                  <Table.Td>
-                    <Code>{qapResult.Bx.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>C(7)</Table.Td>
-                  <Table.Td>
-                    <Code>{qapResult.Cx.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>A*B - C (mod p)</Table.Td>
-                  <Table.Td>
-                    <Code>{qapResult.lhs.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>H(7) * T(7) (mod p)</Table.Td>
-                  <Table.Td>
-                    <Code>{qapResult.rhs.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
+              <TableBody>
+                <TableRow>
+                  <TableCell>A(7)</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{qapResult.Ax.toString()}</code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>B(7)</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{qapResult.Bx.toString()}</code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>C(7)</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{qapResult.Cx.toString()}</code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>A*B - C (mod p)</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{qapResult.lhs.toString()}</code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>H(7) * T(7) (mod p)</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{qapResult.rhs.toString()}</code>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
             </Table>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 }

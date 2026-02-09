@@ -1,31 +1,23 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import {
-  Stack,
-  TextInput,
-  Button,
-  Code,
-  Text,
-  Paper,
-  Group,
-  Badge,
-  Alert,
-  Table,
-  ActionIcon,
-  Box,
-} from "@mantine/core";
-import {
-  IconBinaryTree,
-  IconPlus,
-  IconTrash,
-  IconCheck,
-  IconX,
-} from "@tabler/icons-react";
+import { GitBranch, Plus, Trash2, Check, X } from "lucide-react";
 import { MerkleTree, type MerkleProof } from "../../lib/blockchain/merkle";
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
 import { OnChainSection } from "../shared/on-chain-section";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 function MerkleTreeVisual({
   tree,
@@ -67,11 +59,11 @@ function MerkleTreeVisual({
   }
 
   return (
-    <Paper p="md" withBorder data-testid="merkle-tree-visual">
-      <Text size="sm" fw={600} mb="sm">
+    <div className="rounded-lg border border-border bg-card p-4" data-testid="merkle-tree-visual">
+      <p className="text-sm font-semibold mb-2">
         Merkle Tree Structure
-      </Text>
-      <Box style={{ overflowX: "auto" }}>
+      </p>
+      <div className="overflow-x-auto">
         <svg
           width={maxWidth}
           height={svgHeight}
@@ -99,8 +91,8 @@ function MerkleTreeVisual({
                         stroke={
                           isOnProofPath(node.hash) &&
                           isOnProofPath(childLevel[leftChildPos].hash)
-                            ? "var(--mantine-color-blue-5)"
-                            : "var(--mantine-color-gray-4)"
+                            ? "hsl(217.2 91.2% 59.8%)"
+                            : "hsl(var(--muted-foreground) / 0.3)"
                         }
                         strokeWidth={
                           isOnProofPath(node.hash) &&
@@ -119,8 +111,8 @@ function MerkleTreeVisual({
                         stroke={
                           isOnProofPath(node.hash) &&
                           isOnProofPath(childLevel[rightChildPos].hash)
-                            ? "var(--mantine-color-blue-5)"
-                            : "var(--mantine-color-gray-4)"
+                            ? "hsl(217.2 91.2% 59.8%)"
+                            : "hsl(var(--muted-foreground) / 0.3)"
                         }
                         strokeWidth={
                           isOnProofPath(node.hash) &&
@@ -143,25 +135,25 @@ function MerkleTreeVisual({
               const isSelected = levelIdx === 0 && node.index === selectedLeaf;
               const onPath = isOnProofPath(node.hash);
 
-              let fill = "var(--mantine-color-gray-1)";
-              let stroke = "var(--mantine-color-gray-4)";
-              const textFill = "var(--mantine-color-dark-6)";
+              let fill = "hsl(var(--muted))";
+              let stroke = "hsl(var(--muted-foreground) / 0.3)";
+              const textFill = "hsl(var(--foreground))";
 
               if (isSelected) {
-                fill = "var(--mantine-color-green-1)";
-                stroke = "var(--mantine-color-green-5)";
+                fill = "hsl(142.1 76.2% 36.3% / 0.15)";
+                stroke = "hsl(142.1 76.2% 36.3%)";
               } else if (onPath) {
-                fill = "var(--mantine-color-blue-1)";
-                stroke = "var(--mantine-color-blue-5)";
+                fill = "hsl(217.2 91.2% 59.8% / 0.15)";
+                stroke = "hsl(217.2 91.2% 59.8%)";
               }
 
               if (levelIdx === totalLevels - 1) {
                 fill = onPath
-                  ? "var(--mantine-color-blue-2)"
-                  : "var(--mantine-color-violet-1)";
+                  ? "hsl(217.2 91.2% 59.8% / 0.2)"
+                  : "hsl(263.4 70% 50.4% / 0.15)";
                 stroke = onPath
-                  ? "var(--mantine-color-blue-5)"
-                  : "var(--mantine-color-violet-4)";
+                  ? "hsl(217.2 91.2% 59.8%)"
+                  : "hsl(263.4 70% 50.4% / 0.5)";
               }
 
               return (
@@ -191,14 +183,14 @@ function MerkleTreeVisual({
             }),
           )}
         </svg>
-      </Box>
+      </div>
       {proof && (
-        <Text size="xs" c="dimmed" mt="xs">
+        <p className="text-xs text-muted-foreground mt-1">
           Blue path shows the verification route from leaf to root. Sibling
           nodes are highlighted along the proof path.
-        </Text>
+        </p>
       )}
-    </Paper>
+    </div>
   );
 }
 
@@ -252,167 +244,154 @@ export function MerkleProofDemo() {
   }, [proof]);
 
   const inputPanel = (
-    <Stack gap="md">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+    <div className="flex flex-col gap-4">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Step 1: Build Merkle Tree
-          </Text>
-          <Group>
-            <TextInput
+          </p>
+          <div className="flex items-center gap-2">
+            <Input
               placeholder="Add data item..."
               value={newItem}
-              onChange={(e) => setNewItem(e.currentTarget.value)}
+              onChange={(e) => setNewItem(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleAddItem()}
-              style={{ flex: 1 }}
-              size="sm"
+              className="flex-1"
             />
             <Button
-              leftSection={<IconPlus size={16} />}
-              onClick={handleAddItem}
               variant="outline"
               size="sm"
+              onClick={handleAddItem}
             >
+              <Plus className="h-4 w-4 mr-1" />
               Add
             </Button>
-          </Group>
+          </div>
 
-          <Table striped highlightOnHover>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Index</Table.Th>
-                <Table.Th>Data</Table.Th>
-                <Table.Th>Leaf Hash</Table.Th>
-                <Table.Th>Actions</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Index</TableHead>
+                <TableHead>Data</TableHead>
+                <TableHead>Leaf Hash</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {items.map((item, i) => (
-                <Table.Tr
+                <TableRow
                   key={i}
-                  style={{
-                    backgroundColor:
-                      selectedLeaf === i
-                        ? "var(--mantine-color-blue-light)"
-                        : undefined,
-                  }}
+                  className={selectedLeaf === i ? "bg-blue-50 dark:bg-blue-950" : ""}
                 >
-                  <Table.Td>{i}</Table.Td>
-                  <Table.Td>{item}</Table.Td>
-                  <Table.Td>
-                    <Code style={{ fontSize: "0.6rem" }}>
+                  <TableCell>{i}</TableCell>
+                  <TableCell>{item}</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: "0.6rem" }}>
                       {tree?.leaves[i]?.hash.slice(0, 16)}...
-                    </Code>
-                  </Table.Td>
-                  <Table.Td>
-                    <Group gap="xs">
+                    </code>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
                       <Button
-                        size="xs"
-                        variant="light"
+                        size="sm"
+                        variant="secondary"
                         onClick={() => handleGenerateProof(i)}
                         disabled={!tree}
                       >
                         Prove
                       </Button>
-                      <ActionIcon
-                        size="sm"
-                        variant="subtle"
-                        color="red"
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-red-600"
                         onClick={() => handleRemoveItem(i)}
                       >
-                        <IconTrash size={14} />
-                      </ActionIcon>
-                    </Group>
-                  </Table.Td>
-                </Table.Tr>
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
 
           {tree && (
             <div>
-              <Text size="xs" c="dimmed">
+              <p className="text-xs text-muted-foreground">
                 Merkle Root
-              </Text>
-              <Code block style={{ wordBreak: "break-all" }}>
-                {tree.root.hash}
-              </Code>
-              <Group gap="xs" mt="xs">
-                <Badge variant="light" size="sm">
+              </p>
+              <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto break-all">
+                <code>{tree.root.hash}</code>
+              </pre>
+              <div className="flex items-center gap-1 mt-1">
+                <Badge variant="secondary">
                   {items.length} leaves
                 </Badge>
-                <Badge variant="light" size="sm">
+                <Badge variant="secondary">
                   {tree.levels.length} levels
                 </Badge>
-              </Group>
+              </div>
             </div>
           )}
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {proof && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">
               Step 2: Merkle Proof for &quot;{items[selectedLeaf!]}&quot;
-            </Text>
+            </p>
 
             <div>
-              <Text size="xs" c="dimmed">
+              <p className="text-xs text-muted-foreground">
                 Leaf Hash
-              </Text>
-              <Code
-                block
-                style={{ wordBreak: "break-all", fontSize: "0.7rem" }}
-              >
-                {proof.leaf}
-              </Code>
+              </p>
+              <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all" style={{ fontSize: "0.7rem" }}>
+                <code>{proof.leaf}</code>
+              </pre>
             </div>
 
             <div>
-              <Text size="xs" c="dimmed">
+              <p className="text-xs text-muted-foreground">
                 Proof Siblings ({proof.siblings.length})
-              </Text>
+              </p>
               {proof.siblings.map((s, i) => (
-                <Group key={i} gap="xs" mt="xs">
-                  <Badge variant="light" size="sm">
+                <div key={i} className="flex items-center gap-1 mt-1">
+                  <Badge variant="secondary">
                     {s.position}
                   </Badge>
-                  <Code style={{ fontSize: "0.6rem", wordBreak: "break-all" }}>
+                  <code className="rounded bg-muted px-1.5 py-0.5 font-mono break-all" style={{ fontSize: "0.6rem" }}>
                     {s.hash.slice(0, 24)}...
-                  </Code>
-                </Group>
+                  </code>
+                </div>
               ))}
             </div>
 
-            <Button
-              leftSection={<IconBinaryTree size={16} />}
-              onClick={handleVerifyProof}
-            >
+            <Button onClick={handleVerifyProof}>
+              <GitBranch className="h-4 w-4 mr-2" />
               Verify Proof
             </Button>
 
             {verifyResult !== null && (
-              <Alert
-                icon={
-                  verifyResult ? <IconCheck size={16} /> : <IconX size={16} />
-                }
-                color={verifyResult ? "green" : "red"}
-                title={verifyResult ? "Proof Valid" : "Proof Invalid"}
-              >
-                {verifyResult
-                  ? "The Merkle proof is valid — the data is included in the tree."
-                  : "The Merkle proof is invalid."}
+              <Alert className={verifyResult ? "border-green-500" : "border-red-500"}>
+                {verifyResult ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+                <AlertTitle>{verifyResult ? "Proof Valid" : "Proof Invalid"}</AlertTitle>
+                <AlertDescription>
+                  {verifyResult
+                    ? "The Merkle proof is valid — the data is included in the tree."
+                    : "The Merkle proof is invalid."}
+                </AlertDescription>
               </Alert>
             )}
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md">
+    <div className="flex flex-col gap-4">
       {tree ? (
         <MerkleTreeVisual
           tree={tree}
@@ -420,13 +399,13 @@ export function MerkleProofDemo() {
           proof={proof}
         />
       ) : (
-        <Paper p="md" withBorder>
-          <Text size="sm" c="dimmed" ta="center" py="xl">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm text-muted-foreground text-center py-8">
             Add at least 2 items to build a Merkle tree
-          </Text>
-        </Paper>
+          </p>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 
   return (

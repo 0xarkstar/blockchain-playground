@@ -1,22 +1,13 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import {
-  Stack,
-  TextInput,
-  Button,
-  Text,
-  Paper,
-  Group,
-  Badge,
-  Code,
-  SimpleGrid,
-  Alert,
-  Box,
-} from "@mantine/core";
-import { IconDatabase, IconSearch, IconInfoCircle } from "@tabler/icons-react";
+import { Database, Search, Info } from "lucide-react";
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Alert, AlertDescription } from "../ui/alert";
 
 interface AccountState {
   address: string;
@@ -47,11 +38,11 @@ const EXAMPLE_ACCOUNTS: AccountState[] = [
 
 function StateTrieVisual({ account }: { account: AccountState }) {
   return (
-    <Paper p="md" withBorder data-testid="state-trie-visual">
-      <Text size="sm" fw={600} mb="sm">
+    <div className="rounded-lg border border-border bg-card p-4" data-testid="state-trie-visual">
+      <p className="text-sm font-semibold mb-2">
         State Trie Structure
-      </Text>
-      <Box style={{ display: "flex", justifyContent: "center" }}>
+      </p>
+      <div className="flex justify-center">
         <svg width="300" height="260" viewBox="0 0 300 260">
           {/* State Root */}
           <rect
@@ -60,8 +51,8 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="100"
             height="30"
             rx="6"
-            fill="var(--mantine-color-violet-1)"
-            stroke="var(--mantine-color-violet-5)"
+            fill="hsl(263.4 70% 50.4% / 0.15)"
+            stroke="hsl(263.4 70% 50.4%)"
             strokeWidth="2"
           />
           <text
@@ -70,7 +61,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             textAnchor="middle"
             fontSize="10"
             fontWeight="600"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             State Root
           </text>
@@ -81,7 +72,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             y1="35"
             x2="150"
             y2="55"
-            stroke="var(--mantine-color-gray-4)"
+            stroke="hsl(var(--muted-foreground) / 0.3)"
             strokeWidth="1.5"
           />
 
@@ -92,8 +83,8 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="180"
             height="30"
             rx="4"
-            fill="var(--mantine-color-blue-1)"
-            stroke="var(--mantine-color-blue-4)"
+            fill="hsl(217.2 91.2% 59.8% / 0.15)"
+            stroke="hsl(217.2 91.2% 59.8% / 0.5)"
             strokeWidth="1.5"
           />
           <text
@@ -102,7 +93,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             textAnchor="middle"
             fontSize="8"
             fontFamily="monospace"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             {account.address.slice(0, 20)}...
           </text>
@@ -117,7 +108,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
                 y1="85"
                 x2={x}
                 y2="110"
-                stroke="var(--mantine-color-gray-3)"
+                stroke="hsl(var(--muted-foreground) / 0.2)"
                 strokeWidth="1"
               />
             );
@@ -130,8 +121,8 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="60"
             height="44"
             rx="4"
-            fill="var(--mantine-color-green-1)"
-            stroke="var(--mantine-color-green-4)"
+            fill="hsl(142.1 76.2% 36.3% / 0.15)"
+            stroke="hsl(142.1 76.2% 36.3% / 0.5)"
             strokeWidth="1"
           />
           <text
@@ -140,7 +131,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             textAnchor="middle"
             fontSize="8"
             fontWeight="600"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             Nonce
           </text>
@@ -150,7 +141,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             textAnchor="middle"
             fontSize="9"
             fontFamily="monospace"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             {account.nonce}
           </text>
@@ -162,8 +153,8 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="60"
             height="44"
             rx="4"
-            fill="var(--mantine-color-yellow-1)"
-            stroke="var(--mantine-color-yellow-5)"
+            fill="hsl(47.9 95.8% 53.1% / 0.15)"
+            stroke="hsl(47.9 95.8% 53.1% / 0.5)"
             strokeWidth="1"
           />
           <text
@@ -172,7 +163,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             textAnchor="middle"
             fontSize="8"
             fontWeight="600"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             Balance
           </text>
@@ -182,7 +173,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             textAnchor="middle"
             fontSize="7"
             fontFamily="monospace"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             {account.balance}
           </text>
@@ -194,8 +185,8 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="60"
             height="44"
             rx="4"
-            fill="var(--mantine-color-orange-1)"
-            stroke="var(--mantine-color-orange-4)"
+            fill="hsl(24.6 95% 53.1% / 0.15)"
+            stroke="hsl(24.6 95% 53.1% / 0.5)"
             strokeWidth="1"
           />
           <text
@@ -204,7 +195,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             textAnchor="middle"
             fontSize="7"
             fontWeight="600"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             storageRoot
           </text>
@@ -214,7 +205,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             textAnchor="middle"
             fontSize="6"
             fontFamily="monospace"
-            fill="var(--mantine-color-dimmed)"
+            fill="hsl(var(--muted-foreground))"
           >
             {account.storageRoot.slice(0, 10)}...
           </text>
@@ -226,8 +217,8 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="60"
             height="44"
             rx="4"
-            fill="var(--mantine-color-red-1)"
-            stroke="var(--mantine-color-red-4)"
+            fill="hsl(var(--destructive) / 0.15)"
+            stroke="hsl(var(--destructive) / 0.5)"
             strokeWidth="1"
           />
           <text
@@ -236,7 +227,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             textAnchor="middle"
             fontSize="7"
             fontWeight="600"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             codeHash
           </text>
@@ -246,7 +237,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             textAnchor="middle"
             fontSize="6"
             fontFamily="monospace"
-            fill="var(--mantine-color-dimmed)"
+            fill="hsl(var(--muted-foreground))"
           >
             {account.codeHash.slice(0, 10)}...
           </text>
@@ -257,7 +248,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             y1="154"
             x2="185"
             y2="175"
-            stroke="var(--mantine-color-orange-3)"
+            stroke="hsl(24.6 95% 53.1% / 0.3)"
             strokeWidth="1"
             strokeDasharray="3 2"
           />
@@ -267,8 +258,8 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="80"
             height="26"
             rx="4"
-            fill="var(--mantine-color-orange-0)"
-            stroke="var(--mantine-color-orange-3)"
+            fill="hsl(24.6 95% 53.1% / 0.08)"
+            stroke="hsl(24.6 95% 53.1% / 0.3)"
             strokeWidth="1"
             strokeDasharray="3 2"
           />
@@ -277,21 +268,21 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             y="192"
             textAnchor="middle"
             fontSize="8"
-            fill="var(--mantine-color-dimmed)"
+            fill="hsl(var(--muted-foreground))"
           >
             Storage Trie
           </text>
 
           {/* Legend */}
-          <text x="5" y="230" fontSize="8" fill="var(--mantine-color-dimmed)">
+          <text x="5" y="230" fontSize="8" fill="hsl(var(--muted-foreground))">
             Merkle Patricia Trie: accounts keyed by keccak256(address)
           </text>
-          <text x="5" y="245" fontSize="8" fill="var(--mantine-color-dimmed)">
+          <text x="5" y="245" fontSize="8" fill="hsl(var(--muted-foreground))">
             Each account stores: nonce, balance, storageRoot, codeHash
           </text>
         </svg>
-      </Box>
-    </Paper>
+      </div>
+    </div>
   );
 }
 
@@ -322,119 +313,116 @@ export function StateExplorerDemo() {
   }, [address]);
 
   const inputPanel = (
-    <Stack gap="md">
-      <Alert icon={<IconInfoCircle size={16} />} color="blue" variant="light">
-        This demo simulates browsing Ethereum state. In a full implementation,
-        it would query live RPC endpoints to fetch real account data.
+    <div className="flex flex-col gap-4">
+      <Alert className="border-blue-500">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          This demo simulates browsing Ethereum state. In a full implementation,
+          it would query live RPC endpoints to fetch real account data.
+        </AlertDescription>
       </Alert>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Account Lookup
-          </Text>
-          <Group>
-            <TextInput
+          </p>
+          <div className="flex items-center gap-2">
+            <Input
               placeholder="0x..."
               value={address}
-              onChange={(e) => setAddress(e.currentTarget.value)}
-              style={{ flex: 1 }}
+              onChange={(e) => setAddress(e.target.value)}
+              className="flex-1"
             />
             <Button
-              leftSection={<IconSearch size={16} />}
               onClick={handleLookup}
-              loading={loading}
+              disabled={loading}
             >
-              Lookup
+              <Search className="h-4 w-4 mr-2" />
+              {loading ? "Loading..." : "Lookup"}
             </Button>
-          </Group>
-          <Group gap="xs">
+          </div>
+          <div className="flex items-center gap-1">
             {EXAMPLE_ACCOUNTS.map((a) => (
               <Badge
                 key={a.address}
-                variant="light"
-                style={{ cursor: "pointer" }}
+                variant="secondary"
+                className="cursor-pointer"
                 onClick={() => setAddress(a.address)}
               >
                 {a.address.slice(0, 8)}...
               </Badge>
             ))}
-          </Group>
-        </Stack>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
       {account && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Group justify="space-between">
-              <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">
                 Account State
-              </Text>
-              <Badge variant="light" color="blue">
-                <IconDatabase size={12} /> State Trie
+              </p>
+              <Badge variant="secondary" className="flex items-center gap-1">
+                <Database className="h-3 w-3" /> State Trie
               </Badge>
-            </Group>
+            </div>
 
-            <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
-              <Paper p="sm" withBorder>
-                <Text size="xs" c="dimmed">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="rounded-lg border border-border bg-card p-3">
+                <p className="text-xs text-muted-foreground">
                   Balance
-                </Text>
-                <Text size="lg" fw={700}>
+                </p>
+                <p className="text-lg font-bold">
                   {account.balance}
-                </Text>
-              </Paper>
-              <Paper p="sm" withBorder>
-                <Text size="xs" c="dimmed">
+                </p>
+              </div>
+              <div className="rounded-lg border border-border bg-card p-3">
+                <p className="text-xs text-muted-foreground">
                   Nonce (TX Count)
-                </Text>
-                <Text size="lg" fw={700}>
+                </p>
+                <p className="text-lg font-bold">
                   {account.nonce}
-                </Text>
-              </Paper>
-            </SimpleGrid>
+                </p>
+              </div>
+            </div>
 
             <div>
-              <Text size="xs" c="dimmed">
+              <p className="text-xs text-muted-foreground">
                 Code Hash (keccak256 of contract bytecode)
-              </Text>
-              <Code
-                block
-                style={{ wordBreak: "break-all", fontSize: "0.7rem" }}
-              >
-                {account.codeHash}
-              </Code>
+              </p>
+              <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all" style={{ fontSize: "0.7rem" }}>
+                <code>{account.codeHash}</code>
+              </pre>
             </div>
 
             <div>
-              <Text size="xs" c="dimmed">
+              <p className="text-xs text-muted-foreground">
                 Storage Root (Merkle Patricia Trie root of contract storage)
-              </Text>
-              <Code
-                block
-                style={{ wordBreak: "break-all", fontSize: "0.7rem" }}
-              >
-                {account.storageRoot}
-              </Code>
+              </p>
+              <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all" style={{ fontSize: "0.7rem" }}>
+                <code>{account.storageRoot}</code>
+              </pre>
             </div>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md">
+    <div className="flex flex-col gap-4">
       {account ? (
         <StateTrieVisual account={account} />
       ) : (
-        <Paper p="md" withBorder>
-          <Text size="sm" c="dimmed" ta="center" py="xl">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm text-muted-foreground text-center py-8">
             Look up an account to see its state trie structure
-          </Text>
-        </Paper>
+          </p>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 
   return (

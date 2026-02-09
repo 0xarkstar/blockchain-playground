@@ -1,16 +1,16 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Progress } from "../ui/progress";
 import {
-  Stack,
-  NumberInput,
-  Text,
-  Paper,
-  Group,
-  Badge,
   Table,
-  Progress,
-} from "@mantine/core";
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
 import {
   calculateHealthFactor,
   calculateMaxBorrow,
@@ -20,11 +20,27 @@ import {
 import { EducationPanel } from "../../components/shared";
 
 function healthColor(hf: number): string {
-  if (hf >= 2) return "green";
-  if (hf >= 1.5) return "lime";
-  if (hf >= 1.1) return "yellow";
-  if (hf >= 1) return "orange";
-  return "red";
+  if (hf >= 2) return "text-green-600";
+  if (hf >= 1.5) return "text-lime-600";
+  if (hf >= 1.1) return "text-yellow-600";
+  if (hf >= 1) return "text-orange-600";
+  return "text-red-600";
+}
+
+function healthBadgeClass(hf: number): string {
+  if (hf >= 2) return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
+  if (hf >= 1.5) return "bg-lime-100 text-lime-800 dark:bg-lime-900 dark:text-lime-300";
+  if (hf >= 1.1) return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
+  if (hf >= 1) return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300";
+  return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
+}
+
+function healthProgressColor(hf: number): string {
+  if (hf >= 2) return "[&>div]:bg-green-500";
+  if (hf >= 1.5) return "[&>div]:bg-lime-500";
+  if (hf >= 1.1) return "[&>div]:bg-yellow-500";
+  if (hf >= 1) return "[&>div]:bg-orange-500";
+  return "[&>div]:bg-red-500";
 }
 
 function healthLabel(hf: number): string {
@@ -74,131 +90,127 @@ export function LendingProtocolDemo() {
     : "∞";
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Collateral
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Amount (tokens)"
-              value={collateralAmount}
-              onChange={(v) => setCollateralAmount(Number(v) || 0)}
-              min={0}
-              decimalScale={4}
-            />
-            <NumberInput
-              label="Price (USD)"
-              value={collateralPrice}
-              onChange={(v) => setCollateralPrice(Number(v) || 0)}
-              min={0}
-              prefix="$"
-              thousandSeparator=","
-            />
-          </Group>
-          <Text size="xs" c="dimmed">
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Collateral</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Amount (tokens)</Label>
+              <Input
+                type="number"
+                value={collateralAmount}
+                onChange={(e) => setCollateralAmount(Number(e.target.value) || 0)}
+                min={0}
+                step={0.0001}
+              />
+            </div>
+            <div>
+              <Label>Price (USD)</Label>
+              <Input
+                type="number"
+                value={collateralPrice}
+                onChange={(e) => setCollateralPrice(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">
             Collateral Value: ${result.collateralValue.toLocaleString()}
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Borrow
-          </Text>
-          <NumberInput
-            label="Borrow Amount (USD)"
-            value={borrowAmount}
-            onChange={(v) => setBorrowAmount(Number(v) || 0)}
-            min={0}
-            prefix="$"
-            thousandSeparator=","
-          />
-          <NumberInput
-            label="Liquidation Threshold"
-            value={liquidationThreshold}
-            onChange={(v) => setLiquidationThreshold(Number(v) || 0)}
-            min={0}
-            max={1}
-            step={0.05}
-            decimalScale={2}
-          />
-        </Stack>
-      </Paper>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Borrow</p>
+          <div>
+            <Label>Borrow Amount (USD)</Label>
+            <Input
+              type="number"
+              value={borrowAmount}
+              onChange={(e) => setBorrowAmount(Number(e.target.value) || 0)}
+              min={0}
+            />
+          </div>
+          <div>
+            <Label>Liquidation Threshold</Label>
+            <Input
+              type="number"
+              value={liquidationThreshold}
+              onChange={(e) => setLiquidationThreshold(Number(e.target.value) || 0)}
+              min={0}
+              max={1}
+              step={0.05}
+            />
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Position Health
-            </Text>
-            <Badge
-              size="lg"
-              variant="light"
-              color={healthColor(result.healthFactor)}
-            >
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Position Health</p>
+            <Badge variant="secondary" className={healthBadgeClass(result.healthFactor)}>
               {healthLabel(result.healthFactor)}
             </Badge>
-          </Group>
+          </div>
 
           <div>
-            <Text size="xs" c="dimmed" mb={4}>
+            <p className="text-xs text-muted-foreground mb-1">
               Health Factor: {hfDisplay}
-            </Text>
+            </p>
             <Progress
               value={Math.min(
                 isFinite(result.healthFactor) ? result.healthFactor * 50 : 100,
                 100,
               )}
-              color={healthColor(result.healthFactor)}
-              size="lg"
+              className={`h-3 ${healthProgressColor(result.healthFactor)}`}
             />
           </div>
 
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Health Factor</Table.Td>
-                <Table.Td ta="right">
-                  <Text fw={600} c={healthColor(result.healthFactor)}>
+            <TableBody>
+              <TableRow>
+                <TableCell>Health Factor</TableCell>
+                <TableCell className="text-right">
+                  <span className={`font-semibold ${healthColor(result.healthFactor)}`}>
                     {hfDisplay}
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Max Borrow</Table.Td>
-                <Table.Td ta="right">
+                  </span>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Max Borrow</TableCell>
+                <TableCell className="text-right">
                   ${result.maxBorrow.toLocaleString()}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Collateral Ratio</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Collateral Ratio</TableCell>
+                <TableCell className="text-right">
                   {isFinite(result.collateralRatio)
                     ? `${result.collateralRatio.toFixed(1)}%`
                     : "∞"}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Liquidation Price</Table.Td>
-                <Table.Td ta="right">
-                  <Text fw={600} c="red">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Liquidation Price</TableCell>
+                <TableCell className="text-right">
+                  <span className="font-semibold text-red-600">
                     ${result.liqPrice.toFixed(2)}
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Utilization</Table.Td>
-                <Table.Td ta="right">
+                  </span>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Utilization</TableCell>
+                <TableCell className="text-right">
                   {(result.utilization * 100).toFixed(1)}%
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -225,6 +237,6 @@ export function LendingProtocolDemo() {
           "Higher liquidation thresholds allow more borrowing but less safety margin",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

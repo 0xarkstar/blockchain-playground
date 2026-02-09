@@ -1,18 +1,20 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
+import { Plus, Trash2, Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import {
-  Stack,
-  NumberInput,
-  Text,
-  Paper,
-  Group,
-  Badge,
   Table,
-  Button,
-  Alert,
-} from "@mantine/core";
-import { IconPlus, IconTrash, IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   calculateTWAP,
   detectPriceDeviation,
@@ -86,69 +88,60 @@ export function OraclePriceFeedDemo() {
   }, [snapshots, analysis.twap, deviationThreshold]);
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Price History
-          </Text>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Price History</p>
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>#</Table.Th>
-                <Table.Th>Price</Table.Th>
-                <Table.Th>Time (s)</Table.Th>
-                <Table.Th w={60} />
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+            <TableHeader>
+              <TableRow>
+                <TableHead>#</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Time (s)</TableHead>
+                <TableHead className="w-[60px]" />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {snapshots.map((s, i) => (
-                <Table.Tr key={s.timestamp}>
-                  <Table.Td>{i + 1}</Table.Td>
-                  <Table.Td>${s.price.toFixed(2)}</Table.Td>
-                  <Table.Td>{s.timestamp}s</Table.Td>
-                  <Table.Td>
+                <TableRow key={s.timestamp}>
+                  <TableCell>{i + 1}</TableCell>
+                  <TableCell>${s.price.toFixed(2)}</TableCell>
+                  <TableCell>{s.timestamp}s</TableCell>
+                  <TableCell>
                     <Button
-                      variant="subtle"
-                      color="red"
-                      size="xs"
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 text-red-600"
                       onClick={() => removeSnapshot(i)}
-                      p={4}
                     >
-                      <IconTrash size={14} />
+                      <Trash2 className="h-3.5 w-3.5" />
                     </Button>
-                  </Table.Td>
-                </Table.Tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-          <Group>
-            <NumberInput
+          <div className="flex items-center gap-2">
+            <Input
+              type="number"
               value={newPrice}
-              onChange={(v) => setNewPrice(Number(v) || 0)}
+              onChange={(e) => setNewPrice(Number(e.target.value) || 0)}
               min={0}
-              prefix="$"
-              decimalScale={2}
-              size="xs"
-              style={{ flex: 1 }}
+              step={0.01}
+              className="flex-1"
             />
-            <Button
-              leftSection={<IconPlus size={14} />}
-              size="xs"
-              onClick={addSnapshot}
-            >
+            <Button size="sm" onClick={addSnapshot}>
+              <Plus className="h-3.5 w-3.5 mr-1" />
               Add
             </Button>
-          </Group>
-        </Stack>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
       {priceChartData.length > 1 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Price Feed Chart
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Price Feed Chart</p>
             <SimpleLineChart
               data={priceChartData}
               xKey="time"
@@ -156,107 +149,117 @@ export function OraclePriceFeedDemo() {
               colors={["#228be6", "#fab005", "#fa5252", "#fa5252"]}
               height={250}
             />
-            <Text size="xs" c="dimmed" ta="center">
+            <p className="text-xs text-muted-foreground text-center">
               Price (blue) with TWAP (yellow) and deviation bands (red)
-            </Text>
-          </Stack>
-        </Paper>
+            </p>
+          </div>
+        </div>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Configuration
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Deviation Threshold (%)"
-              value={deviationThreshold}
-              onChange={(v) => setDeviationThreshold(Number(v) || 0)}
-              min={0}
-              max={100}
-              suffix="%"
-              decimalScale={1}
-            />
-            <NumberInput
-              label="Heartbeat Interval (s)"
-              value={heartbeatInterval}
-              onChange={(v) => setHeartbeatInterval(Number(v) || 0)}
-              min={0}
-              suffix="s"
-            />
-          </Group>
-        </Stack>
-      </Paper>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Configuration</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Deviation Threshold (%)</Label>
+              <Input
+                type="number"
+                value={deviationThreshold}
+                onChange={(e) => setDeviationThreshold(Number(e.target.value) || 0)}
+                min={0}
+                max={100}
+              />
+            </div>
+            <div>
+              <Label>Heartbeat Interval (s)</Label>
+              <Input
+                type="number"
+                value={heartbeatInterval}
+                onChange={(e) => setHeartbeatInterval(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Analysis
-          </Text>
-          <Group gap="sm">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Analysis</p>
+          <div className="flex items-center gap-2">
             <Badge
-              variant="light"
-              color={analysis.deviation.deviated ? "red" : "green"}
+              variant="secondary"
+              className={
+                analysis.deviation.deviated
+                  ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                  : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+              }
             >
               {analysis.deviation.deviated ? "Price Deviated" : "Price Normal"}
             </Badge>
-            <Badge variant="light" color={analysis.stale ? "red" : "green"}>
+            <Badge
+              variant="secondary"
+              className={
+                analysis.stale
+                  ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                  : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+              }
+            >
               {analysis.stale ? "Heartbeat Stale" : "Heartbeat Fresh"}
             </Badge>
-          </Group>
+          </div>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Current Price</Table.Td>
-                <Table.Td ta="right">
+            <TableBody>
+              <TableRow>
+                <TableCell>Current Price</TableCell>
+                <TableCell className="text-right">
                   ${analysis.currentPrice.toFixed(2)}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>TWAP</Table.Td>
-                <Table.Td ta="right">
-                  <Text fw={600}>${analysis.twap.toFixed(2)}</Text>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Deviation from TWAP</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>TWAP</TableCell>
+                <TableCell className="text-right">
+                  <span className="font-semibold">${analysis.twap.toFixed(2)}</span>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Deviation from TWAP</TableCell>
+                <TableCell className="text-right">
                   {(analysis.deviation.deviation * 100).toFixed(3)}%
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>TWAP Window</Table.Td>
-                <Table.Td ta="right">{analysis.totalTime}s</Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>TWAP Window</TableCell>
+                <TableCell className="text-right">{analysis.totalTime}s</TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
 
           {analysis.deviation.deviated && (
-            <Alert
-              icon={<IconInfoCircle size={16} />}
-              color="red"
-              title="Price Deviation Detected"
-            >
-              Current price deviates{" "}
-              {(analysis.deviation.deviation * 100).toFixed(3)}% from TWAP,
-              exceeding the {deviationThreshold}% threshold. This may indicate
-              price manipulation or extreme volatility.
+            <Alert variant="destructive">
+              <Info className="h-4 w-4" />
+              <AlertTitle>Price Deviation Detected</AlertTitle>
+              <AlertDescription>
+                Current price deviates{" "}
+                {(analysis.deviation.deviation * 100).toFixed(3)}% from TWAP,
+                exceeding the {deviationThreshold}% threshold. This may indicate
+                price manipulation or extreme volatility.
+              </AlertDescription>
             </Alert>
           )}
 
           {analysis.stale && (
-            <Alert
-              icon={<IconInfoCircle size={16} />}
-              color="orange"
-              title="Stale Heartbeat"
-            >
-              The oracle has not updated within the {heartbeatInterval}s
-              heartbeat interval. Price data may be unreliable.
+            <Alert>
+              <Info className="h-4 w-4" />
+              <AlertTitle>Stale Heartbeat</AlertTitle>
+              <AlertDescription>
+                The oracle has not updated within the {heartbeatInterval}s
+                heartbeat interval. Price data may be unreliable.
+              </AlertDescription>
             </Alert>
           )}
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -283,6 +286,6 @@ export function OraclePriceFeedDemo() {
           "Always check heartbeat freshness before using oracle prices",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

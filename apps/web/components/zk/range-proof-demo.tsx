@@ -1,19 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Stack,
-  Paper,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  NumberInput,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Info } from "lucide-react";
 import { createPedersenParams } from "../../lib/zk/pedersen";
 import {
   constructRangeProof,
@@ -21,6 +9,19 @@ import {
   decomposeToBits,
   type RangeProof,
 } from "../../lib/zk/range-proof";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 export function RangeProofDemo() {
   const params = createPedersenParams();
@@ -39,169 +40,177 @@ export function RangeProofDemo() {
   );
 
   return (
-    <Stack gap="lg">
-      <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        Range proof: prove a committed value is in [0, 2^n) without revealing
-        it. The value is decomposed into bits, each committed separately. The
-        verifier checks each bit is 0 or 1, and the product reconstructs the
-        original commitment.
+    <div className="flex flex-col gap-6">
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          Range proof: prove a committed value is in [0, 2^n) without revealing
+          it. The value is decomposed into bits, each committed separately. The
+          verifier checks each bit is 0 or 1, and the product reconstructs the
+          original commitment.
+        </AlertDescription>
       </Alert>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Configure
-          </Text>
-          <Group grow>
-            <NumberInput
-              label={`Value (range: 0 to ${maxValue})`}
-              value={value}
-              onChange={(v) => setValue(Number(v) ?? 0)}
-              min={-1}
-              max={maxValue + 1}
-            />
-            <NumberInput
-              label="Bit width (n)"
-              value={numBits}
-              onChange={(v) => setNumBits(Number(v) || 1)}
-              min={1}
-              max={8}
-            />
-          </Group>
-          <Text size="sm" c="dimmed">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Configure</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>{`Value (range: 0 to ${maxValue})`}</Label>
+              <Input
+                type="number"
+                value={value}
+                onChange={(e) => setValue(Number(e.target.value) ?? 0)}
+                min={-1}
+                max={maxValue + 1}
+              />
+            </div>
+            <div>
+              <Label>Bit width (n)</Label>
+              <Input
+                type="number"
+                value={numBits}
+                onChange={(e) => setNumBits(Number(e.target.value) || 1)}
+                min={1}
+                max={8}
+              />
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground">
             Binary: {bits.slice().reverse().join("")} (value {value}, {numBits}
             -bit)
-          </Text>
-          <Group gap="xs" justify="center">
+          </p>
+          <div className="flex items-center gap-1 justify-center">
             {bits
               .slice()
               .reverse()
               .map((bit, i) => {
                 const pos = numBits - 1 - i;
                 return (
-                  <Paper
+                  <div
                     key={i}
-                    p="xs"
-                    withBorder
-                    style={{
-                      minWidth: 52,
-                      textAlign: "center",
-                      background:
-                        bit === 1
-                          ? "var(--mantine-color-blue-light)"
-                          : "var(--mantine-color-gray-light)",
-                      borderColor:
-                        bit === 1
-                          ? "var(--mantine-color-blue-6)"
-                          : "var(--mantine-color-gray-4)",
-                    }}
+                    className={`rounded-lg border p-2 text-center min-w-[52px] ${
+                      bit === 1
+                        ? "bg-blue-50 border-blue-500 dark:bg-blue-900 dark:border-blue-400"
+                        : "bg-gray-50 border-gray-300 dark:bg-gray-800 dark:border-gray-600"
+                    }`}
                   >
-                    <Stack gap={2} align="center">
-                      <Text size="xs" c="dimmed">
+                    <div className="flex flex-col items-center gap-0.5">
+                      <p className="text-xs text-muted-foreground">
                         2^{pos}
-                      </Text>
-                      <Text size="lg" fw={700} c={bit === 1 ? "blue" : "gray"}>
+                      </p>
+                      <p className={`text-lg font-bold ${bit === 1 ? "text-blue-600 dark:text-blue-400" : "text-gray-500"}`}>
                         {bit}
-                      </Text>
-                      <Text size="xs" c="dimmed">
+                      </p>
+                      <p className="text-xs text-muted-foreground">
                         ={1 << pos}
-                      </Text>
-                    </Stack>
-                  </Paper>
+                      </p>
+                    </div>
+                  </div>
                 );
               })}
-          </Group>
-          <Button onClick={handleProve} variant="light">
+          </div>
+          <Button variant="secondary" onClick={handleProve}>
             Generate Range Proof
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {proof && (
         <>
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Group justify="space-between">
-                <Text size="sm" fw={600}>
-                  Proof Result
-                </Text>
-                <Badge variant="light" color={proof.valid ? "green" : "red"}>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold">Proof Result</p>
+                <Badge
+                  variant="secondary"
+                  className={
+                    proof.valid
+                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                      : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                  }
+                >
                   {proof.valid
                     ? "Valid — value in range"
                     : "Invalid — value out of range"}
                 </Badge>
-              </Group>
+              </div>
               {proof.valid && (
-                <Table striped>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Bit Position</Table.Th>
-                      <Table.Th>Bit Value</Table.Th>
-                      <Table.Th>Commitment</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Bit Position</TableHead>
+                      <TableHead>Bit Value</TableHead>
+                      <TableHead>Commitment</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
                     {proof.bitCommitments.map((bc) => (
-                      <Table.Tr key={bc.bitPosition}>
-                        <Table.Td>2^{bc.bitPosition}</Table.Td>
-                        <Table.Td>
+                      <TableRow key={bc.bitPosition}>
+                        <TableCell>2^{bc.bitPosition}</TableCell>
+                        <TableCell>
                           <Badge
-                            size="sm"
-                            variant="light"
-                            color={bc.bit === 1 ? "blue" : "gray"}
+                            variant="secondary"
+                            className={
+                              bc.bit === 1
+                                ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                                : ""
+                            }
                           >
                             {bc.bit}
                           </Badge>
-                        </Table.Td>
-                        <Table.Td>
-                          <Code>{bc.commitment.commitment.toString()}</Code>
-                        </Table.Td>
-                      </Table.Tr>
+                        </TableCell>
+                        <TableCell>
+                          <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{bc.commitment.commitment.toString()}</code>
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </Table.Tbody>
+                  </TableBody>
                 </Table>
               )}
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
           {proof.valid && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text size="sm" fw={600}>
-                  Verification
-                </Text>
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-semibold">Verification</p>
                 <Table>
-                  <Table.Tbody>
-                    <Table.Tr>
-                      <Table.Td>Total commitment</Table.Td>
-                      <Table.Td>
-                        <Code>{proof.totalCommitment.toString()}</Code>
-                      </Table.Td>
-                    </Table.Tr>
-                    <Table.Tr>
-                      <Table.Td>Reconstructed from bits</Table.Td>
-                      <Table.Td>
-                        <Code>{proof.reconstructed.toString()}</Code>
-                      </Table.Td>
-                    </Table.Tr>
-                    <Table.Tr>
-                      <Table.Td>Match</Table.Td>
-                      <Table.Td>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>Total commitment</TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{proof.totalCommitment.toString()}</code>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Reconstructed from bits</TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{proof.reconstructed.toString()}</code>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>Match</TableCell>
+                      <TableCell>
                         <Badge
-                          variant="light"
-                          color={verifyRangeProof(proof) ? "green" : "red"}
+                          variant="secondary"
+                          className={
+                            verifyRangeProof(proof)
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                              : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                          }
                         >
                           {verifyRangeProof(proof) ? "Yes" : "No"}
                         </Badge>
-                      </Table.Td>
-                    </Table.Tr>
-                  </Table.Tbody>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
                 </Table>
-              </Stack>
-            </Paper>
+              </div>
+            </div>
           )}
         </>
       )}
-    </Stack>
+    </div>
   );
 }

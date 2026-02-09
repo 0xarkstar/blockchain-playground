@@ -1,16 +1,15 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import {
-  Stack,
-  NumberInput,
-  Text,
-  Paper,
-  Group,
-  Badge,
   Table,
-  SimpleGrid,
-} from "@mantine/core";
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
 import { calculateArbitrageProfit } from "../../lib/defi/flash-loan";
 import { SimpleBarChart, EducationPanel } from "../../components/shared";
 
@@ -49,149 +48,147 @@ export function ArbitrageSimulatorDemo() {
   }, [priceA, priceB, tradeAmount, gasCost]);
 
   return (
-    <Stack gap="lg">
-      <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Group justify="space-between">
-              <Text size="sm" fw={600}>
-                Pool A
-              </Text>
+    <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">Pool A</p>
               {result.buyPool === "A" && (
-                <Badge color="green" variant="light" size="sm">
+                <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                   Buy Here
                 </Badge>
               )}
               {result.sellPool === "A" && (
-                <Badge color="blue" variant="light" size="sm">
+                <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                   Sell Here
                 </Badge>
               )}
-            </Group>
-            <NumberInput
-              label="Token Price (USD)"
-              value={priceA}
-              onChange={(v) => setPriceA(Number(v) || 0)}
-              min={0}
-              prefix="$"
-              decimalScale={2}
-              thousandSeparator=","
-            />
-          </Stack>
-        </Paper>
+            </div>
+            <div>
+              <Label>Token Price (USD)</Label>
+              <Input
+                type="number"
+                value={priceA}
+                onChange={(e) => setPriceA(Number(e.target.value) || 0)}
+                min={0}
+                step={0.01}
+              />
+            </div>
+          </div>
+        </div>
 
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Group justify="space-between">
-              <Text size="sm" fw={600}>
-                Pool B
-              </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">Pool B</p>
               {result.buyPool === "B" && (
-                <Badge color="green" variant="light" size="sm">
+                <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                   Buy Here
                 </Badge>
               )}
               {result.sellPool === "B" && (
-                <Badge color="blue" variant="light" size="sm">
+                <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                   Sell Here
                 </Badge>
               )}
-            </Group>
-            <NumberInput
-              label="Token Price (USD)"
-              value={priceB}
-              onChange={(v) => setPriceB(Number(v) || 0)}
-              min={0}
-              prefix="$"
-              decimalScale={2}
-              thousandSeparator=","
-            />
-          </Stack>
-        </Paper>
-      </SimpleGrid>
+            </div>
+            <div>
+              <Label>Token Price (USD)</Label>
+              <Input
+                type="number"
+                value={priceB}
+                onChange={(e) => setPriceB(Number(e.target.value) || 0)}
+                min={0}
+                step={0.01}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Trade Parameters
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Trade Amount (USD)"
-              value={tradeAmount}
-              onChange={(v) => setTradeAmount(Number(v) || 0)}
-              min={0}
-              prefix="$"
-              thousandSeparator=","
-            />
-            <NumberInput
-              label="Gas Cost (USD)"
-              value={gasCost}
-              onChange={(v) => setGasCost(Number(v) || 0)}
-              min={0}
-              prefix="$"
-              decimalScale={2}
-            />
-          </Group>
-        </Stack>
-      </Paper>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Trade Parameters</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Trade Amount (USD)</Label>
+              <Input
+                type="number"
+                value={tradeAmount}
+                onChange={(e) => setTradeAmount(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+            <div>
+              <Label>Gas Cost (USD)</Label>
+              <Input
+                type="number"
+                value={gasCost}
+                onChange={(e) => setGasCost(Number(e.target.value) || 0)}
+                min={0}
+                step={0.01}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Result
-            </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Result</p>
             <Badge
-              size="lg"
-              variant="light"
-              color={result.profitable ? "green" : "red"}
+              variant="secondary"
+              className={
+                result.profitable
+                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+              }
             >
               {result.profitable ? "Profitable" : "Unprofitable"}
             </Badge>
-          </Group>
+          </div>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Price Spread</Table.Td>
-                <Table.Td ta="right">
+            <TableBody>
+              <TableRow>
+                <TableCell>Price Spread</TableCell>
+                <TableCell className="text-right">
                   {result.spreadPercent.toFixed(3)}%
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Strategy</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Strategy</TableCell>
+                <TableCell className="text-right">
                   Buy on Pool {result.buyPool}, Sell on Pool {result.sellPool}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Profit (before gas)</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Profit (before gas)</TableCell>
+                <TableCell className="text-right">
                   ${result.profitBeforeGas.toFixed(2)}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Gas Cost</Table.Td>
-                <Table.Td ta="right">-${gasCost.toFixed(2)}</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Net Profit</Table.Td>
-                <Table.Td ta="right">
-                  <Text fw={600} c={result.profitable ? "green" : "red"}>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Gas Cost</TableCell>
+                <TableCell className="text-right">-${gasCost.toFixed(2)}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Net Profit</TableCell>
+                <TableCell className="text-right">
+                  <span className={`font-semibold ${result.profitable ? "text-green-600" : "text-red-600"}`}>
                     ${result.profitAfterGas.toFixed(2)}
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                  </span>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Price Comparison
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Price Comparison</p>
           <SimpleBarChart
             data={[
               { pool: "Pool A", price: priceA },
@@ -202,14 +199,14 @@ export function ArbitrageSimulatorDemo() {
             grouped
             height={200}
           />
-          <Text size="xs" c="dimmed" ta="center">
+          <p className="text-xs text-muted-foreground text-center">
             Price spread: {result.spreadPercent.toFixed(3)}% —{" "}
             {result.profitable
               ? "Profitable after gas"
               : "Unprofitable after gas"}
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -236,6 +233,6 @@ export function ArbitrageSimulatorDemo() {
           "L2s and alternative chains offer lower gas for smaller arb opportunities",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

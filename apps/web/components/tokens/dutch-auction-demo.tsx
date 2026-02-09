@@ -1,21 +1,19 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Progress } from "../ui/progress";
 import {
-  Stack,
-  Paper,
-  TextInput,
-  NumberInput,
-  Button,
   Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  Progress,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
 import {
   createDutchAuction,
   getAuctionPriceInfo,
@@ -78,104 +76,125 @@ export function DutchAuctionDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Auction Configuration
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Seller"
-              value={seller}
-              onChange={(e) => setSeller(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Token ID"
-              value={tokenId}
-              onChange={(v) => setTokenId(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Group grow>
-            <NumberInput
-              label="Start Price"
-              value={startPrice}
-              onChange={(v) => setStartPrice(Number(v) || 0)}
-              min={1}
-              decimalScale={4}
-            />
-            <NumberInput
-              label="End Price"
-              value={endPrice}
-              onChange={(v) => setEndPrice(Number(v) || 0)}
-              min={0}
-              decimalScale={4}
-            />
-          </Group>
-          <Group grow>
-            <NumberInput
-              label="Start Time"
-              value={startTime}
-              onChange={(v) => setStartTime(Number(v) || 0)}
-            />
-            <NumberInput
-              label="Duration"
-              value={duration}
-              onChange={(v) => setDuration(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Button onClick={handleCreate} variant="light">
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Auction Configuration</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Seller</Label>
+              <Input
+                value={seller}
+                onChange={(e) => setSeller(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Token ID</Label>
+              <Input
+                type="number"
+                value={tokenId}
+                onChange={(e) => setTokenId(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Start Price</Label>
+              <Input
+                type="number"
+                value={startPrice}
+                onChange={(e) => setStartPrice(Number(e.target.value) || 0)}
+                min={1}
+                step={0.0001}
+              />
+            </div>
+            <div>
+              <Label>End Price</Label>
+              <Input
+                type="number"
+                value={endPrice}
+                onChange={(e) => setEndPrice(Number(e.target.value) || 0)}
+                min={0}
+                step={0.0001}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Start Time</Label>
+              <Input
+                type="number"
+                value={startTime}
+                onChange={(e) => setStartTime(Number(e.target.value) || 0)}
+              />
+            </div>
+            <div>
+              <Label>Duration</Label>
+              <Input
+                type="number"
+                value={duration}
+                onChange={(e) => setDuration(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" onClick={handleCreate}>
             Create Auction
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Bid
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Current Time"
-              value={currentTime}
-              onChange={(v) => setCurrentTime(Number(v) || 0)}
-            />
-            <TextInput
-              label="Buyer"
-              value={buyer}
-              onChange={(e) => setBuyer(e.currentTarget.value)}
-            />
-          </Group>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Bid</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Current Time</Label>
+              <Input
+                type="number"
+                value={currentTime}
+                onChange={(e) => setCurrentTime(Number(e.target.value) || 0)}
+              />
+            </div>
+            <div>
+              <Label>Buyer</Label>
+              <Input
+                value={buyer}
+                onChange={(e) => setBuyer(e.target.value)}
+              />
+            </div>
+          </div>
           <Button
+            variant="secondary"
+            className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800"
             onClick={handleSettle}
-            variant="light"
-            color="green"
             disabled={state.settled}
           >
             {state.settled ? "Auction Settled" : "Buy Now"}
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {lastMessage && (
-        <Alert icon={<IconInfoCircle size={16} />} variant="light">
-          {lastMessage}
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>{lastMessage}</AlertDescription>
         </Alert>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Current Status
-            </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Current Status</p>
             <Badge
-              variant="light"
-              color={
-                state.settled ? "green" : priceInfo.isActive ? "blue" : "red"
+              variant="secondary"
+              className={
+                state.settled
+                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                  : priceInfo.isActive
+                    ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                    : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
               }
             >
               {state.settled
@@ -186,60 +205,58 @@ export function DutchAuctionDemo() {
                     ? "Ended"
                     : "Not Started"}
             </Badge>
-          </Group>
-          <Progress value={priceInfo.percentDecayed} color="orange" size="lg" />
+          </div>
+          <Progress value={priceInfo.percentDecayed} className="h-3" />
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Current Price</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{priceInfo.currentPrice.toFixed(4)} ETH</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Price Decay</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{priceInfo.percentDecayed.toFixed(1)}%</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Time Elapsed</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{priceInfo.timeElapsed}</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Time Remaining</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{priceInfo.timeRemaining}</Code>
-                </Table.Td>
-              </Table.Tr>
+            <TableBody>
+              <TableRow>
+                <TableCell>Current Price</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{priceInfo.currentPrice.toFixed(4)} ETH</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Price Decay</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{priceInfo.percentDecayed.toFixed(1)}%</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Time Elapsed</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{priceInfo.timeElapsed}</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Time Remaining</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{priceInfo.timeRemaining}</code>
+                </TableCell>
+              </TableRow>
               {state.settled && (
                 <>
-                  <Table.Tr>
-                    <Table.Td>Winner</Table.Td>
-                    <Table.Td ta="right">
-                      <Code>{state.winner}</Code>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr>
-                    <Table.Td>Settled Price</Table.Td>
-                    <Table.Td ta="right">
-                      <Code>{state.settledPrice?.toFixed(4)} ETH</Code>
-                    </Table.Td>
-                  </Table.Tr>
+                  <TableRow>
+                    <TableCell>Winner</TableCell>
+                    <TableCell className="text-right">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{state.winner}</code>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Settled Price</TableCell>
+                    <TableCell className="text-right">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{state.settledPrice?.toFixed(4)} ETH</code>
+                    </TableCell>
+                  </TableRow>
                 </>
               )}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Price Curve
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Price Curve</p>
           <SimpleLineChart
             data={curve.map((point) => ({
               time: Number(point.time.toFixed(0)),
@@ -250,8 +267,8 @@ export function DutchAuctionDemo() {
             colors={["#fa5252"]}
             height={280}
           />
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 }

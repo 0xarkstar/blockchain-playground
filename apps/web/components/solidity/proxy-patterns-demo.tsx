@@ -1,20 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  SegmentedControl,
-  TextInput,
-  Button,
   Table,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  Code,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   getProxyInfo,
   createProxyState,
@@ -64,291 +64,263 @@ export function ProxyPatternsDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Proxy Architecture
-          </Text>
-          <Paper p="md" withBorder bg="gray.0">
-            <Group gap="md" justify="center" align="flex-start">
-              <Paper
-                p="sm"
-                withBorder
-                bg="blue.1"
-                style={{ minWidth: 120, textAlign: "center" }}
-              >
-                <Text size="xs" fw={700}>
-                  Proxy Contract
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Stores state
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Fixed address
-                </Text>
-                <Badge size="xs" variant="light" color="blue" mt={4}>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Proxy Architecture</p>
+          <div className="rounded-lg border border-border bg-muted p-4">
+            <div className="flex items-start gap-4 justify-center">
+              <div className="rounded-lg border border-border bg-blue-100 dark:bg-blue-900 p-3 min-w-[120px] text-center">
+                <p className="text-xs font-bold">Proxy Contract</p>
+                <p className="text-xs text-muted-foreground">Stores state</p>
+                <p className="text-xs text-muted-foreground">Fixed address</p>
+                <Badge
+                  variant="secondary"
+                  className="text-xs mt-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                >
                   {proxyType}
                 </Badge>
-              </Paper>
-              <Stack
-                gap={2}
-                align="center"
-                justify="center"
-                style={{ paddingTop: 20 }}
-              >
-                <Text size="xs" fw={600}>
-                  DELEGATECALL
-                </Text>
-                <Text size="xs" c="dimmed">
-                  ----&gt;
-                </Text>
-              </Stack>
-              <Paper
-                p="sm"
-                withBorder
-                bg="green.1"
-                style={{ minWidth: 120, textAlign: "center" }}
-              >
-                <Text size="xs" fw={700}>
-                  Implementation
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Contains logic
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Replaceable
-                </Text>
-                <Badge size="xs" variant="light" color="green" mt={4}>
+              </div>
+              <div className="flex flex-col items-center justify-center pt-5 gap-0.5">
+                <p className="text-xs font-semibold">DELEGATECALL</p>
+                <p className="text-xs text-muted-foreground">----&gt;</p>
+              </div>
+              <div className="rounded-lg border border-border bg-green-100 dark:bg-green-900 p-3 min-w-[120px] text-center">
+                <p className="text-xs font-bold">Implementation</p>
+                <p className="text-xs text-muted-foreground">Contains logic</p>
+                <p className="text-xs text-muted-foreground">Replaceable</p>
+                <Badge
+                  variant="secondary"
+                  className="text-xs mt-1 bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                >
                   {state.implementation}
                 </Badge>
-              </Paper>
-            </Group>
-            <Paper
-              p="xs"
-              mt="sm"
-              withBorder
-              bg="yellow.0"
-              style={{ textAlign: "center" }}
-            >
-              <Text size="xs" c="dimmed">
+              </div>
+            </div>
+            <div className="rounded-lg border border-border bg-yellow-50 dark:bg-yellow-950 p-2 mt-3 text-center">
+              <p className="text-xs text-muted-foreground">
                 Storage lives in Proxy, not Implementation. Upgrades only change
                 the logic pointer.
-              </Text>
-            </Paper>
-          </Paper>
-        </Stack>
-      </Paper>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Proxy Type
-          </Text>
-          <SegmentedControl
-            data={PROXY_TYPES}
-            value={proxyType}
-            onChange={(v) => handleTypeChange(v as ProxyType)}
-            fullWidth
-          />
-        </Stack>
-      </Paper>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Proxy Type</p>
+          <div className="flex flex-wrap gap-1 rounded-lg bg-muted p-1">
+            {PROXY_TYPES.map((pt) => (
+              <Button
+                key={pt.value}
+                variant={proxyType === pt.value ? "default" : "ghost"}
+                size="sm"
+                className="flex-1"
+                onClick={() => handleTypeChange(pt.value)}
+              >
+                {pt.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            {info.name}
-          </Text>
-          <Text size="sm" c="dimmed">
-            {info.description}
-          </Text>
-          <Group grow>
-            <Stack gap="xs">
-              <Text size="xs" fw={600} c="green">
-                Pros
-              </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">{info.name}</p>
+          <p className="text-sm text-muted-foreground">{info.description}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1">
+              <p className="text-xs font-semibold text-green-600">Pros</p>
               {info.pros.map((pro, i) => (
-                <Text key={i} size="xs">
+                <p key={i} className="text-xs">
                   + {pro}
-                </Text>
+                </p>
               ))}
-            </Stack>
-            <Stack gap="xs">
-              <Text size="xs" fw={600} c="red">
-                Cons
-              </Text>
+            </div>
+            <div className="flex flex-col gap-1">
+              <p className="text-xs font-semibold text-red-600">Cons</p>
               {info.cons.map((con, i) => (
-                <Text key={i} size="xs">
+                <p key={i} className="text-xs">
                   - {con}
-                </Text>
+                </p>
               ))}
-            </Stack>
-          </Group>
-        </Stack>
-      </Paper>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Upgrade Simulation
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Admin"
-              value={state.admin}
-              readOnly
-              variant="filled"
-            />
-            <TextInput
-              label="Caller"
-              value={caller}
-              onChange={(e) => setCaller(e.currentTarget.value)}
-            />
-            <TextInput
-              label="New Implementation"
-              value={newImpl}
-              onChange={(e) => setNewImpl(e.currentTarget.value)}
-            />
-          </Group>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Upgrade Simulation</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>Admin</Label>
+              <Input value={state.admin} readOnly className="bg-muted" />
+            </div>
+            <div>
+              <Label>Caller</Label>
+              <Input
+                value={caller}
+                onChange={(e) => setCaller(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>New Implementation</Label>
+              <Input
+                value={newImpl}
+                onChange={(e) => setNewImpl(e.target.value)}
+              />
+            </div>
+          </div>
           <Button onClick={handleUpgrade}>Upgrade</Button>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Current Implementation</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{state.implementation}</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Admin</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{state.admin}</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Previous Implementations</Table.Td>
-                <Table.Td ta="right">
+            <TableBody>
+              <TableRow>
+                <TableCell>Current Implementation</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
+                    {state.implementation}
+                  </code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Admin</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
+                    {state.admin}
+                  </code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Previous Implementations</TableCell>
+                <TableCell className="text-right">
                   {state.previousImplementations.length > 0 ? (
-                    state.previousImplementations.map((impl, i) => (
-                      <Badge key={i} size="xs" variant="outline" mr={4}>
-                        {impl}
-                      </Badge>
-                    ))
+                    <div className="flex flex-wrap gap-1 justify-end">
+                      {state.previousImplementations.map((impl, i) => (
+                        <Badge key={i} variant="outline" className="text-xs">
+                          {impl}
+                        </Badge>
+                      ))}
+                    </div>
                   ) : (
-                    <Text size="xs" c="dimmed">
-                      None
-                    </Text>
+                    <p className="text-xs text-muted-foreground">None</p>
                   )}
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Delegatecall Flow
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Delegatecall Flow</p>
           {viz.steps.map((step) => (
-            <Alert
-              key={step.step}
-              icon={
-                <Badge size="xs" circle>
-                  {step.step}
-                </Badge>
-              }
-              variant="light"
-              color="blue"
-            >
-              <Text size="sm" fw={600}>
+            <Alert key={step.step}>
+              <Badge className="text-xs rounded-full h-5 w-5 flex items-center justify-center p-0">
+                {step.step}
+              </Badge>
+              <AlertTitle>
                 {step.from} → {step.to}
-              </Text>
-              <Text size="xs">{step.description}</Text>
-              <Text size="xs" c="dimmed">
-                {step.context}
-              </Text>
+              </AlertTitle>
+              <AlertDescription>
+                <p className="text-xs">{step.description}</p>
+                <p className="text-xs text-muted-foreground">{step.context}</p>
+              </AlertDescription>
             </Alert>
           ))}
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Storage Owner</Table.Td>
-                <Table.Td ta="right">
-                  <Badge variant="light" color="blue">
+            <TableBody>
+              <TableRow>
+                <TableCell>Storage Owner</TableCell>
+                <TableCell className="text-right">
+                  <Badge
+                    variant="secondary"
+                    className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                  >
                     {viz.storageOwner}
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Code Source</Table.Td>
-                <Table.Td ta="right">
-                  <Badge variant="light" color="violet">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Code Source</TableCell>
+                <TableCell className="text-right">
+                  <Badge
+                    variant="secondary"
+                    className="bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300"
+                  >
                     {viz.codeSource}
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>msg.sender</Table.Td>
-                <Table.Td ta="right">
-                  <Badge variant="light">{viz.msgSender}</Badge>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>msg.sender</TableCell>
+                <TableCell className="text-right">
+                  <Badge variant="secondary">{viz.msgSender}</Badge>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            EIP-1967 Storage Slots
-          </Text>
-          <Alert
-            icon={<IconInfoCircle size={16} />}
-            color="gray"
-            variant="light"
-          >
-            Standardized storage slots prevent collisions between proxy and
-            implementation state.
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">EIP-1967 Storage Slots</p>
+          <Alert>
+            <Info className="h-4 w-4" />
+            <AlertDescription>
+              Standardized storage slots prevent collisions between proxy and
+              implementation state.
+            </AlertDescription>
           </Alert>
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Slot</Table.Th>
-                <Table.Th>Address</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Implementation</Table.Td>
-                <Table.Td>
-                  <Code style={{ fontSize: 10, wordBreak: "break-all" }}>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Slot</TableHead>
+                <TableHead>Address</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>Implementation</TableCell>
+                <TableCell>
+                  <code
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono"
+                    style={{ fontSize: 10, wordBreak: "break-all" }}
+                  >
                     {slots.implementation}
-                  </Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Admin</Table.Td>
-                <Table.Td>
-                  <Code style={{ fontSize: 10, wordBreak: "break-all" }}>
+                  </code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Admin</TableCell>
+                <TableCell>
+                  <code
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono"
+                    style={{ fontSize: 10, wordBreak: "break-all" }}
+                  >
                     {slots.admin}
-                  </Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Beacon</Table.Td>
-                <Table.Td>
-                  <Code style={{ fontSize: 10, wordBreak: "break-all" }}>
+                  </code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Beacon</TableCell>
+                <TableCell>
+                  <code
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono"
+                    style={{ fontSize: 10, wordBreak: "break-all" }}
+                  >
                     {slots.beacon}
-                  </Code>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                  </code>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -376,6 +348,6 @@ export function ProxyPatternsDemo() {
           "Consider using OpenZeppelin Upgrades plugins for safe deployments",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

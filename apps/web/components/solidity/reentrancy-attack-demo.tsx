@@ -1,20 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  NumberInput,
-  SegmentedControl,
-  Stepper,
   Table,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  Code,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   simulateReentrancyAttack,
   simulateWithReentrancyGuard,
@@ -55,258 +55,261 @@ export function ReentrancyAttackDemo() {
   }, [victimBalance, attackerDeposit, maxDepth, defense]);
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Configuration
-          </Text>
-          <SegmentedControl
-            data={DEFENSES}
-            value={defense}
-            onChange={(v) => setDefense(v as Defense)}
-            fullWidth
-          />
-          <Group grow>
-            <NumberInput
-              label="Victim Balance (ETH)"
-              value={victimBalance}
-              onChange={(v) => setVictimBalance(Number(v) || 0)}
-              min={0}
-            />
-            <NumberInput
-              label="Attacker Deposit (ETH)"
-              value={attackerDeposit}
-              onChange={(v) => setAttackerDeposit(Number(v) || 1)}
-              min={1}
-            />
-            {defense === "vulnerable" && (
-              <NumberInput
-                label="Max Reentrancy Depth"
-                value={maxDepth}
-                onChange={(v) => setMaxDepth(Number(v) || 1)}
-                min={1}
-                max={10}
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Configuration</p>
+          <div className="flex flex-wrap gap-1 rounded-lg bg-muted p-1">
+            {DEFENSES.map((d) => (
+              <Button
+                key={d.value}
+                variant={defense === d.value ? "default" : "ghost"}
+                size="sm"
+                className="flex-1"
+                onClick={() => setDefense(d.value)}
+              >
+                {d.label}
+              </Button>
+            ))}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>Victim Balance (ETH)</Label>
+              <Input
+                type="number"
+                value={victimBalance}
+                onChange={(e) => setVictimBalance(Number(e.target.value) || 0)}
+                min={0}
               />
+            </div>
+            <div>
+              <Label>Attacker Deposit (ETH)</Label>
+              <Input
+                type="number"
+                value={attackerDeposit}
+                onChange={(e) => setAttackerDeposit(Number(e.target.value) || 1)}
+                min={1}
+              />
+            </div>
+            {defense === "vulnerable" && (
+              <div>
+                <Label>Max Reentrancy Depth</Label>
+                <Input
+                  type="number"
+                  value={maxDepth}
+                  onChange={(e) => setMaxDepth(Number(e.target.value) || 1)}
+                  min={1}
+                  max={10}
+                />
+              </div>
             )}
-          </Group>
-        </Stack>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Result
-            </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Result</p>
             <Badge
-              size="lg"
-              color={simulation.attackSuccessful ? "red" : "green"}
+              className={`text-sm px-3 py-1 ${simulation.attackSuccessful ? "bg-red-600 text-white" : "bg-green-600 text-white"}`}
             >
               {simulation.attackSuccessful
                 ? "ATTACK SUCCESSFUL"
                 : "ATTACK BLOCKED"}
             </Badge>
-          </Group>
+          </div>
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th />
-                <Table.Th ta="right">Before</Table.Th>
-                <Table.Th ta="right">After</Table.Th>
-                <Table.Th ta="right">Change</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Victim Contract</Table.Td>
-                <Table.Td ta="right">
+            <TableHeader>
+              <TableRow>
+                <TableHead />
+                <TableHead className="text-right">Before</TableHead>
+                <TableHead className="text-right">After</TableHead>
+                <TableHead className="text-right">Change</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>Victim Contract</TableCell>
+                <TableCell className="text-right">
                   {simulation.initialBalances.victim} ETH
-                </Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+                <TableCell className="text-right">
                   {simulation.finalBalances.victim} ETH
-                </Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+                <TableCell className="text-right">
                   <Badge
-                    color={
+                    variant="secondary"
+                    className={
                       simulation.finalBalances.victim <
                       simulation.initialBalances.victim
-                        ? "red"
-                        : "gray"
+                        ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                        : ""
                     }
-                    variant="light"
                   >
                     {simulation.finalBalances.victim -
                       simulation.initialBalances.victim}{" "}
                     ETH
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Attacker</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Attacker</TableCell>
+                <TableCell className="text-right">
                   {simulation.initialBalances.attacker} ETH
-                </Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+                <TableCell className="text-right">
                   {simulation.finalBalances.attacker} ETH
-                </Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+                <TableCell className="text-right">
                   <Badge
-                    color={simulation.attackerProfit > 0 ? "red" : "green"}
-                    variant="light"
+                    variant="secondary"
+                    className={
+                      simulation.attackerProfit > 0
+                        ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                        : "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                    }
                   >
                     {simulation.attackerProfit > 0 ? "+" : ""}
                     {simulation.attackerProfit} ETH
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
           {simulation.totalReentrancyDepth > 0 && (
-            <Text size="xs" c="dimmed">
+            <p className="text-xs text-muted-foreground">
               Reentrancy depth: {simulation.totalReentrancyDepth}
-            </Text>
+            </p>
           )}
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {simulation.totalReentrancyDepth > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">
               Re-Entry Depth Visualization
-            </Text>
-            <Stack gap={4}>
+            </p>
+            <div className="flex flex-col gap-1">
               {Array.from(
                 { length: simulation.totalReentrancyDepth },
                 (_, i) => (
-                  <Paper
+                  <div
                     key={i}
-                    p="xs"
-                    withBorder
-                    style={{
-                      marginLeft: i * 24,
-                      borderColor:
-                        i === simulation.totalReentrancyDepth - 1
-                          ? "var(--mantine-color-red-5)"
-                          : "var(--mantine-color-orange-3)",
-                    }}
-                    bg={
+                    className={`rounded-lg border p-2 ${
                       i === simulation.totalReentrancyDepth - 1
-                        ? "red.0"
-                        : "orange.0"
-                    }
+                        ? "border-red-500 bg-red-50 dark:bg-red-950"
+                        : "border-orange-300 bg-orange-50 dark:bg-orange-950"
+                    }`}
+                    style={{ marginLeft: i * 24 }}
                   >
-                    <Group gap="xs">
+                    <div className="flex items-center gap-1">
                       <Badge
-                        size="xs"
-                        color={
+                        className={`text-xs ${
                           i === simulation.totalReentrancyDepth - 1
-                            ? "red"
-                            : "orange"
-                        }
+                            ? "bg-red-600 text-white"
+                            : "bg-orange-600 text-white"
+                        }`}
                       >
                         Depth {i + 1}
                       </Badge>
-                      <Text size="xs">
+                      <p className="text-xs">
                         {i === 0
                           ? "Initial withdraw() call"
                           : `Re-entrant withdraw() call #${i}`}
-                      </Text>
-                    </Group>
-                  </Paper>
+                      </p>
+                    </div>
+                  </div>
                 ),
               )}
-            </Stack>
-          </Stack>
-        </Paper>
+            </div>
+          </div>
+        </div>
       )}
 
       {simulation.frames.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Call Trace
-            </Text>
-            <Stepper
-              active={simulation.frames.length}
-              orientation="vertical"
-              size="xs"
-            >
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Call Trace</p>
+            <div className="flex flex-col gap-2 border-l-2 border-border pl-4">
               {simulation.frames.map((frame) => (
-                <Stepper.Step
-                  key={frame.id}
-                  label={
-                    <Group gap="xs">
-                      <Badge
-                        size="xs"
-                        color={
-                          frame.status === "reverted"
-                            ? "red"
-                            : frame.status === "success"
-                              ? "green"
-                              : "yellow"
-                        }
-                      >
-                        {frame.status}
+                <div key={frame.id} className="flex flex-col gap-1">
+                  <div className="flex items-center gap-1 flex-wrap">
+                    <Badge
+                      className={`text-xs ${
+                        frame.status === "reverted"
+                          ? "bg-red-600 text-white"
+                          : frame.status === "success"
+                            ? "bg-green-600 text-white"
+                            : "bg-yellow-600 text-white"
+                      }`}
+                    >
+                      {frame.status}
+                    </Badge>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 11 }}>
+                      {frame.caller} → {frame.target}.{frame.functionName}()
+                    </code>
+                    {frame.ethValue > 0 && (
+                      <Badge variant="secondary" className="text-xs">
+                        {frame.ethValue} ETH
                       </Badge>
-                      <Code style={{ fontSize: 11 }}>
-                        {frame.caller} → {frame.target}.{frame.functionName}()
-                      </Code>
-                      {frame.ethValue > 0 && (
-                        <Badge size="xs" variant="light">
-                          {frame.ethValue} ETH
-                        </Badge>
-                      )}
-                    </Group>
-                  }
-                  description={
-                    <Text size="xs" c="dimmed" ml={frame.depth * 16}>
-                      {"  ".repeat(frame.depth)}
-                      {frame.description}
-                    </Text>
-                  }
-                  color={frame.status === "reverted" ? "red" : "green"}
-                />
+                    )}
+                  </div>
+                  <p
+                    className="text-xs text-muted-foreground"
+                    style={{ marginLeft: frame.depth * 16 }}
+                  >
+                    {"  ".repeat(frame.depth)}
+                    {frame.description}
+                  </p>
+                </div>
               ))}
-            </Stepper>
-          </Stack>
-        </Paper>
+            </div>
+          </div>
+        </div>
       )}
 
       <Alert
-        icon={<IconInfoCircle size={16} />}
-        color={defense === "vulnerable" ? "red" : "green"}
-        variant="light"
+        className={
+          defense === "vulnerable"
+            ? "border-red-500 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100"
+            : "border-green-500 bg-green-50 text-green-900 dark:bg-green-950 dark:text-green-100"
+        }
       >
-        {defense === "vulnerable" && (
-          <>
-            <Text fw={600}>Vulnerable Pattern</Text>
-            <Text size="sm">
-              The withdraw function sends ETH before updating the balance. The
-              attacker&apos;s receive() function re-calls withdraw(), draining
-              the contract.
-            </Text>
-          </>
-        )}
-        {defense === "guard" && (
-          <>
-            <Text fw={600}>ReentrancyGuard (OpenZeppelin)</Text>
-            <Text size="sm">
-              A mutex lock prevents re-entering the function. The second
-              withdraw() call reverts because the lock is still held.
-            </Text>
-          </>
-        )}
-        {defense === "cei" && (
-          <>
-            <Text fw={600}>Checks-Effects-Interactions (CEI)</Text>
-            <Text size="sm">
-              Update state (set balance to 0) BEFORE sending ETH. When the
-              attacker re-enters, the check fails because balance is already 0.
-            </Text>
-          </>
-        )}
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          {defense === "vulnerable" && (
+            <>
+              <p className="font-semibold">Vulnerable Pattern</p>
+              <p className="text-sm">
+                The withdraw function sends ETH before updating the balance. The
+                attacker&apos;s receive() function re-calls withdraw(), draining
+                the contract.
+              </p>
+            </>
+          )}
+          {defense === "guard" && (
+            <>
+              <p className="font-semibold">ReentrancyGuard (OpenZeppelin)</p>
+              <p className="text-sm">
+                A mutex lock prevents re-entering the function. The second
+                withdraw() call reverts because the lock is still held.
+              </p>
+            </>
+          )}
+          {defense === "cei" && (
+            <>
+              <p className="font-semibold">
+                Checks-Effects-Interactions (CEI)
+              </p>
+              <p className="text-sm">
+                Update state (set balance to 0) BEFORE sending ETH. When the
+                attacker re-enters, the check fails because balance is already 0.
+              </p>
+            </>
+          )}
+        </AlertDescription>
       </Alert>
 
       <EducationPanel
@@ -334,6 +337,6 @@ export function ReentrancyAttackDemo() {
           "Audit all external calls — any can trigger re-entry via fallback/receive",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

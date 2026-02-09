@@ -1,23 +1,17 @@
 "use client";
 
+import { Plane, Plus, Trash2, Loader2 } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import {
-  Stack,
-  TextInput,
-  Button,
-  Text,
-  Group,
-  Badge,
-  Paper,
-  ActionIcon,
   Table,
-  Code,
-} from "@mantine/core";
-import {
-  IconParachute,
-  IconPlus,
-  IconTrash,
-  IconLoader2,
-} from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 interface EligibleAddress {
   readonly id: number;
@@ -55,122 +49,120 @@ export function AirdropSetupPanel({
 }: AirdropSetupPanelProps) {
   return (
     <>
-      <Paper p="md" withBorder>
-        <Stack gap="sm">
-          <Text fw={600} size="sm">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">
             Step 1: Eligible Addresses
-          </Text>
-          <Text size="xs" c="dimmed">
+          </p>
+          <p className="text-xs text-muted-foreground">
             These addresses are eligible for the airdrop. In production, this
             list would be compiled off-chain (e.g., early users, token holders
             at a snapshot).
-          </Text>
+          </p>
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>#</Table.Th>
-                <Table.Th>Address</Table.Th>
+            <TableHeader>
+              <TableRow>
+                <TableHead>#</TableHead>
+                <TableHead>Address</TableHead>
                 {addresses.some((a) => a.commitment) && (
-                  <Table.Th>Commitment</Table.Th>
+                  <TableHead>Commitment</TableHead>
                 )}
-                {phase === "setup" && <Table.Th></Table.Th>}
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+                {phase === "setup" && <TableHead></TableHead>}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {addresses.map((addr, idx) => (
-                <Table.Tr key={addr.id}>
-                  <Table.Td>
+                <TableRow key={addr.id}>
+                  <TableCell>
                     <Badge
-                      color={
+                      variant="secondary"
+                      className={
                         idx === claimIndex && phase !== "setup"
-                          ? "blue"
-                          : "gray"
+                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                          : ""
                       }
-                      variant="light"
-                      size="sm"
                     >
                       {idx + 1}
                     </Badge>
-                  </Table.Td>
-                  <Table.Td>
-                    <Code>{truncateHex(addr.address, 8)}</Code>
-                  </Table.Td>
+                  </TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{truncateHex(addr.address, 8)}</code>
+                  </TableCell>
                   {addresses.some((a) => a.commitment) && (
-                    <Table.Td>
+                    <TableCell>
                       {addr.commitment ? (
-                        <Code>{truncateHex(addr.commitment, 6)}</Code>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{truncateHex(addr.commitment, 6)}</code>
                       ) : (
-                        <Text size="xs" c="dimmed">
+                        <p className="text-xs text-muted-foreground">
                           pending
-                        </Text>
+                        </p>
                       )}
-                    </Table.Td>
+                    </TableCell>
                   )}
                   {phase === "setup" && (
-                    <Table.Td>
-                      <ActionIcon
-                        variant="subtle"
-                        color="red"
-                        size="xs"
+                    <TableCell>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 text-red-500 hover:text-red-700"
                         onClick={() => onRemoveAddress(addr.id)}
                         disabled={addresses.length <= 2}
                       >
-                        <IconTrash size={12} />
-                      </ActionIcon>
-                    </Table.Td>
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </TableCell>
                   )}
-                </Table.Tr>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
           {phase === "setup" && (
-            <Group gap="xs">
-              <TextInput
+            <div className="flex items-center gap-1">
+              <Input
                 placeholder="0x... (Ethereum address)"
                 value={newAddress}
-                onChange={(e) => onNewAddressChange(e.currentTarget.value)}
-                style={{ flex: 1 }}
-                size="xs"
+                onChange={(e) => onNewAddressChange(e.target.value)}
+                className="flex-1 text-xs"
               />
-              <ActionIcon
-                variant="light"
+              <Button
+                variant="secondary"
+                size="icon"
                 onClick={onAddAddress}
                 disabled={!newAddress.trim()}
               >
-                <IconPlus size={14} />
-              </ActionIcon>
-            </Group>
+                <Plus className="h-3.5 w-3.5" />
+              </Button>
+            </div>
           )}
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="sm">
-          <Text fw={600} size="sm">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">
             Step 2: Build Eligibility Tree
-          </Text>
-          <Text size="xs" c="dimmed">
+          </p>
+          <p className="text-xs text-muted-foreground">
             Hash each address with Poseidon and insert into a Merkle tree. Only
             the Merkle root is published on-chain.
-          </Text>
+          </p>
           {progressMessage && phase === "building" && (
-            <Group gap="xs">
-              <IconLoader2 size={14} className="animate-spin" />
-              <Text size="xs" c="blue">
+            <div className="flex items-center gap-1">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <p className="text-xs text-blue-600 dark:text-blue-400">
                 {progressMessage}
-              </Text>
-            </Group>
+              </p>
+            </div>
           )}
           <Button
             onClick={onBuildTree}
-            loading={phase === "building"}
             disabled={phase !== "setup" || addresses.length < 2}
-            leftSection={<IconParachute size={16} />}
           >
+            <Plane className="mr-2 h-4 w-4" />
             Build Merkle Tree
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
     </>
   );
 }

@@ -1,103 +1,99 @@
 import { useTranslations } from "next-intl";
 import {
-  Container,
-  Title,
-  Text,
-  SimpleGrid,
-  Card,
-  Badge,
-  Group,
-  Stack,
-  ThemeIcon,
-  Divider,
-} from "@mantine/core";
-import {
-  IconHash,
-  IconEye,
-  IconFingerprint,
-  IconShieldLock,
-  IconAdjustments,
-  IconBinaryTree,
-  IconMathFunction,
-  IconChartDots,
-  IconPuzzle,
-  IconDatabase,
-  IconEyeOff,
-} from "@tabler/icons-react";
+  Hash,
+  Eye,
+  Fingerprint,
+  ShieldCheck,
+  SlidersHorizontal,
+  GitFork,
+  FunctionSquare,
+  BarChart3,
+  Puzzle,
+  Database,
+  EyeOff,
+} from "lucide-react";
+import { Badge } from "../../../../components/ui/badge";
+import { Separator } from "../../../../components/ui/separator";
 
 const demos = [
   {
     key: "hashCommitment" as const,
     slug: "hash-commitment",
-    icon: IconHash,
+    icon: Hash,
     difficulty: "beginner",
   },
   {
     key: "zkConcepts" as const,
     slug: "zk-concepts",
-    icon: IconEye,
+    icon: Eye,
     difficulty: "beginner",
   },
   {
     key: "schnorrProtocol" as const,
     slug: "schnorr-protocol",
-    icon: IconFingerprint,
+    icon: Fingerprint,
     difficulty: "beginner",
   },
   {
     key: "pedersenCommitment" as const,
     slug: "pedersen-commitment",
-    icon: IconShieldLock,
+    icon: ShieldCheck,
     difficulty: "intermediate",
   },
   {
     key: "rangeProof" as const,
     slug: "range-proof",
-    icon: IconAdjustments,
+    icon: SlidersHorizontal,
     difficulty: "intermediate",
   },
   {
     key: "zkSetMembership" as const,
     slug: "zk-set-membership",
-    icon: IconBinaryTree,
+    icon: GitFork,
     difficulty: "intermediate",
   },
   {
     key: "arithmeticCircuits" as const,
     slug: "arithmetic-circuits",
-    icon: IconMathFunction,
+    icon: FunctionSquare,
     difficulty: "intermediate",
   },
   {
     key: "r1csQap" as const,
     slug: "r1cs-qap",
-    icon: IconChartDots,
+    icon: BarChart3,
     difficulty: "advanced",
   },
   {
     key: "snarkPipeline" as const,
     slug: "snark-pipeline",
-    icon: IconPuzzle,
+    icon: Puzzle,
     difficulty: "advanced",
   },
   {
     key: "zkRollup" as const,
     slug: "zk-rollup",
-    icon: IconDatabase,
+    icon: Database,
     difficulty: "advanced",
   },
   {
     key: "privateTransfer" as const,
     slug: "private-transfer",
-    icon: IconEyeOff,
+    icon: EyeOff,
     difficulty: "advanced",
   },
 ] as const;
 
 const difficultyColors = {
-  beginner: "green",
-  intermediate: "yellow",
-  advanced: "red",
+  beginner: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  intermediate: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  advanced: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+} as const;
+
+const themeIconColors = {
+  beginner: "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400",
+  intermediate: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-400",
+  advanced: "bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-400",
 } as const;
 
 export default function ZKPage() {
@@ -110,61 +106,51 @@ export default function ZKPage() {
   };
 
   return (
-    <Container size="lg" py="xl">
-      <Stack gap="xl">
+    <div className="container mx-auto max-w-5xl px-4 py-8">
+      <div className="flex flex-col gap-8">
         <div>
-          <Title order={1}>{t("pageTitle")}</Title>
-          <Text size="lg" c="dimmed" mt="xs">
+          <h1 className="text-3xl font-bold">{t("pageTitle")}</h1>
+          <p className="text-lg text-muted-foreground mt-1">
             {t("pageDescription")}
-          </Text>
+          </p>
         </div>
 
         {(["beginner", "intermediate", "advanced"] as const).map((level) => (
-          <Stack key={level} gap="md">
-            <Divider
-              label={
-                <Badge
-                  size="lg"
-                  variant="light"
-                  color={difficultyColors[level]}
-                >
-                  {t(level)}
-                </Badge>
-              }
-            />
-            <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
+          <div key={level} className="flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <Separator className="flex-1" />
+              <Badge
+                variant="secondary"
+                className={`text-sm ${difficultyColors[level]}`}
+              >
+                {t(level)}
+              </Badge>
+              <Separator className="flex-1" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {groups[level].map((demo) => (
-                <Card
+                <a
                   key={demo.slug}
-                  shadow="sm"
-                  padding="lg"
-                  radius="md"
-                  withBorder
-                  component="a"
                   href={`zk/demo/${demo.slug}`}
-                  style={{ cursor: "pointer" }}
+                  className="block rounded-lg border border-border bg-card p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                 >
-                  <Stack gap="sm">
-                    <Group justify="space-between">
-                      <ThemeIcon
-                        size="lg"
-                        variant="light"
-                        color={difficultyColors[demo.difficulty]}
-                      >
-                        <demo.icon size={20} />
-                      </ThemeIcon>
-                    </Group>
-                    <Title order={4}>{t(`demos.${demo.key}.title`)}</Title>
-                    <Text size="sm" c="dimmed">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${themeIconColors[demo.difficulty]}`}>
+                        <demo.icon className="h-5 w-5" />
+                      </div>
+                    </div>
+                    <h4 className="text-lg font-semibold">{t(`demos.${demo.key}.title`)}</h4>
+                    <p className="text-sm text-muted-foreground">
                       {t(`demos.${demo.key}.description`)}
-                    </Text>
-                  </Stack>
-                </Card>
+                    </p>
+                  </div>
+                </a>
               ))}
-            </SimpleGrid>
-          </Stack>
+            </div>
+          </div>
         ))}
-      </Stack>
-    </Container>
+      </div>
+    </div>
   );
 }

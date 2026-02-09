@@ -1,18 +1,14 @@
-import "@mantine/core/styles.css";
+import "../globals.css";
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages } from "next-intl/server";
-import {
-  ColorSchemeScript,
-  MantineProvider,
-  mantineHtmlProps,
-} from "@mantine/core";
+import { ThemeProvider } from "next-themes";
 
 import { routing } from "../../i18n/routing";
-import { theme } from "../../lib/theme";
 import { AppShellLayout } from "../../components/layout/app-shell-layout";
+import { Toaster } from "../../components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Blockchain Playground",
@@ -36,16 +32,14 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} {...mantineHtmlProps}>
-      <head>
-        <ColorSchemeScript defaultColorScheme="auto" />
-      </head>
+    <html lang={locale} suppressHydrationWarning>
       <body>
-        <NextIntlClientProvider messages={messages}>
-          <MantineProvider theme={theme} defaultColorScheme="auto">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <NextIntlClientProvider messages={messages}>
             <AppShellLayout>{children}</AppShellLayout>
-          </MantineProvider>
-        </NextIntlClientProvider>
+            <Toaster richColors position="bottom-right" />
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

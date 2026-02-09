@@ -1,25 +1,25 @@
 "use client";
 
 import { useState, useMemo, useCallback, useRef } from "react";
+import { Plus, Trash2, Play, SkipForward, RefreshCw } from "lucide-react";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
 import {
-  Stack,
-  Paper,
   Select,
-  TextInput,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-} from "@mantine/core";
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import {
-  IconPlus,
-  IconTrash,
-  IconPlayerPlay,
-  IconPlayerSkipForward,
-  IconRefresh,
-} from "@tabler/icons-react";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   createInitialEvmState,
   executeInstruction,
@@ -153,241 +153,233 @@ export function AssemblyPlaygroundDemo() {
   const storageEntries = Object.entries(state.storage);
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Templates
-            </Text>
-          </Group>
-          <Group>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Templates</p>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
             {EXAMPLE_PROGRAMS.map((prog, i) => (
               <Button
                 key={i}
-                size="xs"
+                size="sm"
                 variant="outline"
                 onClick={() => loadExample(i)}
               >
                 {prog.label}
               </Button>
             ))}
-          </Group>
-        </Stack>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Instructions
-          </Text>
-          <Group>
-            <Select
-              data={opcodeList}
-              value={newOpcode}
-              onChange={(v) => v && setNewOpcode(v)}
-              searchable
-              style={{ flex: 1 }}
-            />
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Instructions</p>
+          <div className="flex items-center gap-2">
+            <Select value={newOpcode} onValueChange={(v) => setNewOpcode(v)}>
+              <SelectTrigger className="flex-1">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {opcodeList.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    {o.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             {needsOperand(newOpcode) && (
-              <TextInput
+              <Input
                 placeholder="Operand"
                 value={newOperand}
-                onChange={(e) => setNewOperand(e.currentTarget.value)}
-                style={{ width: 120 }}
+                onChange={(e) => setNewOperand(e.target.value)}
+                className="w-[120px]"
               />
             )}
-            <Button
-              leftSection={<IconPlus size={16} />}
-              onClick={addInstruction}
-            >
+            <Button onClick={addInstruction}>
+              <Plus className="h-4 w-4 mr-1" />
               Add
             </Button>
-          </Group>
+          </div>
 
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th style={{ width: 30 }}>#</Table.Th>
-                <Table.Th>Opcode</Table.Th>
-                <Table.Th>Operand</Table.Th>
-                <Table.Th style={{ width: 40 }} />
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[30px]">#</TableHead>
+                <TableHead>Opcode</TableHead>
+                <TableHead>Operand</TableHead>
+                <TableHead className="w-[40px]" />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {instructions.map((instr, i) => (
-                <Table.Tr
+                <TableRow
                   key={instr.id}
-                  style={{
-                    backgroundColor:
-                      i === currentStep
-                        ? "var(--mantine-color-blue-light)"
-                        : i < currentStep
-                          ? "var(--mantine-color-green-light)"
-                          : undefined,
-                  }}
+                  className={
+                    i === currentStep
+                      ? "bg-blue-50 dark:bg-blue-950/50"
+                      : i < currentStep
+                        ? "bg-green-50 dark:bg-green-950/50"
+                        : ""
+                  }
                 >
-                  <Table.Td>{i}</Table.Td>
-                  <Table.Td>
-                    <Badge size="sm" variant="light">
+                  <TableCell>{i}</TableCell>
+                  <TableCell>
+                    <Badge variant="secondary" className="text-xs">
                       {instr.opcode}
                     </Badge>
-                  </Table.Td>
-                  <Table.Td>
+                  </TableCell>
+                  <TableCell>
                     {instr.operand ? (
-                      <Code>{instr.operand}</Code>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
+                        {instr.operand}
+                      </code>
                     ) : (
-                      <Text size="xs" c="dimmed">
-                        —
-                      </Text>
+                      <p className="text-xs text-muted-foreground">—</p>
                     )}
-                  </Table.Td>
-                  <Table.Td>
+                  </TableCell>
+                  <TableCell>
                     <Button
-                      size="xs"
-                      variant="subtle"
-                      color="red"
+                      size="sm"
+                      variant="ghost"
+                      className="text-red-500 hover:text-red-700"
                       onClick={() => removeInstruction(i)}
                     >
-                      <IconTrash size={14} />
+                      <Trash2 className="h-3.5 w-3.5" />
                     </Button>
-                  </Table.Td>
-                </Table.Tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
 
-          <Group>
+          <div className="flex items-center gap-2">
             <Button
-              leftSection={<IconPlayerSkipForward size={16} />}
-              size="xs"
+              size="sm"
               onClick={stepOne}
               disabled={currentStep >= instructions.length - 1 || state.halted}
             >
+              <SkipForward className="h-4 w-4 mr-1" />
               Step
             </Button>
             <Button
-              leftSection={<IconPlayerPlay size={16} />}
-              size="xs"
-              color="green"
+              size="sm"
+              className="bg-green-600 hover:bg-green-700 text-white"
               onClick={runAll}
             >
+              <Play className="h-4 w-4 mr-1" />
               Run All
             </Button>
-            <Button
-              leftSection={<IconRefresh size={16} />}
-              size="xs"
-              variant="outline"
-              onClick={reset}
-            >
+            <Button size="sm" variant="outline" onClick={reset}>
+              <RefreshCw className="h-4 w-4 mr-1" />
               Reset
             </Button>
-            <Badge variant="light" color="gray">
-              Gas: {state.gasUsed}
-            </Badge>
-            {state.error && <Badge color="red">{state.error}</Badge>}
-          </Group>
-        </Stack>
-      </Paper>
+            <Badge variant="secondary">Gas: {state.gasUsed}</Badge>
+            {state.error && (
+              <Badge className="bg-red-600 text-white">{state.error}</Badge>
+            )}
+          </div>
+        </div>
+      </div>
 
-      <Group grow align="flex-start">
-        <Paper p="md" withBorder>
-          <Stack gap="xs">
-            <Text size="xs" fw={600}>
-              Stack (top → bottom)
-            </Text>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-1">
+            <p className="text-xs font-semibold">Stack (top → bottom)</p>
             {stackEntries.length === 0 ? (
-              <Text size="xs" c="dimmed">
-                Empty
-              </Text>
+              <p className="text-xs text-muted-foreground">Empty</p>
             ) : (
               stackEntries.map((val, i) => (
-                <Group key={i} gap="xs">
-                  <Badge size="xs" variant="outline">
+                <div key={i} className="flex items-center gap-1">
+                  <Badge variant="outline" className="text-xs">
                     {stackEntries.length - 1 - i}
                   </Badge>
-                  <Code style={{ fontSize: 11 }}>{val.toString()}</Code>
-                </Group>
+                  <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 11 }}>
+                    {val.toString()}
+                  </code>
+                </div>
               ))
             )}
-          </Stack>
-        </Paper>
+          </div>
+        </div>
 
-        <Paper p="md" withBorder>
-          <Stack gap="xs">
-            <Text size="xs" fw={600}>
-              Memory
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-1">
+            <p className="text-xs font-semibold">Memory</p>
             {memoryEntries.length === 0 ? (
-              <Text size="xs" c="dimmed">
-                Empty
-              </Text>
+              <p className="text-xs text-muted-foreground">Empty</p>
             ) : (
               <Table>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Offset</Table.Th>
-                    <Table.Th>Value</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Offset</TableHead>
+                    <TableHead>Value</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {memoryEntries.map(([offset, val]) => (
-                    <Table.Tr key={offset}>
-                      <Table.Td>
-                        <Code>{offset}</Code>
-                      </Table.Td>
-                      <Table.Td>
-                        <Code style={{ fontSize: 10 }}>{val}</Code>
-                      </Table.Td>
-                    </Table.Tr>
+                    <TableRow key={offset}>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
+                          {offset}
+                        </code>
+                      </TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 10 }}>
+                          {val}
+                        </code>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </Table.Tbody>
+                </TableBody>
               </Table>
             )}
-          </Stack>
-        </Paper>
+          </div>
+        </div>
 
-        <Paper p="md" withBorder>
-          <Stack gap="xs">
-            <Text size="xs" fw={600}>
-              Storage
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-1">
+            <p className="text-xs font-semibold">Storage</p>
             {storageEntries.length === 0 ? (
-              <Text size="xs" c="dimmed">
-                Empty
-              </Text>
+              <p className="text-xs text-muted-foreground">Empty</p>
             ) : (
               <Table>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Key</Table.Th>
-                    <Table.Th>Value</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Key</TableHead>
+                    <TableHead>Value</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {storageEntries.map(([key, val]) => (
-                    <Table.Tr key={key}>
-                      <Table.Td>
-                        <Code>{key}</Code>
-                      </Table.Td>
-                      <Table.Td>
-                        <Code style={{ fontSize: 10 }}>{val}</Code>
-                      </Table.Td>
-                    </Table.Tr>
+                    <TableRow key={key}>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
+                          {key}
+                        </code>
+                      </TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 10 }}>
+                          {val}
+                        </code>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </Table.Tbody>
+                </TableBody>
               </Table>
             )}
-          </Stack>
-        </Paper>
-      </Group>
+          </div>
+        </div>
+      </div>
 
       {stackHeightData.length > 1 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">
               Stack Height After Each Operation
-            </Text>
+            </p>
             <SimpleBarChart
               data={stackHeightData}
               xKey="step"
@@ -395,12 +387,12 @@ export function AssemblyPlaygroundDemo() {
               colors={["#7950f2"]}
               height={200}
             />
-            <Text size="xs" c="dimmed" ta="center">
+            <p className="text-xs text-muted-foreground text-center">
               PUSH increases stack height, operations like ADD/MUL consume and
               produce values
-            </Text>
-          </Stack>
-        </Paper>
+            </p>
+          </div>
+        </div>
       )}
 
       <EducationPanel
@@ -428,6 +420,6 @@ export function AssemblyPlaygroundDemo() {
           "Use Yul (inline assembly) for gas-critical optimizations in Solidity",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

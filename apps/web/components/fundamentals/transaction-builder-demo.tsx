@@ -1,23 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Stack,
-  TextInput,
-  NumberInput,
-  Button,
-  Text,
-  Paper,
-  Group,
-  Badge,
-  Code,
-  Alert,
-  Stepper,
-  Box,
-} from "@mantine/core";
-import { IconArrowsExchange, IconInfoCircle } from "@tabler/icons-react";
+import { ArrowLeftRight, Info } from "lucide-react";
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 
 function TransactionFlowDiagram({
   txData,
@@ -25,11 +16,11 @@ function TransactionFlowDiagram({
   txData: Record<string, string> | null;
 }) {
   return (
-    <Paper p="md" withBorder data-testid="tx-flow-diagram">
-      <Text size="sm" fw={600} mb="sm">
+    <div className="rounded-lg border border-border bg-card p-4" data-testid="tx-flow-diagram">
+      <p className="text-sm font-semibold mb-2">
         Transaction Flow
-      </Text>
-      <Box style={{ display: "flex", justifyContent: "center" }}>
+      </p>
+      <div className="flex justify-center">
         <svg width="300" height="200" viewBox="0 0 300 200">
           {/* Sender */}
           <rect
@@ -38,8 +29,8 @@ function TransactionFlowDiagram({
             width="70"
             height="60"
             rx="8"
-            fill="var(--mantine-color-blue-1)"
-            stroke="var(--mantine-color-blue-5)"
+            fill="hsl(217.2 91.2% 59.8% / 0.15)"
+            stroke="hsl(217.2 91.2% 59.8%)"
             strokeWidth="2"
           />
           <text
@@ -48,7 +39,7 @@ function TransactionFlowDiagram({
             textAnchor="middle"
             fontSize="10"
             fontWeight="600"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             Sender
           </text>
@@ -57,7 +48,7 @@ function TransactionFlowDiagram({
             y="115"
             textAnchor="middle"
             fontSize="8"
-            fill="var(--mantine-color-dimmed)"
+            fill="hsl(var(--muted-foreground))"
           >
             Signs TX
           </text>
@@ -68,12 +59,12 @@ function TransactionFlowDiagram({
             y1="100"
             x2="105"
             y2="100"
-            stroke="var(--mantine-color-gray-5)"
+            stroke="hsl(var(--muted-foreground))"
             strokeWidth="2"
           />
           <polygon
             points="105,95 115,100 105,105"
-            fill="var(--mantine-color-gray-5)"
+            fill="hsl(var(--muted-foreground))"
           />
 
           {/* Transaction box */}
@@ -85,13 +76,13 @@ function TransactionFlowDiagram({
             rx="8"
             fill={
               txData
-                ? "var(--mantine-color-green-1)"
-                : "var(--mantine-color-gray-1)"
+                ? "hsl(142.1 76.2% 36.3% / 0.15)"
+                : "hsl(var(--muted))"
             }
             stroke={
               txData
-                ? "var(--mantine-color-green-5)"
-                : "var(--mantine-color-gray-4)"
+                ? "hsl(142.1 76.2% 36.3%)"
+                : "hsl(var(--muted-foreground) / 0.3)"
             }
             strokeWidth="2"
           />
@@ -101,7 +92,7 @@ function TransactionFlowDiagram({
             textAnchor="middle"
             fontSize="10"
             fontWeight="600"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             Transaction
           </text>
@@ -112,7 +103,7 @@ function TransactionFlowDiagram({
                 y="95"
                 textAnchor="middle"
                 fontSize="7"
-                fill="var(--mantine-color-dimmed)"
+                fill="hsl(var(--muted-foreground))"
               >
                 {txData.value}
               </text>
@@ -121,7 +112,7 @@ function TransactionFlowDiagram({
                 y="110"
                 textAnchor="middle"
                 fontSize="7"
-                fill="var(--mantine-color-dimmed)"
+                fill="hsl(var(--muted-foreground))"
               >
                 Gas: {txData.gasLimit}
               </text>
@@ -130,7 +121,7 @@ function TransactionFlowDiagram({
                 y="125"
                 textAnchor="middle"
                 fontSize="7"
-                fill="var(--mantine-color-dimmed)"
+                fill="hsl(var(--muted-foreground))"
               >
                 {txData.type}
               </text>
@@ -139,7 +130,7 @@ function TransactionFlowDiagram({
                 y="140"
                 textAnchor="middle"
                 fontSize="7"
-                fill="var(--mantine-color-dimmed)"
+                fill="hsl(var(--muted-foreground))"
               >
                 Chain: Base Sepolia
               </text>
@@ -150,7 +141,7 @@ function TransactionFlowDiagram({
               y="105"
               textAnchor="middle"
               fontSize="8"
-              fill="var(--mantine-color-dimmed)"
+              fill="hsl(var(--muted-foreground))"
             >
               Build to see
             </text>
@@ -162,12 +153,12 @@ function TransactionFlowDiagram({
             y1="100"
             x2="210"
             y2="100"
-            stroke="var(--mantine-color-gray-5)"
+            stroke="hsl(var(--muted-foreground))"
             strokeWidth="2"
           />
           <polygon
             points="210,95 220,100 210,105"
-            fill="var(--mantine-color-gray-5)"
+            fill="hsl(var(--muted-foreground))"
           />
 
           {/* Recipient */}
@@ -177,8 +168,8 @@ function TransactionFlowDiagram({
             width="70"
             height="60"
             rx="8"
-            fill="var(--mantine-color-orange-1)"
-            stroke="var(--mantine-color-orange-5)"
+            fill="hsl(24.6 95% 53.1% / 0.15)"
+            stroke="hsl(24.6 95% 53.1%)"
             strokeWidth="2"
           />
           <text
@@ -187,7 +178,7 @@ function TransactionFlowDiagram({
             textAnchor="middle"
             fontSize="10"
             fontWeight="600"
-            fill="var(--mantine-color-dark-6)"
+            fill="hsl(var(--foreground))"
           >
             Recipient
           </text>
@@ -196,13 +187,13 @@ function TransactionFlowDiagram({
             y="115"
             textAnchor="middle"
             fontSize="8"
-            fill="var(--mantine-color-dimmed)"
+            fill="hsl(var(--muted-foreground))"
           >
             {txData ? txData.to.slice(0, 8) + "..." : "0x..."}
           </text>
         </svg>
-      </Box>
-    </Paper>
+      </div>
+    </div>
   );
 }
 
@@ -224,87 +215,128 @@ export function TransactionBuilderDemo() {
     setActiveStep(1);
   };
 
+  const steps = [
+    { label: "Build", description: "Configure transaction" },
+    { label: "Review", description: "Transaction details" },
+    { label: "Sign & Send", description: "Submit on-chain" },
+  ];
+
   const inputPanel = (
-    <Stack gap="md">
-      <Alert icon={<IconInfoCircle size={16} />} color="blue" variant="light">
-        This demo shows the anatomy of a transaction. Connect a wallet and use
-        Base Sepolia testnet to actually send transactions.
+    <div className="flex flex-col gap-4">
+      <Alert className="border-blue-500">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          This demo shows the anatomy of a transaction. Connect a wallet and use
+          Base Sepolia testnet to actually send transactions.
+        </AlertDescription>
       </Alert>
 
-      <Stepper active={activeStep} onStepClick={setActiveStep}>
-        <Stepper.Step label="Build" description="Configure transaction">
-          <Paper p="md" withBorder mt="md">
-            <Stack gap="md">
-              <TextInput
-                label="Recipient Address"
+      {/* Stepper header */}
+      <div className="flex items-center gap-2">
+        {steps.map((step, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <button
+              onClick={() => setActiveStep(i)}
+              className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
+                activeStep === i
+                  ? "bg-primary text-primary-foreground"
+                  : activeStep > i
+                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                    : "bg-muted text-muted-foreground"
+              }`}
+            >
+              <span className="flex h-6 w-6 items-center justify-center rounded-full border text-xs font-semibold">
+                {i + 1}
+              </span>
+              <span className="hidden sm:inline">{step.label}</span>
+            </button>
+            {i < steps.length - 1 && (
+              <div className="h-px w-4 bg-border" />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Step content */}
+      {activeStep === 0 && (
+        <div className="rounded-lg border border-border bg-card p-4 mt-4">
+          <div className="flex flex-col gap-4">
+            <div>
+              <Label>Recipient Address</Label>
+              <Input
                 placeholder="0x..."
                 value={to}
-                onChange={(e) => setTo(e.currentTarget.value)}
+                onChange={(e) => setTo(e.target.value)}
               />
-              <NumberInput
-                label="Value (ETH)"
+            </div>
+            <div>
+              <Label>Value (ETH)</Label>
+              <Input
+                type="number"
                 value={value}
-                onChange={(v) => setValue(Number(v))}
+                onChange={(e) => setValue(Number(e.target.value))}
                 min={0}
                 step={0.001}
-                decimalScale={6}
               />
-              <Button
-                leftSection={<IconArrowsExchange size={16} />}
-                onClick={handleBuildTransaction}
-                disabled={!to}
-              >
-                Build Transaction
-              </Button>
-            </Stack>
-          </Paper>
-        </Stepper.Step>
+            </div>
+            <Button
+              onClick={handleBuildTransaction}
+              disabled={!to}
+            >
+              <ArrowLeftRight className="h-4 w-4 mr-2" />
+              Build Transaction
+            </Button>
+          </div>
+        </div>
+      )}
 
-        <Stepper.Step label="Review" description="Transaction details">
-          {txData && (
-            <Paper p="md" withBorder mt="md">
-              <Stack gap="sm">
-                <Text size="sm" fw={600}>
-                  Transaction Object
-                </Text>
-                <Code block>{JSON.stringify(txData, null, 2)}</Code>
-                <Group gap="xs">
-                  <Badge variant="light">EIP-1559</Badge>
-                  <Badge variant="light" color="green">
-                    Base Sepolia
-                  </Badge>
-                </Group>
-                <Button onClick={() => setActiveStep(2)} variant="outline">
-                  Proceed to Sign
-                </Button>
-              </Stack>
-            </Paper>
-          )}
-        </Stepper.Step>
+      {activeStep === 1 && txData && (
+        <div className="rounded-lg border border-border bg-card p-4 mt-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">
+              Transaction Object
+            </p>
+            <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto">
+              <code>{JSON.stringify(txData, null, 2)}</code>
+            </pre>
+            <div className="flex items-center gap-1">
+              <Badge variant="secondary">EIP-1559</Badge>
+              <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                Base Sepolia
+              </Badge>
+            </div>
+            <Button onClick={() => setActiveStep(2)} variant="outline">
+              Proceed to Sign
+            </Button>
+          </div>
+        </div>
+      )}
 
-        <Stepper.Step label="Sign & Send" description="Submit on-chain">
-          <Paper p="md" withBorder mt="md">
-            <Stack gap="md">
-              <Alert icon={<IconInfoCircle size={16} />} color="yellow">
+      {activeStep === 2 && (
+        <div className="rounded-lg border border-border bg-card p-4 mt-4">
+          <div className="flex flex-col gap-4">
+            <Alert className="border-yellow-500">
+              <Info className="h-4 w-4" />
+              <AlertDescription>
                 Connect your wallet with the header button to sign and send this
                 transaction on Base Sepolia.
-              </Alert>
-              <Text size="sm" c="dimmed">
-                Transaction signing requires a connected wallet. The transaction
-                will be sent to Base Sepolia testnet. Get test ETH from a
-                faucet.
-              </Text>
-            </Stack>
-          </Paper>
-        </Stepper.Step>
-      </Stepper>
-    </Stack>
+              </AlertDescription>
+            </Alert>
+            <p className="text-sm text-muted-foreground">
+              Transaction signing requires a connected wallet. The transaction
+              will be sent to Base Sepolia testnet. Get test ETH from a
+              faucet.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md">
+    <div className="flex flex-col gap-4">
       <TransactionFlowDiagram txData={txData} />
-    </Stack>
+    </div>
   );
 
   return (

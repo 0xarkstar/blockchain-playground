@@ -1,22 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import {
-  Stack,
-  TextInput,
-  NumberInput,
-  Button,
-  Code,
-  Text,
-  Paper,
-  Group,
-  Badge,
-  Table,
-  Slider,
-  Alert,
-  Box,
-} from "@mantine/core";
-import { IconCube, IconPick, IconPlus } from "@tabler/icons-react";
+import { Box, Pickaxe, Plus } from "lucide-react";
 import {
   createGenesisBlock,
   createBlock,
@@ -28,6 +13,20 @@ import {
 } from "../../lib/blockchain/block";
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Slider } from "../ui/slider";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 function BlockchainVisual({ block }: { block: Block }) {
   const genesis = {
@@ -36,89 +35,80 @@ function BlockchainVisual({ block }: { block: Block }) {
   };
 
   return (
-    <Paper p="md" withBorder data-testid="blockchain-visual">
-      <Text size="sm" fw={600} mb="md">
+    <div className="rounded-lg border border-border bg-card p-4" data-testid="blockchain-visual">
+      <p className="text-sm font-semibold mb-4">
         Blockchain Structure
-      </Text>
-      <Group gap={0} wrap="nowrap" style={{ overflowX: "auto" }}>
+      </p>
+      <div className="flex gap-0 flex-nowrap overflow-x-auto">
         {/* Genesis block */}
-        <Paper
-          p="sm"
-          withBorder
-          style={{
-            minWidth: 160,
-            borderColor: "var(--mantine-color-gray-5)",
-          }}
+        <div
+          className="rounded-lg border border-gray-400 bg-card p-3"
+          style={{ minWidth: 160 }}
         >
-          <Badge size="xs" color="gray" mb={4}>
+          <Badge variant="secondary" className="mb-1 text-xs">
             Genesis
           </Badge>
-          <Text size="xs" c="dimmed">
+          <p className="text-xs text-muted-foreground">
             Hash
-          </Text>
-          <Code style={{ fontSize: "0.55rem" }}>
+          </p>
+          <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
             {genesis.hash.slice(0, 16)}...
-          </Code>
-        </Paper>
+          </code>
+        </div>
 
         {/* Arrow connecting blocks */}
-        <Box px="xs" style={{ display: "flex", alignItems: "center" }}>
+        <div className="px-1 flex items-center">
           <svg width="40" height="24" viewBox="0 0 40 24">
             <line
               x1="0"
               y1="12"
               x2="30"
               y2="12"
-              stroke="var(--mantine-color-blue-5)"
+              stroke="hsl(217.2 91.2% 59.8%)"
               strokeWidth="2"
             />
             <polygon
               points="30,6 40,12 30,18"
-              fill="var(--mantine-color-blue-5)"
+              fill="hsl(217.2 91.2% 59.8%)"
             />
           </svg>
-        </Box>
+        </div>
 
         {/* Mined block */}
-        <Paper
-          p="sm"
-          withBorder
-          style={{
-            minWidth: 160,
-            borderColor: "var(--mantine-color-green-5)",
-            borderWidth: 2,
-          }}
+        <div
+          className="rounded-lg border-2 border-green-500 bg-card p-3"
+          style={{ minWidth: 160 }}
         >
-          <Badge size="xs" color="green" mb={4}>
+          <Badge className="mb-1 text-xs bg-green-600">
             Block #{block.index}
           </Badge>
-          <Text size="xs" c="dimmed">
+          <p className="text-xs text-muted-foreground">
             Prev Hash
-          </Text>
-          <Code style={{ fontSize: "0.55rem" }} color="blue">
+          </p>
+          <code className="rounded bg-blue-100 dark:bg-blue-900 px-1.5 py-0.5 text-xs font-mono">
             {block.header.previousHash.slice(0, 16)}...
-          </Code>
-          <Text size="xs" c="dimmed" mt={4}>
+          </code>
+          <p className="text-xs text-muted-foreground mt-1">
             Hash
-          </Text>
-          <Code style={{ fontSize: "0.55rem" }}>
+          </p>
+          <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
             {block.hash.slice(0, 16)}...
-          </Code>
-          <Group gap={4} mt={4}>
-            <Badge size="xs" variant="light">
+          </code>
+          <div className="flex items-center gap-1 mt-1">
+            <Badge variant="secondary" className="text-xs">
               {block.transactions.length} TXs
             </Badge>
-            <Badge size="xs" variant="light">
+            <Badge variant="secondary" className="text-xs">
               Nonce: {block.header.nonce}
             </Badge>
-          </Group>
-        </Paper>
-      </Group>
-      <Text size="xs" c="dimmed" mt="xs">
+          </div>
+        </div>
+      </div>
+      <p className="text-xs text-muted-foreground mt-1">
         The previous hash in Block #{block.index} matches the genesis block
         hash, creating a cryptographic link
-      </Text>
-    </Paper>
+      </p>
+    </div>
   );
 }
 
@@ -158,165 +148,166 @@ export function BlockBuilderDemo() {
   }, []);
 
   const inputPanel = (
-    <Stack gap="md">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+    <div className="flex flex-col gap-4">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Step 1: Create Transactions
-          </Text>
-          <Group grow>
-            <TextInput
-              label="From"
-              value={from}
-              onChange={(e) => setFrom(e.currentTarget.value)}
-              size="sm"
-            />
-            <TextInput
-              label="To"
-              value={to}
-              onChange={(e) => setTo(e.currentTarget.value)}
-              size="sm"
-            />
-            <NumberInput
-              label="Amount"
-              value={amount}
-              onChange={(v) => setAmount(Number(v))}
-              min={0}
-              size="sm"
-            />
-          </Group>
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <div>
+              <Label>From</Label>
+              <Input
+                value={from}
+                onChange={(e) => setFrom(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>To</Label>
+              <Input
+                value={to}
+                onChange={(e) => setTo(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Amount</Label>
+              <Input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(Number(e.target.value))}
+                min={0}
+              />
+            </div>
+          </div>
           <Button
-            leftSection={<IconPlus size={16} />}
             variant="outline"
             onClick={handleAddTransaction}
           >
+            <Plus className="h-4 w-4 mr-2" />
             Add Transaction
           </Button>
 
           {transactions.length > 0 && (
-            <Table striped highlightOnHover>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>ID</Table.Th>
-                  <Table.Th>From</Table.Th>
-                  <Table.Th>To</Table.Th>
-                  <Table.Th>Amount</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>From</TableHead>
+                  <TableHead>To</TableHead>
+                  <TableHead>Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {transactions.map((tx) => (
-                  <Table.Tr key={tx.id}>
-                    <Table.Td>
-                      <Code>{tx.id.slice(0, 10)}...</Code>
-                    </Table.Td>
-                    <Table.Td>{tx.from}</Table.Td>
-                    <Table.Td>{tx.to}</Table.Td>
-                    <Table.Td>{tx.amount}</Table.Td>
-                  </Table.Tr>
+                  <TableRow key={tx.id}>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{tx.id.slice(0, 10)}...</code>
+                    </TableCell>
+                    <TableCell>{tx.from}</TableCell>
+                    <TableCell>{tx.to}</TableCell>
+                    <TableCell>{tx.amount}</TableCell>
+                  </TableRow>
                 ))}
-              </Table.Tbody>
+              </TableBody>
             </Table>
           )}
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Step 2: Configure Mining Difficulty
-          </Text>
-          <Text size="xs" c="dimmed">
+          </p>
+          <p className="text-xs text-muted-foreground">
             Difficulty: {difficulty} (requires {difficulty} leading zeros in
             hash)
-          </Text>
+          </p>
           <Slider
-            value={difficulty}
-            onChange={setDifficulty}
+            value={[difficulty]}
+            onValueChange={(v) => setDifficulty(v[0])}
             min={1}
             max={5}
             step={1}
-            marks={[
-              { value: 1, label: "1" },
-              { value: 2, label: "2" },
-              { value: 3, label: "3" },
-              { value: 4, label: "4" },
-              { value: 5, label: "5" },
-            ]}
           />
-        </Stack>
-      </Paper>
+          <div className="flex justify-between text-xs text-muted-foreground px-1">
+            {[1, 2, 3, 4, 5].map((v) => (
+              <span key={v}>{v}</span>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <Group>
+      <div className="flex items-center gap-2">
         <Button
-          leftSection={<IconPick size={16} />}
           onClick={handleMineBlock}
           disabled={transactions.length === 0 || mining}
-          loading={mining}
         >
-          Mine Block
+          <Pickaxe className="h-4 w-4 mr-2" />
+          {mining ? "Mining..." : "Mine Block"}
         </Button>
         <Button variant="outline" onClick={handleReset}>
           Reset
         </Button>
-      </Group>
-    </Stack>
+      </div>
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md">
+    <div className="flex flex-col gap-4">
       {miningResult && block ? (
         <>
           <BlockchainVisual block={block} />
 
-          <Paper p="md" withBorder>
-            <Stack gap="md">
-              <Group justify="space-between">
-                <Text size="sm" fw={600}>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold">
                   Mined Block
-                </Text>
-                <Group gap="xs">
-                  <Badge variant="light" color="green">
+                </p>
+                <div className="flex items-center gap-1">
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                     Block #{block.index}
                   </Badge>
-                  <Badge variant="light">Nonce: {miningResult.nonce}</Badge>
-                </Group>
-              </Group>
+                  <Badge variant="secondary">Nonce: {miningResult.nonce}</Badge>
+                </div>
+              </div>
 
-              <Alert
-                icon={<IconCube size={16} />}
-                color="green"
-                title="Block Mined Successfully"
-              >
-                Found valid nonce after {miningResult.hashesComputed} hashes in{" "}
-                {miningResult.timeMs.toFixed(1)}ms
+              <Alert className="border-green-500">
+                <Box className="h-4 w-4" />
+                <AlertTitle>Block Mined Successfully</AlertTitle>
+                <AlertDescription>
+                  Found valid nonce after {miningResult.hashesComputed} hashes in{" "}
+                  {miningResult.timeMs.toFixed(1)}ms
+                </AlertDescription>
               </Alert>
 
               <div>
-                <Text size="xs" c="dimmed">
+                <p className="text-xs text-muted-foreground">
                   Block Hash
-                </Text>
-                <Code block style={{ wordBreak: "break-all" }}>
-                  {block.hash}
-                </Code>
+                </p>
+                <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto break-all">
+                  <code>{block.hash}</code>
+                </pre>
               </div>
               <div>
-                <Text size="xs" c="dimmed">
+                <p className="text-xs text-muted-foreground">
                   Previous Hash
-                </Text>
-                <Code block style={{ wordBreak: "break-all" }}>
-                  {block.header.previousHash}
-                </Code>
+                </p>
+                <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto break-all">
+                  <code>{block.header.previousHash}</code>
+                </pre>
               </div>
               <div>
-                <Text size="xs" c="dimmed">
+                <p className="text-xs text-muted-foreground">
                   Merkle Root
-                </Text>
-                <Code block style={{ wordBreak: "break-all" }}>
-                  {block.header.merkleRoot}
-                </Code>
+                </p>
+                <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto break-all">
+                  <code>{block.header.merkleRoot}</code>
+                </pre>
               </div>
 
-              <Group gap="md">
+              <div className="flex items-center gap-4 flex-wrap">
                 <Badge>Difficulty: {block.header.difficulty}</Badge>
                 <Badge>Nonce: {block.header.nonce}</Badge>
                 <Badge>TXs: {block.transactions.length}</Badge>
@@ -328,18 +319,18 @@ export function BlockBuilderDemo() {
                   ).toFixed(0)}{" "}
                   H/s
                 </Badge>
-              </Group>
-            </Stack>
-          </Paper>
+              </div>
+            </div>
+          </div>
         </>
       ) : (
-        <Paper p="md" withBorder>
-          <Text size="sm" c="dimmed" ta="center" py="xl">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm text-muted-foreground text-center py-8">
             Add transactions and mine a block to see the blockchain structure
-          </Text>
-        </Paper>
+          </p>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 
   return (

@@ -1,19 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  TextInput,
-  Button,
   Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   createERC721,
   mintNFT,
@@ -77,96 +78,101 @@ export function SoulboundTokensDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Issue SBT Credential
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Recipient"
-              value={mintTo}
-              onChange={(e) => setMintTo(e.currentTarget.value)}
-            />
-            <TextInput
-              label="Credential Type"
-              value={credentialType}
-              onChange={(e) => setCredentialType(e.currentTarget.value)}
-            />
-            <TextInput
-              label="Issuer"
-              value={issuer}
-              onChange={(e) => setIssuer(e.currentTarget.value)}
-            />
-          </Group>
-          <Button onClick={handleMint} variant="light" color="violet">
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Issue SBT Credential</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>Recipient</Label>
+              <Input
+                value={mintTo}
+                onChange={(e) => setMintTo(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Credential Type</Label>
+              <Input
+                value={credentialType}
+                onChange={(e) => setCredentialType(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Issuer</Label>
+              <Input
+                value={issuer}
+                onChange={(e) => setIssuer(e.target.value)}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-violet-100 text-violet-800 hover:bg-violet-200 dark:bg-violet-900 dark:text-violet-300 dark:hover:bg-violet-800" onClick={handleMint}>
             Issue SBT
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Try Transfer (should fail)
-          </Text>
-          <Group grow>
-            <TextInput
-              label="From"
-              value={transferFrom}
-              onChange={(e) => setTransferFrom(e.currentTarget.value)}
-            />
-            <TextInput
-              label="To"
-              value={transferTo}
-              onChange={(e) => setTransferTo(e.currentTarget.value)}
-            />
-            <TextInput
-              label="Token ID"
-              value={transferTokenId}
-              onChange={(e) => setTransferTokenId(e.currentTarget.value)}
-            />
-          </Group>
-          <Button onClick={handleTransfer} variant="light" color="red">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Try Transfer (should fail)</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>From</Label>
+              <Input
+                value={transferFrom}
+                onChange={(e) => setTransferFrom(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>To</Label>
+              <Input
+                value={transferTo}
+                onChange={(e) => setTransferTo(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Token ID</Label>
+              <Input
+                value={transferTokenId}
+                onChange={(e) => setTransferTokenId(e.target.value)}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800" onClick={handleTransfer}>
             Attempt Transfer
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {lastMessage && (
-        <Alert
-          icon={<IconInfoCircle size={16} />}
-          variant="light"
-          color={lastMessage.includes("Soulbound") ? "red" : undefined}
-        >
-          {lastMessage}
+        <Alert variant={lastMessage.includes("Soulbound") ? "destructive" : "default"}>
+          <Info className="h-4 w-4" />
+          <AlertDescription>{lastMessage}</AlertDescription>
         </Alert>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">
               {state.name} ({state.symbol})
-            </Text>
-            <Group gap="xs">
-              <Badge variant="light" color="violet">
+            </p>
+            <div className="flex items-center gap-1">
+              <Badge variant="secondary" className="bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300">
                 Soulbound
               </Badge>
-              <Badge variant="light">Total: {totalSupplyNFT(state)}</Badge>
-            </Group>
-          </Group>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Token ID</Table.Th>
-                <Table.Th>Owner</Table.Th>
-                <Table.Th>Credential</Table.Th>
-                <Table.Th>Issuer</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+              <Badge variant="secondary">Total: {totalSupplyNFT(state)}</Badge>
+            </div>
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Token ID</TableHead>
+                <TableHead>Owner</TableHead>
+                <TableHead>Credential</TableHead>
+                <TableHead>Issuer</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {Object.entries(state.owners).map(([id, owner]) => {
                 const meta = state.metadata[Number(id)];
                 const issuerAttr = meta?.attributes?.find(
@@ -176,81 +182,76 @@ export function SoulboundTokensDemo() {
                   (a) => a.trait_type === "Type",
                 );
                 return (
-                  <Table.Tr key={id}>
-                    <Table.Td>
-                      <Badge variant="light" color="violet">
+                  <TableRow key={id}>
+                    <TableCell>
+                      <Badge variant="secondary" className="bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300">
                         #{id}
                       </Badge>
-                    </Table.Td>
-                    <Table.Td>
-                      <Code>{owner}</Code>
-                    </Table.Td>
-                    <Table.Td>{typeAttr?.value ?? "—"}</Table.Td>
-                    <Table.Td>{issuerAttr?.value ?? "—"}</Table.Td>
-                  </Table.Tr>
+                    </TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{owner}</code>
+                    </TableCell>
+                    <TableCell>{typeAttr?.value ?? "—"}</TableCell>
+                    <TableCell>{issuerAttr?.value ?? "—"}</TableCell>
+                  </TableRow>
                 );
               })}
               {Object.keys(state.owners).length === 0 && (
-                <Table.Tr>
-                  <Table.Td colSpan={4} ta="center">
-                    <Text size="sm" c="dimmed">
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center">
+                    <p className="text-sm text-muted-foreground">
                       No SBTs issued
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
+                    </p>
+                  </TableCell>
+                </TableRow>
               )}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            SBT Holders
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Address</Table.Th>
-                <Table.Th ta="right">SBT Count</Table.Th>
-                <Table.Th>Token IDs</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">SBT Holders</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Address</TableHead>
+                <TableHead className="text-right">SBT Count</TableHead>
+                <TableHead>Token IDs</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {owners.map((addr) => (
-                <Table.Tr key={addr}>
-                  <Table.Td>
-                    <Code>{addr}</Code>
-                  </Table.Td>
-                  <Table.Td ta="right">{balanceOfNFT(state, addr)}</Table.Td>
-                  <Table.Td>
-                    <Group gap="xs">
+                <TableRow key={addr}>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{addr}</code>
+                  </TableCell>
+                  <TableCell className="text-right">{balanceOfNFT(state, addr)}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
                       {tokensOfOwner(state, addr).map((id) => (
                         <Badge
                           key={id}
-                          size="xs"
                           variant="outline"
-                          color="violet"
+                          className="text-xs text-violet-600 border-violet-300 dark:text-violet-400 dark:border-violet-600"
                         >
                           #{id}
                         </Badge>
                       ))}
-                    </Group>
-                  </Table.Td>
-                </Table.Tr>
+                    </div>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {owners.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              SBT Binding Diagram
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">SBT Binding Diagram</p>
             <svg
               width="100%"
               height={Math.max(120, owners.length * 90)}
@@ -269,8 +270,7 @@ export function SoulboundTokensDemo() {
                       width={130}
                       height={44}
                       rx={8}
-                      fill="var(--mantine-color-blue-light)"
-                      stroke="var(--mantine-color-blue-6)"
+                      className="fill-blue-100 stroke-blue-500 dark:fill-blue-900 dark:stroke-blue-400"
                       strokeWidth={1.5}
                     />
                     <text
@@ -278,20 +278,20 @@ export function SoulboundTokensDemo() {
                       y={y + 5}
                       textAnchor="middle"
                       fontSize={13}
-                      fill="var(--mantine-color-blue-9)"
+                      className="fill-blue-800 dark:fill-blue-200"
                     >
                       {addr}
                     </text>
-                    {tokens.map((tokenId, ti) => {
+                    {tokens.map((tId, ti) => {
                       const tx = 250 + ti * 70;
                       return (
-                        <g key={tokenId}>
+                        <g key={tId}>
                           <line
                             x1={150}
                             y1={y}
                             x2={tx - 20}
                             y2={y}
-                            stroke="var(--mantine-color-violet-5)"
+                            className="stroke-violet-400 dark:stroke-violet-500"
                             strokeWidth={2}
                             strokeDasharray="6 3"
                           />
@@ -301,8 +301,7 @@ export function SoulboundTokensDemo() {
                             width={56}
                             height={36}
                             rx={6}
-                            fill="var(--mantine-color-violet-light)"
-                            stroke="var(--mantine-color-violet-6)"
+                            className="fill-violet-100 stroke-violet-500 dark:fill-violet-900 dark:stroke-violet-400"
                             strokeWidth={1.5}
                           />
                           <text
@@ -310,7 +309,7 @@ export function SoulboundTokensDemo() {
                             y={y - 3}
                             textAnchor="middle"
                             fontSize={10}
-                            fill="var(--mantine-color-violet-8)"
+                            className="fill-violet-700 dark:fill-violet-300"
                           >
                             SBT
                           </text>
@@ -320,9 +319,9 @@ export function SoulboundTokensDemo() {
                             textAnchor="middle"
                             fontSize={12}
                             fontWeight={700}
-                            fill="var(--mantine-color-violet-9)"
+                            className="fill-violet-800 dark:fill-violet-200"
                           >
-                            #{tokenId}
+                            #{tId}
                           </text>
                         </g>
                       );
@@ -331,25 +330,23 @@ export function SoulboundTokensDemo() {
                 );
               })}
             </svg>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="sm">
-          <Text size="sm" fw={600}>
-            About Soulbound Tokens
-          </Text>
-          <Text size="sm" c="dimmed">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">About Soulbound Tokens</p>
+          <p className="text-sm text-muted-foreground">
             Soulbound tokens (SBTs) are non-transferable NFTs proposed by
             Vitalik Buterin. They represent commitments, credentials, and
             affiliations — things that make up a person&apos;s identity in Web3.
             Unlike regular NFTs, SBTs cannot be sold or transferred, making them
             ideal for degrees, certifications, proof of attendance, and
             reputation scores.
-          </Text>
-        </Stack>
-      </Paper>
-    </Stack>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

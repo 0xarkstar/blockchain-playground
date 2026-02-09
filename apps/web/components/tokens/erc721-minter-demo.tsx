@@ -1,20 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  TextInput,
-  Button,
   Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  SimpleGrid,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   createERC721,
   mintNFT,
@@ -80,191 +80,195 @@ export function ERC721MinterDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Mint NFT
-          </Text>
-          <Group grow>
-            <TextInput
-              label="To"
-              value={mintTo}
-              onChange={(e) => setMintTo(e.currentTarget.value)}
-            />
-            <TextInput
-              label="Name"
-              value={nftName}
-              onChange={(e) => setNftName(e.currentTarget.value)}
-            />
-          </Group>
-          <Group grow>
-            <TextInput
-              label="Description"
-              value={nftDesc}
-              onChange={(e) => setNftDesc(e.currentTarget.value)}
-            />
-            <TextInput
-              label="Image URI"
-              value={nftImage}
-              onChange={(e) => setNftImage(e.currentTarget.value)}
-            />
-          </Group>
-          <Button onClick={handleMint} variant="light" color="green">
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Mint NFT</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>To</Label>
+              <Input
+                value={mintTo}
+                onChange={(e) => setMintTo(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Name</Label>
+              <Input
+                value={nftName}
+                onChange={(e) => setNftName(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Description</Label>
+              <Input
+                value={nftDesc}
+                onChange={(e) => setNftDesc(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Image URI</Label>
+              <Input
+                value={nftImage}
+                onChange={(e) => setNftImage(e.target.value)}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800" onClick={handleMint}>
             Mint
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Transfer NFT
-          </Text>
-          <Group grow>
-            <TextInput
-              label="From"
-              value={transferFromAddr}
-              onChange={(e) => setTransferFromAddr(e.currentTarget.value)}
-            />
-            <TextInput
-              label="To"
-              value={transferToAddr}
-              onChange={(e) => setTransferToAddr(e.currentTarget.value)}
-            />
-            <TextInput
-              label="Token ID"
-              value={transferTokenId}
-              onChange={(e) => setTransferTokenId(e.currentTarget.value)}
-            />
-          </Group>
-          <Button onClick={handleTransfer} variant="light" color="blue">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Transfer NFT</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>From</Label>
+              <Input
+                value={transferFromAddr}
+                onChange={(e) => setTransferFromAddr(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>To</Label>
+              <Input
+                value={transferToAddr}
+                onChange={(e) => setTransferToAddr(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Token ID</Label>
+              <Input
+                value={transferTokenId}
+                onChange={(e) => setTransferTokenId(e.target.value)}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800" onClick={handleTransfer}>
             Transfer
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {lastMessage && (
-        <Alert icon={<IconInfoCircle size={16} />} variant="light">
-          {lastMessage}
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>{lastMessage}</AlertDescription>
         </Alert>
       )}
 
       {Object.keys(state.owners).length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              NFT Gallery
-            </Text>
-            <SimpleGrid cols={{ base: 2, sm: 3, md: 4 }} spacing="sm">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">NFT Gallery</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
               {Object.entries(state.owners).map(([id, owner]) => {
                 const meta = state.metadata[Number(id)];
                 const hue = (Number(id) * 67) % 360;
                 return (
-                  <Paper
+                  <div
                     key={id}
-                    p="sm"
-                    withBorder
+                    className="rounded-lg border border-border p-3"
                     style={{
                       background: `linear-gradient(135deg, hsl(${hue}, 60%, 85%), hsl(${(hue + 40) % 360}, 50%, 75%))`,
                     }}
                   >
-                    <Stack gap={4} align="center">
-                      <Badge variant="filled" size="lg">
-                        #{id}
-                      </Badge>
-                      <Text size="xs" fw={600} ta="center">
+                    <div className="flex flex-col items-center gap-1">
+                      <Badge>#{id}</Badge>
+                      <p className="text-xs font-semibold text-center">
                         {meta?.name ?? `Token #${id}`}
-                      </Text>
-                      <Text size="xs" c="dimmed">
+                      </p>
+                      <p className="text-xs text-muted-foreground">
                         {owner}
-                      </Text>
-                    </Stack>
-                  </Paper>
+                      </p>
+                    </div>
+                  </div>
                 );
               })}
-            </SimpleGrid>
-          </Stack>
-        </Paper>
+            </div>
+          </div>
+        </div>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">
               Collection: {state.name} ({state.symbol})
-            </Text>
-            <Badge variant="light">Total: {totalSupplyNFT(state)}</Badge>
-          </Group>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Token ID</Table.Th>
-                <Table.Th>Owner</Table.Th>
-                <Table.Th>Name</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+            </p>
+            <Badge variant="secondary">Total: {totalSupplyNFT(state)}</Badge>
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Token ID</TableHead>
+                <TableHead>Owner</TableHead>
+                <TableHead>Name</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {Object.entries(state.owners).map(([id, owner]) => (
-                <Table.Tr key={id}>
-                  <Table.Td>
-                    <Badge variant="light">#{id}</Badge>
-                  </Table.Td>
-                  <Table.Td>
-                    <Code>{owner}</Code>
-                  </Table.Td>
-                  <Table.Td>{state.metadata[Number(id)]?.name ?? "—"}</Table.Td>
-                </Table.Tr>
+                <TableRow key={id}>
+                  <TableCell>
+                    <Badge variant="secondary">#{id}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{owner}</code>
+                  </TableCell>
+                  <TableCell>{state.metadata[Number(id)]?.name ?? "—"}</TableCell>
+                </TableRow>
               ))}
               {Object.keys(state.owners).length === 0 && (
-                <Table.Tr>
-                  <Table.Td colSpan={3} ta="center">
-                    <Text size="sm" c="dimmed">
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center">
+                    <p className="text-sm text-muted-foreground">
                       No tokens minted
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
+                    </p>
+                  </TableCell>
+                </TableRow>
               )}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Balances by Owner
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Owner</Table.Th>
-                <Table.Th ta="right">Count</Table.Th>
-                <Table.Th>Token IDs</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Balances by Owner</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Owner</TableHead>
+                <TableHead className="text-right">Count</TableHead>
+                <TableHead>Token IDs</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {owners.map((addr) => (
-                <Table.Tr key={addr}>
-                  <Table.Td>
-                    <Code>{addr}</Code>
-                  </Table.Td>
-                  <Table.Td ta="right">{balanceOfNFT(state, addr)}</Table.Td>
-                  <Table.Td>
-                    <Group gap="xs">
+                <TableRow key={addr}>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{addr}</code>
+                  </TableCell>
+                  <TableCell className="text-right">{balanceOfNFT(state, addr)}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
                       {tokensOfOwner(state, addr).map((id) => (
-                        <Badge key={id} size="xs" variant="outline">
+                        <Badge key={id} variant="outline" className="text-xs">
                           #{id}
                         </Badge>
                       ))}
-                    </Group>
-                  </Table.Td>
-                </Table.Tr>
+                    </div>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,18 +1,26 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  SegmentedControl,
   Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Label } from "../ui/label";
+import {
   Table,
-  Badge,
-  Text,
-  Alert,
-  Group,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import { EducationPanel } from "../../components/shared";
 
 type VariableContext = "state" | "parameter" | "local" | "return";
@@ -181,243 +189,207 @@ export function DataLocationsDemo() {
   );
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Data Location Overview
-          </Text>
-          <Group grow gap="md">
-            <Paper p="sm" withBorder bg="red.0" style={{ textAlign: "center" }}>
-              <Badge color="red" variant="filled" mb={4}>
-                Storage
-              </Badge>
-              <Text size="xs">Persistent on-chain</Text>
-              <Text size="xs" fw={600}>
-                20,000 gas (write)
-              </Text>
-              <Text size="xs" c="dimmed">
-                State variables
-              </Text>
-            </Paper>
-            <Paper
-              p="sm"
-              withBorder
-              bg="blue.0"
-              style={{ textAlign: "center" }}
-            >
-              <Badge color="blue" variant="filled" mb={4}>
-                Memory
-              </Badge>
-              <Text size="xs">Temporary, mutable</Text>
-              <Text size="xs" fw={600}>
-                3 gas (read/write)
-              </Text>
-              <Text size="xs" c="dimmed">
-                Local ref types
-              </Text>
-            </Paper>
-            <Paper
-              p="sm"
-              withBorder
-              bg="green.0"
-              style={{ textAlign: "center" }}
-            >
-              <Badge color="green" variant="filled" mb={4}>
-                Calldata
-              </Badge>
-              <Text size="xs">Read-only input</Text>
-              <Text size="xs" fw={600}>
-                4-16 gas/byte
-              </Text>
-              <Text size="xs" c="dimmed">
-                Function params
-              </Text>
-            </Paper>
-            <Paper
-              p="sm"
-              withBorder
-              bg="yellow.0"
-              style={{ textAlign: "center" }}
-            >
-              <Badge color="yellow" variant="filled" mb={4}>
-                Stack
-              </Badge>
-              <Text size="xs">Cheapest, limited</Text>
-              <Text size="xs" fw={600}>
-                2-3 gas
-              </Text>
-              <Text size="xs" c="dimmed">
-                Value types
-              </Text>
-            </Paper>
-          </Group>
-        </Stack>
-      </Paper>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Data Location Overview</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="rounded-lg border border-border bg-red-50 dark:bg-red-950 p-3 text-center">
+              <Badge className="bg-red-600 text-white mb-1">Storage</Badge>
+              <p className="text-xs">Persistent on-chain</p>
+              <p className="text-xs font-semibold">20,000 gas (write)</p>
+              <p className="text-xs text-muted-foreground">State variables</p>
+            </div>
+            <div className="rounded-lg border border-border bg-blue-50 dark:bg-blue-950 p-3 text-center">
+              <Badge className="bg-blue-600 text-white mb-1">Memory</Badge>
+              <p className="text-xs">Temporary, mutable</p>
+              <p className="text-xs font-semibold">3 gas (read/write)</p>
+              <p className="text-xs text-muted-foreground">Local ref types</p>
+            </div>
+            <div className="rounded-lg border border-border bg-green-50 dark:bg-green-950 p-3 text-center">
+              <Badge className="bg-green-600 text-white mb-1">Calldata</Badge>
+              <p className="text-xs">Read-only input</p>
+              <p className="text-xs font-semibold">4-16 gas/byte</p>
+              <p className="text-xs text-muted-foreground">Function params</p>
+            </div>
+            <div className="rounded-lg border border-border bg-yellow-50 dark:bg-yellow-950 p-3 text-center">
+              <Badge className="bg-yellow-600 text-white mb-1">Stack</Badge>
+              <p className="text-xs">Cheapest, limited</p>
+              <p className="text-xs font-semibold">2-3 gas</p>
+              <p className="text-xs text-muted-foreground">Value types</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Variable Context
-          </Text>
-          <SegmentedControl
-            data={CONTEXTS}
-            value={context}
-            onChange={(v) => setContext(v as VariableContext)}
-            fullWidth
-          />
-          <Select
-            label="Data Type"
-            data={DATA_TYPES}
-            value={dataType}
-            onChange={(v) => v && setDataType(v)}
-          />
-        </Stack>
-      </Paper>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Variable Context</p>
+          <div className="flex flex-wrap gap-1 rounded-lg bg-muted p-1">
+            {CONTEXTS.map((ctx) => (
+              <Button
+                key={ctx.value}
+                variant={context === ctx.value ? "default" : "ghost"}
+                size="sm"
+                className="flex-1"
+                onClick={() => setContext(ctx.value)}
+              >
+                {ctx.label}
+              </Button>
+            ))}
+          </div>
+          <div>
+            <Label>Data Type</Label>
+            <Select value={dataType} onValueChange={(v) => setDataType(v)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {DATA_TYPES.map((t) => (
+                  <SelectItem key={t} value={t}>
+                    {t}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Recommendation
-          </Text>
-          <Alert icon={<IconInfoCircle size={16} />} color="blue">
-            <Text fw={600}>Use: {recommendation.recommended}</Text>
-            <Text size="sm">{recommendation.reason}</Text>
-            {recommendation.alternatives.length > 0 && (
-              <Text size="xs" c="dimmed" mt={4}>
-                Alternatives: {recommendation.alternatives.join(", ")}
-              </Text>
-            )}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Recommendation</p>
+          <Alert>
+            <Info className="h-4 w-4" />
+            <AlertDescription>
+              <p className="font-semibold">
+                Use: {recommendation.recommended}
+              </p>
+              <p className="text-sm">{recommendation.reason}</p>
+              {recommendation.alternatives.length > 0 && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Alternatives: {recommendation.alternatives.join(", ")}
+                </p>
+              )}
+            </AlertDescription>
           </Alert>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Location Comparison
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Location</Table.Th>
-                <Table.Th>Persistent</Table.Th>
-                <Table.Th>Mutable</Table.Th>
-                <Table.Th>Gas Cost</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Location Comparison</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Location</TableHead>
+                <TableHead>Persistent</TableHead>
+                <TableHead>Mutable</TableHead>
+                <TableHead>Gas Cost</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {Object.values(LOCATIONS).map((loc) => (
-                <Table.Tr
+                <TableRow
                   key={loc.location}
-                  style={{
-                    backgroundColor:
-                      loc.location === recommendation.recommended
-                        ? "var(--mantine-color-blue-light)"
-                        : undefined,
-                  }}
+                  className={
+                    loc.location === recommendation.recommended
+                      ? "bg-blue-50 dark:bg-blue-950/50"
+                      : ""
+                  }
                 >
-                  <Table.Td>
+                  <TableCell>
                     <Badge
                       variant={
                         loc.location === recommendation.recommended
-                          ? "filled"
+                          ? "default"
                           : "outline"
-                      }
-                      color={
-                        loc.location === recommendation.recommended
-                          ? "blue"
-                          : "gray"
                       }
                     >
                       {loc.location}
                     </Badge>
-                  </Table.Td>
-                  <Table.Td>
+                  </TableCell>
+                  <TableCell>
                     <Badge
-                      size="xs"
-                      color={loc.persistent ? "green" : "gray"}
-                      variant="light"
+                      variant="secondary"
+                      className={`text-xs ${loc.persistent ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : ""}`}
                     >
                       {loc.persistent ? "Yes" : "No"}
                     </Badge>
-                  </Table.Td>
-                  <Table.Td>
+                  </TableCell>
+                  <TableCell>
                     <Badge
-                      size="xs"
-                      color={loc.mutable ? "green" : "red"}
-                      variant="light"
+                      variant="secondary"
+                      className={`text-xs ${loc.mutable ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
                     >
                       {loc.mutable ? "Yes" : "No"}
                     </Badge>
-                  </Table.Td>
-                  <Table.Td>
-                    <Text size="xs">{loc.gasCost}</Text>
-                  </Table.Td>
-                </Table.Tr>
+                  </TableCell>
+                  <TableCell>
+                    <p className="text-xs">{loc.gasCost}</p>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Rules Summary
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Rules Summary</p>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge size="xs" variant="outline">
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="outline" className="text-xs">
                     State vars
                   </Badge>
-                </Table.Td>
-                <Table.Td>Always storage (implicit)</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge size="xs" variant="outline">
+                </TableCell>
+                <TableCell>Always storage (implicit)</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="outline" className="text-xs">
                     Value params
                   </Badge>
-                </Table.Td>
-                <Table.Td>Copied to stack (no keyword needed)</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge size="xs" variant="outline">
+                </TableCell>
+                <TableCell>Copied to stack (no keyword needed)</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="outline" className="text-xs">
                     Reference params
                   </Badge>
-                </Table.Td>
-                <Table.Td>
+                </TableCell>
+                <TableCell>
                   calldata (read-only) or memory (mutable) required
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge size="xs" variant="outline">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="outline" className="text-xs">
                     Local ref vars
                   </Badge>
-                </Table.Td>
-                <Table.Td>
+                </TableCell>
+                <TableCell>
                   memory (default) or storage (state reference)
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge size="xs" variant="outline">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="outline" className="text-xs">
                     Mappings
                   </Badge>
-                </Table.Td>
-                <Table.Td>
+                </TableCell>
+                <TableCell>
                   Only in storage — cannot be in memory or calldata
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -445,6 +417,6 @@ export function DataLocationsDemo() {
           "Stack is limited to 16 accessible slots — causes 'stack too deep' errors",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

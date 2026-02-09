@@ -1,20 +1,25 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
+import { Plus, Trash2, Info } from "lucide-react";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  TextInput,
   Select,
-  Button,
-  Code,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
   Table,
-  Badge,
-  Group,
-  Text,
-  Alert,
-} from "@mantine/core";
-import { IconPlus, IconTrash, IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
 import { encodeCalldata, type AbiParam } from "../../lib/solidity/abi";
 import { EducationPanel } from "../../components/shared";
 
@@ -67,177 +72,179 @@ export function AbiEncoderDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Alert icon={<IconInfoCircle size={16} />} color="blue" variant="light">
-        This encoder supports static types only: uint256, address, bool,
-        bytes32, uint8. Dynamic types (string, bytes, arrays) require
-        offset-based encoding.
+    <div className="flex flex-col gap-6">
+      <Alert>
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          This encoder supports static types only: uint256, address, bool,
+          bytes32, uint8. Dynamic types (string, bytes, arrays) require
+          offset-based encoding.
+        </AlertDescription>
       </Alert>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Function Definition
-          </Text>
-          <TextInput
-            label="Function Name"
-            value={funcName}
-            onChange={(e) => setFuncName(e.currentTarget.value)}
-          />
-          <Text size="xs" fw={600}>
-            Parameters
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Function Definition</p>
+          <div>
+            <Label>Function Name</Label>
+            <Input
+              value={funcName}
+              onChange={(e) => setFuncName(e.target.value)}
+            />
+          </div>
+          <p className="text-xs font-semibold">Parameters</p>
           {params.map((param, i) => (
-            <Group key={param.id} align="flex-end">
-              <Select
-                label="Type"
-                data={PARAM_TYPES}
-                value={param.type}
-                onChange={(v) => v && updateParam(i, "type", v)}
-                style={{ width: 130 }}
-              />
-              <TextInput
-                label="Name"
-                value={param.name}
-                onChange={(e) => updateParam(i, "name", e.currentTarget.value)}
-                style={{ width: 120 }}
-              />
-              <TextInput
-                label="Value"
-                value={param.value}
-                onChange={(e) => updateParam(i, "value", e.currentTarget.value)}
-                style={{ flex: 1 }}
-              />
+            <div key={param.id} className="flex items-end gap-2">
+              <div className="w-[130px]">
+                <Label>Type</Label>
+                <Select
+                  value={param.type}
+                  onValueChange={(v) => updateParam(i, "type", v)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PARAM_TYPES.map((t) => (
+                      <SelectItem key={t} value={t}>
+                        {t}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="w-[120px]">
+                <Label>Name</Label>
+                <Input
+                  value={param.name}
+                  onChange={(e) => updateParam(i, "name", e.target.value)}
+                />
+              </div>
+              <div className="flex-1">
+                <Label>Value</Label>
+                <Input
+                  value={param.value}
+                  onChange={(e) => updateParam(i, "value", e.target.value)}
+                />
+              </div>
               <Button
                 size="sm"
-                variant="subtle"
-                color="red"
+                variant="ghost"
+                className="text-red-500 hover:text-red-700"
                 onClick={() => removeParam(i)}
               >
-                <IconTrash size={14} />
+                <Trash2 className="h-3.5 w-3.5" />
               </Button>
-            </Group>
+            </div>
           ))}
-          <Button
-            leftSection={<IconPlus size={16} />}
-            variant="outline"
-            onClick={addParam}
-            size="xs"
-          >
+          <Button variant="outline" size="sm" onClick={addParam}>
+            <Plus className="h-4 w-4 mr-1" />
             Add Parameter
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {result && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Encoded Result
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Encoded Result</p>
             <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>Function Signature</Table.Td>
-                  <Table.Td ta="right">
-                    <Code>{result.functionSignature}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Selector (4 bytes)</Table.Td>
-                  <Table.Td ta="right">
-                    <Badge color="blue" variant="light" size="lg">
+              <TableBody>
+                <TableRow>
+                  <TableCell>Function Signature</TableCell>
+                  <TableCell className="text-right">
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
+                      {result.functionSignature}
+                    </code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Selector (4 bytes)</TableCell>
+                  <TableCell className="text-right">
+                    <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                       {result.selector}
                     </Badge>
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
             </Table>
 
             {result.encodedParams.length > 0 && (
               <>
-                <Text size="xs" fw={600}>
+                <p className="text-xs font-semibold">
                   Encoded Parameters (32-byte words)
-                </Text>
+                </p>
                 {result.encodedParams.map((encoded, i) => (
-                  <Group key={i} gap="xs">
-                    <Badge size="xs" variant="outline">
+                  <div key={i} className="flex items-center gap-1">
+                    <Badge variant="outline" className="text-xs">
                       word {i}
                     </Badge>
-                    <Code style={{ flex: 1, fontSize: 11 }}>{encoded}</Code>
-                  </Group>
+                    <code
+                      className="rounded bg-muted px-1.5 py-0.5 font-mono flex-1"
+                      style={{ fontSize: 11 }}
+                    >
+                      {encoded}
+                    </code>
+                  </div>
                 ))}
               </>
             )}
 
-            <Text size="xs" fw={600}>
-              Full Calldata (Color-Coded)
-            </Text>
-            <Paper
-              p="xs"
-              withBorder
+            <p className="text-xs font-semibold">Full Calldata (Color-Coded)</p>
+            <div
+              className="rounded-lg border border-border bg-card p-2 font-mono"
               style={{
-                fontFamily: "monospace",
                 fontSize: 11,
                 wordBreak: "break-all",
                 lineHeight: 1.8,
               }}
             >
-              <span
-                style={{
-                  backgroundColor: "var(--mantine-color-blue-1)",
-                  padding: "2px 0",
-                }}
-              >
+              <span className="bg-blue-100 dark:bg-blue-900/50 py-0.5">
                 {result.selector}
               </span>
               {result.encodedParams.map((encoded, i) => {
                 const colors = [
-                  "var(--mantine-color-green-1)",
-                  "var(--mantine-color-orange-1)",
-                  "var(--mantine-color-violet-1)",
-                  "var(--mantine-color-cyan-1)",
-                  "var(--mantine-color-pink-1)",
+                  "bg-green-100 dark:bg-green-900/50",
+                  "bg-orange-100 dark:bg-orange-900/50",
+                  "bg-violet-100 dark:bg-violet-900/50",
+                  "bg-cyan-100 dark:bg-cyan-900/50",
+                  "bg-pink-100 dark:bg-pink-900/50",
                 ];
                 return (
-                  <span
-                    key={i}
-                    style={{
-                      backgroundColor: colors[i % colors.length],
-                      padding: "2px 0",
-                    }}
-                  >
+                  <span key={i} className={`${colors[i % colors.length]} py-0.5`}>
                     {encoded.replace("0x", "")}
                   </span>
                 );
               })}
-            </Paper>
-            <Group gap="xs" mt="xs">
-              <Badge size="xs" color="blue" variant="light">
+            </div>
+            <div className="flex items-center gap-1 mt-1">
+              <Badge
+                variant="secondary"
+                className="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+              >
                 Selector (4B)
               </Badge>
               {params.map((p, i) => {
-                const badgeColors = [
-                  "green",
-                  "orange",
-                  "violet",
-                  "cyan",
-                  "pink",
+                const badgeClasses = [
+                  "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+                  "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
+                  "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300",
+                  "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300",
+                  "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300",
                 ];
                 return (
                   <Badge
                     key={p.id}
-                    size="xs"
-                    color={badgeColors[i % badgeColors.length]}
-                    variant="light"
+                    variant="secondary"
+                    className={`text-xs ${badgeClasses[i % badgeClasses.length]}`}
                   >
                     {p.name || `param${i}`} (32B)
                   </Badge>
                 );
               })}
-            </Group>
-          </Stack>
-        </Paper>
+            </div>
+          </div>
+        </div>
       )}
 
       <EducationPanel
@@ -265,6 +272,6 @@ export function AbiEncoderDemo() {
           "Tools like cast and Etherscan's decoder can parse calldata back to readable parameters",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

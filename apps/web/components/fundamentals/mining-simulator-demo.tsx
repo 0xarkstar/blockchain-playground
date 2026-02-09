@@ -1,19 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import {
-  Stack,
-  Button,
-  Text,
-  Paper,
-  Group,
-  Badge,
-  Slider,
-  Code,
-  Progress,
-  SimpleGrid,
-} from "@mantine/core";
-import { IconPick, IconPlayerStop } from "@tabler/icons-react";
+import { Pickaxe, Square } from "lucide-react";
 import {
   createGenesisBlock,
   createBlock,
@@ -24,6 +12,10 @@ import {
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
 import { SimpleLineChart } from "../shared/charts";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Slider } from "../ui/slider";
+import { Progress } from "../ui/progress";
 
 interface MiningStats {
   hashesComputed: number;
@@ -121,155 +113,148 @@ export function MiningSimulatorDemo() {
   }, []);
 
   const inputPanel = (
-    <Stack gap="md">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+    <div className="flex flex-col gap-4">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Mining Difficulty
-          </Text>
-          <Text size="xs" c="dimmed">
+          </p>
+          <p className="text-xs text-muted-foreground">
             Difficulty: {difficulty} (hash must start with {difficulty} zeros).
             Higher = exponentially harder.
-          </Text>
+          </p>
           <Slider
-            value={difficulty}
-            onChange={setDifficulty}
+            value={[difficulty]}
+            onValueChange={(v) => setDifficulty(v[0])}
             min={1}
             max={6}
             step={1}
             disabled={mining}
-            marks={[
-              { value: 1, label: "1" },
-              { value: 2, label: "2" },
-              { value: 3, label: "3" },
-              { value: 4, label: "4" },
-              { value: 5, label: "5" },
-              { value: 6, label: "6" },
-            ]}
           />
-        </Stack>
-      </Paper>
+          <div className="flex justify-between text-xs text-muted-foreground px-1">
+            {[1, 2, 3, 4, 5, 6].map((v) => (
+              <span key={v}>{v}</span>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <Group>
+      <div className="flex items-center gap-2">
         {!mining ? (
-          <Button
-            leftSection={<IconPick size={16} />}
-            onClick={handleStartMining}
-          >
+          <Button onClick={handleStartMining}>
+            <Pickaxe className="h-4 w-4 mr-2" />
             Start Mining
           </Button>
         ) : (
           <Button
-            leftSection={<IconPlayerStop size={16} />}
-            color="red"
+            className="bg-red-600 hover:bg-red-700"
             onClick={handleStop}
           >
+            <Square className="h-4 w-4 mr-2" />
             Stop Mining
           </Button>
         )}
-      </Group>
+      </div>
 
       {stats && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Group justify="space-between">
-              <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">
                 Mining Progress
-              </Text>
+              </p>
               {stats.found && (
-                <Badge color="green" variant="filled">
+                <Badge className="bg-green-600 text-white">
                   Block Found!
                 </Badge>
               )}
-            </Group>
+            </div>
 
-            {mining && <Progress value={100} animated />}
+            {mining && <Progress value={100} className="animate-pulse" />}
 
-            <SimpleGrid cols={{ base: 2 }} spacing="md">
-              <Paper p="sm" withBorder>
-                <Text size="xs" c="dimmed">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-lg border border-border bg-card p-3">
+                <p className="text-xs text-muted-foreground">
                   Hashes Computed
-                </Text>
-                <Text size="lg" fw={700}>
+                </p>
+                <p className="text-lg font-bold">
                   {stats.hashesComputed.toLocaleString()}
-                </Text>
-              </Paper>
-              <Paper p="sm" withBorder>
-                <Text size="xs" c="dimmed">
+                </p>
+              </div>
+              <div className="rounded-lg border border-border bg-card p-3">
+                <p className="text-xs text-muted-foreground">
                   Hash Rate
-                </Text>
-                <Text size="lg" fw={700}>
+                </p>
+                <p className="text-lg font-bold">
                   {stats.hashRate > 1000
                     ? `${(stats.hashRate / 1000).toFixed(1)} KH/s`
                     : `${stats.hashRate.toFixed(0)} H/s`}
-                </Text>
-              </Paper>
-              <Paper p="sm" withBorder>
-                <Text size="xs" c="dimmed">
+                </p>
+              </div>
+              <div className="rounded-lg border border-border bg-card p-3">
+                <p className="text-xs text-muted-foreground">
                   Current Nonce
-                </Text>
-                <Text size="lg" fw={700}>
+                </p>
+                <p className="text-lg font-bold">
                   {stats.currentNonce.toLocaleString()}
-                </Text>
-              </Paper>
-              <Paper p="sm" withBorder>
-                <Text size="xs" c="dimmed">
+                </p>
+              </div>
+              <div className="rounded-lg border border-border bg-card p-3">
+                <p className="text-xs text-muted-foreground">
                   Elapsed Time
-                </Text>
-                <Text size="lg" fw={700}>
+                </p>
+                <p className="text-lg font-bold">
                   {(stats.elapsedMs / 1000).toFixed(2)}s
-                </Text>
-              </Paper>
-            </SimpleGrid>
-
-            <div>
-              <Text size="xs" c="dimmed">
-                {stats.found ? "Winning Hash" : "Current Hash"}
-              </Text>
-              <Code
-                block
-                style={{ wordBreak: "break-all" }}
-                color={stats.found ? "green" : undefined}
-              >
-                {stats.currentHash}
-              </Code>
+                </p>
+              </div>
             </div>
 
-            <Text size="xs" c="dimmed">
-              Target: hash must start with <Code>{"0".repeat(difficulty)}</Code>
-            </Text>
-          </Stack>
-        </Paper>
+            <div>
+              <p className="text-xs text-muted-foreground">
+                {stats.found ? "Winning Hash" : "Current Hash"}
+              </p>
+              <pre
+                className={`rounded-lg p-3 text-sm overflow-x-auto break-all ${stats.found ? "bg-green-100 dark:bg-green-900" : "bg-muted"}`}
+              >
+                <code>{stats.currentHash}</code>
+              </pre>
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              Target: hash must start with <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{"0".repeat(difficulty)}</code>
+            </p>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md">
+    <div className="flex flex-col gap-4">
       {miningHistory.length > 0 ? (
-        <Paper p="md" withBorder data-testid="mining-history-chart">
-          <Text size="sm" fw={600} mb="sm">
+        <div className="rounded-lg border border-border bg-card p-4" data-testid="mining-history-chart">
+          <p className="text-sm font-semibold mb-2">
             Mining History
-          </Text>
+          </p>
           <SimpleLineChart
             data={miningHistory}
             xKey="attempt"
             yKeys={["hashes", "hashRate"]}
             height={250}
           />
-          <Text size="xs" c="dimmed" mt="xs">
+          <p className="text-xs text-muted-foreground mt-1">
             Track how difficulty affects hashes needed and hash rate across
             mining attempts
-          </Text>
-        </Paper>
+          </p>
+        </div>
       ) : (
-        <Paper p="md" withBorder>
-          <Text size="sm" c="dimmed" ta="center" py="xl">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm text-muted-foreground text-center py-8">
             Mine blocks at different difficulty levels to build a history chart
-          </Text>
-        </Paper>
+          </p>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 
   return (

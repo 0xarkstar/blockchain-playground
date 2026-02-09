@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  Stack,
-  TextInput,
-  Button,
-  Text,
-  Group,
-  Paper,
-  SegmentedControl,
-} from "@mantine/core";
-import { IconLoader2 } from "@tabler/icons-react";
+import { Loader2 } from "lucide-react";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 type VoteChoice = "yes" | "no";
 
@@ -33,48 +27,66 @@ export function VotingBooth({
   }
 
   return (
-    <Paper p="md" withBorder>
-      <Stack gap="sm">
-        <Text fw={600} size="sm">
+    <div className="rounded-lg border border-border bg-card p-4">
+      <div className="flex flex-col gap-2">
+        <p className="text-sm font-semibold">
           Step 2: Cast Your Vote
-        </Text>
-        <Text size="xs" c="dimmed">
+        </p>
+        <p className="text-xs text-muted-foreground">
           Your vote is private: the ZK proof shows you are a registered voter
           and your vote is valid, without revealing which voter you are.
-        </Text>
-        <TextInput
-          label="Proposal"
-          value="Should the DAO fund the ZK education initiative?"
-          readOnly
-        />
-        <Text size="sm" fw={500}>
+        </p>
+        <div>
+          <Label>Proposal</Label>
+          <Input
+            value="Should the DAO fund the ZK education initiative?"
+            readOnly
+          />
+        </div>
+        <p className="text-sm font-medium">
           Your Vote:
-        </Text>
-        <SegmentedControl
-          value={voteChoice}
-          onChange={(val) => onVoteChoiceChange(val as VoteChoice)}
-          data={[
-            { label: "Yes", value: "yes" },
-            { label: "No", value: "no" },
-          ]}
-          disabled={phase !== "registered"}
-        />
+        </p>
+        <div className="flex items-center gap-0 rounded-lg border border-border overflow-hidden">
+          <button
+            type="button"
+            className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
+              voteChoice === "yes"
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+            onClick={() => onVoteChoiceChange("yes")}
+            disabled={phase !== "registered"}
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
+              voteChoice === "no"
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+            onClick={() => onVoteChoiceChange("no")}
+            disabled={phase !== "registered"}
+          >
+            No
+          </button>
+        </div>
         {progressMessage && (
-          <Group gap="xs">
-            <IconLoader2 size={14} className="animate-spin" />
-            <Text size="xs" c="blue">
+          <div className="flex items-center gap-1">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            <p className="text-xs text-blue-600 dark:text-blue-400">
               {progressMessage}
-            </Text>
-          </Group>
+            </p>
+          </div>
         )}
         <Button
           onClick={onVoteAndProve}
-          loading={phase === "proving"}
           disabled={phase !== "registered"}
         >
           Vote & Generate ZK Proof
         </Button>
-      </Stack>
-    </Paper>
+      </div>
+    </div>
   );
 }

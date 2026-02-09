@@ -1,17 +1,19 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Progress } from "../ui/progress";
 import {
-  Stack,
-  Paper,
-  SegmentedControl,
-  NumberInput,
   Table,
-  Badge,
-  Group,
-  Text,
-  Progress,
-} from "@mantine/core";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   compareStorageVsMemory,
   comparePackedVsUnpacked,
@@ -65,33 +67,39 @@ export function GasOptimizerDemo() {
   })();
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Pattern Category
-          </Text>
-          <SegmentedControl
-            data={CATEGORIES}
-            value={category}
-            onChange={setCategory}
-            fullWidth
-          />
-          <NumberInput
-            label={countLabel}
-            value={count}
-            onChange={(v) => setCount(Number(v) || 1)}
-            min={1}
-            max={1000}
-          />
-        </Stack>
-      </Paper>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Pattern Category</p>
+          <div className="flex flex-wrap gap-1 rounded-lg bg-muted p-1">
+            {CATEGORIES.map((cat) => (
+              <Button
+                key={cat.value}
+                variant={category === cat.value ? "default" : "ghost"}
+                size="sm"
+                className="flex-1"
+                onClick={() => setCategory(cat.value)}
+              >
+                {cat.label}
+              </Button>
+            ))}
+          </div>
+          <div>
+            <Label>{countLabel}</Label>
+            <Input
+              type="number"
+              value={count}
+              onChange={(e) => setCount(Number(e.target.value) || 1)}
+              min={1}
+              max={1000}
+            />
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Gas Comparison
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Gas Comparison</p>
           <SimpleBarChart
             data={[
               {
@@ -106,153 +114,148 @@ export function GasOptimizerDemo() {
             grouped
             height={200}
           />
-          <Group grow>
-            <Paper p="sm" withBorder>
-              <Stack gap="xs" align="center">
-                <Text size="xs" c="dimmed">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-lg border border-border bg-card p-3">
+              <div className="flex flex-col gap-1 items-center">
+                <p className="text-xs text-muted-foreground">
                   {comparison.unoptimized.label}
-                </Text>
-                <Text size="xl" fw={700} c="red">
+                </p>
+                <p className="text-xl font-bold text-red-500">
                   {comparison.unoptimized.totalGas.toLocaleString()}
-                </Text>
-                <Text size="xs" c="dimmed">
-                  gas
-                </Text>
-              </Stack>
-            </Paper>
-            <Paper p="sm" withBorder>
-              <Stack gap="xs" align="center">
-                <Text size="xs" c="dimmed">
+                </p>
+                <p className="text-xs text-muted-foreground">gas</p>
+              </div>
+            </div>
+            <div className="rounded-lg border border-border bg-card p-3">
+              <div className="flex flex-col gap-1 items-center">
+                <p className="text-xs text-muted-foreground">
                   {comparison.optimized.label}
-                </Text>
-                <Text size="xl" fw={700} c="green">
+                </p>
+                <p className="text-xl font-bold text-green-500">
                   {comparison.optimized.totalGas.toLocaleString()}
-                </Text>
-                <Text size="xs" c="dimmed">
-                  gas
-                </Text>
-              </Stack>
-            </Paper>
-          </Group>
+                </p>
+                <p className="text-xs text-muted-foreground">gas</p>
+              </div>
+            </div>
+          </div>
 
-          <Group justify="center">
-            <Badge size="lg" color="green" variant="light">
+          <div className="flex justify-center">
+            <Badge
+              variant="secondary"
+              className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 text-sm px-3 py-1"
+            >
               {comparison.savings.toLocaleString()} gas saved (
               {comparison.savingsPercent.toFixed(1)}%)
             </Badge>
-          </Group>
+          </div>
 
-          <Progress
-            value={100 - comparison.savingsPercent}
-            color="green"
-            size="xl"
-          />
-          <Text size="xs" c="dimmed" ta="center">
+          <Progress value={100 - comparison.savingsPercent} className="h-3" />
+          <p className="text-xs text-muted-foreground text-center">
             {comparison.explanation}
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
-      <Group grow align="flex-start">
-        <Paper p="md" withBorder>
-          <Stack gap="xs">
-            <Text size="xs" fw={600} c="red">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-1">
+            <p className="text-xs font-semibold text-red-500">
               Unoptimized Breakdown
-            </Text>
+            </p>
             <Table>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Operation</Table.Th>
-                  <Table.Th ta="right">Gas/Op</Table.Th>
-                  <Table.Th ta="right">Count</Table.Th>
-                  <Table.Th ta="right">Total</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Operation</TableHead>
+                  <TableHead className="text-right">Gas/Op</TableHead>
+                  <TableHead className="text-right">Count</TableHead>
+                  <TableHead className="text-right">Total</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {comparison.unoptimized.breakdown.map((item, i) => (
-                  <Table.Tr key={i}>
-                    <Table.Td>
-                      <Text size="xs">{item.operation}</Text>
-                    </Table.Td>
-                    <Table.Td ta="right">
+                  <TableRow key={i}>
+                    <TableCell>
+                      <p className="text-xs">{item.operation}</p>
+                    </TableCell>
+                    <TableCell className="text-right">
                       {item.gasPerOp.toLocaleString()}
-                    </Table.Td>
-                    <Table.Td ta="right">{item.count}</Table.Td>
-                    <Table.Td ta="right">
+                    </TableCell>
+                    <TableCell className="text-right">{item.count}</TableCell>
+                    <TableCell className="text-right">
                       {item.totalGas.toLocaleString()}
-                    </Table.Td>
-                  </Table.Tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Tbody>
+              </TableBody>
             </Table>
-          </Stack>
-        </Paper>
-        <Paper p="md" withBorder>
-          <Stack gap="xs">
-            <Text size="xs" fw={600} c="green">
+          </div>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-1">
+            <p className="text-xs font-semibold text-green-500">
               Optimized Breakdown
-            </Text>
+            </p>
             <Table>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Operation</Table.Th>
-                  <Table.Th ta="right">Gas/Op</Table.Th>
-                  <Table.Th ta="right">Count</Table.Th>
-                  <Table.Th ta="right">Total</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Operation</TableHead>
+                  <TableHead className="text-right">Gas/Op</TableHead>
+                  <TableHead className="text-right">Count</TableHead>
+                  <TableHead className="text-right">Total</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {comparison.optimized.breakdown.map((item, i) => (
-                  <Table.Tr key={i}>
-                    <Table.Td>
-                      <Text size="xs">{item.operation}</Text>
-                    </Table.Td>
-                    <Table.Td ta="right">
+                  <TableRow key={i}>
+                    <TableCell>
+                      <p className="text-xs">{item.operation}</p>
+                    </TableCell>
+                    <TableCell className="text-right">
                       {item.gasPerOp.toLocaleString()}
-                    </Table.Td>
-                    <Table.Td ta="right">{item.count}</Table.Td>
-                    <Table.Td ta="right">
+                    </TableCell>
+                    <TableCell className="text-right">{item.count}</TableCell>
+                    <TableCell className="text-right">
                       {item.totalGas.toLocaleString()}
-                    </Table.Td>
-                  </Table.Tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Tbody>
+              </TableBody>
             </Table>
-          </Stack>
-        </Paper>
-      </Group>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            EVM Gas Constants Reference
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Opcode</Table.Th>
-                <Table.Th ta="right">Gas</Table.Th>
-                <Table.Th>Description</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">EVM Gas Constants Reference</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Opcode</TableHead>
+                <TableHead className="text-right">Gas</TableHead>
+                <TableHead>Description</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {gasConstants.map((c) => (
-                <Table.Tr key={c.name}>
-                  <Table.Td>
-                    <Badge size="xs" variant="outline">
+                <TableRow key={c.name}>
+                  <TableCell>
+                    <Badge variant="outline" className="text-xs">
                       {c.name}
                     </Badge>
-                  </Table.Td>
-                  <Table.Td ta="right">{c.gas.toLocaleString()}</Table.Td>
-                  <Table.Td>
-                    <Text size="xs">{c.description}</Text>
-                  </Table.Td>
-                </Table.Tr>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {c.gas.toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    <p className="text-xs">{c.description}</p>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -280,6 +283,6 @@ export function GasOptimizerDemo() {
           "Short-circuit conditions: put cheap checks before expensive ones",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

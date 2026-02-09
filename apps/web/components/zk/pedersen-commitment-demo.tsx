@@ -1,19 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Stack,
-  Paper,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  NumberInput,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Info } from "lucide-react";
 import {
   createPedersenParams,
   pedersenCommit,
@@ -22,6 +10,17 @@ import {
   type PedersenCommitmentResult,
   type HomomorphicDemo,
 } from "../../lib/zk/pedersen";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
 
 export function PedersenCommitmentDemo() {
   const params = createPedersenParams();
@@ -70,121 +69,135 @@ export function PedersenCommitmentDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        Pedersen commitment: C = g^v * h^r mod p. It is perfectly hiding
-        (information-theoretically secure) and computationally binding. Unlike
-        hash commitments, it supports homomorphic addition.
+    <div className="flex flex-col gap-6">
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          Pedersen commitment: C = g^v * h^r mod p. It is perfectly hiding
+          (information-theoretically secure) and computationally binding. Unlike
+          hash commitments, it supports homomorphic addition.
+        </AlertDescription>
       </Alert>
 
-      <Paper p="md" withBorder>
-        <Stack gap="sm">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">
             Parameters (p=23, subgroup order q=11)
-          </Text>
-          <Group>
-            <Text size="sm">
-              g = <Code>{params.g.toString()}</Code>
-            </Text>
-            <Text size="sm">
-              h = <Code>{params.h.toString()}</Code>
-            </Text>
-          </Group>
-        </Stack>
-      </Paper>
+          </p>
+          <div className="flex items-center gap-4">
+            <p className="text-sm">
+              g = <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{params.g.toString()}</code>
+            </p>
+            <p className="text-sm">
+              h = <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{params.h.toString()}</code>
+            </p>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Create Commitment
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Value (v)"
-              value={value}
-              onChange={(v) => setValue(Number(v) || 0)}
-              min={0}
-              max={22}
-            />
-            <NumberInput
-              label="Randomness (r)"
-              value={randomness}
-              onChange={(v) => setRandomness(Number(v) || 0)}
-              min={0}
-              max={10}
-            />
-          </Group>
-          <Button onClick={handleCommit} variant="light">
-            Commit
-          </Button>
-        </Stack>
-      </Paper>
-
-      {commitment && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Text size="sm" fw={600}>
-              Commitment Result
-            </Text>
-            <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>g^v mod p</Table.Td>
-                  <Table.Td>
-                    <Code>{commitment.gPart.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>h^r mod p</Table.Td>
-                  <Table.Td>
-                    <Code>{commitment.hPart.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>C = g^v * h^r mod p</Table.Td>
-                  <Table.Td>
-                    <Code fw={700}>{commitment.commitment.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
-            </Table>
-
-            <Text size="sm" fw={600} mt="md">
-              Verify
-            </Text>
-            <Group grow>
-              <NumberInput
-                label="Value"
-                value={verifyVal}
-                onChange={(v) => setVerifyVal(Number(v) || 0)}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Create Commitment</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Value (v)</Label>
+              <Input
+                type="number"
+                value={value}
+                onChange={(e) => setValue(Number(e.target.value) || 0)}
                 min={0}
                 max={22}
               />
-              <NumberInput
-                label="Randomness"
-                value={verifyRand}
-                onChange={(v) => setVerifyRand(Number(v) || 0)}
+            </div>
+            <div>
+              <Label>Randomness (r)</Label>
+              <Input
+                type="number"
+                value={randomness}
+                onChange={(e) => setRandomness(Number(e.target.value) || 0)}
                 min={0}
                 max={10}
               />
-            </Group>
-            <Button onClick={handleVerify} variant="light" color="green">
+            </div>
+          </div>
+          <Button variant="secondary" onClick={handleCommit}>
+            Commit
+          </Button>
+        </div>
+      </div>
+
+      {commitment && (
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">Commitment Result</p>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell>g^v mod p</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{commitment.gPart.toString()}</code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>h^r mod p</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{commitment.hPart.toString()}</code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>C = g^v * h^r mod p</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono font-bold">{commitment.commitment.toString()}</code>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+
+            <p className="text-sm font-semibold mt-4">Verify</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Value</Label>
+                <Input
+                  type="number"
+                  value={verifyVal}
+                  onChange={(e) => setVerifyVal(Number(e.target.value) || 0)}
+                  min={0}
+                  max={22}
+                />
+              </div>
+              <div>
+                <Label>Randomness</Label>
+                <Input
+                  type="number"
+                  value={verifyRand}
+                  onChange={(e) => setVerifyRand(Number(e.target.value) || 0)}
+                  min={0}
+                  max={10}
+                />
+              </div>
+            </div>
+            <Button variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300" onClick={handleVerify}>
               Verify
             </Button>
             {verified !== null && (
-              <Badge variant="light" color={verified ? "green" : "red"}>
+              <Badge
+                variant="secondary"
+                className={
+                  verified
+                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                    : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                }
+              >
                 {verified ? "Valid" : "Invalid"}
               </Badge>
             )}
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Homomorphic Property
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Homomorphic Property</p>
           <svg width="100%" height={100} viewBox="0 0 500 100">
             <rect
               x={10}
@@ -192,8 +205,7 @@ export function PedersenCommitmentDemo() {
               width={100}
               height={50}
               rx={8}
-              fill="var(--mantine-color-blue-light)"
-              stroke="var(--mantine-color-blue-6)"
+              className="fill-blue-100 stroke-blue-500 dark:fill-blue-900 dark:stroke-blue-400"
               strokeWidth={1.5}
             />
             <text
@@ -201,7 +213,7 @@ export function PedersenCommitmentDemo() {
               y={45}
               textAnchor="middle"
               fontSize={11}
-              fill="var(--mantine-color-blue-9)"
+              className="fill-blue-900 dark:fill-blue-200"
             >
               C(a)
             </text>
@@ -210,7 +222,7 @@ export function PedersenCommitmentDemo() {
               y={62}
               textAnchor="middle"
               fontSize={10}
-              fill="var(--mantine-color-blue-7)"
+              className="fill-blue-700 dark:fill-blue-300"
             >
               g^a * h^r1
             </text>
@@ -220,7 +232,7 @@ export function PedersenCommitmentDemo() {
               textAnchor="middle"
               fontSize={18}
               fontWeight={700}
-              fill="var(--mantine-color-dimmed)"
+              className="fill-muted-foreground"
             >
               +
             </text>
@@ -230,8 +242,7 @@ export function PedersenCommitmentDemo() {
               width={100}
               height={50}
               rx={8}
-              fill="var(--mantine-color-violet-light)"
-              stroke="var(--mantine-color-violet-6)"
+              className="fill-violet-100 stroke-violet-500 dark:fill-violet-900 dark:stroke-violet-400"
               strokeWidth={1.5}
             />
             <text
@@ -239,7 +250,7 @@ export function PedersenCommitmentDemo() {
               y={45}
               textAnchor="middle"
               fontSize={11}
-              fill="var(--mantine-color-violet-9)"
+              className="fill-violet-900 dark:fill-violet-200"
             >
               C(b)
             </text>
@@ -248,7 +259,7 @@ export function PedersenCommitmentDemo() {
               y={62}
               textAnchor="middle"
               fontSize={10}
-              fill="var(--mantine-color-violet-7)"
+              className="fill-violet-700 dark:fill-violet-300"
             >
               g^b * h^r2
             </text>
@@ -258,7 +269,7 @@ export function PedersenCommitmentDemo() {
               textAnchor="middle"
               fontSize={18}
               fontWeight={700}
-              fill="var(--mantine-color-dimmed)"
+              className="fill-muted-foreground"
             >
               =
             </text>
@@ -268,8 +279,7 @@ export function PedersenCommitmentDemo() {
               width={180}
               height={50}
               rx={8}
-              fill="var(--mantine-color-green-light)"
-              stroke="var(--mantine-color-green-6)"
+              className="fill-green-100 stroke-green-500 dark:fill-green-900 dark:stroke-green-400"
               strokeWidth={1.5}
             />
             <text
@@ -277,7 +287,7 @@ export function PedersenCommitmentDemo() {
               y={45}
               textAnchor="middle"
               fontSize={11}
-              fill="var(--mantine-color-green-9)"
+              className="fill-green-900 dark:fill-green-200"
             >
               C(a+b)
             </text>
@@ -286,92 +296,85 @@ export function PedersenCommitmentDemo() {
               y={62}
               textAnchor="middle"
               fontSize={10}
-              fill="var(--mantine-color-green-7)"
+              className="fill-green-700 dark:fill-green-300"
             >
               g^(a+b) * h^(r1+r2)
             </text>
           </svg>
-          <Text size="sm" c="dimmed">
+          <p className="text-sm text-muted-foreground">
             commit(v1, r1) * commit(v2, r2) = commit(v1+v2, r1+r2)
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="v1"
-              value={v1}
-              onChange={(v) => setV1(Number(v) || 0)}
-              min={0}
-              max={10}
-            />
-            <NumberInput
-              label="r1"
-              value={r1}
-              onChange={(v) => setR1(Number(v) || 0)}
-              min={0}
-              max={10}
-            />
-            <NumberInput
-              label="v2"
-              value={v2}
-              onChange={(v) => setV2(Number(v) || 0)}
-              min={0}
-              max={10}
-            />
-            <NumberInput
-              label="r2"
-              value={r2}
-              onChange={(v) => setR2(Number(v) || 0)}
-              min={0}
-              max={10}
-            />
-          </Group>
-          <Button onClick={handleHomomorphic} variant="light" color="violet">
+          </p>
+          <div className="grid grid-cols-4 gap-4">
+            <div>
+              <Label>v1</Label>
+              <Input type="number" value={v1} onChange={(e) => setV1(Number(e.target.value) || 0)} min={0} max={10} />
+            </div>
+            <div>
+              <Label>r1</Label>
+              <Input type="number" value={r1} onChange={(e) => setR1(Number(e.target.value) || 0)} min={0} max={10} />
+            </div>
+            <div>
+              <Label>v2</Label>
+              <Input type="number" value={v2} onChange={(e) => setV2(Number(e.target.value) || 0)} min={0} max={10} />
+            </div>
+            <div>
+              <Label>r2</Label>
+              <Input type="number" value={r2} onChange={(e) => setR2(Number(e.target.value) || 0)} min={0} max={10} />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-violet-100 text-violet-800 hover:bg-violet-200 dark:bg-violet-900 dark:text-violet-300" onClick={handleHomomorphic}>
             Demonstrate
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {homoResult && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Text size="sm" fw={600}>
-              Homomorphic Result
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">Homomorphic Result</p>
             <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>C1 = commit(v1, r1)</Table.Td>
-                  <Table.Td>
-                    <Code>{homoResult.c1.commitment.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>C2 = commit(v2, r2)</Table.Td>
-                  <Table.Td>
-                    <Code>{homoResult.c2.commitment.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>C1 * C2 mod p</Table.Td>
-                  <Table.Td>
-                    <Code>{homoResult.product.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>commit(v1+v2, r1+r2)</Table.Td>
-                  <Table.Td>
-                    <Code>{homoResult.combined.toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
+              <TableBody>
+                <TableRow>
+                  <TableCell>C1 = commit(v1, r1)</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{homoResult.c1.commitment.toString()}</code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>C2 = commit(v2, r2)</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{homoResult.c2.commitment.toString()}</code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>C1 * C2 mod p</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{homoResult.product.toString()}</code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>commit(v1+v2, r1+r2)</TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{homoResult.combined.toString()}</code>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
             </Table>
-            <Badge variant="light" color={homoResult.matches ? "green" : "red"}>
+            <Badge
+              variant="secondary"
+              className={
+                homoResult.matches
+                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                  : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+              }
+            >
               {homoResult.matches
                 ? "Match — homomorphism verified!"
                 : "Mismatch"}
             </Badge>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 }

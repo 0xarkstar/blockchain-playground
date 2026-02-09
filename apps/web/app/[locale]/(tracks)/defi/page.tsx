@@ -1,103 +1,100 @@
 import { useTranslations } from "next-intl";
 import {
-  Container,
-  Title,
-  Text,
-  SimpleGrid,
-  Card,
-  Badge,
-  Group,
-  Stack,
-  ThemeIcon,
-  Divider,
-} from "@mantine/core";
-import {
-  IconArrowsExchange,
-  IconDroplet,
-  IconTrendingDown,
-  IconBuildingBank,
-  IconChartLine,
-  IconCoins,
-  IconBolt,
-  IconScale,
-  IconAntenna,
-  IconAlertTriangle,
-  IconCalculator,
-} from "@tabler/icons-react";
+  ArrowLeftRight,
+  Droplet,
+  TrendingDown,
+  Landmark,
+  LineChart,
+  Coins,
+  Zap,
+  Scale,
+  Radio,
+  AlertTriangle,
+  Calculator,
+} from "lucide-react";
+import { Badge } from "../../../../components/ui/badge";
+import { Card, CardContent } from "../../../../components/ui/card";
+import { Separator } from "../../../../components/ui/separator";
 
 const demos = [
   {
     key: "simpleSwap" as const,
     slug: "simple-swap",
-    icon: IconArrowsExchange,
+    icon: ArrowLeftRight,
     difficulty: "beginner",
   },
   {
     key: "liquidityPool" as const,
     slug: "liquidity-pool",
-    icon: IconDroplet,
+    icon: Droplet,
     difficulty: "beginner",
   },
   {
     key: "impermanentLoss" as const,
     slug: "impermanent-loss",
-    icon: IconTrendingDown,
+    icon: TrendingDown,
     difficulty: "beginner",
   },
   {
     key: "lendingProtocol" as const,
     slug: "lending-protocol",
-    icon: IconBuildingBank,
+    icon: Landmark,
     difficulty: "beginner",
   },
   {
     key: "interestRateExplorer" as const,
     slug: "interest-rate-explorer",
-    icon: IconChartLine,
+    icon: LineChart,
     difficulty: "beginner",
   },
   {
     key: "stakingRewards" as const,
     slug: "staking-rewards",
-    icon: IconCoins,
+    icon: Coins,
     difficulty: "intermediate",
   },
   {
     key: "flashLoan" as const,
     slug: "flash-loan",
-    icon: IconBolt,
+    icon: Zap,
     difficulty: "intermediate",
   },
   {
     key: "arbitrageSimulator" as const,
     slug: "arbitrage-simulator",
-    icon: IconScale,
+    icon: Scale,
     difficulty: "intermediate",
   },
   {
     key: "oraclePriceFeed" as const,
     slug: "oracle-price-feed",
-    icon: IconAntenna,
+    icon: Radio,
     difficulty: "intermediate",
   },
   {
     key: "liquidationSimulator" as const,
     slug: "liquidation-simulator",
-    icon: IconAlertTriangle,
+    icon: AlertTriangle,
     difficulty: "advanced",
   },
   {
     key: "yieldCalculator" as const,
     slug: "yield-calculator",
-    icon: IconCalculator,
+    icon: Calculator,
     difficulty: "advanced",
   },
 ] as const;
 
-const difficultyColors = {
-  beginner: "green",
-  intermediate: "yellow",
-  advanced: "red",
+const difficultyBadgeClass = {
+  beginner: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  intermediate: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  advanced: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+} as const;
+
+const difficultyIconClass = {
+  beginner: "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400",
+  intermediate: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-400",
+  advanced: "bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-400",
 } as const;
 
 export default function DefiPage() {
@@ -110,61 +107,56 @@ export default function DefiPage() {
   };
 
   return (
-    <Container size="lg" py="xl">
-      <Stack gap="xl">
+    <div className="container mx-auto max-w-5xl px-4 py-8">
+      <div className="flex flex-col gap-8">
         <div>
-          <Title order={1}>{t("pageTitle")}</Title>
-          <Text size="lg" c="dimmed" mt="xs">
+          <h1 className="text-3xl font-bold">{t("pageTitle")}</h1>
+          <p className="text-lg text-muted-foreground mt-1">
             {t("pageDescription")}
-          </Text>
+          </p>
         </div>
 
         {(["beginner", "intermediate", "advanced"] as const).map((level) => (
-          <Stack key={level} gap="md">
-            <Divider
-              label={
-                <Badge
-                  size="lg"
-                  variant="light"
-                  color={difficultyColors[level]}
-                >
-                  {t(level)}
-                </Badge>
-              }
-            />
-            <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
+          <div key={level} className="flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <Separator className="flex-1" />
+              <Badge variant="secondary" className={difficultyBadgeClass[level]}>
+                {t(level)}
+              </Badge>
+              <Separator className="flex-1" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {groups[level].map((demo) => (
-                <Card
+                <a
                   key={demo.slug}
-                  shadow="sm"
-                  padding="lg"
-                  radius="md"
-                  withBorder
-                  component="a"
                   href={`defi/demo/${demo.slug}`}
-                  style={{ cursor: "pointer" }}
+                  className="block"
                 >
-                  <Stack gap="sm">
-                    <Group justify="space-between">
-                      <ThemeIcon
-                        size="lg"
-                        variant="light"
-                        color={difficultyColors[demo.difficulty]}
-                      >
-                        <demo.icon size={20} />
-                      </ThemeIcon>
-                    </Group>
-                    <Title order={4}>{t(`demos.${demo.key}.title`)}</Title>
-                    <Text size="sm" c="dimmed">
-                      {t(`demos.${demo.key}.description`)}
-                    </Text>
-                  </Stack>
-                </Card>
+                  <Card className="h-full cursor-pointer transition-colors hover:bg-accent">
+                    <CardContent className="p-6">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <div
+                            className={`flex h-10 w-10 items-center justify-center rounded-lg ${difficultyIconClass[demo.difficulty]}`}
+                          >
+                            <demo.icon className="h-5 w-5" />
+                          </div>
+                        </div>
+                        <h4 className="text-lg font-semibold">
+                          {t(`demos.${demo.key}.title`)}
+                        </h4>
+                        <p className="text-sm text-muted-foreground">
+                          {t(`demos.${demo.key}.description`)}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </a>
               ))}
-            </SimpleGrid>
-          </Stack>
+            </div>
+          </div>
         ))}
-      </Stack>
-    </Container>
+      </div>
+    </div>
   );
 }

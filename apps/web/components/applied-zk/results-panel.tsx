@@ -1,6 +1,6 @@
 "use client";
 
-import { Stack, Text, Group, Badge, Paper, Code } from "@mantine/core";
+import { Badge } from "../ui/badge";
 
 function truncateHex(hex: string, chars: number = 10): string {
   if (hex.length <= chars * 2 + 2) return hex;
@@ -26,57 +26,63 @@ export function ResultsPanel({
   return (
     <>
       {nullifierHash && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Text fw={600} size="sm">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">
               Nullifier (Anti-Double-Vote)
-            </Text>
-            <Text size="xs" c="dimmed">
+            </p>
+            <p className="text-xs text-muted-foreground">
               The nullifier is derived from your secret and the proposal ID. If
               submitted twice, it will be detected and rejected. It does not
               reveal your identity.
-            </Text>
-            <Group gap="xs">
-              <Badge color="orange" variant="light">
+            </p>
+            <div className="flex items-center gap-1">
+              <Badge variant="secondary" className="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">
                 Unique per proposal
               </Badge>
-            </Group>
-            <Code block>{truncateHex(nullifierHash, 16)}</Code>
-          </Stack>
-        </Paper>
+            </div>
+            <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+              <code>{truncateHex(nullifierHash, 16)}</code>
+            </pre>
+          </div>
+        </div>
       )}
 
       {merkleRoot && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Text fw={600} size="sm">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold">
               Merkle Root (Voter Registry)
-            </Text>
-            <Code block>{truncateHex(merkleRoot, 16)}</Code>
-          </Stack>
-        </Paper>
+            </p>
+            <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+              <code>{truncateHex(merkleRoot, 16)}</code>
+            </pre>
+          </div>
+        </div>
       )}
 
       {proofResult && (
-        <Paper p="md" withBorder>
-          <Stack gap="sm">
-            <Group justify="space-between">
-              <Text fw={600} size="sm">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">
                 Vote Proof
-              </Text>
-              <Badge color="green" variant="light">
+              </p>
+              <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                 Generated
               </Badge>
-            </Group>
-            <Code block>
-              {`pi_a: [${proofResult.proof.pi_a
-                .slice(0, 2)
-                .map((v) => truncateHex(v, 8))
-                .join(", ")}]\n`}
-              {`public signals: ${proofResult.publicSignals.length} values`}
-            </Code>
-          </Stack>
-        </Paper>
+            </div>
+            <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+              <code>
+                {`pi_a: [${proofResult.proof.pi_a
+                  .slice(0, 2)
+                  .map((v) => truncateHex(v, 8))
+                  .join(", ")}]\n`}
+                {`public signals: ${proofResult.publicSignals.length} values`}
+              </code>
+            </pre>
+          </div>
+        </div>
       )}
     </>
   );

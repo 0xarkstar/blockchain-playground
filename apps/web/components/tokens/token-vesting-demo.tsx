@@ -1,20 +1,24 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Progress } from "../ui/progress";
 import {
-  Stack,
-  Paper,
-  TextInput,
-  NumberInput,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
   Select,
-  Progress,
-} from "@mantine/core";
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
 import {
   createVestingSchedule,
   getVestingInfo,
@@ -63,155 +67,176 @@ export function TokenVestingDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Vesting Configuration
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Beneficiary"
-              value={beneficiary}
-              onChange={(e) => setBeneficiary(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Total Amount"
-              value={totalAmount}
-              onChange={(v) => setTotalAmount(Number(v) || 0)}
-              min={1}
-            />
-            <Select
-              label="Type"
-              value={vestingType}
-              onChange={(v) => setVestingType((v as VestingType) ?? "linear")}
-              data={[
-                { value: "linear", label: "Linear" },
-                { value: "cliff", label: "Cliff" },
-                { value: "graded", label: "Graded" },
-              ]}
-            />
-          </Group>
-          <Group grow>
-            <NumberInput
-              label="Start Time"
-              value={startTime}
-              onChange={(v) => setStartTime(Number(v) || 0)}
-              min={0}
-            />
-            <NumberInput
-              label="Cliff Duration"
-              value={cliffDuration}
-              onChange={(v) => setCliffDuration(Number(v) || 0)}
-              min={0}
-            />
-            <NumberInput
-              label="Total Duration"
-              value={totalDuration}
-              onChange={(v) => setTotalDuration(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Button onClick={handleCreate} variant="light">
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Vesting Configuration</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>Beneficiary</Label>
+              <Input
+                value={beneficiary}
+                onChange={(e) => setBeneficiary(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Total Amount</Label>
+              <Input
+                type="number"
+                value={totalAmount}
+                onChange={(e) => setTotalAmount(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+            <div>
+              <Label>Type</Label>
+              <Select
+                value={vestingType}
+                onValueChange={(v) => setVestingType(v as VestingType)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="linear">Linear</SelectItem>
+                  <SelectItem value="cliff">Cliff</SelectItem>
+                  <SelectItem value="graded">Graded</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>Start Time</Label>
+              <Input
+                type="number"
+                value={startTime}
+                onChange={(e) => setStartTime(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+            <div>
+              <Label>Cliff Duration</Label>
+              <Input
+                type="number"
+                value={cliffDuration}
+                onChange={(e) => setCliffDuration(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+            <div>
+              <Label>Total Duration</Label>
+              <Input
+                type="number"
+                value={totalDuration}
+                onChange={(e) => setTotalDuration(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" onClick={handleCreate}>
             Create Schedule
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Time Control
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Current Time"
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Time Control</p>
+          <div>
+            <Label>Current Time</Label>
+            <Input
+              type="number"
               value={currentTime}
-              onChange={(v) => setCurrentTime(Number(v) || 0)}
+              onChange={(e) => setCurrentTime(Number(e.target.value) || 0)}
               min={0}
             />
-          </Group>
-          <Button onClick={handleRelease} variant="light" color="green">
+          </div>
+          <Button variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800" onClick={handleRelease}>
             Release Tokens
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Vesting Status
-            </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Vesting Status</p>
             <Badge
-              variant="light"
-              color={info.isFullyVested ? "green" : "blue"}
+              variant="secondary"
+              className={
+                info.isFullyVested
+                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                  : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+              }
             >
               {info.isFullyVested
                 ? "Fully Vested"
                 : `${info.vestedPercent.toFixed(1)}% Vested`}
             </Badge>
-          </Group>
-          <Progress value={info.vestedPercent} color="blue" size="lg" />
+          </div>
+          <Progress value={info.vestedPercent} className="h-3" />
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Beneficiary</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{schedule.beneficiary}</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Type</Table.Td>
-                <Table.Td ta="right">
-                  <Badge variant="light">{schedule.vestingType}</Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Cliff Reached</Table.Td>
-                <Table.Td ta="right">
+            <TableBody>
+              <TableRow>
+                <TableCell>Beneficiary</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{schedule.beneficiary}</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Type</TableCell>
+                <TableCell className="text-right">
+                  <Badge variant="secondary">{schedule.vestingType}</Badge>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Cliff Reached</TableCell>
+                <TableCell className="text-right">
                   <Badge
-                    color={info.isCliffReached ? "green" : "red"}
-                    variant="light"
+                    variant="secondary"
+                    className={
+                      info.isCliffReached
+                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                        : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                    }
                   >
                     {info.isCliffReached ? "Yes" : "No"}
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Vested Amount</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{info.vestedAmount}</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Released</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{schedule.released}</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Releasable</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{info.releasableAmount}</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Remaining</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{info.remainingAmount}</Code>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Vested Amount</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{info.vestedAmount}</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Released</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{schedule.released}</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Releasable</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{info.releasableAmount}</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Remaining</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{info.remainingAmount}</code>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Vesting Curve
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Vesting Curve</p>
           <SimpleAreaChart
             data={curve.map((point) => ({
               time: `Day ${point.time}`,
@@ -222,8 +247,8 @@ export function TokenVestingDemo() {
             yKeys={["Vested Amount"]}
             height={280}
           />
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 }

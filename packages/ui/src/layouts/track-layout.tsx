@@ -1,15 +1,5 @@
 "use client";
 
-import {
-  Container,
-  Title,
-  Text,
-  Tabs,
-  Stack,
-  Badge,
-  Group,
-} from "@mantine/core";
-import { IconBook, IconPlayerPlay } from "@tabler/icons-react";
 import type { ReactNode } from "react";
 
 interface TrackLayoutProps {
@@ -28,51 +18,24 @@ export function TrackLayout({
   demoCount,
   moduleCount,
   children,
-  theoryTab,
-  demoTab,
 }: TrackLayoutProps) {
   return (
-    <Container size="lg" py="xl">
-      <Stack gap="lg">
+    <div className="container mx-auto max-w-5xl px-4 py-8">
+      <div className="flex flex-col gap-6">
         <div>
-          <Title order={1}>{title}</Title>
-          <Text size="lg" c="dimmed" mt="xs">
-            {description}
-          </Text>
-          <Group mt="sm" gap="xs">
-            <Badge variant="light" color="blue">
+          <h1 className="text-3xl font-bold">{title}</h1>
+          <p className="text-lg text-muted-foreground mt-1">{description}</p>
+          <div className="flex gap-2 mt-3">
+            <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
               {demoCount} Demos
-            </Badge>
-            <Badge variant="light" color="green">
+            </span>
+            <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
               {moduleCount} Modules
-            </Badge>
-          </Group>
+            </span>
+          </div>
         </div>
-
-        {theoryTab || demoTab ? (
-          <Tabs defaultValue="demos">
-            <Tabs.List>
-              <Tabs.Tab
-                value="demos"
-                leftSection={<IconPlayerPlay size={16} />}
-              >
-                Demos
-              </Tabs.Tab>
-              <Tabs.Tab value="theory" leftSection={<IconBook size={16} />}>
-                Theory
-              </Tabs.Tab>
-            </Tabs.List>
-            <Tabs.Panel value="demos" pt="md">
-              {demoTab ?? children}
-            </Tabs.Panel>
-            <Tabs.Panel value="theory" pt="md">
-              {theoryTab}
-            </Tabs.Panel>
-          </Tabs>
-        ) : (
-          children
-        )}
-      </Stack>
-    </Container>
+        {children}
+      </div>
+    </div>
   );
 }

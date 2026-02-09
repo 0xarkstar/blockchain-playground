@@ -1,18 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import {
-  Stack,
-  Button,
-  Alert,
-  Code,
-  Text,
-  Group,
-  Badge,
-  Paper,
-  Tabs,
-} from "@mantine/core";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { Check, X } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ProgressPipeline, EducationPanel } from "../shared";
 import { AirdropSetupPanel } from "./airdrop-setup-panel";
@@ -33,6 +22,10 @@ import {
   MerkleTree,
   formatMerkleProofForCircuit,
 } from "../../lib/applied-zk/merkle";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 type DemoPhase =
   | "setup"
@@ -294,37 +287,33 @@ export function PrivateAirdropDemo() {
 
   return (
     <Tabs defaultValue="demo">
-      <Tabs.List>
-        <Tabs.Tab value="demo">Demo</Tabs.Tab>
-        <Tabs.Tab value="learn">Learn</Tabs.Tab>
-      </Tabs.List>
+      <TabsList>
+        <TabsTrigger value="demo">Demo</TabsTrigger>
+        <TabsTrigger value="learn">Learn</TabsTrigger>
+      </TabsList>
 
-      <Tabs.Panel value="demo" pt="md">
-        <Stack gap="md">
-          <Group justify="space-between">
+      <TabsContent value="demo" className="mt-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
             <ConnectButton />
-            <Button variant="subtle" size="xs" onClick={handleReset}>
+            <Button variant="ghost" size="sm" onClick={handleReset}>
               Reset
             </Button>
-          </Group>
+          </div>
 
-          <Paper p="sm" withBorder>
+          <div className="rounded-lg border border-border bg-card p-3">
             <ProgressPipeline
               steps={pipelineSteps}
               currentStepIndex={getPipelineIndex(phase)}
               stepStatuses={getPipelineStatuses(phase)}
               showElapsedTime={phase === "proving" || phase === "verifying"}
             />
-          </Paper>
+          </div>
 
           {error && (
-            <Alert
-              color="red"
-              icon={<IconX size={16} />}
-              withCloseButton
-              onClose={() => setError("")}
-            >
-              {error}
+            <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+              <X className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
@@ -355,44 +344,45 @@ export function PrivateAirdropDemo() {
           />
 
           {proofResult && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Group justify="space-between">
-                  <Text fw={600} size="sm">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold">
                     Claim Proof
-                  </Text>
-                  <Badge color="green" variant="light">
+                  </p>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                     Generated
                   </Badge>
-                </Group>
-                <Code block>
-                  {`pi_a: [${proofResult.proof.pi_a
-                    .slice(0, 2)
-                    .map((v) => truncateHex(v, 8))
-                    .join(", ")}]\n`}
-                  {`public signals: ${proofResult.publicSignals.length} values\n`}
-                  {`nullifier + root = public, address = private`}
-                </Code>
-              </Stack>
-            </Paper>
+                </div>
+                <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+                  <code>
+                    {`pi_a: [${proofResult.proof.pi_a
+                      .slice(0, 2)
+                      .map((v) => truncateHex(v, 8))
+                      .join(", ")}]\n`}
+                    {`public signals: ${proofResult.publicSignals.length} values\n`}
+                    {`nullifier + root = public, address = private`}
+                  </code>
+                </pre>
+              </div>
+            </div>
           )}
 
           {proofResult && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-semibold">
                   Step 4: Verify & Claim
-                </Text>
+                </p>
                 <Button
                   onClick={handleVerifyProof}
-                  loading={phase === "verifying"}
                   disabled={phase === "verifying"}
-                  color={
+                  className={
                     verificationResult === true
-                      ? "green"
+                      ? "bg-green-600 hover:bg-green-700"
                       : verificationResult === false
-                        ? "red"
-                        : "blue"
+                        ? "bg-red-600 hover:bg-red-700"
+                        : ""
                   }
                 >
                   {verificationResult === null
@@ -402,28 +392,30 @@ export function PrivateAirdropDemo() {
                       : "Verification Failed"}
                 </Button>
                 {verificationResult !== null && (
-                  <Alert
-                    color={verificationResult ? "green" : "red"}
-                    icon={
-                      verificationResult ? (
-                        <IconCheck size={16} />
-                      ) : (
-                        <IconX size={16} />
-                      )
-                    }
-                  >
-                    {verificationResult
-                      ? "Claim verified! The claimer proved eligibility without revealing their address. The nullifier prevents double-claiming."
-                      : "Claim verification failed. The proof is invalid."}
+                  <Alert className={
+                    verificationResult
+                      ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
+                      : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
+                  }>
+                    {verificationResult ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <X className="h-4 w-4" />
+                    )}
+                    <AlertDescription>
+                      {verificationResult
+                        ? "Claim verified! The claimer proved eligibility without revealing their address. The nullifier prevents double-claiming."
+                        : "Claim verification failed. The proof is invalid."}
+                    </AlertDescription>
                   </Alert>
                 )}
-              </Stack>
-            </Paper>
+              </div>
+            </div>
           )}
-        </Stack>
-      </Tabs.Panel>
+        </div>
+      </TabsContent>
 
-      <Tabs.Panel value="learn" pt="md">
+      <TabsContent value="learn" className="mt-4">
         <EducationPanel
           howItWorks={[
             {
@@ -463,7 +455,7 @@ export function PrivateAirdropDemo() {
           ]}
           defaultExpanded
         />
-      </Tabs.Panel>
+      </TabsContent>
     </Tabs>
   );
 }

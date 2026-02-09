@@ -1,7 +1,17 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Stack, NumberInput, Slider, Text, Paper, Table } from "@mantine/core";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Slider } from "../ui/slider";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import { calculateImpermanentLoss } from "../../lib/defi/amm";
 import { SimpleAreaChart, EducationPanel } from "../../components/shared";
 
@@ -10,16 +20,10 @@ export function ImpermanentLossDemo() {
   const [priceRatio, setPriceRatio] = useState<number>(1);
 
   const result = useMemo(() => {
-    // 50/50 pool: each side gets half the initial value
     const halfValue = totalValue / 2;
     const il = calculateImpermanentLoss(priceRatio);
-
-    // HODL value: token A changes by priceRatio, token B stays
     const hodlValue = halfValue * priceRatio + halfValue;
-
-    // LP value = hodlValue * (1 + IL) for a 50/50 pool
     const lpValue = hodlValue * (1 + il);
-
     const difference = lpValue - hodlValue;
     const ilPercent = il * 100;
 
@@ -43,12 +47,10 @@ export function ImpermanentLossDemo() {
   }, []);
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Impermanent Loss Curve
-          </Text>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Impermanent Loss Curve</p>
           <SimpleAreaChart
             data={ilCurveData}
             xKey="ratio"
@@ -56,127 +58,125 @@ export function ImpermanentLossDemo() {
             colors={["#fa5252"]}
             height={250}
           />
-          <Text size="xs" c="dimmed" ta="center">
+          <p className="text-xs text-muted-foreground text-center">
             IL % (y-axis) vs Price Ratio Change (x-axis). Loss increases with
             divergence from 1x.
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Initial Position (50/50 Pool)
-          </Text>
-          <NumberInput
-            label="Total Position Value (USD)"
-            description="Automatically split equally between Token A and Token B"
-            value={totalValue}
-            onChange={(v) => setTotalValue(Number(v) || 0)}
-            min={0}
-            thousandSeparator=","
-            prefix="$"
-          />
-          <Text size="xs" c="dimmed">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Initial Position (50/50 Pool)</p>
+          <div>
+            <Label>Total Position Value (USD)</Label>
+            <p className="text-xs text-muted-foreground mb-1">
+              Automatically split equally between Token A and Token B
+            </p>
+            <Input
+              type="number"
+              value={totalValue}
+              onChange={(e) => setTotalValue(Number(e.target.value) || 0)}
+              min={0}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">
             Token A: ${result.halfValue.toLocaleString()} | Token B: $
             {result.halfValue.toLocaleString()}
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Price Ratio Change: {priceRatio.toFixed(2)}x
-          </Text>
-          <Text size="xs" c="dimmed">
+          </p>
+          <p className="text-xs text-muted-foreground">
             How much Token A price has changed relative to Token B
-          </Text>
+          </p>
           <Slider
-            value={priceRatio}
-            onChange={setPriceRatio}
+            value={[priceRatio]}
+            onValueChange={([v]) => setPriceRatio(v)}
             min={0.1}
             max={10}
             step={0.1}
-            marks={[
-              { value: 0.1, label: "0.1x" },
-              { value: 1, label: "1x" },
-              { value: 2, label: "2x" },
-              { value: 5, label: "5x" },
-              { value: 10, label: "10x" },
-            ]}
-            label={(v) => `${v.toFixed(1)}x`}
           />
-        </Stack>
-      </Paper>
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>0.1x</span>
+            <span>1x</span>
+            <span>2x</span>
+            <span>5x</span>
+            <span>10x</span>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Comparison
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Comparison</p>
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Metric</Table.Th>
-                <Table.Th ta="right">Value</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Initial Value</Table.Td>
-                <Table.Td ta="right">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Metric</TableHead>
+                <TableHead className="text-right">Value</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>Initial Value</TableCell>
+                <TableCell className="text-right">
                   $
                   {totalValue.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>HODL Value</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>HODL Value</TableCell>
+                <TableCell className="text-right">
                   $
                   {result.hodlValue.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>LP Value</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>LP Value</TableCell>
+                <TableCell className="text-right">
                   $
                   {result.lpValue.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Difference (LP - HODL)</Table.Td>
-                <Table.Td ta="right">
-                  <Text c={result.difference < 0 ? "red" : "green"} fw={600}>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Difference (LP - HODL)</TableCell>
+                <TableCell className="text-right">
+                  <span className={`font-semibold ${result.difference < 0 ? "text-red-600" : "text-green-600"}`}>
                     $
                     {result.difference.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })}
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Impermanent Loss</Table.Td>
-                <Table.Td ta="right">
-                  <Text c="red" fw={600}>
+                  </span>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Impermanent Loss</TableCell>
+                <TableCell className="text-right">
+                  <span className="font-semibold text-red-600">
                     {result.ilPercent.toFixed(2)}%
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                  </span>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -203,6 +203,6 @@ export function ImpermanentLossDemo() {
           "Concentrated liquidity (Uniswap v3) amplifies both fees AND IL",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

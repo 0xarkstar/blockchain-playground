@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Stack, Button, Alert, Group, Paper, Tabs } from "@mantine/core";
-import { IconX } from "@tabler/icons-react";
+import { X } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ProgressPipeline, EducationPanel } from "../shared";
 import { CredentialPanel } from "./credential-panel";
@@ -13,6 +12,9 @@ import {
   type ProofGenerationResult,
 } from "../../lib/applied-zk/snarkjs";
 import { poseidonHash, bigintToHex } from "../../lib/applied-zk/poseidon";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Button } from "../ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 type DemoPhase =
   | "input"
@@ -206,37 +208,33 @@ export function AgeVerificationDemo() {
 
   return (
     <Tabs defaultValue="demo">
-      <Tabs.List>
-        <Tabs.Tab value="demo">Demo</Tabs.Tab>
-        <Tabs.Tab value="learn">Learn</Tabs.Tab>
-      </Tabs.List>
+      <TabsList>
+        <TabsTrigger value="demo">Demo</TabsTrigger>
+        <TabsTrigger value="learn">Learn</TabsTrigger>
+      </TabsList>
 
-      <Tabs.Panel value="demo" pt="md">
-        <Stack gap="md">
-          <Group justify="space-between">
+      <TabsContent value="demo" className="mt-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
             <ConnectButton />
-            <Button variant="subtle" size="xs" onClick={handleReset}>
+            <Button variant="ghost" size="sm" onClick={handleReset}>
               Reset
             </Button>
-          </Group>
+          </div>
 
-          <Paper p="sm" withBorder>
+          <div className="rounded-lg border border-border bg-card p-3">
             <ProgressPipeline
               steps={pipelineSteps}
               currentStepIndex={getPipelineIndex(phase)}
               stepStatuses={getPipelineStatuses(phase)}
               showElapsedTime={phase === "proving" || phase === "verifying"}
             />
-          </Paper>
+          </div>
 
           {error && (
-            <Alert
-              color="red"
-              icon={<IconX size={16} />}
-              withCloseButton
-              onClose={() => setError("")}
-            >
-              {error}
+            <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+              <X className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
@@ -265,10 +263,10 @@ export function AgeVerificationDemo() {
             onGenerateProof={handleGenerateProof}
             onVerifyProof={handleVerifyProof}
           />
-        </Stack>
-      </Tabs.Panel>
+        </div>
+      </TabsContent>
 
-      <Tabs.Panel value="learn" pt="md">
+      <TabsContent value="learn" className="mt-4">
         <EducationPanel
           howItWorks={[
             {
@@ -307,7 +305,7 @@ export function AgeVerificationDemo() {
           ]}
           defaultExpanded
         />
-      </Tabs.Panel>
+      </TabsContent>
     </Tabs>
   );
 }

@@ -1,28 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import {
-  Stack,
-  TextInput,
-  Button,
-  Alert,
-  Code,
-  Text,
-  Group,
-  Badge,
-  Paper,
-  Tabs,
-  CopyButton,
-  ActionIcon,
-  Tooltip,
-} from "@mantine/core";
-import {
-  IconCheck,
-  IconX,
-  IconHash,
-  IconCopy,
-  IconLoader2,
-} from "@tabler/icons-react";
+import { Check, X, Hash, Copy, Loader2 } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { ProgressPipeline } from "../shared";
 import { EducationPanel } from "../shared";
@@ -32,6 +11,12 @@ import {
   type ProofGenerationResult,
 } from "../../lib/applied-zk/snarkjs";
 import { poseidonHashSingle, bigintToHex } from "../../lib/applied-zk/poseidon";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 type DemoPhase =
   | "input"
@@ -110,6 +95,13 @@ export function HashPreimageDemo() {
   );
   const [error, setError] = useState("");
   const [progressMessage, setProgressMessage] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(poseidonHash);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleHash = useCallback(async () => {
     try {
@@ -187,207 +179,203 @@ export function HashPreimageDemo() {
 
   return (
     <Tabs defaultValue="demo">
-      <Tabs.List>
-        <Tabs.Tab value="demo">Demo</Tabs.Tab>
-        <Tabs.Tab value="learn">Learn</Tabs.Tab>
-      </Tabs.List>
+      <TabsList>
+        <TabsTrigger value="demo">Demo</TabsTrigger>
+        <TabsTrigger value="learn">Learn</TabsTrigger>
+      </TabsList>
 
-      <Tabs.Panel value="demo" pt="md">
-        <Stack gap="md">
-          <Group justify="space-between">
+      <TabsContent value="demo" className="mt-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
             <ConnectButton />
-            <Button variant="subtle" size="xs" onClick={handleReset}>
+            <Button variant="ghost" size="sm" onClick={handleReset}>
               Reset
             </Button>
-          </Group>
+          </div>
 
-          <Paper p="sm" withBorder>
+          <div className="rounded-lg border border-border bg-card p-3">
             <ProgressPipeline
               steps={pipelineSteps}
               currentStepIndex={getPipelineIndex(phase)}
               stepStatuses={getPipelineStatuses(phase)}
               showElapsedTime={phase === "proving" || phase === "verifying"}
             />
-          </Paper>
+          </div>
 
           {error && (
-            <Alert
-              color="red"
-              icon={<IconX size={16} />}
-              withCloseButton
-              onClose={() => setError("")}
-            >
-              {error}
+            <Alert className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+              <X className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text fw={600} size="sm">
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold">
                 Step 1: Enter Secret
-              </Text>
-              <TextInput
-                label="Secret number"
-                description="The value you want to prove knowledge of without revealing it"
-                value={secretInput}
-                onChange={(e) => setSecretInput(e.currentTarget.value)}
-                placeholder="Enter a number"
-                disabled={phase !== "input"}
-              />
+              </p>
+              <div>
+                <Label>Secret number</Label>
+                <p className="text-xs text-muted-foreground mb-1">
+                  The value you want to prove knowledge of without revealing it
+                </p>
+                <Input
+                  value={secretInput}
+                  onChange={(e) => setSecretInput(e.target.value)}
+                  placeholder="Enter a number"
+                  disabled={phase !== "input"}
+                />
+              </div>
               <Button
                 onClick={handleHash}
                 disabled={phase !== "input" || !secretInput}
-                leftSection={<IconHash size={16} />}
               >
+                <Hash className="mr-2 h-4 w-4" />
                 Compute Poseidon Hash
               </Button>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
           {poseidonHash && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-semibold">
                   Step 2: Poseidon Hash (Public)
-                </Text>
-                <Group gap="xs">
-                  <Badge color="blue" variant="light">
+                </p>
+                <div className="flex items-center gap-1">
+                  <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                     Public Output
                   </Badge>
-                  <Text size="xs" c="dimmed">
+                  <p className="text-xs text-muted-foreground">
                     This hash is shared publicly. The secret remains private.
-                  </Text>
-                </Group>
-                <Group gap="xs">
-                  <Code block style={{ flex: 1 }}>
-                    {truncateHex(poseidonHash, 16)}
-                  </Code>
-                  <CopyButton value={poseidonHash}>
-                    {({ copied, copy }) => (
-                      <Tooltip label={copied ? "Copied" : "Copy"}>
-                        <ActionIcon variant="subtle" onClick={copy}>
-                          {copied ? (
-                            <IconCheck size={16} />
-                          ) : (
-                            <IconCopy size={16} />
-                          )}
-                        </ActionIcon>
-                      </Tooltip>
+                  </p>
+                </div>
+                <div className="flex items-center gap-1">
+                  <pre className="flex-1 rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+                    <code>{truncateHex(poseidonHash, 16)}</code>
+                  </pre>
+                  <Button variant="ghost" size="icon" onClick={handleCopy} title={copied ? "Copied" : "Copy"}>
+                    {copied ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
                     )}
-                  </CopyButton>
-                </Group>
-              </Stack>
-            </Paper>
+                  </Button>
+                </div>
+              </div>
+            </div>
           )}
 
           {poseidonHash && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-semibold">
                   Step 3: Generate ZK Proof
-                </Text>
-                <Text size="xs" c="dimmed">
+                </p>
+                <p className="text-xs text-muted-foreground">
                   Generate a Groth16 proof that you know the preimage of the
                   hash, without revealing the secret.
-                </Text>
+                </p>
                 {progressMessage && (
-                  <Group gap="xs">
-                    <IconLoader2 size={14} className="animate-spin" />
-                    <Text size="xs" c="blue">
+                  <div className="flex items-center gap-1">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    <p className="text-xs text-blue-600 dark:text-blue-400">
                       {progressMessage}
-                    </Text>
-                  </Group>
+                    </p>
+                  </div>
                 )}
                 <Button
                   onClick={handleGenerateProof}
-                  loading={phase === "proving"}
-                  disabled={
-                    phase !== "proving" &&
-                    phase !== "proved" &&
-                    phase !== "verified"
-                  }
+                  disabled={phase !== "proved" && phase !== "verified"}
                 >
                   Generate Proof
                 </Button>
-              </Stack>
-            </Paper>
+              </div>
+            </div>
           )}
 
           {proofResult && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Group justify="space-between">
-                  <Text fw={600} size="sm">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold">
                     Proof Data
-                  </Text>
-                  <Badge color="green" variant="light">
+                  </p>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                     Generated
                   </Badge>
-                </Group>
-                <Stack gap="xs">
-                  <Text size="xs" fw={500}>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <p className="text-xs font-medium">
                     pi_a (2 elements):
-                  </Text>
-                  <Code block>
-                    {proofResult.proof.pi_a
-                      .slice(0, 2)
-                      .map((v) => truncateHex(v, 12))
-                      .join("\n")}
-                  </Code>
-                  <Text size="xs" fw={500}>
+                  </p>
+                  <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+                    <code>
+                      {proofResult.proof.pi_a
+                        .slice(0, 2)
+                        .map((v) => truncateHex(v, 12))
+                        .join("\n")}
+                    </code>
+                  </pre>
+                  <p className="text-xs font-medium">
                     pi_b (2x2 elements):
-                  </Text>
-                  <Code block>
-                    {proofResult.proof.pi_b
-                      .slice(0, 2)
-                      .map(
-                        (row) =>
-                          `[${row.map((v) => truncateHex(v, 8)).join(", ")}]`,
-                      )
-                      .join("\n")}
-                  </Code>
-                  <Text size="xs" fw={500}>
+                  </p>
+                  <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+                    <code>
+                      {proofResult.proof.pi_b
+                        .slice(0, 2)
+                        .map(
+                          (row) =>
+                            `[${row.map((v) => truncateHex(v, 8)).join(", ")}]`,
+                        )
+                        .join("\n")}
+                    </code>
+                  </pre>
+                  <p className="text-xs font-medium">
                     pi_c (2 elements):
-                  </Text>
-                  <Code block>
-                    {proofResult.proof.pi_c
-                      .slice(0, 2)
-                      .map((v) => truncateHex(v, 12))
-                      .join("\n")}
-                  </Code>
-                  <Text size="xs" fw={500}>
+                  </p>
+                  <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+                    <code>
+                      {proofResult.proof.pi_c
+                        .slice(0, 2)
+                        .map((v) => truncateHex(v, 12))
+                        .join("\n")}
+                    </code>
+                  </pre>
+                  <p className="text-xs font-medium">
                     Public Signals:
-                  </Text>
-                  <Code block>
-                    {proofResult.publicSignals
-                      .map((s) => truncateHex(s, 16))
-                      .join("\n")}
-                  </Code>
-                </Stack>
-              </Stack>
-            </Paper>
+                  </p>
+                  <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
+                    <code>
+                      {proofResult.publicSignals
+                        .map((s) => truncateHex(s, 16))
+                        .join("\n")}
+                    </code>
+                  </pre>
+                </div>
+              </div>
+            </div>
           )}
 
           {proofResult && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Text fw={600} size="sm">
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-semibold">
                   Step 4: Verify Proof
-                </Text>
-                <Text size="xs" c="dimmed">
+                </p>
+                <p className="text-xs text-muted-foreground">
                   Verify the proof using the verification key. No secret
                   knowledge needed.
-                </Text>
+                </p>
                 <Button
                   onClick={handleVerifyProof}
-                  loading={phase === "verifying"}
                   disabled={phase === "verifying"}
-                  color={
+                  className={
                     verificationResult === true
-                      ? "green"
+                      ? "bg-green-600 hover:bg-green-700"
                       : verificationResult === false
-                        ? "red"
-                        : "blue"
+                        ? "bg-red-600 hover:bg-red-700"
+                        : ""
                   }
                 >
                   {verificationResult === null
@@ -397,28 +385,30 @@ export function HashPreimageDemo() {
                       : "Proof Invalid"}
                 </Button>
                 {verificationResult !== null && (
-                  <Alert
-                    color={verificationResult ? "green" : "red"}
-                    icon={
-                      verificationResult ? (
-                        <IconCheck size={16} />
-                      ) : (
-                        <IconX size={16} />
-                      )
-                    }
-                  >
-                    {verificationResult
-                      ? "The proof is valid! The prover knows the secret preimage without revealing it."
-                      : "The proof is invalid. The prover does not know the correct preimage."}
+                  <Alert className={
+                    verificationResult
+                      ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
+                      : "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950"
+                  }>
+                    {verificationResult ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <X className="h-4 w-4" />
+                    )}
+                    <AlertDescription>
+                      {verificationResult
+                        ? "The proof is valid! The prover knows the secret preimage without revealing it."
+                        : "The proof is invalid. The prover does not know the correct preimage."}
+                    </AlertDescription>
                   </Alert>
                 )}
-              </Stack>
-            </Paper>
+              </div>
+            </div>
           )}
-        </Stack>
-      </Tabs.Panel>
+        </div>
+      </TabsContent>
 
-      <Tabs.Panel value="learn" pt="md">
+      <TabsContent value="learn" className="mt-4">
         <EducationPanel
           howItWorks={[
             {
@@ -459,7 +449,7 @@ export function HashPreimageDemo() {
           ]}
           defaultExpanded
         />
-      </Tabs.Panel>
+      </TabsContent>
     </Tabs>
   );
 }

@@ -1,103 +1,100 @@
 import { useTranslations } from "next-intl";
 import {
-  Container,
-  Title,
-  Text,
-  SimpleGrid,
-  Card,
-  Badge,
-  Group,
-  Stack,
-  ThemeIcon,
-  Divider,
-} from "@mantine/core";
-import {
-  IconCoin,
-  IconArrowsLeftRight,
-  IconPhoto,
-  IconStack2,
-  IconClock,
-  IconFileDescription,
-  IconBuildingStore,
-  IconTrendingDown,
-  IconCrown,
-  IconScale,
-  IconLink,
-} from "@tabler/icons-react";
+  Coins,
+  ArrowLeftRight,
+  Image,
+  Layers,
+  Clock,
+  FileText,
+  Store,
+  TrendingDown,
+  Crown,
+  Scale,
+  Link,
+} from "lucide-react";
+import { Badge } from "../../../../components/ui/badge";
+import { Card, CardContent } from "../../../../components/ui/card";
+import { Separator } from "../../../../components/ui/separator";
 
 const demos = [
   {
     key: "erc20Creator" as const,
     slug: "erc20-creator",
-    icon: IconCoin,
+    icon: Coins,
     difficulty: "beginner",
   },
   {
     key: "tokenAllowance" as const,
     slug: "token-allowance",
-    icon: IconArrowsLeftRight,
+    icon: ArrowLeftRight,
     difficulty: "beginner",
   },
   {
     key: "erc721Minter" as const,
     slug: "erc721-minter",
-    icon: IconPhoto,
+    icon: Image,
     difficulty: "beginner",
   },
   {
     key: "erc1155MultiToken" as const,
     slug: "erc1155-multi-token",
-    icon: IconStack2,
+    icon: Layers,
     difficulty: "beginner",
   },
   {
     key: "tokenVesting" as const,
     slug: "token-vesting",
-    icon: IconClock,
+    icon: Clock,
     difficulty: "intermediate",
   },
   {
     key: "nftMetadata" as const,
     slug: "nft-metadata",
-    icon: IconFileDescription,
+    icon: FileText,
     difficulty: "intermediate",
   },
   {
     key: "nftMarketplace" as const,
     slug: "nft-marketplace",
-    icon: IconBuildingStore,
+    icon: Store,
     difficulty: "intermediate",
   },
   {
     key: "dutchAuction" as const,
     slug: "dutch-auction",
-    icon: IconTrendingDown,
+    icon: TrendingDown,
     difficulty: "intermediate",
   },
   {
     key: "eip2981Royalties" as const,
     slug: "eip2981-royalties",
-    icon: IconCrown,
+    icon: Crown,
     difficulty: "advanced",
   },
   {
     key: "tokenGovernance" as const,
     slug: "token-governance",
-    icon: IconScale,
+    icon: Scale,
     difficulty: "advanced",
   },
   {
     key: "soulboundTokens" as const,
     slug: "soulbound-tokens",
-    icon: IconLink,
+    icon: Link,
     difficulty: "advanced",
   },
 ] as const;
 
 const difficultyColors = {
-  beginner: "green",
-  intermediate: "yellow",
-  advanced: "red",
+  beginner: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  intermediate: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  advanced: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+} as const;
+
+const iconBgColors = {
+  beginner: "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400",
+  intermediate: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-400",
+  advanced: "bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-400",
 } as const;
 
 export default function TokensPage() {
@@ -110,61 +107,55 @@ export default function TokensPage() {
   };
 
   return (
-    <Container size="lg" py="xl">
-      <Stack gap="xl">
+    <div className="container mx-auto max-w-5xl px-4 py-8">
+      <div className="flex flex-col gap-8">
         <div>
-          <Title order={1}>{t("pageTitle")}</Title>
-          <Text size="lg" c="dimmed" mt="xs">
+          <h1 className="text-3xl font-bold">{t("pageTitle")}</h1>
+          <p className="text-lg text-muted-foreground mt-1">
             {t("pageDescription")}
-          </Text>
+          </p>
         </div>
 
         {(["beginner", "intermediate", "advanced"] as const).map((level) => (
-          <Stack key={level} gap="md">
-            <Divider
-              label={
-                <Badge
-                  size="lg"
-                  variant="light"
-                  color={difficultyColors[level]}
-                >
-                  {t(level)}
-                </Badge>
-              }
-            />
-            <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
+          <div key={level} className="flex flex-col gap-4">
+            <div className="flex items-center gap-4">
+              <Separator className="flex-1" />
+              <Badge
+                variant="secondary"
+                className={difficultyColors[level]}
+              >
+                {t(level)}
+              </Badge>
+              <Separator className="flex-1" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {groups[level].map((demo) => (
-                <Card
+                <a
                   key={demo.slug}
-                  shadow="sm"
-                  padding="lg"
-                  radius="md"
-                  withBorder
-                  component="a"
                   href={`tokens/demo/${demo.slug}`}
-                  style={{ cursor: "pointer" }}
+                  className="block"
                 >
-                  <Stack gap="sm">
-                    <Group justify="space-between">
-                      <ThemeIcon
-                        size="lg"
-                        variant="light"
-                        color={difficultyColors[demo.difficulty]}
-                      >
-                        <demo.icon size={20} />
-                      </ThemeIcon>
-                    </Group>
-                    <Title order={4}>{t(`demos.${demo.key}.title`)}</Title>
-                    <Text size="sm" c="dimmed">
-                      {t(`demos.${demo.key}.description`)}
-                    </Text>
-                  </Stack>
-                </Card>
+                  <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
+                    <CardContent className="p-6">
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${iconBgColors[demo.difficulty]}`}>
+                            <demo.icon className="h-5 w-5" />
+                          </div>
+                        </div>
+                        <h4 className="text-lg font-semibold">{t(`demos.${demo.key}.title`)}</h4>
+                        <p className="text-sm text-muted-foreground">
+                          {t(`demos.${demo.key}.description`)}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </a>
               ))}
-            </SimpleGrid>
-          </Stack>
+            </div>
+          </div>
         ))}
-      </Stack>
-    </Container>
+      </div>
+    </div>
   );
 }

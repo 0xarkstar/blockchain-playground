@@ -1,19 +1,26 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
   Select,
-  TextInput,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
   Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   getSolidityTypeInfo,
   encodeValue,
@@ -59,135 +66,150 @@ export function DataTypesDemo() {
   );
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Input
-          </Text>
-          <Group grow>
-            <Select
-              label="Solidity Type"
-              data={typeNames}
-              value={selectedType}
-              onChange={(v) => {
-                if (v) {
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Input</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Solidity Type</Label>
+              <Select
+                value={selectedType}
+                onValueChange={(v) => {
                   setSelectedType(v);
                   const info = getSolidityTypeInfo(v);
                   setInputValue(info?.defaultValue ?? "0");
-                }
-              }}
-              searchable
-            />
-            <TextInput
-              label="Value"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.currentTarget.value)}
-            />
-          </Group>
-        </Stack>
-      </Paper>
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {typeNames.map((t) => (
+                    <SelectItem key={t} value={t}>
+                      {t}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Value</Label>
+              <Input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
       {typeInfo && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Type Info
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Type Info</p>
             <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>Category</Table.Td>
-                  <Table.Td ta="right">
-                    <Badge variant="light">{typeInfo.category}</Badge>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Size</Table.Td>
-                  <Table.Td ta="right">
+              <TableBody>
+                <TableRow>
+                  <TableCell>Category</TableCell>
+                  <TableCell className="text-right">
+                    <Badge variant="secondary">{typeInfo.category}</Badge>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Size</TableCell>
+                  <TableCell className="text-right">
                     {typeInfo.size} bytes ({typeInfo.bits} bits)
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Signed</Table.Td>
-                  <Table.Td ta="right">
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Signed</TableCell>
+                  <TableCell className="text-right">
                     <Badge
-                      color={typeInfo.signed ? "yellow" : "gray"}
-                      variant="light"
+                      variant="secondary"
+                      className={
+                        typeInfo.signed
+                          ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+                          : ""
+                      }
                     >
                       {typeInfo.signed ? "Yes" : "No"}
                     </Badge>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Min</Table.Td>
-                  <Table.Td ta="right">
-                    <Code style={{ fontSize: 11 }}>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Min</TableCell>
+                  <TableCell className="text-right">
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 11 }}>
                       {typeInfo.min.length > 40
                         ? typeInfo.min.slice(0, 20) + "..."
                         : typeInfo.min}
-                    </Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Max</Table.Td>
-                  <Table.Td ta="right">
-                    <Code style={{ fontSize: 11 }}>
+                    </code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Max</TableCell>
+                  <TableCell className="text-right">
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 11 }}>
                       {typeInfo.max.length > 40
                         ? typeInfo.max.slice(0, 20) + "..."
                         : typeInfo.max}
-                    </Code>
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
+                    </code>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
             </Table>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Encoded Value
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Encoded Value</p>
           {encoded.valid ? (
             <Table>
-              <Table.Tbody>
-                <Table.Tr>
-                  <Table.Td>Hex</Table.Td>
-                  <Table.Td ta="right">
-                    <Code>{encoded.hex}</Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Padded (32 bytes)</Table.Td>
-                  <Table.Td ta="right">
-                    <Code style={{ fontSize: 11, wordBreak: "break-all" }}>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Hex</TableCell>
+                  <TableCell className="text-right">
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
+                      {encoded.hex}
+                    </code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Padded (32 bytes)</TableCell>
+                  <TableCell className="text-right">
+                    <code
+                      className="rounded bg-muted px-1.5 py-0.5 font-mono"
+                      style={{ fontSize: 11, wordBreak: "break-all" }}
+                    >
                       {encoded.paddedHex}
-                    </Code>
-                  </Table.Td>
-                </Table.Tr>
-                <Table.Tr>
-                  <Table.Td>Decimal</Table.Td>
-                  <Table.Td ta="right">
-                    <Code>{encoded.decimal}</Code>
-                  </Table.Td>
-                </Table.Tr>
-              </Table.Tbody>
+                    </code>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Decimal</TableCell>
+                  <TableCell className="text-right">
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
+                      {encoded.decimal}
+                    </code>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
             </Table>
           ) : (
-            <Alert icon={<IconInfoCircle size={16} />} color="red">
-              {encoded.error}
+            <Alert variant="destructive">
+              <Info className="h-4 w-4" />
+              <AlertDescription>{encoded.error}</AlertDescription>
             </Alert>
           )}
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Memory Size Comparison
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Memory Size Comparison</p>
           <SimpleBarChart
             data={sizeChartData}
             xKey="type"
@@ -195,45 +217,45 @@ export function DataTypesDemo() {
             colors={["#7950f2"]}
             height={220}
           />
-          <Text size="xs" c="dimmed" ta="center">
+          <p className="text-xs text-muted-foreground text-center">
             Bytes required per type. All types pad to 32 bytes in ABI encoding.
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            All Types Reference
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Type</Table.Th>
-                <Table.Th>Category</Table.Th>
-                <Table.Th ta="right">Size</Table.Th>
-                <Table.Th ta="right">Bits</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">All Types Reference</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Type</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead className="text-right">Size</TableHead>
+                <TableHead className="text-right">Bits</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {allTypes.map((t) => (
-                <Table.Tr key={t.name}>
-                  <Table.Td>
-                    <Code>{t.name}</Code>
-                  </Table.Td>
-                  <Table.Td>
-                    <Badge size="xs" variant="light">
+                <TableRow key={t.name}>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
+                      {t.name}
+                    </code>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="secondary" className="text-xs">
                       {t.category}
                     </Badge>
-                  </Table.Td>
-                  <Table.Td ta="right">{t.size}B</Table.Td>
-                  <Table.Td ta="right">{t.bits}</Table.Td>
-                </Table.Tr>
+                  </TableCell>
+                  <TableCell className="text-right">{t.size}B</TableCell>
+                  <TableCell className="text-right">{t.bits}</TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -260,6 +282,6 @@ export function DataTypesDemo() {
           "address payable is needed to send ETH; regular address cannot",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

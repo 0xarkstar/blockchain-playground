@@ -1,21 +1,23 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  Stack,
-  Text,
-  Paper,
-  Badge,
-  Table,
-  NumberInput,
-  SimpleGrid,
-  Alert,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Info } from "lucide-react";
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
 import { SimpleBarChart } from "../shared/charts";
 import { OnChainSection } from "../shared/on-chain-section";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 interface GasOperation {
   name: string;
@@ -100,10 +102,10 @@ const GAS_OPERATIONS: GasOperation[] = [
 ];
 
 const categoryColors = {
-  storage: "blue",
-  computation: "green",
-  transfer: "orange",
-  contract: "violet",
+  storage: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+  computation: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  transfer: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
+  contract: "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300",
 } as const;
 
 export function GasEstimatorDemo() {
@@ -126,95 +128,102 @@ export function GasEstimatorDemo() {
   );
 
   const inputPanel = (
-    <Stack gap="md">
-      <SimpleGrid cols={{ base: 1 }} spacing="md">
-        <NumberInput
-          label="Gas Price (Gwei)"
-          value={gasPrice}
-          onChange={(v) => setGasPrice(Number(v))}
-          min={0.01}
-          step={0.1}
-          decimalScale={2}
-        />
-        <NumberInput
-          label="ETH Price (USD)"
-          value={ethPrice}
-          onChange={(v) => setEthPrice(Number(v))}
-          min={1}
-          step={100}
-        />
-      </SimpleGrid>
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 gap-4">
+        <div>
+          <Label>Gas Price (Gwei)</Label>
+          <Input
+            type="number"
+            value={gasPrice}
+            onChange={(e) => setGasPrice(Number(e.target.value))}
+            min={0.01}
+            step={0.1}
+          />
+        </div>
+        <div>
+          <Label>ETH Price (USD)</Label>
+          <Input
+            type="number"
+            value={ethPrice}
+            onChange={(e) => setEthPrice(Number(e.target.value))}
+            min={1}
+            step={100}
+          />
+        </div>
+      </div>
 
-      <Table striped highlightOnHover>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Operation</Table.Th>
-            <Table.Th>Category</Table.Th>
-            <Table.Th>Gas Used</Table.Th>
-            <Table.Th>Cost (ETH)</Table.Th>
-            <Table.Th>Cost (USD)</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Operation</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead>Gas Used</TableHead>
+            <TableHead>Cost (ETH)</TableHead>
+            <TableHead>Cost (USD)</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {GAS_OPERATIONS.map((op) => {
             const { ethCost, usdCost } = computeCost(op.gasUsed);
             return (
-              <Table.Tr key={op.name}>
-                <Table.Td>
-                  <Stack gap={2}>
-                    <Text size="sm" fw={500}>
+              <TableRow key={op.name}>
+                <TableCell>
+                  <div className="flex flex-col gap-0.5">
+                    <p className="text-sm font-medium">
                       {op.name}
-                    </Text>
-                    <Text size="xs" c="dimmed">
+                    </p>
+                    <p className="text-xs text-muted-foreground">
                       {op.description}
-                    </Text>
-                  </Stack>
-                </Table.Td>
-                <Table.Td>
+                    </p>
+                  </div>
+                </TableCell>
+                <TableCell>
                   <Badge
-                    variant="light"
-                    color={categoryColors[op.category]}
-                    size="sm"
+                    variant="secondary"
+                    className={`text-xs ${categoryColors[op.category]}`}
                   >
                     {op.category}
                   </Badge>
-                </Table.Td>
-                <Table.Td>
-                  <Text size="sm" ff="monospace">
+                </TableCell>
+                <TableCell>
+                  <p className="text-sm font-mono">
                     {op.gasUsed.toLocaleString()}
-                  </Text>
-                </Table.Td>
-                <Table.Td>
-                  <Text size="sm" ff="monospace">
+                  </p>
+                </TableCell>
+                <TableCell>
+                  <p className="text-sm font-mono">
                     {ethCost < 0.000001
                       ? ethCost.toExponential(2)
                       : ethCost.toFixed(6)}
-                  </Text>
-                </Table.Td>
-                <Table.Td>
-                  <Text size="sm" ff="monospace">
+                  </p>
+                </TableCell>
+                <TableCell>
+                  <p className="text-sm font-mono">
                     ${usdCost < 0.01 ? usdCost.toFixed(6) : usdCost.toFixed(4)}
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
+                  </p>
+                </TableCell>
+              </TableRow>
             );
           })}
-        </Table.Tbody>
+        </TableBody>
       </Table>
 
-      <Alert icon={<IconInfoCircle size={16} />} color="gray" variant="light">
-        Gas costs are approximate estimates. Actual costs depend on network
-        conditions, contract complexity, and EVM state.
+      <Alert>
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          Gas costs are approximate estimates. Actual costs depend on network
+          conditions, contract complexity, and EVM state.
+        </AlertDescription>
       </Alert>
-    </Stack>
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md">
-      <Paper p="md" withBorder data-testid="gas-comparison-chart">
-        <Text size="sm" fw={600} mb="sm">
+    <div className="flex flex-col gap-4">
+      <div className="rounded-lg border border-border bg-card p-4" data-testid="gas-comparison-chart">
+        <p className="text-sm font-semibold mb-2">
           Gas Cost Comparison
-        </Text>
+        </p>
         <SimpleBarChart
           data={chartData}
           xKey="name"
@@ -222,12 +231,12 @@ export function GasEstimatorDemo() {
           height={300}
           grouped
         />
-        <Text size="xs" c="dimmed" mt="xs">
+        <p className="text-xs text-muted-foreground mt-1">
           Comparing gas costs across operations (1,000+ gas only). Contract
           deployment is the most expensive.
-        </Text>
-      </Paper>
-    </Stack>
+        </p>
+      </div>
+    </div>
   );
 
   return (

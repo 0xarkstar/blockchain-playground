@@ -1,22 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Stack,
-  Paper,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  TextInput,
-  NumberInput,
-} from "@mantine/core";
-import { IconInfoCircle, IconAlertTriangle } from "@tabler/icons-react";
+import { Info, AlertTriangle } from "lucide-react";
 import { getFullPipeline, type FullPipelineResult } from "../../lib/zk/snark";
 import { ProgressPipeline, EducationPanel } from "../shared";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
 
 export function SNARKPipelineDemo() {
   const [expression, setExpression] = useState("x * y");
@@ -37,60 +35,56 @@ export function SNARKPipelineDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        Full SNARK pipeline: Expression → Circuit → R1CS → QAP → Trusted Setup →
-        Proof → Verify. This is a simplified simulation over a small field
-        (p=23).
+    <div className="flex flex-col gap-6">
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          Full SNARK pipeline: Expression → Circuit → R1CS → QAP → Trusted Setup →
+          Proof → Verify. This is a simplified simulation over a small field
+          (p=23).
+        </AlertDescription>
       </Alert>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Configure
-          </Text>
-          <TextInput
-            label="Arithmetic expression"
-            value={expression}
-            onChange={(e) => {
-              setExpression(e.currentTarget.value);
-              setResult(null);
-            }}
-          />
-          <Group grow>
-            <NumberInput
-              label="x"
-              value={xVal}
-              onChange={(v) => setXVal(Number(v) || 0)}
-              min={0}
-              max={22}
+          </p>
+          <div>
+            <Label>Arithmetic expression</Label>
+            <Input
+              value={expression}
+              onChange={(e) => {
+                setExpression(e.target.value);
+                setResult(null);
+              }}
             />
-            <NumberInput
-              label="y"
-              value={yVal}
-              onChange={(v) => setYVal(Number(v) || 0)}
-              min={0}
-              max={22}
-            />
-            <NumberInput
-              label="z"
-              value={zVal}
-              onChange={(v) => setZVal(Number(v) || 0)}
-              min={0}
-              max={22}
-            />
-          </Group>
-          <Button onClick={handleRun} variant="light">
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <Label>x</Label>
+              <Input type="number" value={xVal} onChange={(e) => setXVal(Number(e.target.value) || 0)} min={0} max={22} />
+            </div>
+            <div>
+              <Label>y</Label>
+              <Input type="number" value={yVal} onChange={(e) => setYVal(Number(e.target.value) || 0)} min={0} max={22} />
+            </div>
+            <div>
+              <Label>z</Label>
+              <Input type="number" value={zVal} onChange={(e) => setZVal(Number(e.target.value) || 0)} min={0} max={22} />
+            </div>
+          </div>
+          <Button variant="secondary" onClick={handleRun}>
             Run Full Pipeline
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             SNARK Pipeline
-          </Text>
+          </p>
           <ProgressPipeline
             steps={[
               { id: "circuit", label: "Circuit" },
@@ -102,8 +96,8 @@ export function SNARKPipelineDemo() {
             ]}
             currentStepIndex={result ? 6 : 0}
           />
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -148,96 +142,96 @@ export function SNARKPipelineDemo() {
 
       {result && (
         <>
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Group justify="space-between">
-                <Text size="sm" fw={600}>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold">
                   Result
-                </Text>
+                </p>
                 <Badge
-                  variant="light"
-                  color={result.verified ? "green" : "red"}
+                  variant="secondary"
+                  className={
+                    result.verified
+                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                      : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                  }
                 >
                   {result.verified ? "Proof Verified" : "Verification Failed"}
                 </Badge>
-              </Group>
-              <Text size="sm">
-                Output: <Code>{result.output.toString()}</Code> (mod{" "}
+              </div>
+              <p className="text-sm">
+                Output: <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{result.output.toString()}</code> (mod{" "}
                 {p.toString()})
-              </Text>
-            </Stack>
-          </Paper>
+              </p>
+            </div>
+          </div>
 
           {result.steps.map((step, i) => (
-            <Paper key={i} p="md" withBorder>
-              <Stack gap="sm">
-                <Text size="sm" fw={600}>
+            <div key={i} className="rounded-lg border border-border bg-card p-4">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm font-semibold">
                   {step.name}
-                </Text>
-                <Text size="sm" c="dimmed">
+                </p>
+                <p className="text-sm text-muted-foreground">
                   {step.description}
-                </Text>
+                </p>
                 {step.warning && (
-                  <Alert
-                    icon={<IconAlertTriangle size={14} />}
-                    variant="light"
-                    color="yellow"
-                    p="xs"
-                  >
-                    <Text size="xs">{step.warning}</Text>
+                  <Alert className="border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950 p-2">
+                    <AlertTriangle className="h-3.5 w-3.5" />
+                    <AlertDescription className="text-xs">{step.warning}</AlertDescription>
                   </Alert>
                 )}
                 <Table>
-                  <Table.Tbody>
+                  <TableBody>
                     {Object.entries(step.data).map(([key, val]) => (
-                      <Table.Tr key={key}>
-                        <Table.Td>
-                          <Text size="sm">{key}</Text>
-                        </Table.Td>
-                        <Table.Td>
-                          <Code>
+                      <TableRow key={key}>
+                        <TableCell>
+                          <p className="text-sm">{key}</p>
+                        </TableCell>
+                        <TableCell>
+                          <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
                             {Array.isArray(val) ? val.join(", ") : String(val)}
-                          </Code>
-                        </Table.Td>
-                      </Table.Tr>
+                          </code>
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </Table.Tbody>
+                  </TableBody>
                 </Table>
-              </Stack>
-            </Paper>
+              </div>
+            </div>
           ))}
 
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text size="sm" fw={600}>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold">
                 Proof Components
-              </Text>
+              </p>
               <Table>
-                <Table.Tbody>
-                  <Table.Tr>
-                    <Table.Td>π_A</Table.Td>
-                    <Table.Td>
-                      <Code>{result.proof.piA.toString()}</Code>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr>
-                    <Table.Td>π_B</Table.Td>
-                    <Table.Td>
-                      <Code>{result.proof.piB.toString()}</Code>
-                    </Table.Td>
-                  </Table.Tr>
-                  <Table.Tr>
-                    <Table.Td>π_C</Table.Td>
-                    <Table.Td>
-                      <Code>{result.proof.piC.toString()}</Code>
-                    </Table.Td>
-                  </Table.Tr>
-                </Table.Tbody>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>π_A</TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{result.proof.piA.toString()}</code>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>π_B</TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{result.proof.piB.toString()}</code>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>π_C</TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{result.proof.piC.toString()}</code>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
               </Table>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
         </>
       )}
-    </Stack>
+    </div>
   );
 }

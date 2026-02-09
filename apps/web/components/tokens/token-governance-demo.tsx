@@ -1,22 +1,27 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  TextInput,
-  NumberInput,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
   Select,
-  Progress,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   createGovernance,
   setVotingPower,
@@ -98,182 +103,202 @@ export function TokenGovernanceDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Members
-            </Text>
-            <Badge variant="light">Total Power: {totalPower}</Badge>
-          </Group>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Address</Table.Th>
-                <Table.Th ta="right">Base Power</Table.Th>
-                <Table.Th ta="right">Effective Power</Table.Th>
-                <Table.Th>Delegated To</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Members</p>
+            <Badge variant="secondary">Total Power: {totalPower}</Badge>
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Address</TableHead>
+                <TableHead className="text-right">Base Power</TableHead>
+                <TableHead className="text-right">Effective Power</TableHead>
+                <TableHead>Delegated To</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {members.map((addr) => (
-                <Table.Tr key={addr}>
-                  <Table.Td>
-                    <Code>{addr}</Code>
-                  </Table.Td>
-                  <Table.Td ta="right">{state.votingPower[addr]}</Table.Td>
-                  <Table.Td ta="right">
+                <TableRow key={addr}>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{addr}</code>
+                  </TableCell>
+                  <TableCell className="text-right">{state.votingPower[addr]}</TableCell>
+                  <TableCell className="text-right">
                     <Badge
-                      variant="light"
-                      color={
+                      variant="secondary"
+                      className={
                         getEffectiveVotingPower(state, addr) > 0
-                          ? "blue"
-                          : "gray"
+                          ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                          : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
                       }
                     >
                       {getEffectiveVotingPower(state, addr)}
                     </Badge>
-                  </Table.Td>
-                  <Table.Td>
+                  </TableCell>
+                  <TableCell>
                     {state.delegations[addr] ? (
-                      <Code>{state.delegations[addr]}</Code>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{state.delegations[addr]}</code>
                     ) : (
                       "—"
                     )}
-                  </Table.Td>
-                </Table.Tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-          <Group grow>
-            <TextInput
-              label="Address"
-              value={powerAddr}
-              onChange={(e) => setPowerAddr(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Power"
-              value={powerAmount}
-              onChange={(v) => setPowerAmount(Number(v) || 0)}
-              min={0}
-            />
-          </Group>
-          <Button onClick={handleSetPower} variant="light" size="sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Address</Label>
+              <Input
+                value={powerAddr}
+                onChange={(e) => setPowerAddr(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Power</Label>
+              <Input
+                type="number"
+                value={powerAmount}
+                onChange={(e) => setPowerAmount(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" size="sm" onClick={handleSetPower}>
             Set Power
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Delegate
-          </Text>
-          <Group grow>
-            <TextInput
-              label="From"
-              value={delegateFrom}
-              onChange={(e) => setDelegateFrom(e.currentTarget.value)}
-            />
-            <TextInput
-              label="To (self = undelegate)"
-              value={delegateTo}
-              onChange={(e) => setDelegateTo(e.currentTarget.value)}
-            />
-          </Group>
-          <Button onClick={handleDelegate} variant="light" color="orange">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Delegate</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>From</Label>
+              <Input
+                value={delegateFrom}
+                onChange={(e) => setDelegateFrom(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>To (self = undelegate)</Label>
+              <Input
+                value={delegateTo}
+                onChange={(e) => setDelegateTo(e.target.value)}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-orange-100 text-orange-800 hover:bg-orange-200 dark:bg-orange-900 dark:text-orange-300 dark:hover:bg-orange-800" onClick={handleDelegate}>
             Delegate
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Time & Proposals
-          </Text>
-          <NumberInput
-            label="Current Time"
-            value={currentTime}
-            onChange={(v) => setCurrentTime(Number(v) || 0)}
-          />
-          <Group grow>
-            <TextInput
-              label="Title"
-              value={proposalTitle}
-              onChange={(e) => setProposalTitle(e.currentTarget.value)}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Time & Proposals</p>
+          <div>
+            <Label>Current Time</Label>
+            <Input
+              type="number"
+              value={currentTime}
+              onChange={(e) => setCurrentTime(Number(e.target.value) || 0)}
             />
-            <TextInput
-              label="Proposer"
-              value={proposalCreator}
-              onChange={(e) => setProposalCreator(e.currentTarget.value)}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Title</Label>
+              <Input
+                value={proposalTitle}
+                onChange={(e) => setProposalTitle(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Proposer</Label>
+              <Input
+                value={proposalCreator}
+                onChange={(e) => setProposalCreator(e.target.value)}
+              />
+            </div>
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Input
+              value={proposalDesc}
+              onChange={(e) => setProposalDesc(e.target.value)}
             />
-          </Group>
-          <TextInput
-            label="Description"
-            value={proposalDesc}
-            onChange={(e) => setProposalDesc(e.currentTarget.value)}
-          />
-          <Button onClick={handleCreateProposal} variant="light" color="green">
+          </div>
+          <Button variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800" onClick={handleCreateProposal}>
             Create Proposal
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Vote
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Proposal ID"
-              value={voteProposalId}
-              onChange={(v) => setVoteProposalId(Number(v) || 0)}
-              min={1}
-            />
-            <TextInput
-              label="Voter"
-              value={voter}
-              onChange={(e) => setVoter(e.currentTarget.value)}
-            />
-            <Select
-              label="Choice"
-              value={voteChoice}
-              onChange={(v) =>
-                setVoteChoice((v as "for" | "against" | "abstain") ?? "for")
-              }
-              data={[
-                { value: "for", label: "For" },
-                { value: "against", label: "Against" },
-                { value: "abstain", label: "Abstain" },
-              ]}
-            />
-          </Group>
-          <Group>
-            <Button onClick={handleVote} variant="light" color="blue">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Vote</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>Proposal ID</Label>
+              <Input
+                type="number"
+                value={voteProposalId}
+                onChange={(e) => setVoteProposalId(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+            <div>
+              <Label>Voter</Label>
+              <Input
+                value={voter}
+                onChange={(e) => setVoter(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Choice</Label>
+              <Select
+                value={voteChoice}
+                onValueChange={(v) =>
+                  setVoteChoice(v as "for" | "against" | "abstain")
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="for">For</SelectItem>
+                  <SelectItem value="against">Against</SelectItem>
+                  <SelectItem value="abstain">Abstain</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800" onClick={handleVote}>
               Vote
             </Button>
-            <Button onClick={handleFinalize} variant="light" color="violet">
+            <Button variant="secondary" className="bg-violet-100 text-violet-800 hover:bg-violet-200 dark:bg-violet-900 dark:text-violet-300 dark:hover:bg-violet-800" onClick={handleFinalize}>
               Finalize
             </Button>
-          </Group>
-        </Stack>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
       {lastMessage && (
-        <Alert icon={<IconInfoCircle size={16} />} variant="light">
-          {lastMessage}
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>{lastMessage}</AlertDescription>
         </Alert>
       )}
 
       {state.proposals.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Proposals
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Proposals</p>
             {state.proposals.map((p) => {
               const totalVotes = p.votesFor + p.votesAgainst + p.votesAbstain;
               const forPct =
@@ -284,58 +309,61 @@ export function TokenGovernanceDemo() {
                 totalVotes > 0 ? (p.votesAbstain / totalVotes) * 100 : 0;
               const statusColor =
                 p.status === "passed"
-                  ? "green"
+                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
                   : p.status === "rejected"
-                    ? "red"
-                    : "blue";
+                    ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                    : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
               return (
-                <Paper key={p.id} p="sm" withBorder>
-                  <Stack gap="xs">
-                    <Group justify="space-between">
-                      <Text fw={600}>
+                <div key={p.id} className="rounded-lg border border-border p-3">
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <p className="font-semibold">
                         #{p.id}: {p.title}
-                      </Text>
-                      <Badge color={statusColor} variant="light">
+                      </p>
+                      <Badge variant="secondary" className={statusColor}>
                         {p.status}
                       </Badge>
-                    </Group>
-                    <Text size="xs" c="dimmed">
+                    </div>
+                    <p className="text-xs text-muted-foreground">
                       By {p.proposer} | Ends at {p.endTime} | Quorum:{" "}
                       {p.quorumRequired}
-                    </Text>
-                    <Progress.Root size="lg">
-                      <Progress.Section value={forPct} color="green">
-                        <Progress.Label>For {p.votesFor}</Progress.Label>
-                      </Progress.Section>
-                      <Progress.Section value={againstPct} color="red">
-                        <Progress.Label>
-                          Against {p.votesAgainst}
-                        </Progress.Label>
-                      </Progress.Section>
-                      <Progress.Section value={abstainPct} color="gray">
-                        <Progress.Label>
-                          Abstain {p.votesAbstain}
-                        </Progress.Label>
-                      </Progress.Section>
-                    </Progress.Root>
-                    <Text size="xs" c="dimmed">
+                    </p>
+                    <div className="flex h-6 w-full overflow-hidden rounded-full">
+                      <div
+                        className="bg-green-500 flex items-center justify-center text-xs text-white font-medium"
+                        style={{ width: `${forPct}%` }}
+                      >
+                        {forPct > 15 ? `For ${p.votesFor}` : ""}
+                      </div>
+                      <div
+                        className="bg-red-500 flex items-center justify-center text-xs text-white font-medium"
+                        style={{ width: `${againstPct}%` }}
+                      >
+                        {againstPct > 15 ? `Against ${p.votesAgainst}` : ""}
+                      </div>
+                      <div
+                        className="bg-gray-400 flex items-center justify-center text-xs text-white font-medium"
+                        style={{ width: `${abstainPct}%` }}
+                      >
+                        {abstainPct > 15 ? `Abstain ${p.votesAbstain}` : ""}
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
                       Total: {totalVotes} / {p.quorumRequired} quorum
                       {totalVotes >= p.quorumRequired ? " (met)" : " (not met)"}
-                    </Text>
-                  </Stack>
-                </Paper>
+                    </p>
+                  </div>
+                </div>
               );
             })}
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
       {state.proposals.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Voting Results
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Voting Results</p>
             <SimpleBarChart
               data={state.proposals.map((p) => ({
                 proposal: `#${p.id}`,
@@ -349,9 +377,9 @@ export function TokenGovernanceDemo() {
               grouped
               height={250}
             />
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 }

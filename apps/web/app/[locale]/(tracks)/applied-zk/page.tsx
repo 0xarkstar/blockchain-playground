@@ -1,54 +1,50 @@
 import { useTranslations } from "next-intl";
 import {
-  Container,
-  Title,
-  Text,
-  SimpleGrid,
-  Card,
-  Badge,
-  Group,
-  Stack,
-  ThemeIcon,
-  Divider,
-} from "@mantine/core";
-import {
-  IconHash,
-  IconShieldCheck,
-  IconThumbUp,
-  IconParachute,
-} from "@tabler/icons-react";
+  Hash,
+  ShieldCheck,
+  ThumbsUp,
+  Plane,
+} from "lucide-react";
+import { Badge } from "../../../../components/ui/badge";
+import { Separator } from "../../../../components/ui/separator";
 
 const demos = [
   {
     key: "hashPreimage" as const,
     slug: "hash-preimage",
-    icon: IconHash,
+    icon: Hash,
     difficulty: "beginner",
   },
   {
     key: "ageVerification" as const,
     slug: "age-verification",
-    icon: IconShieldCheck,
+    icon: ShieldCheck,
     difficulty: "intermediate",
   },
   {
     key: "secretVoting" as const,
     slug: "secret-voting",
-    icon: IconThumbUp,
+    icon: ThumbsUp,
     difficulty: "advanced",
   },
   {
     key: "privateAirdrop" as const,
     slug: "private-airdrop",
-    icon: IconParachute,
+    icon: Plane,
     difficulty: "advanced",
   },
 ] as const;
 
 const difficultyColors = {
-  beginner: "green",
-  intermediate: "yellow",
-  advanced: "red",
+  beginner: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  intermediate: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  advanced: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
+} as const;
+
+const themeIconColors = {
+  beginner: "bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400",
+  intermediate: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-400",
+  advanced: "bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-400",
 } as const;
 
 export default function AppliedZKPage() {
@@ -61,63 +57,53 @@ export default function AppliedZKPage() {
   };
 
   return (
-    <Container size="lg" py="xl">
-      <Stack gap="xl">
+    <div className="container mx-auto max-w-5xl px-4 py-8">
+      <div className="flex flex-col gap-8">
         <div>
-          <Title order={1}>{t("pageTitle")}</Title>
-          <Text size="lg" c="dimmed" mt="xs">
+          <h1 className="text-3xl font-bold">{t("pageTitle")}</h1>
+          <p className="text-lg text-muted-foreground mt-1">
             {t("pageDescription")}
-          </Text>
+          </p>
         </div>
 
         {(["beginner", "intermediate", "advanced"] as const).map((level) =>
           groups[level].length > 0 ? (
-            <Stack key={level} gap="md">
-              <Divider
-                label={
-                  <Badge
-                    size="lg"
-                    variant="light"
-                    color={difficultyColors[level]}
-                  >
-                    {t(level)}
-                  </Badge>
-                }
-              />
-              <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
+            <div key={level} className="flex flex-col gap-4">
+              <div className="flex items-center gap-4">
+                <Separator className="flex-1" />
+                <Badge
+                  variant="secondary"
+                  className={`text-sm ${difficultyColors[level]}`}
+                >
+                  {t(level)}
+                </Badge>
+                <Separator className="flex-1" />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {groups[level].map((demo) => (
-                  <Card
+                  <a
                     key={demo.slug}
-                    shadow="sm"
-                    padding="lg"
-                    radius="md"
-                    withBorder
-                    component="a"
                     href={`applied-zk/demo/${demo.slug}`}
-                    style={{ cursor: "pointer" }}
+                    className="block rounded-lg border border-border bg-card p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                   >
-                    <Stack gap="sm">
-                      <Group justify="space-between">
-                        <ThemeIcon
-                          size="lg"
-                          variant="light"
-                          color={difficultyColors[demo.difficulty]}
-                        >
-                          <demo.icon size={20} />
-                        </ThemeIcon>
-                      </Group>
-                      <Title order={4}>{t(`demos.${demo.key}.title`)}</Title>
-                      <Text size="sm" c="dimmed">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center justify-between">
+                        <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${themeIconColors[demo.difficulty]}`}>
+                          <demo.icon className="h-5 w-5" />
+                        </div>
+                      </div>
+                      <h4 className="text-lg font-semibold">{t(`demos.${demo.key}.title`)}</h4>
+                      <p className="text-sm text-muted-foreground">
                         {t(`demos.${demo.key}.description`)}
-                      </Text>
-                    </Stack>
-                  </Card>
+                      </p>
+                    </div>
+                  </a>
                 ))}
-              </SimpleGrid>
-            </Stack>
+              </div>
+            </div>
           ) : null,
         )}
-      </Stack>
-    </Container>
+      </div>
+    </div>
   );
 }

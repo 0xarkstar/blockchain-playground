@@ -1,7 +1,7 @@
 "use client";
 
-import { Stack, Button, Text, Group, Paper } from "@mantine/core";
-import { IconLoader2 } from "@tabler/icons-react";
+import { Loader2 } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface EligibleAddress {
   readonly id: number;
@@ -37,44 +37,43 @@ export function ClaimPanel({
   }
 
   return (
-    <Paper p="md" withBorder>
-      <Stack gap="sm">
-        <Text fw={600} size="sm">
+    <div className="rounded-lg border border-border bg-card p-4">
+      <div className="flex flex-col gap-2">
+        <p className="text-sm font-semibold">
           Step 3: Claim Airdrop Privately
-        </Text>
-        <Text size="xs" c="dimmed">
+        </p>
+        <p className="text-xs text-muted-foreground">
           Prove you are in the eligibility list without revealing which address
           is yours. Select which address to claim as:
-        </Text>
-        <Group gap="xs" wrap="wrap">
+        </p>
+        <div className="flex items-center gap-1 flex-wrap">
           {addresses.map((addr, idx) => (
             <Button
               key={addr.id}
-              variant={idx === claimIndex ? "filled" : "outline"}
-              size="xs"
+              variant={idx === claimIndex ? "default" : "outline"}
+              size="sm"
               onClick={() => onClaimIndexChange(idx)}
               disabled={phase !== "ready"}
             >
               Address {idx + 1}
             </Button>
           ))}
-        </Group>
+        </div>
         {progressMessage && phase === "proving" && (
-          <Group gap="xs">
-            <IconLoader2 size={14} className="animate-spin" />
-            <Text size="xs" c="blue">
+          <div className="flex items-center gap-1">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            <p className="text-xs text-blue-600 dark:text-blue-400">
               {progressMessage}
-            </Text>
-          </Group>
+            </p>
+          </div>
         )}
         <Button
           onClick={onClaim}
-          loading={phase === "proving"}
           disabled={phase !== "ready"}
         >
           Generate Claim Proof
         </Button>
-      </Stack>
-    </Paper>
+      </div>
+    </div>
   );
 }

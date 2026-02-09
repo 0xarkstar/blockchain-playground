@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { Stack, Grid, Tabs, Badge, Group, Paper, Text } from "@mantine/core";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 interface DemoLayoutProps {
   title?: string;
@@ -16,9 +16,9 @@ interface DemoLayoutProps {
 }
 
 const difficultyColors: Record<string, string> = {
-  beginner: "green",
-  intermediate: "yellow",
-  advanced: "red",
+  beginner: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  intermediate: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  advanced: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
 };
 
 export function DemoLayout({
@@ -36,78 +36,70 @@ export function DemoLayout({
   const hasTabs = learnContent || detailsContent || onChainContent;
 
   const interactiveContent = (
-    <Grid gutter="md">
-      <Grid.Col span={{ base: 12, md: 6 }}>{inputPanel}</Grid.Col>
-      <Grid.Col span={{ base: 12, md: 6 }}>{resultPanel}</Grid.Col>
-    </Grid>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {inputPanel}
+      {resultPanel}
+    </div>
   );
 
   return (
-    <Stack gap="lg">
+    <div className="flex flex-col gap-6">
       {hasHeader && (
-        <Paper p="md" withBorder>
-          <Stack gap="xs">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-2">
             {title && (
-              <Text size="lg" fw={700}>
-                {title}
-              </Text>
+              <p className="text-lg font-bold">{title}</p>
             )}
             {description && (
-              <Text size="sm" c="dimmed">
-                {description}
-              </Text>
+              <p className="text-sm text-muted-foreground">{description}</p>
             )}
-            <Group gap="xs">
+            <div className="flex items-center gap-2">
               {difficulty && (
-                <Badge
-                  color={difficultyColors[difficulty]}
-                  variant="light"
-                  size="sm"
-                >
+                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${difficultyColors[difficulty]}`}>
                   {difficulty}
-                </Badge>
+                </span>
               )}
               {techStack?.map((tech) => (
-                <Badge key={tech} variant="outline" size="sm">
+                <span key={tech} className="inline-flex items-center rounded-full border border-border px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
                   {tech}
-                </Badge>
+                </span>
               ))}
-            </Group>
-          </Stack>
-        </Paper>
+            </div>
+          </div>
+        </div>
       )}
 
       {hasTabs ? (
         <Tabs defaultValue="interactive">
-          <Tabs.List>
-            <Tabs.Tab value="interactive">Interactive</Tabs.Tab>
-            {learnContent && <Tabs.Tab value="learn">Learn</Tabs.Tab>}
-            {detailsContent && <Tabs.Tab value="details">Details</Tabs.Tab>}
-            {onChainContent && <Tabs.Tab value="on-chain">On-Chain</Tabs.Tab>}
-          </Tabs.List>
+          <TabsList>
+            <TabsTrigger value="interactive">Interactive</TabsTrigger>
+            {learnContent && <TabsTrigger value="learn">Learn</TabsTrigger>}
+            {detailsContent && <TabsTrigger value="details">Details</TabsTrigger>}
+            {onChainContent && <TabsTrigger value="on-chain">On-Chain</TabsTrigger>}
+          </TabsList>
 
-          <Tabs.Panel value="interactive" pt="md">
+          <TabsContent value="interactive" className="mt-4">
             {interactiveContent}
-          </Tabs.Panel>
+          </TabsContent>
           {learnContent && (
-            <Tabs.Panel value="learn" pt="md">
+            <TabsContent value="learn" className="mt-4">
               {learnContent}
-            </Tabs.Panel>
+            </TabsContent>
           )}
           {detailsContent && (
-            <Tabs.Panel value="details" pt="md">
+            <TabsContent value="details" className="mt-4">
               {detailsContent}
-            </Tabs.Panel>
+            </TabsContent>
           )}
           {onChainContent && (
-            <Tabs.Panel value="on-chain" pt="md">
+            <TabsContent value="on-chain" className="mt-4">
               {onChainContent}
-            </Tabs.Panel>
+            </TabsContent>
           )}
         </Tabs>
       ) : (
         interactiveContent
       )}
-    </Stack>
+    </div>
   );
 }

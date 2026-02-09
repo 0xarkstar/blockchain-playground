@@ -1,21 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  TextInput,
-  NumberInput,
-  Button,
   Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  SegmentedControl,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   createERC1155,
   mintERC1155,
@@ -81,147 +80,168 @@ export function ERC1155MultiTokenDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Mint Token
-          </Text>
-          <SegmentedControl
-            value={mintType}
-            onChange={(v) => {
-              setMintType(v as "fungible" | "non-fungible");
-              if (v === "non-fungible") setMintAmount(1);
-            }}
-            data={[
-              { label: "Fungible", value: "fungible" },
-              { label: "Non-Fungible", value: "non-fungible" },
-            ]}
-          />
-          <Group grow>
-            <TextInput
-              label="To"
-              value={mintTo}
-              onChange={(e) => setMintTo(e.currentTarget.value)}
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Mint Token</p>
+          <div className="flex items-center gap-1">
+            <Button
+              variant={mintType === "fungible" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setMintType("fungible")}
+            >
+              Fungible
+            </Button>
+            <Button
+              variant={mintType === "non-fungible" ? "default" : "outline"}
+              size="sm"
+              onClick={() => {
+                setMintType("non-fungible");
+                setMintAmount(1);
+              }}
+            >
+              Non-Fungible
+            </Button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>To</Label>
+              <Input
+                value={mintTo}
+                onChange={(e) => setMintTo(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Token ID</Label>
+              <Input
+                type="number"
+                value={mintTokenId}
+                onChange={(e) => setMintTokenId(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+            <div>
+              <Label>Amount</Label>
+              <Input
+                type="number"
+                value={mintAmount}
+                onChange={(e) => setMintAmount(Number(e.target.value) || 0)}
+                min={1}
+                disabled={mintType === "non-fungible"}
+              />
+            </div>
+          </div>
+          <div>
+            <Label>URI (optional)</Label>
+            <Input
+              value={mintUri}
+              onChange={(e) => setMintUri(e.target.value)}
+              placeholder="ipfs://..."
             />
-            <NumberInput
-              label="Token ID"
-              value={mintTokenId}
-              onChange={(v) => setMintTokenId(Number(v) || 0)}
-              min={1}
-            />
-            <NumberInput
-              label="Amount"
-              value={mintAmount}
-              onChange={(v) => setMintAmount(Number(v) || 0)}
-              min={1}
-              disabled={mintType === "non-fungible"}
-            />
-          </Group>
-          <TextInput
-            label="URI (optional)"
-            value={mintUri}
-            onChange={(e) => setMintUri(e.currentTarget.value)}
-            placeholder="ipfs://..."
-          />
-          <Button onClick={handleMint} variant="light" color="green">
+          </div>
+          <Button variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800" onClick={handleMint}>
             Mint
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Transfer
-          </Text>
-          <Group grow>
-            <TextInput
-              label="From"
-              value={tfFrom}
-              onChange={(e) => setTfFrom(e.currentTarget.value)}
-            />
-            <TextInput
-              label="To"
-              value={tfTo}
-              onChange={(e) => setTfTo(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Token ID"
-              value={tfTokenId}
-              onChange={(v) => setTfTokenId(Number(v) || 0)}
-              min={1}
-            />
-            <NumberInput
-              label="Amount"
-              value={tfAmount}
-              onChange={(v) => setTfAmount(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Button onClick={handleTransfer} variant="light" color="blue">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Transfer</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <Label>From</Label>
+              <Input
+                value={tfFrom}
+                onChange={(e) => setTfFrom(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>To</Label>
+              <Input
+                value={tfTo}
+                onChange={(e) => setTfTo(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Token ID</Label>
+              <Input
+                type="number"
+                value={tfTokenId}
+                onChange={(e) => setTfTokenId(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+            <div>
+              <Label>Amount</Label>
+              <Input
+                type="number"
+                value={tfAmount}
+                onChange={(e) => setTfAmount(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800" onClick={handleTransfer}>
             Transfer
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {lastMessage && (
-        <Alert icon={<IconInfoCircle size={16} />} variant="light">
-          {lastMessage}
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>{lastMessage}</AlertDescription>
         </Alert>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Token Balances
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Address</Table.Th>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Token Balances</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Address</TableHead>
                 {allTokenIds.map((id) => (
-                  <Table.Th key={id} ta="right">
+                  <TableHead key={id} className="text-right">
                     ID #{id}
-                  </Table.Th>
+                  </TableHead>
                 ))}
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {allAddresses.map((addr) => (
-                <Table.Tr key={addr}>
-                  <Table.Td>
-                    <Code>{addr}</Code>
-                  </Table.Td>
+                <TableRow key={addr}>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{addr}</code>
+                  </TableCell>
                   {allTokenIds.map((id) => (
-                    <Table.Td key={id} ta="right">
-                      <Code>
+                    <TableCell key={id} className="text-right">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
                         {balanceOfERC1155(state, addr, id).toString()}
-                      </Code>
-                    </Table.Td>
+                      </code>
+                    </TableCell>
                   ))}
-                </Table.Tr>
+                </TableRow>
               ))}
               {allAddresses.length === 0 && (
-                <Table.Tr>
-                  <Table.Td colSpan={allTokenIds.length + 1} ta="center">
-                    <Text size="sm" c="dimmed">
+                <TableRow>
+                  <TableCell colSpan={allTokenIds.length + 1} className="text-center">
+                    <p className="text-sm text-muted-foreground">
                       No tokens minted
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
+                    </p>
+                  </TableCell>
+                </TableRow>
               )}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {allAddresses.length > 0 && allTokenIds.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Balance Distribution
-            </Text>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Balance Distribution</p>
             <SimpleBarChart
               data={allAddresses.map((addr) => {
                 const row: Record<string, unknown> = { address: addr };
@@ -235,58 +255,56 @@ export function ERC1155MultiTokenDemo() {
               grouped
               height={250}
             />
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
       {allTokenIds.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Token Info
-            </Text>
-            <Table striped>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Token ID</Table.Th>
-                  <Table.Th>Type</Table.Th>
-                  <Table.Th ta="right">Total Supply</Table.Th>
-                  <Table.Th>URI</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Token Info</p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Token ID</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead className="text-right">Total Supply</TableHead>
+                  <TableHead>URI</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {allTokenIds.map((id) => (
-                  <Table.Tr key={id}>
-                    <Table.Td>
-                      <Badge variant="light">#{id}</Badge>
-                    </Table.Td>
-                    <Table.Td>
+                  <TableRow key={id}>
+                    <TableCell>
+                      <Badge variant="secondary">#{id}</Badge>
+                    </TableCell>
+                    <TableCell>
                       <Badge
-                        variant="light"
-                        color={
+                        variant="secondary"
+                        className={
                           state.tokenTypes[id] === "non-fungible"
-                            ? "violet"
-                            : "blue"
+                            ? "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300"
+                            : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
                         }
                       >
                         {state.tokenTypes[id] ?? "fungible"}
                       </Badge>
-                    </Table.Td>
-                    <Table.Td ta="right">
-                      <Code>{state.totalSupply[id]?.toString() ?? "0"}</Code>
-                    </Table.Td>
-                    <Table.Td>
-                      <Code style={{ fontSize: 11 }}>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{state.totalSupply[id]?.toString() ?? "0"}</code>
+                    </TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
                         {state.uris[id] ?? "—"}
-                      </Code>
-                    </Table.Td>
-                  </Table.Tr>
+                      </code>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Tbody>
+              </TableBody>
             </Table>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 }

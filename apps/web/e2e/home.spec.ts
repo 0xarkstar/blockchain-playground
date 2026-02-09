@@ -21,6 +21,6 @@ test.describe("Home Page", () => {
     const toggle = page.getByLabel("Toggle color scheme");
     await toggle.click();
     const html = page.locator("html");
-    await expect(html).toHaveAttribute("data-mantine-color-scheme", "dark");
+    await expect(html).toHaveClass(/dark/);
   });
 });

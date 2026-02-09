@@ -1,28 +1,52 @@
 # Pipeline Progress
 
-## Project: blockchain-playground 인프라 개선
+## Project: UI Migration — Mantine v7 → shadcn/ui + Tailwind v4
 
-## Started: 2026-02-08
+## Started: 2026-02-09
 
 ## Phase Status
 
-| Phase             | Status   | Agents                    | Notes                   |
-| ----------------- | -------- | ------------------------- | ----------------------- |
-| P1 구현 (Group A) | COMPLETE | p-impl-tests, p-impl-lint | Steps 1-4 병렬          |
-| P1 구현 (Group B) | COMPLETE | p-impl-ci                 | Step 5, Group A 완료 후 |
-| P2 검증           | COMPLETE | p-qa                      | Step 6, Group B 완료 후 |
+| Phase | Status | Agents | Notes |
+|-------|--------|--------|-------|
+| P0 Foundation | COMPLETE | p-foundation | deps, globals.css, shared components |
+| P1 Wave 1 | COMPLETE | p-track-fund, p-track-defi, p-track-sol | 33 demos + pages |
+| P1 Wave 2 | COMPLETE | p-track-tok, p-track-zk, p-track-pages | 26 demos + home + pages |
+| P2 Cleanup + QA | COMPLETE | p-qa | Remove Mantine deps, final verification |
 
 ## File Ownership Map
 
-- **p-impl-tests**: `packages/utils/`, `apps/web/vitest.config.ts`, `apps/web/package.json` (coverage only)
-- **p-impl-lint**: `apps/web/eslint.config.mjs`, `apps/web/proxy.ts`, `apps/web/package.json` (eslint devDeps), `packages/*/package.json` (lint script removal), root `package.json`, `.prettierrc`, `.prettierignore`
-- **p-impl-ci**: `.github/workflows/ci.yml`, `CLAUDE.md`
-- **p-qa**: read-only verification
+### Phase 0 (p-foundation)
+- `apps/web/postcss.config.js`
+- `apps/web/app/globals.css` (create)
+- `apps/web/app/[locale]/layout.tsx`
+- `apps/web/lib/theme.ts` (delete)
+- `apps/web/lib/utils.ts` (create)
+- `apps/web/components/layout/app-shell-layout.tsx`
+- `apps/web/components/ui/*.tsx` (shadcn components)
+- `packages/ui/src/**`
+- `apps/web/components/shared/**`
+
+### Phase 1 Wave 1
+- `p-track-fund`: `apps/web/components/fundamentals/**`, fundamentals page.tsx + demo pages
+- `p-track-defi`: `apps/web/components/defi/**`, defi page.tsx + demo pages
+- `p-track-sol`: `apps/web/components/solidity/**`, solidity page.tsx + demo pages
+
+### Phase 1 Wave 2
+- `p-track-tok`: `apps/web/components/tokens/**`, tokens page.tsx + demo pages
+- `p-track-zk`: `apps/web/components/zk/**`, `applied-zk/**`, zk page.tsx + demo pages
+- `p-track-pages`: `apps/web/app/[locale]/page.tsx` (home)
 
 ## Timeline
 
-- [2026-02-08] Team created, P1 Group A starting
-- [2026-02-08] P1 Group A complete (p-impl-tests, p-impl-lint)
-- [2026-02-08] P1 Group B complete (p-impl-ci)
-- [2026-02-08] P2 verification complete (p-qa) — ALL CHECKS PASS
-- [2026-02-08] Pipeline complete
+- [2026-02-09] Migration pipeline created, P0 starting
+- [2026-02-09] P0 complete — shadcn/ui foundation, OKLCH tokens, next-themes, 19 UI components
+- [2026-02-09] P1 Wave 1 started — p-track-fund, p-track-defi, p-track-sol (3 agents parallel)
+- [2026-02-09] P1 Wave 1 complete — all 3 tracks migrated (fundamentals, defi, solidity)
+- [2026-02-09] P1 Wave 2 started — p-track-tok, p-track-zk, p-track-pages (3 agents parallel)
+- [2026-02-09] P1 Wave 2 complete — all tracks migrated (tokens, zk, applied-zk, home)
+- [2026-02-09] P2 starting — final cleanup, dep removal, QA
+- [2026-02-09] P2 complete — 7 Mantine deps removed, 4 TS errors fixed, 4 lint fixes, build/test/lint ALL PASS
+- [2026-02-09] **MIGRATION COMPLETE** — 0 @mantine refs, 0 @tabler refs, 709 tests pass, build green
+- [2026-02-09] Phase 2 enhancements: Command palette (Cmd+K), Sonner toasts, syntax-highlighted CodeBlock
+- [2026-02-09] Final QA: 709 unit tests + 54 E2E tests ALL PASS, 0 lint errors
+- [2026-02-09] **PIPELINE COMPLETE**

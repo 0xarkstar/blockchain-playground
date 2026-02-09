@@ -1,16 +1,5 @@
 "use client";
 
-import {
-  Container,
-  Title,
-  Text,
-  Badge,
-  Stack,
-  Group,
-  Paper,
-  Breadcrumbs,
-  Anchor,
-} from "@mantine/core";
 import type { ReactNode } from "react";
 
 interface DemoLayoutProps {
@@ -24,9 +13,9 @@ interface DemoLayoutProps {
 }
 
 const difficultyColors = {
-  beginner: "green",
-  intermediate: "yellow",
-  advanced: "red",
+  beginner: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+  intermediate: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
+  advanced: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
 } as const;
 
 export function DemoLayout({
@@ -39,34 +28,35 @@ export function DemoLayout({
   children,
 }: DemoLayoutProps) {
   return (
-    <Container size="lg" py="xl">
-      <Stack gap="lg">
-        <Breadcrumbs>
-          <Anchor href={trackHref}>{trackTitle}</Anchor>
-          <Text>{title}</Text>
-        </Breadcrumbs>
+    <div className="container mx-auto max-w-5xl px-4 py-8">
+      <div className="flex flex-col gap-6">
+        <nav className="flex items-center gap-2 text-sm text-muted-foreground">
+          <a href={trackHref} className="hover:text-foreground transition-colors">
+            {trackTitle}
+          </a>
+          <span>/</span>
+          <span className="text-foreground">{title}</span>
+        </nav>
 
         <div>
-          <Group gap="xs" mb="xs">
-            <Badge variant="light" color={difficultyColors[difficulty]}>
+          <div className="flex items-center gap-2 mb-2">
+            <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${difficultyColors[difficulty]}`}>
               {difficulty}
-            </Badge>
+            </span>
             {onChain && (
-              <Badge variant="light" color="violet">
+              <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300">
                 On-Chain
-              </Badge>
+              </span>
             )}
-          </Group>
-          <Title order={1}>{title}</Title>
-          <Text size="lg" c="dimmed" mt="xs">
-            {description}
-          </Text>
+          </div>
+          <h1 className="text-3xl font-bold">{title}</h1>
+          <p className="text-lg text-muted-foreground mt-1">{description}</p>
         </div>
 
-        <Paper p="lg" radius="md" withBorder>
+        <div className="rounded-lg border border-border bg-card p-6">
           {children}
-        </Paper>
-      </Stack>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }

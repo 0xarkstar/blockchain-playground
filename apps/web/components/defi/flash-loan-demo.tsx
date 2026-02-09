@@ -1,16 +1,16 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Zap, Check, X } from "lucide-react";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import {
-  Stack,
-  NumberInput,
-  Text,
-  Paper,
   Table,
-  Alert,
-  Stepper,
-} from "@mantine/core";
-import { IconBolt, IconCheck, IconX } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../ui/table";
 import { simulateFlashLoan } from "../../lib/defi/flash-loan";
 import { StepCard, EducationPanel } from "../../components/shared";
 
@@ -23,121 +23,139 @@ export function FlashLoanDemo() {
     return simulateFlashLoan(borrowAmount, feeRate / 100, arbitrageProfit);
   }, [borrowAmount, feeRate, arbitrageProfit]);
 
-  const activeStep = result.success ? 3 : 2;
-
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Flash Loan Parameters
-          </Text>
-          <NumberInput
-            label="Borrow Amount"
-            value={borrowAmount}
-            onChange={(v) => setBorrowAmount(Number(v) || 0)}
-            min={0}
-            thousandSeparator=","
-            prefix="$"
-          />
-          <NumberInput
-            label="Protocol Fee (%)"
-            value={feeRate}
-            onChange={(v) => setFeeRate(Number(v) || 0)}
-            min={0}
-            max={100}
-            decimalScale={3}
-            suffix="%"
-            step={0.01}
-          />
-          <NumberInput
-            label="Arbitrage Profit (before fee)"
-            value={arbitrageProfit}
-            onChange={(v) => setArbitrageProfit(Number(v) || 0)}
-            min={0}
-            thousandSeparator=","
-            prefix="$"
-          />
-        </Stack>
-      </Paper>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Flash Loan Parameters</p>
+          <div>
+            <Label>Borrow Amount</Label>
+            <Input
+              type="number"
+              value={borrowAmount}
+              onChange={(e) => setBorrowAmount(Number(e.target.value) || 0)}
+              min={0}
+            />
+          </div>
+          <div>
+            <Label>Protocol Fee (%)</Label>
+            <Input
+              type="number"
+              value={feeRate}
+              onChange={(e) => setFeeRate(Number(e.target.value) || 0)}
+              min={0}
+              max={100}
+              step={0.01}
+            />
+          </div>
+          <div>
+            <Label>Arbitrage Profit (before fee)</Label>
+            <Input
+              type="number"
+              value={arbitrageProfit}
+              onChange={(e) => setArbitrageProfit(Number(e.target.value) || 0)}
+              min={0}
+            />
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Transaction Simulation
-          </Text>
-          <Stepper active={activeStep} color={result.success ? "green" : "red"}>
-            <Stepper.Step
-              label="Borrow"
-              description={`$${borrowAmount.toLocaleString()}`}
-              icon={<IconBolt size={16} />}
-            />
-            <Stepper.Step
-              label="Arbitrage"
-              description={`Profit: $${arbitrageProfit.toLocaleString()}`}
-            />
-            <Stepper.Step
-              label="Repay"
-              description={`$${result.repayAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}`}
-              icon={
-                result.success ? <IconCheck size={16} /> : <IconX size={16} />
-              }
-            />
-          </Stepper>
-        </Stack>
-      </Paper>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Transaction Simulation</p>
+          <div className="flex items-center gap-4">
+            {[
+              {
+                label: "Borrow",
+                desc: `$${borrowAmount.toLocaleString()}`,
+                icon: <Zap className="h-4 w-4" />,
+                done: true,
+              },
+              {
+                label: "Arbitrage",
+                desc: `Profit: $${arbitrageProfit.toLocaleString()}`,
+                icon: null,
+                done: true,
+              },
+              {
+                label: "Repay",
+                desc: `$${result.repayAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}`,
+                icon: result.success ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />,
+                done: result.success,
+              },
+            ].map((step, i) => (
+              <div key={step.label} className="flex items-center gap-2">
+                <div
+                  className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold ${
+                    step.done
+                      ? result.success
+                        ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                        : i < 2
+                          ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
+                          : "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {step.icon ?? (i + 1)}
+                </div>
+                <div>
+                  <p className="text-xs font-semibold">{step.label}</p>
+                  <p className="text-xs text-muted-foreground">{step.desc}</p>
+                </div>
+                {i < 2 && <div className="mx-2 h-px w-8 bg-border" />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Result
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Result</p>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Borrow Amount</Table.Td>
-                <Table.Td ta="right">${borrowAmount.toLocaleString()}</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Protocol Fee</Table.Td>
-                <Table.Td ta="right">
+            <TableBody>
+              <TableRow>
+                <TableCell>Borrow Amount</TableCell>
+                <TableCell className="text-right">${borrowAmount.toLocaleString()}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Protocol Fee</TableCell>
+                <TableCell className="text-right">
                   $
                   {(result.repayAmount - borrowAmount).toLocaleString(
                     undefined,
                     { maximumFractionDigits: 2 },
                   )}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Repay Amount</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Repay Amount</TableCell>
+                <TableCell className="text-right">
                   $
                   {result.repayAmount.toLocaleString(undefined, {
                     maximumFractionDigits: 2,
                   })}
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Net Profit</Table.Td>
-                <Table.Td ta="right">
-                  <Text fw={600} c={result.profit > 0 ? "green" : "red"}>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Net Profit</TableCell>
+                <TableCell className="text-right">
+                  <span className={`font-semibold ${result.profit > 0 ? "text-green-600" : "text-red-600"}`}>
                     $
                     {result.profit.toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                     })}
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                  </span>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Flash Loan Steps
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Flash Loan Steps</p>
           <StepCard
             stepNumber={1}
             title="Borrow"
@@ -154,17 +172,17 @@ export function FlashLoanDemo() {
             description={`Repay $${result.repayAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })} (principal + fee). ${result.success ? "Transaction succeeds." : "REVERTS — insufficient funds."}`}
             isLast
           />
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Alert
-        icon={result.success ? <IconCheck size={16} /> : <IconX size={16} />}
-        color={result.success ? "green" : "red"}
-        title={result.success ? "Transaction Success" : "Transaction Reverted"}
-      >
-        {result.success
-          ? `Flash loan executed successfully. Net profit: $${result.profit.toFixed(2)} after repaying principal + fee.`
-          : `Transaction reverted — arbitrage profit ($${arbitrageProfit}) is insufficient to cover the protocol fee ($${(result.repayAmount - borrowAmount).toFixed(2)}). In a real flash loan, the entire transaction would revert atomically.`}
+      <Alert variant={result.success ? "default" : "destructive"}>
+        {result.success ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+        <AlertTitle>{result.success ? "Transaction Success" : "Transaction Reverted"}</AlertTitle>
+        <AlertDescription>
+          {result.success
+            ? `Flash loan executed successfully. Net profit: $${result.profit.toFixed(2)} after repaying principal + fee.`
+            : `Transaction reverted — arbitrage profit ($${arbitrageProfit}) is insufficient to cover the protocol fee ($${(result.repayAmount - borrowAmount).toFixed(2)}). In a real flash loan, the entire transaction would revert atomically.`}
+        </AlertDescription>
       </Alert>
 
       <EducationPanel
@@ -192,6 +210,6 @@ export function FlashLoanDemo() {
           "Failed flash loans cost only the gas fee — no capital is at risk",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

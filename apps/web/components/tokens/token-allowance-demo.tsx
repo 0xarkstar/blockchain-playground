@@ -1,20 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  TextInput,
-  NumberInput,
-  Button,
   Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   createERC20,
   mint,
@@ -67,77 +67,92 @@ export function TokenAllowanceDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Step 1: Owner Approves Spender
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Spender"
-              value={approveSpender}
-              onChange={(e) => setApproveSpender(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Amount"
-              value={approveAmount}
-              onChange={(v) => setApproveAmount(Number(v) || 0)}
-              min={0}
-            />
-          </Group>
-          <Button onClick={handleApprove} variant="light" color="orange">
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Spender</Label>
+              <Input
+                value={approveSpender}
+                onChange={(e) => setApproveSpender(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Amount</Label>
+              <Input
+                type="number"
+                value={approveAmount}
+                onChange={(e) => setApproveAmount(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-orange-100 text-orange-800 hover:bg-orange-200 dark:bg-orange-900 dark:text-orange-300 dark:hover:bg-orange-800" onClick={handleApprove}>
             Approve
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Step 2: Spender Transfers From Owner
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Spender"
-              value={tfSpender}
-              onChange={(e) => setTfSpender(e.currentTarget.value)}
-            />
-            <TextInput
-              label="From"
-              value={tfFrom}
-              onChange={(e) => setTfFrom(e.currentTarget.value)}
-            />
-            <TextInput
-              label="To"
-              value={tfTo}
-              onChange={(e) => setTfTo(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Amount"
-              value={tfAmount}
-              onChange={(v) => setTfAmount(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Button onClick={handleTransferFrom} variant="light" color="blue">
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <Label>Spender</Label>
+              <Input
+                value={tfSpender}
+                onChange={(e) => setTfSpender(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>From</Label>
+              <Input
+                value={tfFrom}
+                onChange={(e) => setTfFrom(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>To</Label>
+              <Input
+                value={tfTo}
+                onChange={(e) => setTfTo(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Amount</Label>
+              <Input
+                type="number"
+                value={tfAmount}
+                onChange={(e) => setTfAmount(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800" onClick={handleTransferFrom}>
             Transfer From
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {lastMessage && (
-        <Alert icon={<IconInfoCircle size={16} />} variant="light">
-          {lastMessage}
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>{lastMessage}</AlertDescription>
         </Alert>
       )}
 
       {Object.keys(state.allowances).length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">
               Approval Flow
-            </Text>
+            </p>
             <svg
               width="100%"
               height={
@@ -167,7 +182,7 @@ export function TokenAllowanceDemo() {
                 >
                   <polygon
                     points="0 0, 10 3.5, 0 7"
-                    fill="var(--mantine-color-orange-6)"
+                    className="fill-orange-500"
                   />
                 </marker>
               </defs>
@@ -187,8 +202,7 @@ export function TokenAllowanceDemo() {
                         width={120}
                         height={36}
                         rx={6}
-                        fill="var(--mantine-color-blue-light)"
-                        stroke="var(--mantine-color-blue-6)"
+                        className="fill-blue-100 stroke-blue-500 dark:fill-blue-900 dark:stroke-blue-400"
                         strokeWidth={1}
                       />
                       <text
@@ -196,7 +210,7 @@ export function TokenAllowanceDemo() {
                         y={y + 5}
                         textAnchor="middle"
                         fontSize={13}
-                        fill="var(--mantine-color-blue-9)"
+                        className="fill-blue-800 dark:fill-blue-200"
                       >
                         {owner}
                       </text>
@@ -205,7 +219,7 @@ export function TokenAllowanceDemo() {
                         y1={y}
                         x2={340}
                         y2={y}
-                        stroke="var(--mantine-color-orange-6)"
+                        className="stroke-orange-500"
                         strokeWidth={2}
                         markerEnd="url(#arrowhead)"
                       />
@@ -214,7 +228,7 @@ export function TokenAllowanceDemo() {
                         y={y - 8}
                         textAnchor="middle"
                         fontSize={11}
-                        fill="var(--mantine-color-orange-7)"
+                        className="fill-orange-600 dark:fill-orange-400"
                       >
                         Limit: {amount.toString()}
                       </text>
@@ -224,8 +238,7 @@ export function TokenAllowanceDemo() {
                         width={120}
                         height={36}
                         rx={6}
-                        fill="var(--mantine-color-green-light)"
-                        stroke="var(--mantine-color-green-6)"
+                        className="fill-green-100 stroke-green-500 dark:fill-green-900 dark:stroke-green-400"
                         strokeWidth={1}
                       />
                       <text
@@ -233,7 +246,7 @@ export function TokenAllowanceDemo() {
                         y={y + 5}
                         textAnchor="middle"
                         fontSize={13}
-                        fill="var(--mantine-color-green-9)"
+                        className="fill-green-800 dark:fill-green-200"
                       >
                         {spender}
                       </text>
@@ -242,85 +255,85 @@ export function TokenAllowanceDemo() {
                 });
               })}
             </svg>
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Balances
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Address</Table.Th>
-                <Table.Th ta="right">Balance</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Balances</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Address</TableHead>
+                <TableHead className="text-right">Balance</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {addresses.map((addr) => (
-                <Table.Tr key={addr}>
-                  <Table.Td>
-                    <Code>{addr}</Code>
-                  </Table.Td>
-                  <Table.Td ta="right">
-                    <Code>{balanceOf(state, addr).toString()}</Code>
-                  </Table.Td>
-                </Table.Tr>
+                <TableRow key={addr}>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{addr}</code>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{balanceOf(state, addr).toString()}</code>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Allowances
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Owner</Table.Th>
-                <Table.Th>Spender</Table.Th>
-                <Table.Th ta="right">Allowance</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Allowances</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Owner</TableHead>
+                <TableHead>Spender</TableHead>
+                <TableHead className="text-right">Allowance</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {Object.entries(state.allowances).flatMap(([owner, spenders]) =>
                 Object.entries(spenders).map(([spender, amount]) => (
-                  <Table.Tr key={`${owner}-${spender}`}>
-                    <Table.Td>
-                      <Code>{owner}</Code>
-                    </Table.Td>
-                    <Table.Td>
-                      <Code>{spender}</Code>
-                    </Table.Td>
-                    <Table.Td ta="right">
+                  <TableRow key={`${owner}-${spender}`}>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{owner}</code>
+                    </TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{spender}</code>
+                    </TableCell>
+                    <TableCell className="text-right">
                       <Badge
-                        variant="light"
-                        color={amount > BigInt(0) ? "green" : "gray"}
+                        variant="secondary"
+                        className={
+                          amount > BigInt(0)
+                            ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                            : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
+                        }
                       >
                         {amount.toString()}
                       </Badge>
-                    </Table.Td>
-                  </Table.Tr>
+                    </TableCell>
+                  </TableRow>
                 )),
               )}
               {Object.keys(state.allowances).length === 0 && (
-                <Table.Tr>
-                  <Table.Td colSpan={3} ta="center">
-                    <Text size="sm" c="dimmed">
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center">
+                    <p className="text-sm text-muted-foreground">
                       No allowances set
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
+                    </p>
+                  </TableCell>
+                </TableRow>
               )}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 }

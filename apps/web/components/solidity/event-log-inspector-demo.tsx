@@ -1,20 +1,27 @@
 "use client";
 
 import { useState, useMemo, useRef } from "react";
+import { Plus, Trash2 } from "lucide-react";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
 import {
-  Stack,
-  Paper,
-  TextInput,
   Select,
-  Switch,
-  Button,
-  Code,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
   Table,
-  Badge,
-  Group,
-  Text,
-} from "@mantine/core";
-import { IconPlus, IconTrash } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import { encodeLogEntry, type EventParam } from "../../lib/solidity/abi";
 import { EducationPanel } from "../../components/shared";
 
@@ -96,210 +103,224 @@ export function EventLogInspectorDemo() {
   );
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Event Definition
-          </Text>
-          <TextInput
-            label="Event Name"
-            value={eventName}
-            onChange={(e) => setEventName(e.currentTarget.value)}
-          />
-          <Text size="xs" fw={600}>
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Event Definition</p>
+          <div>
+            <Label>Event Name</Label>
+            <Input
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
+            />
+          </div>
+          <p className="text-xs font-semibold">
             Parameters ({params.length}) — Indexed: {indexedCount}/3 max
-          </Text>
+          </p>
           {params.map((param, i) => (
-            <Group key={param.id} align="flex-end">
-              <Select
-                label="Type"
-                data={PARAM_TYPES}
-                value={param.type}
-                onChange={(v) => v && updateParam(i, "type", v)}
-                style={{ width: 130 }}
-              />
-              <TextInput
-                label="Name"
-                value={param.name}
-                onChange={(e) => updateParam(i, "name", e.currentTarget.value)}
-                style={{ width: 100 }}
-              />
-              <TextInput
-                label="Value"
-                value={param.value}
-                onChange={(e) => updateParam(i, "value", e.currentTarget.value)}
-                style={{ flex: 1 }}
-              />
-              <Switch
-                label="Indexed"
-                checked={param.indexed}
-                onChange={(e) =>
-                  updateParam(i, "indexed", e.currentTarget.checked)
-                }
-                disabled={!param.indexed && indexedCount >= 3}
-              />
+            <div key={param.id} className="flex items-end gap-2">
+              <div className="w-[130px]">
+                <Label>Type</Label>
+                <Select
+                  value={param.type}
+                  onValueChange={(v) => updateParam(i, "type", v)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PARAM_TYPES.map((t) => (
+                      <SelectItem key={t} value={t}>
+                        {t}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="w-[100px]">
+                <Label>Name</Label>
+                <Input
+                  value={param.name}
+                  onChange={(e) => updateParam(i, "name", e.target.value)}
+                />
+              </div>
+              <div className="flex-1">
+                <Label>Value</Label>
+                <Input
+                  value={param.value}
+                  onChange={(e) => updateParam(i, "value", e.target.value)}
+                />
+              </div>
+              <div className="flex items-center gap-2 pb-1">
+                <Switch
+                  checked={param.indexed}
+                  onCheckedChange={(checked) =>
+                    updateParam(i, "indexed", checked)
+                  }
+                  disabled={!param.indexed && indexedCount >= 3}
+                />
+                <Label className="text-xs">Indexed</Label>
+              </div>
               <Button
                 size="sm"
-                variant="subtle"
-                color="red"
+                variant="ghost"
+                className="text-red-500 hover:text-red-700"
                 onClick={() => removeParam(i)}
               >
-                <IconTrash size={14} />
+                <Trash2 className="h-3.5 w-3.5" />
               </Button>
-            </Group>
+            </div>
           ))}
-          <Button
-            leftSection={<IconPlus size={16} />}
-            variant="outline"
-            onClick={addParam}
-            size="xs"
-          >
+          <Button variant="outline" size="sm" onClick={addParam}>
+            <Plus className="h-4 w-4 mr-1" />
             Add Parameter
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {log && (
         <>
-          <Paper p="md" withBorder>
-            <Stack gap="md">
-              <Text size="sm" fw={600}>
-                Topics
-              </Text>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-4">
+              <p className="text-sm font-semibold">Topics</p>
               {log.topics.map((topic, i) => (
-                <Stack key={i} gap={2}>
-                  <Text size="xs" c="dimmed">
+                <div key={i} className="flex flex-col gap-0.5">
+                  <p className="text-xs text-muted-foreground">
                     {log.topicDescriptions[i]}
-                  </Text>
-                  <Code style={{ fontSize: 11, wordBreak: "break-all" }}>
+                  </p>
+                  <code
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono"
+                    style={{ fontSize: 11, wordBreak: "break-all" }}
+                  >
                     {topic}
-                  </Code>
-                </Stack>
+                  </code>
+                </div>
               ))}
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
-          <Paper p="md" withBorder>
-            <Stack gap="md">
-              <Text size="sm" fw={600}>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-4">
+              <p className="text-sm font-semibold">
                 Data (non-indexed ABI-encoded)
-              </Text>
-              <Code block style={{ fontSize: 11, wordBreak: "break-all" }}>
-                {log.data || "0x (empty — all params are indexed)"}
-              </Code>
-            </Stack>
-          </Paper>
+              </p>
+              <pre
+                className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono"
+                style={{ fontSize: 11, wordBreak: "break-all" }}
+              >
+                <code>
+                  {log.data || "0x (empty — all params are indexed)"}
+                </code>
+              </pre>
+            </div>
+          </div>
 
-          <Paper p="md" withBorder>
-            <Stack gap="md">
-              <Text size="sm" fw={600}>
-                Log Structure Summary
-              </Text>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-4">
+              <p className="text-sm font-semibold">Log Structure Summary</p>
               <Table>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Parameter</Table.Th>
-                    <Table.Th>Type</Table.Th>
-                    <Table.Th>Location</Table.Th>
-                    <Table.Th>Searchable</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Parameter</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Location</TableHead>
+                    <TableHead>Searchable</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {params.map((p, i) => (
-                    <Table.Tr key={i}>
-                      <Table.Td>{p.name}</Table.Td>
-                      <Table.Td>
-                        <Badge size="xs" variant="light">
+                    <TableRow key={i}>
+                      <TableCell>{p.name}</TableCell>
+                      <TableCell>
+                        <Badge variant="secondary" className="text-xs">
                           {p.type}
                         </Badge>
-                      </Table.Td>
-                      <Table.Td>
-                        <Badge size="xs" color={p.indexed ? "blue" : "gray"}>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          className={`text-xs ${p.indexed ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"}`}
+                        >
                           {p.indexed ? "topic" : "data"}
                         </Badge>
-                      </Table.Td>
-                      <Table.Td>
+                      </TableCell>
+                      <TableCell>
                         <Badge
-                          size="xs"
-                          color={p.indexed ? "green" : "red"}
-                          variant="light"
+                          variant="secondary"
+                          className={`text-xs ${p.indexed ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
                         >
                           {p.indexed ? "Yes" : "No"}
                         </Badge>
-                      </Table.Td>
-                    </Table.Tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </Table.Tbody>
+                </TableBody>
               </Table>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
         </>
       )}
 
       {log && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Event Timeline
-            </Text>
-            <Stack
-              gap="xs"
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Event Timeline</p>
+            <div
+              className="flex flex-col gap-1"
               style={{
-                borderLeft: "3px solid var(--mantine-color-blue-3)",
+                borderLeft: "3px solid hsl(var(--primary) / 0.3)",
                 paddingLeft: 16,
               }}
             >
-              <Paper p="xs" withBorder bg="blue.0">
-                <Group gap="xs">
-                  <Badge size="xs" color="blue">
+              <div className="rounded-lg border border-border bg-blue-50 dark:bg-blue-950 p-2">
+                <div className="flex items-center gap-1">
+                  <Badge className="text-xs bg-blue-600 text-white">
                     topic[0]
                   </Badge>
-                  <Text size="xs" fw={600}>
-                    Event Signature Hash
-                  </Text>
-                </Group>
-                <Code style={{ fontSize: 10 }}>
+                  <p className="text-xs font-semibold">Event Signature Hash</p>
+                </div>
+                <code className="font-mono" style={{ fontSize: 10 }}>
                   {log.topics[0]?.slice(0, 20)}...
-                </Code>
-              </Paper>
+                </code>
+              </div>
               {params
                 .filter((p) => p.indexed)
                 .map((p, i) => (
-                  <Paper key={p.id} p="xs" withBorder bg="green.0">
-                    <Group gap="xs">
-                      <Badge size="xs" color="green">
+                  <div
+                    key={p.id}
+                    className="rounded-lg border border-border bg-green-50 dark:bg-green-950 p-2"
+                  >
+                    <div className="flex items-center gap-1">
+                      <Badge className="text-xs bg-green-600 text-white">
                         topic[{i + 1}]
                       </Badge>
-                      <Text size="xs" fw={600}>
+                      <p className="text-xs font-semibold">
                         {p.name} (indexed {p.type})
-                      </Text>
-                    </Group>
-                    <Text size="xs" c="dimmed">
-                      {p.value}
-                    </Text>
-                  </Paper>
+                      </p>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{p.value}</p>
+                  </div>
                 ))}
               {params
                 .filter((p) => !p.indexed)
                 .map((p) => (
-                  <Paper key={p.id} p="xs" withBorder bg="gray.0">
-                    <Group gap="xs">
-                      <Badge size="xs" color="gray">
+                  <div
+                    key={p.id}
+                    className="rounded-lg border border-border bg-muted p-2"
+                  >
+                    <div className="flex items-center gap-1">
+                      <Badge variant="secondary" className="text-xs">
                         data
                       </Badge>
-                      <Text size="xs" fw={600}>
+                      <p className="text-xs font-semibold">
                         {p.name} (non-indexed {p.type})
-                      </Text>
-                    </Group>
-                    <Text size="xs" c="dimmed">
-                      {p.value}
-                    </Text>
-                  </Paper>
+                      </p>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{p.value}</p>
+                  </div>
                 ))}
-            </Stack>
-          </Stack>
-        </Paper>
+            </div>
+          </div>
+        </div>
       )}
 
       <EducationPanel
@@ -327,6 +348,6 @@ export function EventLogInspectorDemo() {
           "Anonymous events omit topic[0] — saves gas but harder to filter",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

@@ -1,19 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  SegmentedControl,
-  TextInput,
-  NumberInput,
   Table,
-  Badge,
-  Group,
-  Text,
-  Alert,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import { simulateCall, type CallContext } from "../../lib/solidity/evm";
 import { EducationPanel } from "../../components/shared";
 
@@ -43,229 +44,229 @@ export function ContractInteractionsDemo() {
   );
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Inter-Contract Call Flow
-          </Text>
-          <Paper p="md" withBorder bg="gray.0" style={{ textAlign: "center" }}>
-            <Group gap="md" justify="center" align="center">
-              <Paper
-                p="sm"
-                withBorder
-                bg="blue.1"
-                style={{ minWidth: 100, textAlign: "center" }}
-              >
-                <Text size="xs" fw={600}>
-                  {from}
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Caller
-                </Text>
-              </Paper>
-              <Stack gap={2} align="center">
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Inter-Contract Call Flow</p>
+          <div className="rounded-lg border border-border bg-muted p-4 text-center">
+            <div className="flex items-center gap-4 justify-center">
+              <div className="rounded-lg border border-border bg-blue-100 dark:bg-blue-900 p-3 min-w-[100px] text-center">
+                <p className="text-xs font-semibold">{from}</p>
+                <p className="text-xs text-muted-foreground">Caller</p>
+              </div>
+              <div className="flex flex-col items-center gap-0.5">
                 <Badge
-                  size="sm"
-                  color={
+                  className={
                     callType === "call"
-                      ? "blue"
+                      ? "bg-blue-600 text-white"
                       : callType === "delegatecall"
-                        ? "violet"
-                        : "cyan"
+                        ? "bg-violet-600 text-white"
+                        : "bg-cyan-600 text-white"
                   }
                 >
                   {callType.toUpperCase()}
                 </Badge>
-                <Text size="xs" c="dimmed">
+                <p className="text-xs text-muted-foreground">
                   {value > 0 ? `${value} wei` : "no value"}
-                </Text>
-              </Stack>
-              <Paper
-                p="sm"
-                withBorder
-                bg="green.1"
-                style={{ minWidth: 100, textAlign: "center" }}
-              >
-                <Text size="xs" fw={600}>
-                  {to}
-                </Text>
-                <Text size="xs" c="dimmed">
-                  Target
-                </Text>
-              </Paper>
-            </Group>
-            <Text size="xs" c="dimmed" mt="xs">
+                </p>
+              </div>
+              <div className="rounded-lg border border-border bg-green-100 dark:bg-green-900 p-3 min-w-[100px] text-center">
+                <p className="text-xs font-semibold">{to}</p>
+                <p className="text-xs text-muted-foreground">Target</p>
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
               Storage: {result.storageContext} | Code: {result.codeSource} |
               msg.sender: {result.msgSender}
-            </Text>
-          </Paper>
-        </Stack>
-      </Paper>
+            </p>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Call Configuration
-          </Text>
-          <SegmentedControl
-            data={CALL_TYPES}
-            value={callType}
-            onChange={(v) => setCallType(v as CallContext["callType"])}
-            fullWidth
-          />
-          <Group grow>
-            <TextInput
-              label="From (caller)"
-              value={from}
-              onChange={(e) => setFrom(e.currentTarget.value)}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Call Configuration</p>
+          <div className="flex flex-wrap gap-1 rounded-lg bg-muted p-1">
+            {CALL_TYPES.map((ct) => (
+              <Button
+                key={ct.value}
+                variant={callType === ct.value ? "default" : "ghost"}
+                size="sm"
+                className="flex-1"
+                onClick={() => setCallType(ct.value)}
+              >
+                {ct.label}
+              </Button>
+            ))}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>From (caller)</Label>
+              <Input
+                value={from}
+                onChange={(e) => setFrom(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>To (target)</Label>
+              <Input
+                value={to}
+                onChange={(e) => setTo(e.target.value)}
+              />
+            </div>
+          </div>
+          <div>
+            <Label>Value (wei)</Label>
+            <Input
+              type="number"
+              value={value}
+              onChange={(e) => setValue(Number(e.target.value) || 0)}
+              min={0}
             />
-            <TextInput
-              label="To (target)"
-              value={to}
-              onChange={(e) => setTo(e.currentTarget.value)}
-            />
-          </Group>
-          <NumberInput
-            label="Value (wei)"
-            value={value}
-            onChange={(v) => setValue(Number(v) || 0)}
-            min={0}
-          />
-        </Stack>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            {result.callType} Context
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">{result.callType} Context</p>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>msg.sender</Table.Td>
-                <Table.Td ta="right">
-                  <Badge variant="light">{result.msgSender}</Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Storage Context</Table.Td>
-                <Table.Td ta="right">
-                  <Badge variant="light" color="blue">
+            <TableBody>
+              <TableRow>
+                <TableCell>msg.sender</TableCell>
+                <TableCell className="text-right">
+                  <Badge variant="secondary">{result.msgSender}</Badge>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Storage Context</TableCell>
+                <TableCell className="text-right">
+                  <Badge
+                    variant="secondary"
+                    className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                  >
                     {result.storageContext}
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Code Source</Table.Td>
-                <Table.Td ta="right">
-                  <Badge variant="light" color="violet">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Code Source</TableCell>
+                <TableCell className="text-right">
+                  <Badge
+                    variant="secondary"
+                    className="bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300"
+                  >
                     {result.codeSource}
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Value Transferred</Table.Td>
-                <Table.Td ta="right">{result.valueTransferred} wei</Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Can Modify State</Table.Td>
-                <Table.Td ta="right">
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Value Transferred</TableCell>
+                <TableCell className="text-right">
+                  {result.valueTransferred} wei
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Can Modify State</TableCell>
+                <TableCell className="text-right">
                   <Badge
-                    color={result.canModifyState ? "green" : "red"}
-                    variant="light"
+                    variant="secondary"
+                    className={`${result.canModifyState ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
                   >
                     {result.canModifyState ? "Yes" : "No"}
                   </Badge>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-          <Alert
-            icon={<IconInfoCircle size={16} />}
-            color="blue"
-            variant="light"
-          >
-            {result.description}
+          <Alert>
+            <Info className="h-4 w-4" />
+            <AlertDescription>{result.description}</AlertDescription>
           </Alert>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Side-by-Side Comparison
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Property</Table.Th>
-                <Table.Th>CALL</Table.Th>
-                <Table.Th>DELEGATECALL</Table.Th>
-                <Table.Th>STATICCALL</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>msg.sender</Table.Td>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Side-by-Side Comparison</p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Property</TableHead>
+                <TableHead>CALL</TableHead>
+                <TableHead>DELEGATECALL</TableHead>
+                <TableHead>STATICCALL</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>msg.sender</TableCell>
                 {allResults.map((r, i) => (
-                  <Table.Td key={i}>
-                    <Text size="xs">{r.msgSender}</Text>
-                  </Table.Td>
+                  <TableCell key={i}>
+                    <p className="text-xs">{r.msgSender}</p>
+                  </TableCell>
                 ))}
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Storage</Table.Td>
+              </TableRow>
+              <TableRow>
+                <TableCell>Storage</TableCell>
                 {allResults.map((r, i) => (
-                  <Table.Td key={i}>
-                    <Badge size="xs" variant="light" color="blue">
+                  <TableCell key={i}>
+                    <Badge
+                      variant="secondary"
+                      className="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+                    >
                       {r.storageContext}
                     </Badge>
-                  </Table.Td>
+                  </TableCell>
                 ))}
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Code</Table.Td>
+              </TableRow>
+              <TableRow>
+                <TableCell>Code</TableCell>
                 {allResults.map((r, i) => (
-                  <Table.Td key={i}>
-                    <Badge size="xs" variant="light" color="violet">
+                  <TableCell key={i}>
+                    <Badge
+                      variant="secondary"
+                      className="text-xs bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300"
+                    >
                       {r.codeSource}
                     </Badge>
-                  </Table.Td>
+                  </TableCell>
                 ))}
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Value</Table.Td>
+              </TableRow>
+              <TableRow>
+                <TableCell>Value</TableCell>
                 {allResults.map((r, i) => (
-                  <Table.Td key={i}>
-                    <Text size="xs">{r.valueTransferred}</Text>
-                  </Table.Td>
+                  <TableCell key={i}>
+                    <p className="text-xs">{r.valueTransferred}</p>
+                  </TableCell>
                 ))}
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>State Mutable</Table.Td>
+              </TableRow>
+              <TableRow>
+                <TableCell>State Mutable</TableCell>
                 {allResults.map((r, i) => (
-                  <Table.Td key={i}>
+                  <TableCell key={i}>
                     <Badge
-                      size="xs"
-                      color={r.canModifyState ? "green" : "red"}
-                      variant="light"
+                      variant="secondary"
+                      className={`text-xs ${r.canModifyState ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}`}
                     >
                       {r.canModifyState ? "Yes" : "No"}
                     </Badge>
-                  </Table.Td>
+                  </TableCell>
                 ))}
-              </Table.Tr>
-            </Table.Tbody>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {callType === "delegatecall" && (
-        <Alert icon={<IconInfoCircle size={16} />} color="yellow">
-          DELEGATECALL is used by proxy contracts. The target&apos;s code runs
-          with the caller&apos;s storage, so storage layout must match between
-          proxy and implementation.
+        <Alert className="border-yellow-500 bg-yellow-50 text-yellow-900 dark:bg-yellow-950 dark:text-yellow-100">
+          <Info className="h-4 w-4" />
+          <AlertDescription>
+            DELEGATECALL is used by proxy contracts. The target&apos;s code runs
+            with the caller&apos;s storage, so storage layout must match between
+            proxy and implementation.
+          </AlertDescription>
         </Alert>
       )}
 
@@ -294,6 +295,6 @@ export function ContractInteractionsDemo() {
           "Use STATICCALL for oracle reads to prevent unexpected state changes",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

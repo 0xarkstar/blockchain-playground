@@ -1,20 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  TextInput,
-  NumberInput,
-  Button,
   Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   createERC20,
   mint,
@@ -82,167 +82,182 @@ export function ERC20CreatorDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Token Configuration
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Name"
-              value={tokenName}
-              onChange={(e) => setTokenName(e.currentTarget.value)}
-            />
-            <TextInput
-              label="Symbol"
-              value={tokenSymbol}
-              onChange={(e) => setTokenSymbol(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Decimals"
-              value={decimals}
-              onChange={(v) => setDecimals(Number(v) || 0)}
-              min={0}
-              max={18}
-            />
-          </Group>
-          <Button onClick={handleCreate} variant="light">
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Token Configuration</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>Name</Label>
+              <Input
+                value={tokenName}
+                onChange={(e) => setTokenName(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Symbol</Label>
+              <Input
+                value={tokenSymbol}
+                onChange={(e) => setTokenSymbol(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Decimals</Label>
+              <Input
+                type="number"
+                value={decimals}
+                onChange={(e) => setDecimals(Number(e.target.value) || 0)}
+                min={0}
+                max={18}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" onClick={handleCreate}>
             Create Token
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Mint</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>To</Label>
+              <Input
+                value={mintTo}
+                onChange={(e) => setMintTo(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Amount</Label>
+              <Input
+                type="number"
+                value={mintAmount}
+                onChange={(e) => setMintAmount(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800" onClick={handleMint}>
             Mint
-          </Text>
-          <Group grow>
-            <TextInput
-              label="To"
-              value={mintTo}
-              onChange={(e) => setMintTo(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Amount"
-              value={mintAmount}
-              onChange={(v) => setMintAmount(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Button onClick={handleMint} variant="light" color="green">
-            Mint
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Burn
-          </Text>
-          <Group grow>
-            <TextInput
-              label="From"
-              value={burnFrom}
-              onChange={(e) => setBurnFrom(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Amount"
-              value={burnAmount}
-              onChange={(v) => setBurnAmount(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Button onClick={handleBurn} variant="light" color="red">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Burn</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>From</Label>
+              <Input
+                value={burnFrom}
+                onChange={(e) => setBurnFrom(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Amount</Label>
+              <Input
+                type="number"
+                value={burnAmount}
+                onChange={(e) => setBurnAmount(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800" onClick={handleBurn}>
             Burn
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Transfer
-          </Text>
-          <Group grow>
-            <TextInput
-              label="From"
-              value={transferFrom}
-              onChange={(e) => setTransferFrom(e.currentTarget.value)}
-            />
-            <TextInput
-              label="To"
-              value={transferTo}
-              onChange={(e) => setTransferTo(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Amount"
-              value={transferAmount}
-              onChange={(v) => setTransferAmount(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Button onClick={handleTransfer} variant="light" color="blue">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Transfer</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <Label>From</Label>
+              <Input
+                value={transferFrom}
+                onChange={(e) => setTransferFrom(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>To</Label>
+              <Input
+                value={transferTo}
+                onChange={(e) => setTransferTo(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Amount</Label>
+              <Input
+                type="number"
+                value={transferAmount}
+                onChange={(e) => setTransferAmount(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800" onClick={handleTransfer}>
             Transfer
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {lastMessage && (
-        <Alert icon={<IconInfoCircle size={16} />} variant="light">
-          {lastMessage}
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>{lastMessage}</AlertDescription>
         </Alert>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Token State
-            </Text>
-            <Badge variant="light">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Token State</p>
+            <Badge variant="secondary">
               {state.name} ({state.symbol})
             </Badge>
-          </Group>
-          <Text size="sm">
+          </div>
+          <p className="text-sm">
             Total Supply:{" "}
-            <Code>{formatTokenAmount(state.totalSupply, state.decimals)}</Code>
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Address</Table.Th>
-                <Table.Th ta="right">Balance</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+            <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{formatTokenAmount(state.totalSupply, state.decimals)}</code>
+          </p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Address</TableHead>
+                <TableHead className="text-right">Balance</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {addresses.map((addr) => (
-                <Table.Tr key={addr}>
-                  <Table.Td>
-                    <Code>{addr}</Code>
-                  </Table.Td>
-                  <Table.Td ta="right">
-                    <Code>
+                <TableRow key={addr}>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{addr}</code>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
                       {formatTokenAmount(
                         balanceOf(state, addr),
                         state.decimals,
                       )}
-                    </Code>
-                  </Table.Td>
-                </Table.Tr>
+                    </code>
+                  </TableCell>
+                </TableRow>
               ))}
               {addresses.length === 0 && (
-                <Table.Tr>
-                  <Table.Td colSpan={2} ta="center">
-                    <Text size="sm" c="dimmed">
+                <TableRow>
+                  <TableCell colSpan={2} className="text-center">
+                    <p className="text-sm text-muted-foreground">
                       No balances yet
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
+                    </p>
+                  </TableCell>
+                </TableRow>
               )}
-            </Table.Tbody>
+            </TableBody>
           </Table>
 
           {addresses.length > 0 && (
@@ -256,8 +271,8 @@ export function ERC20CreatorDemo() {
               height={250}
             />
           )}
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 }

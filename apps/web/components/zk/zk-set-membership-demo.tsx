@@ -1,19 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Stack,
-  Paper,
-  Button,
-  Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-  Select,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+import { Info } from "lucide-react";
 import {
   createMemberGroup,
   proveZKMembership,
@@ -22,6 +10,24 @@ import {
   type MemberGroup,
   type ZKMembershipProof,
 } from "../../lib/zk/set-membership";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 
 const DEFAULT_MEMBERS = ["alice", "bob", "charlie", "dave"];
 
@@ -54,67 +60,64 @@ export function ZKSetMembershipDemo() {
   };
 
   return (
-    <Stack gap="lg">
-      <Alert icon={<IconInfoCircle size={16} />} variant="light" color="blue">
-        Prove you belong to a group without revealing which member you are.
-        Members commit to their identity via hash, forming a Merkle tree. A
-        Merkle path proves inclusion without exposing the member index.
+    <div className="flex flex-col gap-6">
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          Prove you belong to a group without revealing which member you are.
+          Members commit to their identity via hash, forming a Merkle tree. A
+          Merkle path proves inclusion without exposing the member index.
+        </AlertDescription>
       </Alert>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Group Members
-          </Text>
-          <Group>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Group Members</p>
+          <div className="flex items-center gap-4">
             {members.map((m, i) => (
-              <Badge key={i} variant="light">
+              <Badge key={i} variant="secondary">
                 {m}
               </Badge>
             ))}
-          </Group>
-          <Button onClick={handleCreateGroup} variant="light">
+          </div>
+          <Button variant="secondary" onClick={handleCreateGroup}>
             Create Group (build Merkle tree)
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {group && (
         <>
-          <Paper p="md" withBorder>
-            <Stack gap="sm">
-              <Text size="sm" fw={600}>
-                Merkle Tree
-              </Text>
-              <Text size="sm">
-                Root: <Code>{group.root.slice(0, 18)}...</Code>
-              </Text>
-              <Table striped>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Member</Table.Th>
-                    <Table.Th>Commitment</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm font-semibold">Merkle Tree</p>
+              <p className="text-sm">
+                Root: <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{group.root.slice(0, 18)}...</code>
+              </p>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Member</TableHead>
+                    <TableHead>Commitment</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {group.members.map((m, i) => (
-                    <Table.Tr key={i}>
-                      <Table.Td>{members[i]}</Table.Td>
-                      <Table.Td>
-                        <Code>{m.commitment.slice(0, 18)}...</Code>
-                      </Table.Td>
-                    </Table.Tr>
+                    <TableRow key={i}>
+                      <TableCell>{members[i]}</TableCell>
+                      <TableCell>
+                        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{m.commitment.slice(0, 18)}...</code>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </Table.Tbody>
+                </TableBody>
               </Table>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
-          <Paper p="md" withBorder>
-            <Stack gap="md">
-              <Text size="sm" fw={600}>
-                Merkle Tree Diagram
-              </Text>
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-4">
+              <p className="text-sm font-semibold">Merkle Tree Diagram</p>
               <svg width="100%" height={180} viewBox="0 0 500 180">
                 <rect
                   x={200}
@@ -122,8 +125,7 @@ export function ZKSetMembershipDemo() {
                   width={100}
                   height={32}
                   rx={6}
-                  fill="var(--mantine-color-green-light)"
-                  stroke="var(--mantine-color-green-6)"
+                  className="fill-green-100 stroke-green-500 dark:fill-green-900 dark:stroke-green-400"
                   strokeWidth={2}
                 />
                 <text
@@ -131,27 +133,13 @@ export function ZKSetMembershipDemo() {
                   y={30}
                   textAnchor="middle"
                   fontSize={10}
-                  fill="var(--mantine-color-green-9)"
+                  className="fill-green-900 dark:fill-green-200"
                 >
                   Root
                 </text>
 
-                <line
-                  x1={250}
-                  y1={42}
-                  x2={130}
-                  y2={65}
-                  stroke="var(--mantine-color-gray-5)"
-                  strokeWidth={1.5}
-                />
-                <line
-                  x1={250}
-                  y1={42}
-                  x2={370}
-                  y2={65}
-                  stroke="var(--mantine-color-gray-5)"
-                  strokeWidth={1.5}
-                />
+                <line x1={250} y1={42} x2={130} y2={65} className="stroke-gray-400" strokeWidth={1.5} />
+                <line x1={250} y1={42} x2={370} y2={65} className="stroke-gray-400" strokeWidth={1.5} />
 
                 <rect
                   x={80}
@@ -159,17 +147,10 @@ export function ZKSetMembershipDemo() {
                   width={100}
                   height={32}
                   rx={6}
-                  fill="var(--mantine-color-blue-light)"
-                  stroke="var(--mantine-color-blue-5)"
+                  className="fill-blue-100 stroke-blue-500 dark:fill-blue-900 dark:stroke-blue-400"
                   strokeWidth={1.5}
                 />
-                <text
-                  x={130}
-                  y={85}
-                  textAnchor="middle"
-                  fontSize={10}
-                  fill="var(--mantine-color-blue-8)"
-                >
+                <text x={130} y={85} textAnchor="middle" fontSize={10} className="fill-blue-800 dark:fill-blue-200">
                   H(L0+L1)
                 </text>
                 <rect
@@ -178,52 +159,17 @@ export function ZKSetMembershipDemo() {
                   width={100}
                   height={32}
                   rx={6}
-                  fill="var(--mantine-color-blue-light)"
-                  stroke="var(--mantine-color-blue-5)"
+                  className="fill-blue-100 stroke-blue-500 dark:fill-blue-900 dark:stroke-blue-400"
                   strokeWidth={1.5}
                 />
-                <text
-                  x={370}
-                  y={85}
-                  textAnchor="middle"
-                  fontSize={10}
-                  fill="var(--mantine-color-blue-8)"
-                >
+                <text x={370} y={85} textAnchor="middle" fontSize={10} className="fill-blue-800 dark:fill-blue-200">
                   H(L2+L3)
                 </text>
 
-                <line
-                  x1={130}
-                  y1={97}
-                  x2={65}
-                  y2={120}
-                  stroke="var(--mantine-color-gray-4)"
-                  strokeWidth={1}
-                />
-                <line
-                  x1={130}
-                  y1={97}
-                  x2={195}
-                  y2={120}
-                  stroke="var(--mantine-color-gray-4)"
-                  strokeWidth={1}
-                />
-                <line
-                  x1={370}
-                  y1={97}
-                  x2={305}
-                  y2={120}
-                  stroke="var(--mantine-color-gray-4)"
-                  strokeWidth={1}
-                />
-                <line
-                  x1={370}
-                  y1={97}
-                  x2={435}
-                  y2={120}
-                  stroke="var(--mantine-color-gray-4)"
-                  strokeWidth={1}
-                />
+                <line x1={130} y1={97} x2={65} y2={120} className="stroke-gray-300" strokeWidth={1} />
+                <line x1={130} y1={97} x2={195} y2={120} className="stroke-gray-300" strokeWidth={1} />
+                <line x1={370} y1={97} x2={305} y2={120} className="stroke-gray-300" strokeWidth={1} />
+                <line x1={370} y1={97} x2={435} y2={120} className="stroke-gray-300" strokeWidth={1} />
 
                 {members.map((m, i) => {
                   const x = 15 + i * 130;
@@ -236,15 +182,10 @@ export function ZKSetMembershipDemo() {
                         width={100}
                         height={32}
                         rx={6}
-                        fill={
+                        className={
                           isSelected
-                            ? "var(--mantine-color-violet-light)"
-                            : "var(--mantine-color-gray-light)"
-                        }
-                        stroke={
-                          isSelected
-                            ? "var(--mantine-color-violet-6)"
-                            : "var(--mantine-color-gray-4)"
+                            ? "fill-violet-100 stroke-violet-500 dark:fill-violet-900 dark:stroke-violet-400"
+                            : "fill-gray-100 stroke-gray-300 dark:fill-gray-800 dark:stroke-gray-600"
                         }
                         strokeWidth={isSelected ? 2 : 1}
                       />
@@ -253,10 +194,10 @@ export function ZKSetMembershipDemo() {
                         y={140}
                         textAnchor="middle"
                         fontSize={11}
-                        fill={
+                        className={
                           isSelected
-                            ? "var(--mantine-color-violet-9)"
-                            : "var(--mantine-color-gray-8)"
+                            ? "fill-violet-900 dark:fill-violet-200"
+                            : "fill-gray-700 dark:fill-gray-300"
                         }
                       >
                         {m}
@@ -267,7 +208,7 @@ export function ZKSetMembershipDemo() {
                           y={165}
                           textAnchor="middle"
                           fontSize={9}
-                          fill="var(--mantine-color-violet-6)"
+                          className="fill-violet-600 dark:fill-violet-400"
                         >
                           (proving)
                         </text>
@@ -276,126 +217,131 @@ export function ZKSetMembershipDemo() {
                   );
                 })}
               </svg>
-            </Stack>
-          </Paper>
+            </div>
+          </div>
 
-          <Paper p="md" withBorder>
-            <Stack gap="md">
-              <Text size="sm" fw={600}>
-                Prove Membership
-              </Text>
-              <Select
-                label="I am..."
-                value={selectedMember}
-                onChange={(v) => setSelectedMember(v ?? "0")}
-                data={members.map((m, i) => ({ value: String(i), label: m }))}
-              />
-              <Group>
-                <Button onClick={handleProve} variant="light" color="blue">
+          <div className="rounded-lg border border-border bg-card p-4">
+            <div className="flex flex-col gap-4">
+              <p className="text-sm font-semibold">Prove Membership</p>
+              <div>
+                <label className="text-sm font-medium">I am...</label>
+                <Select value={selectedMember} onValueChange={(v) => setSelectedMember(v)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {members.map((m, i) => (
+                      <SelectItem key={i} value={String(i)}>{m}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center gap-4">
+                <Button variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300" onClick={handleProve}>
                   Generate ZK Proof
                 </Button>
                 {proof && (
-                  <Button onClick={handleVerify} variant="light" color="green">
+                  <Button variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300" onClick={handleVerify}>
                     Verify Proof
                   </Button>
                 )}
-              </Group>
-            </Stack>
-          </Paper>
+              </div>
+            </div>
+          </div>
 
           {proof && (
-            <Paper p="md" withBorder>
-              <Stack gap="sm">
-                <Group justify="space-between">
-                  <Text size="sm" fw={600}>
-                    Proof
-                  </Text>
+            <div className="rounded-lg border border-border bg-card p-4">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold">Proof</p>
                   {verifyResult !== null && (
                     <Badge
-                      variant="light"
-                      color={verifyResult ? "green" : "red"}
+                      variant="secondary"
+                      className={
+                        verifyResult
+                          ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                          : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+                      }
                     >
                       {verifyResult ? "Verified" : "Invalid"}
                     </Badge>
                   )}
-                </Group>
-                <Text size="sm">
+                </div>
+                <p className="text-sm">
                   Path length: {proof.merklePath.length} nodes
-                </Text>
-                <Table striped>
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Level</Table.Th>
-                      <Table.Th>Sibling Hash</Table.Th>
-                      <Table.Th>Position</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
+                </p>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Level</TableHead>
+                      <TableHead>Sibling Hash</TableHead>
+                      <TableHead>Position</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
                     {proof.merklePath.map((node, i) => (
-                      <Table.Tr key={i}>
-                        <Table.Td>{i + 1}</Table.Td>
-                        <Table.Td>
-                          <Code>{node.hash.slice(0, 18)}...</Code>
-                        </Table.Td>
-                        <Table.Td>
-                          <Badge variant="light" size="sm">
+                      <TableRow key={i}>
+                        <TableCell>{i + 1}</TableCell>
+                        <TableCell>
+                          <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{node.hash.slice(0, 18)}...</code>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="secondary">
                             {node.position}
                           </Badge>
-                        </Table.Td>
-                      </Table.Tr>
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </Table.Tbody>
+                  </TableBody>
                 </Table>
-              </Stack>
-            </Paper>
+              </div>
+            </div>
           )}
         </>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="sm">
-          <Text size="sm" fw={600}>
-            Privacy Comparison
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-2">
+          <p className="text-sm font-semibold">Privacy Comparison</p>
           <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Approach</Table.Th>
-                <Table.Th>Revealed</Table.Th>
-                <Table.Th>Implication</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge variant="light" color="red">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Approach</TableHead>
+                <TableHead>Revealed</TableHead>
+                <TableHead>Implication</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="secondary" className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300">
                     Transparent
                   </Badge>
-                </Table.Td>
-                <Table.Td>{comparison.transparent.revealed}</Table.Td>
-                <Table.Td>
-                  <Text size="xs" c="dimmed">
+                </TableCell>
+                <TableCell>{comparison.transparent.revealed}</TableCell>
+                <TableCell>
+                  <p className="text-xs text-muted-foreground">
                     {comparison.transparent.info}
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
-                  <Badge variant="light" color="green">
+                  </p>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
                     Zero-Knowledge
                   </Badge>
-                </Table.Td>
-                <Table.Td>{comparison.zk.revealed}</Table.Td>
-                <Table.Td>
-                  <Text size="xs" c="dimmed">
+                </TableCell>
+                <TableCell>{comparison.zk.revealed}</TableCell>
+                <TableCell>
+                  <p className="text-xs text-muted-foreground">
                     {comparison.zk.info}
-                  </Text>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                  </p>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 }

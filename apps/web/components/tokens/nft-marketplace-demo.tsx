@@ -1,20 +1,20 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Info } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Alert, AlertDescription } from "../ui/alert";
 import {
-  Stack,
-  Paper,
-  TextInput,
-  NumberInput,
-  Button,
   Table,
-  Code,
-  Badge,
-  Group,
-  Text,
-  Alert,
-} from "@mantine/core";
-import { IconInfoCircle } from "@tabler/icons-react";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   createMarketplace,
   listNFT,
@@ -73,222 +73,234 @@ export function NFTMarketplaceDemo() {
   );
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            List NFT
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Seller"
-              value={listSeller}
-              onChange={(e) => setListSeller(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Token ID"
-              value={listTokenId}
-              onChange={(v) => setListTokenId(Number(v) || 0)}
-              min={1}
-            />
-            <NumberInput
-              label="Price (ETH)"
-              value={listPrice}
-              onChange={(v) => setListPrice(Number(v) || 0)}
-              min={0.01}
-              decimalScale={4}
-            />
-            <NumberInput
-              label="Royalty %"
-              value={listRoyalty}
-              onChange={(v) => setListRoyalty(Number(v) || 0)}
-              min={0}
-              max={50}
-            />
-          </Group>
-          <Button onClick={handleList} variant="light" color="green">
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">List NFT</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <Label>Seller</Label>
+              <Input
+                value={listSeller}
+                onChange={(e) => setListSeller(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Token ID</Label>
+              <Input
+                type="number"
+                value={listTokenId}
+                onChange={(e) => setListTokenId(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+            <div>
+              <Label>Price (ETH)</Label>
+              <Input
+                type="number"
+                value={listPrice}
+                onChange={(e) => setListPrice(Number(e.target.value) || 0)}
+                min={0.01}
+                step={0.0001}
+              />
+            </div>
+            <div>
+              <Label>Royalty %</Label>
+              <Input
+                type="number"
+                value={listRoyalty}
+                onChange={(e) => setListRoyalty(Number(e.target.value) || 0)}
+                min={0}
+                max={50}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800" onClick={handleList}>
             List
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Price Breakdown Preview
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Price Breakdown Preview</p>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Sale Price</Table.Td>
-                <Table.Td ta="right">
-                  <Code>{previewBreakdown.price.toFixed(4)} ETH</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
+            <TableBody>
+              <TableRow>
+                <TableCell>Sale Price</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{previewBreakdown.price.toFixed(4)} ETH</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
                   Royalty ({previewBreakdown.royaltyPercent}%)
-                </Table.Td>
-                <Table.Td ta="right">
-                  <Code>{previewBreakdown.royaltyAmount.toFixed(4)} ETH</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>
+                </TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{previewBreakdown.royaltyAmount.toFixed(4)} ETH</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>
                   Platform Fee ({previewBreakdown.platformFeePercent}%)
-                </Table.Td>
-                <Table.Td ta="right">
-                  <Code>{previewBreakdown.platformFee.toFixed(4)} ETH</Code>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td fw={600}>Seller Receives</Table.Td>
-                <Table.Td ta="right">
-                  <Code fw={600}>
+                </TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{previewBreakdown.platformFee.toFixed(4)} ETH</code>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-semibold">Seller Receives</TableCell>
+                <TableCell className="text-right">
+                  <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono font-semibold">
                     {previewBreakdown.sellerProceeds.toFixed(4)} ETH
-                  </Code>
-                </Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                  </code>
+                </TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Buy / Cancel
-          </Text>
-          <Group grow>
-            <TextInput
-              label="Buyer"
-              value={buyBuyer}
-              onChange={(e) => setBuyBuyer(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Listing ID"
-              value={buyListingId}
-              onChange={(v) => setBuyListingId(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Group>
-            <Button onClick={handleBuy} variant="light" color="blue">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Buy / Cancel</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Buyer</Label>
+              <Input
+                value={buyBuyer}
+                onChange={(e) => setBuyBuyer(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Listing ID</Label>
+              <Input
+                type="number"
+                value={buyListingId}
+                onChange={(e) => setBuyListingId(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-800" onClick={handleBuy}>
               Buy
             </Button>
-          </Group>
-          <Group grow>
-            <TextInput
-              label="Caller"
-              value={cancelCaller}
-              onChange={(e) => setCancelCaller(e.currentTarget.value)}
-            />
-            <NumberInput
-              label="Listing ID"
-              value={cancelId}
-              onChange={(v) => setCancelId(Number(v) || 0)}
-              min={1}
-            />
-          </Group>
-          <Button onClick={handleCancel} variant="light" color="red">
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <Label>Caller</Label>
+              <Input
+                value={cancelCaller}
+                onChange={(e) => setCancelCaller(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label>Listing ID</Label>
+              <Input
+                type="number"
+                value={cancelId}
+                onChange={(e) => setCancelId(Number(e.target.value) || 0)}
+                min={1}
+              />
+            </div>
+          </div>
+          <Button variant="secondary" className="bg-red-100 text-red-800 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800" onClick={handleCancel}>
             Cancel
           </Button>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {lastMessage && (
-        <Alert icon={<IconInfoCircle size={16} />} variant="light">
-          {lastMessage}
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>{lastMessage}</AlertDescription>
         </Alert>
       )}
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Group justify="space-between">
-            <Text size="sm" fw={600}>
-              Active Listings
-            </Text>
-            <Badge variant="light">{activeListings.length} active</Badge>
-          </Group>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>ID</Table.Th>
-                <Table.Th>Seller</Table.Th>
-                <Table.Th>Token</Table.Th>
-                <Table.Th ta="right">Price</Table.Th>
-                <Table.Th ta="right">Royalty</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold">Active Listings</p>
+            <Badge variant="secondary">{activeListings.length} active</Badge>
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>ID</TableHead>
+                <TableHead>Seller</TableHead>
+                <TableHead>Token</TableHead>
+                <TableHead className="text-right">Price</TableHead>
+                <TableHead className="text-right">Royalty</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {activeListings.map((l) => (
-                <Table.Tr key={l.id}>
-                  <Table.Td>
-                    <Badge variant="light">#{l.id}</Badge>
-                  </Table.Td>
-                  <Table.Td>
-                    <Code>{l.seller}</Code>
-                  </Table.Td>
-                  <Table.Td>#{l.tokenId}</Table.Td>
-                  <Table.Td ta="right">
-                    <Code>{l.price} ETH</Code>
-                  </Table.Td>
-                  <Table.Td ta="right">{l.royaltyPercent}%</Table.Td>
-                </Table.Tr>
+                <TableRow key={l.id}>
+                  <TableCell>
+                    <Badge variant="secondary">#{l.id}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{l.seller}</code>
+                  </TableCell>
+                  <TableCell>#{l.tokenId}</TableCell>
+                  <TableCell className="text-right">
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{l.price} ETH</code>
+                  </TableCell>
+                  <TableCell className="text-right">{l.royaltyPercent}%</TableCell>
+                </TableRow>
               ))}
               {activeListings.length === 0 && (
-                <Table.Tr>
-                  <Table.Td colSpan={5} ta="center">
-                    <Text size="sm" c="dimmed">
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center">
+                    <p className="text-sm text-muted-foreground">
                       No active listings
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
+                    </p>
+                  </TableCell>
+                </TableRow>
               )}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
       {state.sales.length > 0 && (
-        <Paper p="md" withBorder>
-          <Stack gap="md">
-            <Text size="sm" fw={600}>
-              Sales History
-            </Text>
-            <Table striped>
-              <Table.Thead>
-                <Table.Tr>
-                  <Table.Th>Listing</Table.Th>
-                  <Table.Th>Buyer</Table.Th>
-                  <Table.Th ta="right">Price</Table.Th>
-                  <Table.Th ta="right">Seller Got</Table.Th>
-                  <Table.Th ta="right">Royalty</Table.Th>
-                  <Table.Th ta="right">Fee</Table.Th>
-                </Table.Tr>
-              </Table.Thead>
-              <Table.Tbody>
+        <div className="rounded-lg border border-border bg-card p-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm font-semibold">Sales History</p>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Listing</TableHead>
+                  <TableHead>Buyer</TableHead>
+                  <TableHead className="text-right">Price</TableHead>
+                  <TableHead className="text-right">Seller Got</TableHead>
+                  <TableHead className="text-right">Royalty</TableHead>
+                  <TableHead className="text-right">Fee</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {state.sales.map((s) => (
-                  <Table.Tr key={s.listingId}>
-                    <Table.Td>#{s.listingId}</Table.Td>
-                    <Table.Td>
-                      <Code>{s.buyer}</Code>
-                    </Table.Td>
-                    <Table.Td ta="right">
-                      <Code>{s.price.toFixed(4)}</Code>
-                    </Table.Td>
-                    <Table.Td ta="right">
-                      <Code>{s.sellerProceeds.toFixed(4)}</Code>
-                    </Table.Td>
-                    <Table.Td ta="right">
-                      <Code>{s.royaltyAmount.toFixed(4)}</Code>
-                    </Table.Td>
-                    <Table.Td ta="right">
-                      <Code>{s.platformFee.toFixed(4)}</Code>
-                    </Table.Td>
-                  </Table.Tr>
+                  <TableRow key={s.listingId}>
+                    <TableCell>#{s.listingId}</TableCell>
+                    <TableCell>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{s.buyer}</code>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{s.price.toFixed(4)}</code>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{s.sellerProceeds.toFixed(4)}</code>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{s.royaltyAmount.toFixed(4)}</code>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{s.platformFee.toFixed(4)}</code>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Table.Tbody>
+              </TableBody>
             </Table>
 
             {state.sales.length > 1 && (
@@ -302,9 +314,9 @@ export function NFTMarketplaceDemo() {
                 height={220}
               />
             )}
-          </Stack>
-        </Paper>
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 }

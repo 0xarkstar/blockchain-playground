@@ -1,15 +1,17 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import {
-  Stack,
-  NumberInput,
-  Text,
-  Paper,
-  Group,
   Table,
-  SegmentedControl,
-} from "@mantine/core";
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   aprToApy,
   calculateCompoundedValue,
@@ -96,116 +98,116 @@ export function StakingRewardsDemo() {
   }, []);
 
   return (
-    <Stack gap="lg">
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Staking Parameters
-          </Text>
-          <Group grow>
-            <NumberInput
-              label="Stake Amount"
-              value={stakeAmount}
-              onChange={(v) => setStakeAmount(Number(v) || 0)}
-              min={0}
-              thousandSeparator=","
-            />
-            <NumberInput
-              label="Total Pool Staked"
-              value={totalStaked}
-              onChange={(v) => setTotalStaked(Number(v) || 0)}
-              min={0}
-              thousandSeparator=","
-            />
-          </Group>
-          <NumberInput
-            label="Reward Rate (APR %)"
-            value={rewardRate}
-            onChange={(v) => setRewardRate(Number(v) || 0)}
-            min={0}
-            max={1000}
-            suffix="%"
-            decimalScale={1}
-          />
+    <div className="flex flex-col gap-6">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Staking Parameters</p>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Stake Amount</Label>
+              <Input
+                type="number"
+                value={stakeAmount}
+                onChange={(e) => setStakeAmount(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+            <div>
+              <Label>Total Pool Staked</Label>
+              <Input
+                type="number"
+                value={totalStaked}
+                onChange={(e) => setTotalStaked(Number(e.target.value) || 0)}
+                min={0}
+              />
+            </div>
+          </div>
           <div>
-            <Text size="xs" c="dimmed" mb={4}>
-              Duration
-            </Text>
-            <SegmentedControl
-              value={durationKey}
-              onChange={setDurationKey}
-              data={Object.keys(DURATION_PRESETS)}
-              fullWidth
+            <Label>Reward Rate (APR %)</Label>
+            <Input
+              type="number"
+              value={rewardRate}
+              onChange={(e) => setRewardRate(Number(e.target.value) || 0)}
+              min={0}
+              max={1000}
             />
           </div>
-        </Stack>
-      </Paper>
+          <div>
+            <p className="text-xs text-muted-foreground mb-1">Duration</p>
+            <Tabs value={durationKey} onValueChange={setDurationKey}>
+              <TabsList className="w-full">
+                {Object.keys(DURATION_PRESETS).map((key) => (
+                  <TabsTrigger key={key} value={key} className="flex-1">
+                    {key}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Summary
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Summary</p>
           <Table>
-            <Table.Tbody>
-              <Table.Tr>
-                <Table.Td>Pool Share</Table.Td>
-                <Table.Td ta="right">
+            <TableBody>
+              <TableRow>
+                <TableCell>Pool Share</TableCell>
+                <TableCell className="text-right">
                   {(result.poolShare * 100).toFixed(4)}%
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>Simple Rewards ({durationKey})</Table.Td>
-                <Table.Td ta="right">
-                  <Text fw={600}>{result.simpleRewards.toFixed(2)}</Text>
-                </Table.Td>
-              </Table.Tr>
-              <Table.Tr>
-                <Table.Td>APR</Table.Td>
-                <Table.Td ta="right">{rewardRate}%</Table.Td>
-              </Table.Tr>
-            </Table.Tbody>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Simple Rewards ({durationKey})</TableCell>
+                <TableCell className="text-right">
+                  <span className="font-semibold">{result.simpleRewards.toFixed(2)}</span>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>APR</TableCell>
+                <TableCell className="text-right">{rewardRate}%</TableCell>
+              </TableRow>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             Compounding Comparison ({durationKey})
-          </Text>
-          <Table striped>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Frequency</Table.Th>
-                <Table.Th ta="right">APY</Table.Th>
-                <Table.Th ta="right">Final Value</Table.Th>
-                <Table.Th ta="right">Rewards</Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
+          </p>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Frequency</TableHead>
+                <TableHead className="text-right">APY</TableHead>
+                <TableHead className="text-right">Final Value</TableHead>
+                <TableHead className="text-right">Rewards</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {result.compounding.map((row) => (
-                <Table.Tr key={row.label}>
-                  <Table.Td>{row.label}</Table.Td>
-                  <Table.Td ta="right">{row.apy.toFixed(2)}%</Table.Td>
-                  <Table.Td ta="right">{row.finalValue.toFixed(2)}</Table.Td>
-                  <Table.Td ta="right">
-                    <Text fw={600} c="green">
+                <TableRow key={row.label}>
+                  <TableCell>{row.label}</TableCell>
+                  <TableCell className="text-right">{row.apy.toFixed(2)}%</TableCell>
+                  <TableCell className="text-right">{row.finalValue.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">
+                    <span className="font-semibold text-green-600">
                       {row.rewards.toFixed(2)}
-                    </Text>
-                  </Table.Td>
-                </Table.Tr>
+                    </span>
+                  </TableCell>
+                </TableRow>
               ))}
-            </Table.Tbody>
+            </TableBody>
           </Table>
-        </Stack>
-      </Paper>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
-            Reward Growth Over Time
-          </Text>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">Reward Growth Over Time</p>
           <SimpleAreaChart
             data={rewardGrowthData}
             xKey="month"
@@ -213,17 +215,17 @@ export function StakingRewardsDemo() {
             colors={["#228be6", "#40c057"]}
             height={250}
           />
-          <Text size="xs" c="dimmed" ta="center">
+          <p className="text-xs text-muted-foreground text-center">
             Simple (blue) vs Daily compound (green) reward accumulation
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Stack gap="md">
-          <Text size="sm" fw={600}>
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="flex flex-col gap-4">
+          <p className="text-sm font-semibold">
             APR vs APY (Daily Compounding)
-          </Text>
+          </p>
           <SimpleBarChart
             data={aprVsApyData}
             xKey="rate"
@@ -231,12 +233,12 @@ export function StakingRewardsDemo() {
             grouped
             height={220}
           />
-          <Text size="xs" c="dimmed" ta="center">
+          <p className="text-xs text-muted-foreground text-center">
             Higher APR rates show larger gap between APR and APY due to
             compounding
-          </Text>
-        </Stack>
-      </Paper>
+          </p>
+        </div>
+      </div>
 
       <EducationPanel
         howItWorks={[
@@ -263,6 +265,6 @@ export function StakingRewardsDemo() {
           "Compare APY (not APR) across protocols for fair comparison",
         ]}
       />
-    </Stack>
+    </div>
   );
 }

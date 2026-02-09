@@ -1,23 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import {
-  Stack,
-  Button,
-  Code,
-  Text,
-  Paper,
-  Group,
-  Badge,
-  Alert,
-  SimpleGrid,
-  Box,
-} from "@mantine/core";
-import {
-  IconLink,
-  IconAlertTriangle,
-  IconShieldCheck,
-} from "@tabler/icons-react";
+import { Link2, AlertTriangle, ShieldCheck } from "lucide-react";
 import {
   createGenesisBlock,
   createBlock,
@@ -28,16 +12,15 @@ import {
 } from "../../lib/blockchain/block";
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 function ChainLinkArrow({ broken }: { broken: boolean }) {
   return (
-    <Box
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minWidth: 36,
-      }}
+    <div
+      className="flex items-center justify-center"
+      style={{ minWidth: 36 }}
     >
       <svg width="36" height="24" viewBox="0 0 36 24">
         {broken ? (
@@ -47,7 +30,7 @@ function ChainLinkArrow({ broken }: { broken: boolean }) {
               y1="12"
               x2="10"
               y2="12"
-              stroke="var(--mantine-color-red-5)"
+              stroke="hsl(var(--destructive))"
               strokeWidth="2"
             />
             <line
@@ -55,14 +38,14 @@ function ChainLinkArrow({ broken }: { broken: boolean }) {
               y1="12"
               x2="36"
               y2="12"
-              stroke="var(--mantine-color-red-5)"
+              stroke="hsl(var(--destructive))"
               strokeWidth="2"
             />
             <text
               x="18"
               y="16"
               textAnchor="middle"
-              fill="var(--mantine-color-red-5)"
+              fill="hsl(var(--destructive))"
               fontSize="14"
               fontWeight="bold"
             >
@@ -76,17 +59,17 @@ function ChainLinkArrow({ broken }: { broken: boolean }) {
               y1="12"
               x2="26"
               y2="12"
-              stroke="var(--mantine-color-green-5)"
+              stroke="hsl(142.1 76.2% 36.3%)"
               strokeWidth="2"
             />
             <polygon
               points="26,6 36,12 26,18"
-              fill="var(--mantine-color-green-5)"
+              fill="hsl(142.1 76.2% 36.3%)"
             />
           </>
         )}
       </svg>
-    </Box>
+    </div>
   );
 }
 
@@ -100,49 +83,45 @@ function ChainVisualDiagram({
   if (chain.length === 0) return null;
 
   return (
-    <Paper p="md" withBorder data-testid="chain-visual-diagram">
-      <Text size="sm" fw={600} mb="sm">
+    <div className="rounded-lg border border-border bg-card p-4" data-testid="chain-visual-diagram">
+      <p className="text-sm font-semibold mb-2">
         Chain Structure
-      </Text>
-      <Group gap={0} wrap="nowrap" style={{ overflowX: "auto" }}>
+      </p>
+      <div className="flex gap-0 flex-nowrap overflow-x-auto">
         {chain.map((block, i) => {
           const v = validation[i];
           const showBrokenLink = i > 0 && !v?.linkValid;
 
           return (
-            <Group key={i} gap={0} wrap="nowrap">
+            <div key={i} className="flex gap-0 flex-nowrap">
               {i > 0 && <ChainLinkArrow broken={showBrokenLink} />}
-              <Paper
-                p="xs"
-                withBorder
+              <div
+                className="rounded-lg border bg-card px-2 py-1"
                 style={{
                   minWidth: 100,
                   borderColor: v?.valid
-                    ? "var(--mantine-color-green-5)"
-                    : "var(--mantine-color-red-5)",
+                    ? "hsl(142.1 76.2% 36.3%)"
+                    : "hsl(var(--destructive))",
                   borderWidth: v?.valid ? 1 : 2,
                   backgroundColor: v?.valid
                     ? undefined
-                    : "var(--mantine-color-red-light)",
+                    : "hsl(var(--destructive) / 0.1)",
                 }}
               >
                 <Badge
-                  size="xs"
-                  color={v?.valid ? "green" : "red"}
-                  mb={2}
-                  fullWidth
+                  className={`w-full justify-center text-xs mb-0.5 ${v?.valid ? "bg-green-600 text-white" : "bg-red-600 text-white"}`}
                 >
                   #{block.index}
                 </Badge>
-                <Code style={{ fontSize: "0.5rem", display: "block" }}>
+                <code className="text-xs font-mono block">
                   {block.hash.slice(0, 10)}...
-                </Code>
-              </Paper>
-            </Group>
+                </code>
+              </div>
+            </div>
           );
         })}
-      </Group>
-    </Paper>
+      </div>
+    </div>
   );
 }
 
@@ -214,129 +193,128 @@ export function ChainIntegrityDemo() {
   const chainValid = validation.every((v) => v.valid);
 
   const inputPanel = (
-    <Stack gap="md">
-      <Group>
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center gap-2">
         <Button
-          leftSection={<IconLink size={16} />}
           onClick={handleBuildChain}
-          loading={building}
+          disabled={building}
         >
-          Build 5-Block Chain
+          <Link2 className="h-4 w-4 mr-2" />
+          {building ? "Building..." : "Build 5-Block Chain"}
         </Button>
-      </Group>
+      </div>
 
       {chain.length > 0 && (
         <>
-          <Alert
-            icon={
-              chainValid ? (
-                <IconShieldCheck size={16} />
-              ) : (
-                <IconAlertTriangle size={16} />
-              )
-            }
-            color={chainValid ? "green" : "red"}
-            title={chainValid ? "Chain Valid" : "Chain Broken!"}
-          >
-            {chainValid
-              ? "All blocks are valid and properly linked."
-              : `Chain integrity broken${tamperedIndex !== null ? ` — Block #${tamperedIndex} was tampered. Subsequent blocks have invalid previous hash links.` : "."}`}
+          <Alert className={chainValid ? "border-green-500" : "border-red-500"}>
+            {chainValid ? (
+              <ShieldCheck className="h-4 w-4" />
+            ) : (
+              <AlertTriangle className="h-4 w-4" />
+            )}
+            <AlertTitle>{chainValid ? "Chain Valid" : "Chain Broken!"}</AlertTitle>
+            <AlertDescription>
+              {chainValid
+                ? "All blocks are valid and properly linked."
+                : `Chain integrity broken${tamperedIndex !== null ? ` — Block #${tamperedIndex} was tampered. Subsequent blocks have invalid previous hash links.` : "."}`}
+            </AlertDescription>
           </Alert>
 
-          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {chain.map((block, i) => {
               const v = validation[i];
               return (
-                <Paper
+                <div
                   key={i}
-                  p="md"
-                  withBorder
+                  className="rounded-lg border bg-card p-4"
                   style={{
                     borderColor: v?.valid
                       ? undefined
-                      : "var(--mantine-color-red-6)",
+                      : "hsl(var(--destructive))",
                     borderWidth: v?.valid ? 1 : 2,
                   }}
                 >
-                  <Stack gap="xs">
-                    <Group justify="space-between">
-                      <Badge color={v?.valid ? "green" : "red"} variant="light">
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="secondary" className={v?.valid ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"}>
                         Block #{block.index}
                       </Badge>
-                      <Group gap={4}>
+                      <div className="flex items-center gap-1">
                         {!v?.hashValid && (
-                          <Badge color="red" size="xs">
+                          <Badge className="bg-red-600 text-white text-xs">
                             Hash Invalid
                           </Badge>
                         )}
                         {!v?.linkValid && (
-                          <Badge color="red" size="xs">
+                          <Badge className="bg-red-600 text-white text-xs">
                             Link Broken
                           </Badge>
                         )}
-                      </Group>
-                    </Group>
+                      </div>
+                    </div>
 
                     <div>
-                      <Text size="xs" c="dimmed">
+                      <p className="text-xs text-muted-foreground">
                         Hash
-                      </Text>
-                      <Code
-                        style={{ fontSize: "0.6rem", wordBreak: "break-all" }}
+                      </p>
+                      <code
+                        className="rounded bg-muted px-1.5 py-0.5 font-mono break-all"
+                        style={{ fontSize: "0.6rem" }}
                       >
                         {block.hash.slice(0, 20)}...
-                      </Code>
+                      </code>
                     </div>
                     <div>
-                      <Text size="xs" c="dimmed">
+                      <p className="text-xs text-muted-foreground">
                         Prev Hash
-                      </Text>
-                      <Code
-                        style={{ fontSize: "0.6rem", wordBreak: "break-all" }}
+                      </p>
+                      <code
+                        className="rounded bg-muted px-1.5 py-0.5 font-mono break-all"
+                        style={{ fontSize: "0.6rem" }}
                       >
                         {block.header.previousHash.slice(0, 20)}...
-                      </Code>
+                      </code>
                     </div>
                     <div>
-                      <Text size="xs" c="dimmed">
+                      <p className="text-xs text-muted-foreground">
                         TXs: {block.transactions.length}
                         {block.transactions[0]
                           ? ` (${block.transactions[0].amount} ETH)`
                           : ""}
-                      </Text>
+                      </p>
                     </div>
 
                     {i > 0 && (
                       <Button
-                        size="xs"
+                        size="sm"
                         variant="outline"
-                        color="red"
+                        className="text-red-600 border-red-600 hover:bg-red-50"
                         onClick={() => handleTamper(i)}
                       >
                         Tamper Block
                       </Button>
                     )}
-                  </Stack>
-                </Paper>
+                  </div>
+                </div>
               );
             })}
-          </SimpleGrid>
+          </div>
         </>
       )}
-    </Stack>
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md">
+    <div className="flex flex-col gap-4">
       <ChainVisualDiagram chain={chain} validation={validation} />
       {chain.length === 0 && (
-        <Paper p="md" withBorder>
-          <Text size="sm" c="dimmed" ta="center" py="xl">
+        <div className="rounded-lg border border-border bg-card p-4">
+          <p className="text-sm text-muted-foreground text-center py-8">
             Build a chain to see the visual integrity diagram
-          </Text>
-        </Paper>
+          </p>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 
   return (

@@ -1,21 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import {
-  TextInput,
-  SegmentedControl,
-  Stack,
-  Code,
-  Text,
-  Group,
-  Paper,
-  Badge,
-  CopyButton,
-  ActionIcon,
-  SimpleGrid,
-  Box,
-} from "@mantine/core";
-import { IconCopy, IconCheck } from "@tabler/icons-react";
+import { Copy, Check } from "lucide-react";
 import {
   hash,
   computeAvalancheEffect,
@@ -25,6 +11,11 @@ import { HashAvalancheVisualizer } from "./hash-avalanche-visualizer";
 import { DemoLayout } from "../shared/demo-layout";
 import { EducationPanel } from "../shared/education-panel";
 import { SimpleBarChart } from "../shared/charts";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 
 function computeHexDistribution(hexHash: string): Record<string, unknown>[] {
   const hex = hexHash.startsWith("0x") ? hexHash.slice(2) : hexHash;
@@ -69,137 +60,144 @@ export function HashExplorerDemo() {
     [input, compareInput, algorithm],
   );
 
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(currentHash);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const inputPanel = (
-    <Stack gap="md">
-      <TextInput
-        label="Input Text"
-        description="Type anything — see how the hash changes instantly"
-        value={input}
-        onChange={(e) => setInput(e.currentTarget.value)}
-        size="md"
-      />
+    <div className="flex flex-col gap-4">
+      <div>
+        <Label>Input Text</Label>
+        <p className="text-xs text-muted-foreground mb-1">
+          Type anything — see how the hash changes instantly
+        </p>
+        <Input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
+      </div>
 
-      <SegmentedControl
-        value={algorithm}
-        onChange={(v) => setAlgorithm(v as HashAlgorithm)}
-        data={[
-          { label: "SHA-256", value: "sha256" },
-          { label: "Keccak-256", value: "keccak256" },
-          { label: "BLAKE2b", value: "blake2b" },
-        ]}
-      />
+      <Tabs value={algorithm} onValueChange={(v) => setAlgorithm(v as HashAlgorithm)}>
+        <TabsList className="w-full">
+          <TabsTrigger value="sha256" className="flex-1">SHA-256</TabsTrigger>
+          <TabsTrigger value="keccak256" className="flex-1">Keccak-256</TabsTrigger>
+          <TabsTrigger value="blake2b" className="flex-1">BLAKE2b</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
-      <Paper p="md" withBorder>
-        <Text size="sm" fw={600} mb="xs">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <p className="text-sm font-semibold mb-1">
           Hash Output ({algorithm})
-        </Text>
-        <Group gap="xs" align="center">
-          <Code block style={{ flex: 1, wordBreak: "break-all" }}>
-            {currentHash}
-          </Code>
-          <CopyButton value={currentHash}>
-            {({ copied, copy }) => (
-              <ActionIcon
-                variant="subtle"
-                color={copied ? "teal" : "gray"}
-                onClick={copy}
-              >
-                {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
-              </ActionIcon>
-            )}
-          </CopyButton>
-        </Group>
-        <Group mt="xs" gap="xs">
-          <Badge variant="light" size="sm">
+        </p>
+        <div className="flex items-center gap-1">
+          <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto flex-1 break-all">
+            <code>{currentHash}</code>
+          </pre>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleCopy}
+          >
+            {copied ? <Check className="h-4 w-4 text-teal-500" /> : <Copy className="h-4 w-4" />}
+          </Button>
+        </div>
+        <div className="flex items-center gap-1 mt-1">
+          <Badge variant="secondary">
             {currentHash.length - 2} hex chars
           </Badge>
-          <Badge variant="light" size="sm">
+          <Badge variant="secondary">
             {(currentHash.length - 2) * 4} bits
           </Badge>
-        </Group>
-      </Paper>
+        </div>
+      </div>
 
-      <SimpleGrid cols={{ base: 1, md: 3 }} spacing="md">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {(["sha256", "keccak256", "blake2b"] as const).map((algo) => (
-          <Paper key={algo} p="sm" withBorder>
-            <Text size="xs" fw={600} tt="uppercase" c="dimmed" mb="xs">
+          <div key={algo} className="rounded-lg border border-border bg-card p-3">
+            <p className="text-xs font-semibold uppercase text-muted-foreground mb-1">
               {algo}
-            </Text>
-            <Code
-              block
-              style={{
-                fontSize: "0.65rem",
-                wordBreak: "break-all",
-              }}
+            </p>
+            <pre
+              className="rounded-lg bg-muted p-3 overflow-x-auto break-all"
+              style={{ fontSize: "0.65rem" }}
             >
-              {hashes[algo]}
-            </Code>
-          </Paper>
+              <code>{hashes[algo]}</code>
+            </pre>
+          </div>
         ))}
-      </SimpleGrid>
-    </Stack>
+      </div>
+    </div>
   );
 
   const resultPanel = (
-    <Stack gap="md">
-      <Paper p="md" withBorder data-testid="hex-distribution-chart">
-        <Text size="sm" fw={600} mb="xs">
+    <div className="flex flex-col gap-4">
+      <div className="rounded-lg border border-border bg-card p-4" data-testid="hex-distribution-chart">
+        <p className="text-sm font-semibold mb-1">
           Hex Character Distribution
-        </Text>
+        </p>
         <SimpleBarChart
           data={hexDistribution}
           xKey="char"
           yKeys={["count"]}
           height={200}
         />
-        <Text size="xs" c="dimmed" mt="xs">
+        <p className="text-xs text-muted-foreground mt-1">
           A good hash function distributes hex characters uniformly (each ~4 for
           64-char hash)
-        </Text>
-      </Paper>
+        </p>
+      </div>
 
-      <Paper p="md" withBorder>
-        <Text size="sm" fw={600} mb="md">
+      <div className="rounded-lg border border-border bg-card p-4">
+        <p className="text-sm font-semibold mb-4">
           Avalanche Effect Comparison
-        </Text>
-        <SimpleGrid cols={{ base: 1 }} spacing="md">
-          <TextInput
-            label="Original Input"
-            value={input}
-            onChange={(e) => setInput(e.currentTarget.value)}
-            size="sm"
-          />
-          <TextInput
-            label="Modified Input"
-            description="Change one character to see the avalanche effect"
-            value={compareInput}
-            onChange={(e) => setCompareInput(e.currentTarget.value)}
-            size="sm"
-          />
-        </SimpleGrid>
+        </p>
+        <div className="grid grid-cols-1 gap-4">
+          <div>
+            <Label>Original Input</Label>
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Modified Input</Label>
+            <p className="text-xs text-muted-foreground mb-1">
+              Change one character to see the avalanche effect
+            </p>
+            <Input
+              value={compareInput}
+              onChange={(e) => setCompareInput(e.target.value)}
+            />
+          </div>
+        </div>
 
-        <Group mt="md" gap="md">
+        <div className="flex items-center gap-4 mt-4">
           <Badge
-            size="lg"
-            variant="filled"
-            color={avalanche.diffPercent > 40 ? "green" : "orange"}
+            className={
+              avalanche.diffPercent > 40
+                ? "bg-green-600 text-white"
+                : "bg-orange-500 text-white"
+            }
           >
             {avalanche.diffPercent.toFixed(1)}% bits changed
           </Badge>
-          <Text size="sm" c="dimmed">
+          <p className="text-sm text-muted-foreground">
             Ideal: ~50% (good hash function)
-          </Text>
-        </Group>
+          </p>
+        </div>
 
-        <Box mt="md">
+        <div className="mt-4">
           <HashAvalancheVisualizer
             binary1={avalanche.binary1}
             binary2={avalanche.binary2}
             diffBits={avalanche.diffBits}
           />
-        </Box>
-      </Paper>
-    </Stack>
+        </div>
+      </div>
+    </div>
   );
 
   return (
