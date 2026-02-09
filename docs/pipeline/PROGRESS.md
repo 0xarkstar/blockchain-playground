@@ -12,6 +12,7 @@
 | P1 Wave 1 | COMPLETE | p-track-fund, p-track-defi, p-track-sol | 33 demos + pages |
 | P1 Wave 2 | COMPLETE | p-track-tok, p-track-zk, p-track-pages | 26 demos + home + pages |
 | P2 Cleanup + QA | COMPLETE | p-qa | Remove Mantine deps, final verification |
+| P3 On-Chain ZK | COMPLETE | 3 agents | On-chain verification, deploy script, Hardhat tests |
 
 ## File Ownership Map
 
@@ -49,4 +50,9 @@
 - [2026-02-09] **MIGRATION COMPLETE** — 0 @mantine refs, 0 @tabler refs, 709 tests pass, build green
 - [2026-02-09] Phase 2 enhancements: Command palette (Cmd+K), Sonner toasts, syntax-highlighted CodeBlock
 - [2026-02-09] Final QA: 709 unit tests + 54 E2E tests ALL PASS, 0 lint errors
-- [2026-02-09] **PIPELINE COMPLETE**
+- [2026-02-09] **UI MIGRATION COMPLETE**
+- [2026-02-09] Phase 3: On-chain ZK verification — ABIs, contracts.ts, OnChainVerify component
+- [2026-02-09] Phase 3: On-chain tab added to all 4 applied-zk demos (wagmi useReadContract)
+- [2026-02-09] Phase 3: Deploy script (deploy-zk.ts), 9 new Hardhat tests (162 total), all passing
+- [2026-02-09] Phase 3: Circuit artifact aliases created (secret_voting, private_airdrop)
+- [2026-02-09] **PIPELINE COMPLETE** — build PASS, 709 unit + 54 E2E + 162 contract tests

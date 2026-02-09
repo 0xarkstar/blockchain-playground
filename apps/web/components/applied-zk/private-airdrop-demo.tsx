@@ -22,6 +22,9 @@ import {
   MerkleTree,
   formatMerkleProofForCircuit,
 } from "../../lib/applied-zk/merkle";
+import { OnChainVerify } from "./on-chain-verify";
+import { merkleAirdropVerifierAbi } from "../../lib/applied-zk/abis";
+import { ZK_CONTRACTS } from "../../lib/applied-zk/contracts";
 import { Alert, AlertDescription } from "../ui/alert";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -290,6 +293,7 @@ export function PrivateAirdropDemo() {
       <TabsList>
         <TabsTrigger value="demo">Demo</TabsTrigger>
         <TabsTrigger value="learn">Learn</TabsTrigger>
+        {proofResult && <TabsTrigger value="on-chain">On-Chain</TabsTrigger>}
       </TabsList>
 
       <TabsContent value="demo" className="mt-4">
@@ -456,6 +460,17 @@ export function PrivateAirdropDemo() {
           defaultExpanded
         />
       </TabsContent>
+
+      {proofResult && (
+        <TabsContent value="on-chain" className="mt-4">
+          <OnChainVerify
+            proofResult={proofResult}
+            verifierAbi={merkleAirdropVerifierAbi}
+            defaultAddress={ZK_CONTRACTS.merkleAirdropVerifier}
+            circuitName="Private Airdrop"
+          />
+        </TabsContent>
+      )}
     </Tabs>
   );
 }

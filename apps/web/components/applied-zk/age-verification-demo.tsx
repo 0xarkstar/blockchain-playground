@@ -12,6 +12,9 @@ import {
   type ProofGenerationResult,
 } from "../../lib/applied-zk/snarkjs";
 import { poseidonHash, bigintToHex } from "../../lib/applied-zk/poseidon";
+import { OnChainVerify } from "./on-chain-verify";
+import { ageVerifierAbi } from "../../lib/applied-zk/abis";
+import { ZK_CONTRACTS } from "../../lib/applied-zk/contracts";
 import { Alert, AlertDescription } from "../ui/alert";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
@@ -211,6 +214,7 @@ export function AgeVerificationDemo() {
       <TabsList>
         <TabsTrigger value="demo">Demo</TabsTrigger>
         <TabsTrigger value="learn">Learn</TabsTrigger>
+        {proofResult && <TabsTrigger value="on-chain">On-Chain</TabsTrigger>}
       </TabsList>
 
       <TabsContent value="demo" className="mt-4">
@@ -306,6 +310,17 @@ export function AgeVerificationDemo() {
           defaultExpanded
         />
       </TabsContent>
+
+      {proofResult && (
+        <TabsContent value="on-chain" className="mt-4">
+          <OnChainVerify
+            proofResult={proofResult}
+            verifierAbi={ageVerifierAbi}
+            defaultAddress={ZK_CONTRACTS.ageVerifier}
+            circuitName="Age Verification"
+          />
+        </TabsContent>
+      )}
     </Tabs>
   );
 }

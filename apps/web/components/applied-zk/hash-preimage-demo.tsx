@@ -11,6 +11,9 @@ import {
   type ProofGenerationResult,
 } from "../../lib/applied-zk/snarkjs";
 import { poseidonHashSingle, bigintToHex } from "../../lib/applied-zk/poseidon";
+import { OnChainVerify } from "./on-chain-verify";
+import { hashPreimageVerifierAbi } from "../../lib/applied-zk/abis";
+import { ZK_CONTRACTS } from "../../lib/applied-zk/contracts";
 import { Alert, AlertDescription } from "../ui/alert";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -182,6 +185,7 @@ export function HashPreimageDemo() {
       <TabsList>
         <TabsTrigger value="demo">Demo</TabsTrigger>
         <TabsTrigger value="learn">Learn</TabsTrigger>
+        {proofResult && <TabsTrigger value="on-chain">On-Chain</TabsTrigger>}
       </TabsList>
 
       <TabsContent value="demo" className="mt-4">
@@ -450,6 +454,17 @@ export function HashPreimageDemo() {
           defaultExpanded
         />
       </TabsContent>
+
+      {proofResult && (
+        <TabsContent value="on-chain" className="mt-4">
+          <OnChainVerify
+            proofResult={proofResult}
+            verifierAbi={hashPreimageVerifierAbi}
+            defaultAddress={ZK_CONTRACTS.hashPreimageVerifier}
+            circuitName="Hash Preimage"
+          />
+        </TabsContent>
+      )}
     </Tabs>
   );
 }
