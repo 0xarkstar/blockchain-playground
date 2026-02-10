@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Check,
   X,
@@ -122,6 +123,13 @@ function truncateHex(hex: string, chars: number = 10): string {
   if (hex.length <= chars * 2 + 2) return hex;
   return `${hex.slice(0, chars + 2)}...${hex.slice(-chars)}`;
 }
+
+const phaseTransition = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
+  transition: { duration: 0.3 },
+};
 
 export function SealedAuctionDemo() {
   const [auctionPhase, setAuctionPhase] = useState<AuctionPhase>("bidding");
@@ -413,8 +421,9 @@ export function SealedAuctionDemo() {
               </div>
 
               {/* Bidding Phase - Enter Bid */}
+              <AnimatePresence mode="wait">
               {auctionPhase === "bidding" && !myCommitment && (
-                <>
+                <motion.div key="bid-input" {...phaseTransition} className="flex flex-col gap-3">
                   <div>
                     <Label htmlFor="bid-amount">Bid Amount (ETH)</Label>
                     <p className="text-xs text-muted-foreground mb-1">
@@ -457,12 +466,12 @@ export function SealedAuctionDemo() {
                     <Lock className="mr-2 h-4 w-4" />
                     Commit Sealed Bid
                   </Button>
-                </>
+                </motion.div>
               )}
 
               {/* Committed State */}
               {myCommitment && (
-                <div className="flex flex-col gap-2">
+                <motion.div key="committed" {...phaseTransition} className="flex flex-col gap-2">
                   <div className="flex items-center gap-1">
                     <Badge
                       variant="secondary"
@@ -477,14 +486,14 @@ export function SealedAuctionDemo() {
                   <code className="text-xs font-mono text-muted-foreground">
                     {truncateHex(bigintToHex(myCommitment), 12)}
                   </code>
-                </div>
+                </motion.div>
               )}
 
               {/* Reveal Phase */}
               {auctionPhase === "reveal" &&
                 myCommitment &&
                 !proofResult && (
-                  <>
+                  <motion.div key="reveal" {...phaseTransition} className="flex flex-col gap-3">
                     <p className="text-xs text-muted-foreground">
                       Reveal your bid with a ZK proof. The proof proves your
                       bid is within the valid range without revealing the exact
@@ -507,7 +516,7 @@ export function SealedAuctionDemo() {
                       <Shield className="mr-2 h-4 w-4" />
                       Reveal with ZK Proof
                     </Button>
-                  </>
+                  </motion.div>
                 )}
 
               {/* Proof Generated */}
@@ -576,7 +585,7 @@ export function SealedAuctionDemo() {
 
               {/* Winner Announcement */}
               {auctionPhase === "finalized" && winner && (
-                <div
+                <motion.div key="winner" {...phaseTransition}
                   className={`relative rounded-lg border p-4 ${
                     winner.address === "0xYou...9999"
                       ? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950"
@@ -603,8 +612,9 @@ export function SealedAuctionDemo() {
                       </p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               )}
+              </AnimatePresence>
             </div>
           </div>
 

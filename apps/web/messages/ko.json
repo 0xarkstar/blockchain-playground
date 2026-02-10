@@ -390,15 +390,429 @@
     "education": {
       "snark": {
         "title": "SNARK 이해하기",
-        "description": "신뢰 설정부터 증명 검증까지, 간결한 비대화식 지식 논증의 작동 원리를 배웁니다."
+        "description": "신뢰 설정부터 증명 검증까지, 간결한 비대화식 지식 논증의 작동 원리를 배웁니다.",
+        "content": {
+          "badge": "교육 모듈",
+          "heading": "zk-SNARK: 영지식 간결한 비대화형 지식 논증",
+          "subtitle": "블록체인에서 가장 널리 배포된 영지식 증명 시스템으로, Zcash, Tornado Cash 및 다수의 L2 솔루션을 구동합니다.",
+          "tabs": {
+            "overview": "개요",
+            "howItWorks": "작동 원리",
+            "trustedSetup": "신뢰 셋업",
+            "tryIt": "체험하기"
+          },
+          "overview": {
+            "whatIsTitle": "zk-SNARK란 무엇인가?",
+            "whatIsDescription": "zk-SNARK(Zero-Knowledge Succinct Non-Interactive Argument of Knowledge)는 증명자가 문장의 유효성 이외의 어떤 정보도 공개하지 않고 검증자에게 문장이 참임을 확신시킬 수 있는 암호학적 증명입니다. 약어는 다음과 같은 핵심 속성을 나타냅니다:",
+            "zeroKnowledge": {
+              "title": "영지식(Zero-Knowledge)",
+              "description": "검증자는 비밀 증인(witness)에 대해 아무것도 알 수 없으며 \u2014 오직 증인이 존재하고 주어진 제약 조건을 만족한다는 것만 알 수 있습니다."
+            },
+            "succinct": {
+              "title": "간결성(Succinct)",
+              "description": "증명은 매우 작으며(Groth16에서 ~200바이트) 원래 연산의 복잡성과 관계없이 밀리초 단위로 검증할 수 있습니다."
+            },
+            "nonInteractive": {
+              "title": "비대화형(Non-Interactive)",
+              "description": "증명자에서 검증자로의 단일 메시지만 필요 \u2014 주고받을 필요가 없습니다. 이는 온체인 검증을 실용적으로 만듭니다."
+            },
+            "argumentOfKnowledge": {
+              "title": "지식 논증(Argument of Knowledge)",
+              "description": "증명자는 실제로 비밀 증인을 \u201c알고\u201d 있어야 합니다. 계산적으로, 실제 증인 없이 유효한 증명을 위조하는 것은 불가능합니다."
+            },
+            "advantages": {
+              "title": "장점",
+              "description": "SNARK가 블록체인에서 널리 채택되는 이유",
+              "item1": "극도로 작은 증명 크기 (Groth16으로 ~200바이트)",
+              "item2": "회로 복잡성과 무관하게 상수 시간 검증 (~10ms)",
+              "item3": "성숙한 생태계: circom, snarkjs, Zcash, Ethereum 지원",
+              "item4": "가스 효율적인 온체인 검증 (Ethereum에서 ~200k 가스)"
+            },
+            "limitations": {
+              "title": "한계",
+              "description": "SNARK 선택 시 고려해야 할 트레이드오프",
+              "item1": "회로마다 신뢰 셋업 세레모니가 필요",
+              "item2": "양자 저항성이 없음 \u2014 타원 곡선 페어링에 의존",
+              "item3": "회로 특정적: 각 프로그램마다 새로운 셋업이 필요",
+              "item4": "셋업의 독성 폐기물(toxic waste)을 안전하게 파기해야 함"
+            }
+          },
+          "howItWorks": {
+            "pipelineTitle": "SNARK 파이프라인: 문장에서 증명까지",
+            "pipelineDescription": "SNARK 증명은 여러 수학적 변환을 거칩니다. 각 단계는 연산을 타원 곡선 암호학을 사용하여 증명하고 검증하기 쉬운 형태로 변환합니다.",
+            "step1": {
+              "title": "회로 작성 (DSL)",
+              "description": "circom과 같은 도메인 특화 언어를 사용하여 연산을 산술 회로로 표현합니다.",
+              "detail1": "비공개 입력(witness)과 공개 입력/출력을 정의",
+              "detail2": "덧셈과 곱셈 게이트를 사용하여 제약 조건 구축",
+              "detail3": "회로는 유한체 위의 산술 연산의 DAG(Directed Acyclic Graph)"
+            },
+            "step2": {
+              "title": "R1CS로 컴파일",
+              "description": "컴파일러가 회로를 Rank-1 제약 시스템(R1CS)으로 변환 \u2014 A * B = C 형태의 방정식 집합.",
+              "detail1": "각 제약 조건은 변수의 선형 결합을 포함",
+              "detail2": "R1CS는 회로를 세 개의 행렬(A, B, C)로 인코딩",
+              "detail3": "유효한 witness는 모든 제약 조건을 동시에 만족"
+            },
+            "step3": {
+              "title": "QAP로 변환",
+              "description": "R1CS가 2차 산술 프로그램(QAP)을 통해 다항식으로 보간됩니다.",
+              "detail1": "라그랑주 보간이 행렬 행을 다항식으로 변환",
+              "detail2": "모든 제약 조건 검사가 다항식 항등식 검사로 축소",
+              "detail3": "핵심 통찰: 다항식 항등식 검증은 무작위 평가를 통해 효율적"
+            },
+            "step4": {
+              "title": "증명 생성",
+              "description": "증명 키와 witness를 사용하여 다항식 평가를 인코딩하는 타원 곡선 점을 계산합니다.",
+              "detail1": "증명자가 셋업의 비밀 점에서 다항식을 평가",
+              "detail2": "타원 곡선 페어링이 비밀을 모른 채 검증 가능하게 함",
+              "detail3": "최종 증명은 단 3개의 그룹 원소로 구성 (Groth16에서 ~200바이트)"
+            },
+            "exampleTitle": "구체적 예시",
+            "example": {
+              "label1": "1. 회로 (circom)",
+              "label2": "2. R1CS 제약 조건",
+              "label3": "3. 증명되는 내용"
+            }
+          },
+          "trustedSetup": {
+            "ceremonyTitle": "신뢰 셋업 세레모니",
+            "ceremonyDescription": "신뢰 셋업은 zk-SNARK에서 가장 논쟁적인 부분입니다. 시스템에 필요한 증명 키와 검증 키를 생성하지만, 이 과정에서 \u201c독성 폐기물(toxic waste)\u201d이 발생하며, 파기되지 않으면 증명을 위조하는 데 사용될 수 있습니다.",
+            "whatHappens": {
+              "title": "진행 과정",
+              "item1": "무작위 비밀 \u03c4(tau)가 생성됨",
+              "item2": "tau의 거듭제곱 (\u03c4, \u03c4\u00b2, \u03c4\u00b3, ...)이 계산됨",
+              "item3": "이들이 타원 곡선 점으로 인코딩됨",
+              "item4": "결과물이 구조화된 참조 문자열(SRS)"
+            },
+            "toxicWaste": {
+              "title": "독성 폐기물(Toxic Waste)",
+              "item1": "\u03c4의 원시 값은 반드시 파기되어야 함",
+              "item2": "누군가 \u03c4를 보유하면 증명을 위조할 수 있음",
+              "item3": "다자간 계산 세레모니로 이 위험을 완화",
+              "item4": "보안을 위해 단 한 명의 정직한 참여자만 있으면 됨"
+            },
+            "powersOfTau": {
+              "title": "Powers of Tau 세레모니",
+              "description": "현대의 신뢰 셋업은 다자간 계산(MPC)을 사용하여 신뢰를 분산합니다. Zcash Sapling 세레모니에는 87명이, Ethereum의 KZG 세레모니에는 140,000명 이상이 참여했습니다.",
+              "step1": {
+                "title": "1단계: 범용 Powers of Tau",
+                "description": "여러 참여자가 각각 무작위성을 기여합니다. 각자 이전 결과에 자신의 비밀을 곱한 뒤 파기합니다."
+              },
+              "step2": {
+                "title": "안전한 파기",
+                "description": "각 참여자가 자신의 무작위 기여분을 안전하게 삭제합니다. 사용된 하드웨어를 물리적으로 파괴하기도 합니다."
+              },
+              "step3": {
+                "title": "2단계: 회로 특화 셋업",
+                "description": "범용 파라미터가 특정 회로에 맞게 특화됩니다. 이 단계도 다자간 계산 세레모니로 진행할 수 있습니다."
+              }
+            },
+            "securityGuarantee": {
+              "title": "1-of-N 보안 보장",
+              "description": "세레모니는 최소 한 명의 참여자가 정직하게 자신의 비밀 기여분을 파기하는 한 안전합니다. 전 세계 수천 명의 참여자가 있으므로, 모든 참여자가 담합할 가능성은 극히 낮습니다."
+            }
+          },
+          "tryIt": {
+            "demoTitle": "대화형 zk-SNARK 데모",
+            "whatHappenedTitle": "무슨 일이 일어났나요?",
+            "whatHappenedDescription": "이 간소화된 데모는 영지식 증명의 핵심 개념을 보여줍니다. 실제 SNARK에서는:",
+            "item1": "증명은 단순한 산술이 아닌 타원 곡선 암호학을 사용하여 생성됨",
+            "item2": "검증자는 증명에서 비밀을 추출할 수 없음 \u2014 무한한 컴퓨팅 파워로도 불가능 (계산적 건전성)",
+            "item3": "증명은 훨씬 복잡한 문장을 표현 가능 (예: 스도쿠 풀이, 자격 증명 검증, 비공개 전송)",
+            "item4": "온체인 검증 비용은 ~200k 가스이며 EVM 페어링 체크 프리컴파일을 통해 상수 시간으로 실행"
+          }
+        }
       },
       "stark": {
         "title": "STARK 이해하기",
-        "description": "확장 가능한 투명 지식 논증을 탐구합니다 — 신뢰 설정 없음, 해시 기반 보안, 양자 내성."
+        "description": "확장 가능한 투명 지식 논증을 탐구합니다 — 신뢰 설정 없음, 해시 기반 보안, 양자 내성.",
+        "content": {
+          "badge": "교육 모듈",
+          "heading": "zk-STARK: 확장 가능한 투명 지식 논증",
+          "subheading": "차세대 영지식 증명 — 신뢰 설정 불필요, 양자 내성 보안, 대규모 연산에 대한 우수한 확장성.",
+          "tabs": {
+            "overview": "개요",
+            "howItWorks": "작동 원리",
+            "fri": "FRI 프로토콜",
+            "applications": "응용 분야"
+          },
+          "overview": {
+            "whatIsTitle": "zk-STARK란?",
+            "whatIsDescription": "<strong>zk-STARK</strong>(Zero-Knowledge Scalable Transparent Argument of Knowledge)는 Eli Ben-Sasson과 StarkWare 연구진이 발명한 증명 시스템입니다. STARK는 SNARK의 두 가지 근본적 한계인 신뢰 설정의 필요성과 양자 컴퓨터에 대한 취약성을 해결합니다.",
+            "scalableTitle": "확장 가능",
+            "scalableDesc": "증명 생성 시간은 연산 크기에 준선형적으로 증가하고, 검증 시간은 다중로그적으로 증가합니다. 이는 STARK가 더 큰 프로그램에 대해 상대적으로 더 빨라진다는 것을 의미합니다.",
+            "transparentTitle": "투명",
+            "transparentDesc": "신뢰 설정 행사가 필요 없습니다. 증명에 사용된 모든 무작위성은 공개적으로 검증 가능하며, \u201c유독 폐기물\u201d 문제를 완전히 제거합니다.",
+            "quantumResistantTitle": "양자 내성",
+            "quantumResistantDesc": "STARK는 타원 곡선이 아닌 충돌 저항 해시 함수에만 의존하며, 이는 양자 컴퓨터 공격에 저항할 수 있다고 알려져 있습니다.",
+            "minimalAssumptionsTitle": "최소 가정",
+            "minimalAssumptionsDesc": "보안은 충돌 저항 해시 함수의 존재에 기반합니다 — 가장 약하고 가장 잘 연구된 암호학적 가정 중 하나입니다.",
+            "advantagesTitle": "장점",
+            "advantagesDesc": "STARK가 증명 시스템의 미래인 이유",
+            "adv1": "신뢰 설정 불필요 — 완전히 투명한 검증",
+            "adv2": "포스트 양자 보안 (해시 기반, 타원 곡선 없음)",
+            "adv3": "매우 큰 연산에 대해 더 나은 점근적 확장성",
+            "adv4": "증명자 시간이 준선형적으로 확장: O(n log n)",
+            "tradeoffsTitle": "트레이드오프",
+            "tradeoffsDesc": "STARK가 현재 SNARK에 뒤처지는 부분",
+            "trade1": "더 큰 증명 크기 (Groth16의 ~200바이트 대비 ~45 KB)",
+            "trade2": "더 느린 온체인 검증 (~10ms 대비 ~100ms)",
+            "trade3": "이더리움 L1 검증에 더 높은 가스 비용",
+            "trade4": "개발 도구가 적은 초기 단계 생태계"
+          },
+          "howItWorks": {
+            "pipelineTitle": "STARK 파이프라인: 실행 추적에서 증명까지",
+            "pipelineDesc": "산술 회로와 R1CS 대신, STARK는 실행 추적과 대수적 제약을 사용합니다. 증명자는 일련의 계산 단계가 주어진 전이 규칙을 만족하는지 증명합니다.",
+            "step1Title": "대수적 중간 표현 (AIR)",
+            "step1Desc": "연산을 다항식 전이 제약이 있는 실행 추적으로 표현합니다.",
+            "step1Detail1": "실행 추적은 각 행이 계산 단계인 테이블입니다",
+            "step1Detail2": "전이 제약은 연속된 행 사이의 규칙을 정의합니다",
+            "step1Detail3": "경계 제약은 특정 위치의 값을 고정합니다 (예: 초기 상태)",
+            "step2Title": "다항식 커밋먼트",
+            "step2Desc": "실행 추적의 열을 다항식으로 보간하고 커밋합니다.",
+            "step2Detail1": "추적의 각 열은 유한체 위의 다항식이 됩니다",
+            "step2Detail2": "전이 제약은 다항식 항등식 검사가 됩니다",
+            "step2Detail3": "합성 다항식은 모든 제약을 하나의 검사로 결합합니다",
+            "step3Title": "FRI 프로토콜",
+            "step3Desc": "Fast Reed-Solomon 대화형 오라클 증명을 사용하여 다항식 차수 경계를 검증합니다.",
+            "step3Detail1": "FRI는 다항식 차수를 반복적으로 절반으로 줄입니다",
+            "step3Detail2": "각 라운드는 무작위 도전(실제로는 Fiat-Shamir를 통해)을 사용합니다",
+            "step3Detail3": "마지막에 다항식은 상수(차수 0)이어야 합니다",
+            "step4Title": "Fiat-Shamir 변환",
+            "step4Desc": "해시 함수에서 도전을 도출하여 대화형 프로토콜을 비대화형 증명으로 변환합니다.",
+            "step4Detail1": "모든 검증자 도전이 해시 출력으로 대체됩니다",
+            "step4Detail2": "증명자가 현재까지의 트랜스크립트 해시를 계산합니다",
+            "step4Detail3": "이로써 증명이 단일 메시지(비대화형)가 됩니다",
+            "exampleTitle": "예시: 피보나치 검증",
+            "exampleDesc": "전체 추적을 공개하지 않고 100번째 피보나치 수를 안다는 것을 증명하고 싶다고 가정합니다:",
+            "executionTraceLabel": "실행 추적",
+            "transitionConstraintsLabel": "전이 제약"
+          },
+          "fri": {
+            "title": "FRI: Fast Reed-Solomon 근접성 IOP",
+            "description": "FRI는 STARK를 작동하게 하는 핵심 암호 프로토콜입니다. 커밋된 함수가 저차 다항식에 \u201c가까운\u201d 것을 증명하며, 이는 계산 무결성을 검증하기 위한 수학적 근간입니다.",
+            "howFriWorksTitle": "FRI 작동 방식",
+            "howFri1": "차수 d의 다항식으로 시작",
+            "howFri2": "짝수와 홀수 계수로 분할",
+            "howFri3": "무작위 도전 \u03b1를 사용하여 결합",
+            "howFri4": "결과의 차수는 d/2 — 차수 0이 될 때까지 반복",
+            "whyTransparentTitle": "투명한 이유",
+            "whyTransparent1": "모든 도전이 공개 해시 함수에서 도출됨",
+            "whyTransparent2": "비밀 매개변수나 신뢰 설정이 불필요",
+            "whyTransparent3": "누구나 독립적으로 증명을 검증 가능",
+            "whyTransparent4": "보안은 해시의 충돌 저항성으로 귀결됨",
+            "postQuantumTitle": "포스트 양자 보안",
+            "postQuantumDesc": "STARK는 보안을 전적으로 해시 함수에서 도출하며, 이는 양자 공격에 저항할 수 있다고 알려져 있습니다. 이는 양자 컴퓨팅이 발전함에 따라 SNARK에 비해 상당한 이점입니다.",
+            "starkSecurityTitle": "STARK 보안 기반",
+            "starkSecurity1": "충돌 저항 해시 함수 (SHA-256, Poseidon)",
+            "starkSecurity2": "타원 곡선 가정 없음",
+            "starkSecurity3": "그로버 알고리즘은 해시 보안을 절반으로만 줄임 (128비트 \u2192 64비트 유효)",
+            "snarkVulnerabilityTitle": "SNARK 취약점",
+            "snarkVuln1": "타원 곡선 이산 로그 문제에 의존",
+            "snarkVuln2": "쇼어 알고리즘이 EC 암호를 다항식 시간에 해독 가능",
+            "snarkVuln3": "새로운 증명 시스템으로의 마이그레이션 필요",
+            "futureProofingTitle": "미래 대비",
+            "futureProofingDesc": "타원 곡선을 해독할 수 있는 실용적 양자 컴퓨터는 아직 수년 후이지만, 지금 STARK를 선택하면 안전 여유를 확보할 수 있습니다. STARK 기반 시스템은 양자 컴퓨팅이 도래해도 마이그레이션할 필요가 없습니다.",
+            "reductionTitle": "FRI 리덕션 과정",
+            "reduceStep1Title": "초기 다항식 (차수 d)",
+            "reduceStep1Desc": "큰 평가 도메인에서 차수 d의 다항식 P(x)의 평가에 커밋합니다.",
+            "reduceStep2Title": "분할 및 접기 (차수 d/2)",
+            "reduceStep2Desc": "P(x) = P_even(x\u00b2) + x\u00b7P_odd(x\u00b2)로 분해합니다. 결합: P'(x) = P_even(x) + \u03b1\u00b7P_odd(x), 무작위 도전 \u03b1 사용.",
+            "reduceStep3Title": "반복 (차수 d/4, d/8, ...)",
+            "reduceStep3Desc": "각 라운드는 차수를 절반으로 줄입니다. log(d) 라운드 후 다항식은 상수여야 합니다.",
+            "reduceStep4Title": "최종 확인",
+            "reduceStep4Desc": "최종 주장된 다항식이 실제로 상수인지 확인합니다. 검증자는 레이어 간 일관성을 무작위로 점검합니다."
+          },
+          "applications": {
+            "title": "실제 STARK 응용 사례",
+            "description": "STARK는 블록체인 분야에서 가장 야심찬 프로젝트들, 특히 L2 스케일링과 검증 가능한 연산 분야를 구동합니다.",
+            "starknetTitle": "StarkNet",
+            "starknetDesc": "STARK 증명을 사용하는 이더리움 위의 무허가 분산형 ZK-롤업.",
+            "starknetBadge1": "L2 스케일링",
+            "starknetBadge2": "Cairo",
+            "starknetBadge3": "이더리움",
+            "starknet1": "Cairo 언어를 통한 범용 스마트 컨트랙트",
+            "starknet2": "이더리움 L1에 유효성 증명 게시",
+            "starknet3": "처음부터 내장된 계정 추상화",
+            "starkexTitle": "StarkEx",
+            "starkexDesc": "dYdX, Immutable X, Sorare가 사용하는 SaaS 스케일링 엔진.",
+            "starkexBadge1": "dYdX",
+            "starkexBadge2": "Immutable X",
+            "starkexBadge3": "Sorare",
+            "starkex1": "dYdX에서 하루 60만 건 이상의 거래 처리",
+            "starkex2": "Immutable X: 가스비 없는 NFT 거래",
+            "starkex3": "배치 증명이 수천 건의 트랜잭션을 집계",
+            "midenTitle": "Polygon Miden",
+            "midenDesc": "프라이버시와 프로그래밍 가능성에 초점을 맞춘 Polygon의 STARK 기반 롤업.",
+            "midenBadge1": "Polygon",
+            "midenBadge2": "프라이버시",
+            "midenBadge3": "롤업",
+            "miden1": "프라이버시를 위한 클라이언트 측 증명 생성",
+            "miden2": "Miden VM: STARK 친화적 가상 머신",
+            "miden3": "동시 트랜잭션 실행",
+            "riscZeroTitle": "RISC Zero",
+            "riscZeroDesc": "STARK를 사용하여 RISC-V 실행을 증명하는 범용 zkVM.",
+            "riscZeroBadge1": "zkVM",
+            "riscZeroBadge2": "RISC-V",
+            "riscZeroBadge3": "Bonsai",
+            "riscZero1": "Rust, C 또는 모든 RISC-V 언어로 ZK 프로그램 작성",
+            "riscZero2": "원격 증명 생성을 위한 Bonsai 네트워크",
+            "riscZero3": "회로 작성 불필요 — 모든 프로그램 증명 가능",
+            "whenToUseTitle": "각 시스템의 사용 시기",
+            "chooseStarksTitle": "STARK를 선택할 때:",
+            "chooseStarks1": "대규모 연산 (L2 롤업, VM 실행)",
+            "chooseStarks2": "포스트 양자 보안이 요구 사항일 때",
+            "chooseStarks3": "신뢰 설정 행사가 허용되지 않을 때",
+            "chooseStarks4": "증명자 확장성이 증명 크기보다 중요할 때",
+            "chooseSnarksTitle": "SNARK를 선택할 때:",
+            "chooseSnarks1": "온체인 검증 비용을 최소화해야 할 때",
+            "chooseSnarks2": "작은 증명 크기가 중요할 때 (예: 온체인 저장)",
+            "chooseSnarks3": "성숙한 도구가 필요할 때 (circom, snarkjs, Hardhat)",
+            "chooseSnarks4": "프라이버시 애플리케이션 (Zcash, Tornado Cash 모델)"
+          }
+        }
       },
       "comparison": {
         "title": "SNARK vs STARK",
-        "description": "두 주요 영지식 증명 시스템을 핵심 지표와 사용 사례로 비교합니다."
+        "description": "두 주요 영지식 증명 시스템을 핵심 지표와 사용 사례로 비교합니다.",
+        "content": {
+          "badge": "교육 모듈",
+          "heading": "SNARK vs STARK: 종합 비교",
+          "subheading": "두 주요 영지식 증명 시스템의 핵심 차이점과 각각의 적합한 사용 시점을 이해합니다.",
+          "stats": {
+            "snarkProofSize": "SNARK 증명 크기 (바이트)",
+            "starkProofSize": "STARK 증명 크기 (바이트)",
+            "snarkVerificationTime": "SNARK 검증 시간",
+            "starkVerificationTime": "STARK 검증 시간"
+          },
+          "quickOverview": {
+            "title": "간략 개요",
+            "snark": {
+              "description": "간결한 비대화형 지식 논증(Succinct Non-interactive Argument of Knowledge). 타원 곡선 페어링을 사용하여 극도로 작은 증명을 생성합니다.",
+              "pro1": "매우 작은 증명 크기 (~200바이트)",
+              "pro2": "빠른 검증 속도 (~10ms)",
+              "pro3": "성숙한 생태계 (circom, snarkjs)",
+              "con1": "신뢰 설정 필요",
+              "con2": "양자 내성 없음"
+            },
+            "stark": {
+              "description": "확장 가능한 투명 지식 논증(Scalable Transparent Argument of Knowledge). 해시 함수를 사용하여 투명하고 양자 내성이 있는 보안을 제공합니다.",
+              "pro1": "신뢰 설정 불필요",
+              "pro2": "양자 내성 보유",
+              "pro3": "대규모 연산에 더 나은 확장성",
+              "con1": "더 큰 증명 크기 (~45 KB)",
+              "con2": "더 느린 온체인 검증"
+            }
+          },
+          "technicalComparison": {
+            "title": "기술 비교",
+            "aspect": "항목",
+            "rows": {
+              "cryptoBasis": {
+                "label": "암호학적 기반",
+                "snark": "타원 곡선 페어링",
+                "stark": "해시 함수"
+              },
+              "trustedSetup": {
+                "label": "신뢰 설정",
+                "snark": "필요 (회로별)",
+                "stark": "불필요"
+              },
+              "proofSize": {
+                "label": "증명 크기",
+                "snark": "~200바이트",
+                "stark": "~45 KB"
+              },
+              "verificationTime": {
+                "label": "검증 시간",
+                "snark": "~10ms (상수)",
+                "stark": "~100ms (다중로그)"
+              },
+              "proverComplexity": {
+                "label": "증명자 복잡도",
+                "snark": "O(n log n)",
+                "stark": "O(n polylog n)"
+              },
+              "verifierComplexity": {
+                "label": "검증자 복잡도",
+                "snark": "O(1)",
+                "stark": "O(polylog n)"
+              },
+              "quantumResistance": {
+                "label": "양자 내성",
+                "snark": "없음",
+                "stark": "있음"
+              },
+              "gasCost": {
+                "label": "온체인 가스 비용",
+                "snark": "~200K 가스",
+                "stark": "~1M+ 가스"
+              }
+            }
+          },
+          "useCases": {
+            "title": "최적 사용 사례",
+            "snark": {
+              "heading": "SNARK에 적합",
+              "onChain": {
+                "title": "온체인 검증",
+                "description": "가스 비용이 주요 제약인 경우 (프라이버시 프로토콜, 자격 증명 검증, 온체인 게임)"
+              },
+              "privacy": {
+                "title": "프라이버시 애플리케이션",
+                "description": "Zcash, Tornado Cash 모델 — 작은 증명 크기로 효율적인 비공개 트랜잭션을 가능하게 함"
+              },
+              "identity": {
+                "title": "신원 및 자격 증명",
+                "description": "기본 데이터를 공개하지 않고 신원 속성(나이, 멤버십)을 증명"
+              },
+              "tooling": {
+                "title": "풍부한 도구 필요",
+                "description": "성숙한 개발자 도구, 감사된 라이브러리, 커뮤니티 지원이 필요한 프로젝트"
+              }
+            },
+            "stark": {
+              "heading": "STARK에 적합",
+              "rollups": {
+                "title": "L2 롤업",
+                "description": "StarkNet, StarkEx — 수천 개의 트랜잭션을 배치하여 L1에 단일 증명으로 게시"
+              },
+              "largeComputation": {
+                "title": "대규모 연산",
+                "description": "복잡한 VM 실행, ML 추론 검증, 수백만 개의 제약 조건을 가진 연산"
+              },
+              "longTermSecurity": {
+                "title": "장기 보안",
+                "description": "미래의 양자 컴퓨터에 대해서도 수십 년간 안전하게 유지되어야 하는 시스템"
+              },
+              "noTrust": {
+                "title": "신뢰 불필요",
+                "description": "어떤 형태의 신뢰 설정도 허용할 수 없는 환경 (정부, 핵심 인프라)"
+              }
+            }
+          },
+          "future": {
+            "title": "미래: 융합",
+            "intro": "연구자들이 양쪽의 장점을 결합하는 하이브리드 접근 방식을 개발하면서 SNARK과 STARK의 경계가 흐려지고 있습니다.",
+            "wrapping": {
+              "title": "STARK \u2192 SNARK 래핑",
+              "description": "연산에 대한 STARK 증명을 생성한 후 저렴한 온체인 검증을 위해 SNARK으로 래핑합니다. StarkNet은 이미 SHARP를 통해 이를 수행합니다."
+            },
+            "universalSnarks": {
+              "title": "유니버설 SNARK",
+              "description": "PLONK과 Halo 2 같은 시스템은 범용 SRS로 회로별 설정을 제거하여 신뢰 설정 부담을 줄입니다."
+            },
+            "recursiveProofs": {
+              "title": "재귀 증명",
+              "description": "다른 증명을 검증하는 증명입니다. SNARK과 STARK 시스템 모두에서 점진적 검증과 증명 집계를 가능하게 합니다."
+            },
+            "bottomLine": {
+              "title": "핵심 결론",
+              "description": "SNARK이나 STARK 어느 쪽도 보편적으로 \u201c더 낫다\u201d고 할 수 없습니다. 올바른 선택은 증명 크기, 설정 신뢰 모델, 양자 내성, 연산 규모 등 제약 조건에 따라 달라집니다. 업계는 양쪽 시스템의 강점을 활용하는 하이브리드 솔루션으로 수렴하고 있습니다."
+            }
+          }
+        }
       }
     },
     "visualization": {

@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import {
   Card,
   CardContent,
@@ -67,11 +68,13 @@ function ComparisonRow({
 }
 
 export default function ComparisonPage() {
+  const t = useTranslations("appliedZk");
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="mb-8">
         <Badge variant="secondary" className="mb-4">
-          Education Module
+          {t("education.comparison.content.badge")}
         </Badge>
         <TextAnimate
           as="h1"
@@ -79,11 +82,10 @@ export default function ComparisonPage() {
           animation="blurInUp"
           by="word"
         >
-          SNARK vs STARK: A Comprehensive Comparison
+          {t("education.comparison.content.heading")}
         </TextAnimate>
         <p className="text-muted-foreground text-lg">
-          Understand the key differences between the two dominant zero-knowledge
-          proof systems and when to use each.
+          {t("education.comparison.content.subheading")}
         </p>
       </div>
 
@@ -96,7 +98,7 @@ export default function ComparisonPage() {
                 ~<NumberTicker value={200} />
               </div>
               <div className="text-sm text-muted-foreground mt-1">
-                SNARK Proof Size (bytes)
+                {t("education.comparison.content.stats.snarkProofSize")}
               </div>
             </CardContent>
           </Card>
@@ -106,7 +108,7 @@ export default function ComparisonPage() {
                 ~<NumberTicker value={45} />K
               </div>
               <div className="text-sm text-muted-foreground mt-1">
-                STARK Proof Size (bytes)
+                {t("education.comparison.content.stats.starkProofSize")}
               </div>
             </CardContent>
           </Card>
@@ -116,7 +118,7 @@ export default function ComparisonPage() {
                 ~<NumberTicker value={10} />ms
               </div>
               <div className="text-sm text-muted-foreground mt-1">
-                SNARK Verification Time
+                {t("education.comparison.content.stats.snarkVerificationTime")}
               </div>
             </CardContent>
           </Card>
@@ -126,7 +128,7 @@ export default function ComparisonPage() {
                 ~<NumberTicker value={100} />ms
               </div>
               <div className="text-sm text-muted-foreground mt-1">
-                STARK Verification Time
+                {t("education.comparison.content.stats.starkVerificationTime")}
               </div>
             </CardContent>
           </Card>
@@ -135,7 +137,7 @@ export default function ComparisonPage() {
         {/* ── Quick Overview ── */}
         <Card>
           <CardHeader>
-            <CardTitle>Quick Overview</CardTitle>
+            <CardTitle>{t("education.comparison.content.quickOverview.title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -144,29 +146,28 @@ export default function ComparisonPage() {
                   zk-SNARK
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Succinct Non-interactive Argument of Knowledge. Uses elliptic
-                  curve pairings for extremely compact proofs.
+                  {t("education.comparison.content.quickOverview.snark.description")}
                 </p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    Tiny proof size (~200 bytes)
+                    {t("education.comparison.content.quickOverview.snark.pro1")}
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    Fast verification (~10ms)
+                    {t("education.comparison.content.quickOverview.snark.pro2")}
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    Mature ecosystem (circom, snarkjs)
+                    {t("education.comparison.content.quickOverview.snark.pro3")}
                   </li>
                   <li className="flex items-center gap-2">
                     <XCircle className="h-4 w-4 text-red-500" />
-                    Requires trusted setup
+                    {t("education.comparison.content.quickOverview.snark.con1")}
                   </li>
                   <li className="flex items-center gap-2">
                     <XCircle className="h-4 w-4 text-red-500" />
-                    Not quantum resistant
+                    {t("education.comparison.content.quickOverview.snark.con2")}
                   </li>
                 </ul>
               </div>
@@ -176,29 +177,28 @@ export default function ComparisonPage() {
                   zk-STARK
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Scalable Transparent Argument of Knowledge. Uses hash
-                  functions for transparent, post-quantum security.
+                  {t("education.comparison.content.quickOverview.stark.description")}
                 </p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    No trusted setup needed
+                    {t("education.comparison.content.quickOverview.stark.pro1")}
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    Quantum resistant
+                    {t("education.comparison.content.quickOverview.stark.pro2")}
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500" />
-                    Better scaling for large computations
+                    {t("education.comparison.content.quickOverview.stark.pro3")}
                   </li>
                   <li className="flex items-center gap-2">
                     <XCircle className="h-4 w-4 text-red-500" />
-                    Larger proof size (~45 KB)
+                    {t("education.comparison.content.quickOverview.stark.con1")}
                   </li>
                   <li className="flex items-center gap-2">
                     <XCircle className="h-4 w-4 text-red-500" />
-                    Slower on-chain verification
+                    {t("education.comparison.content.quickOverview.stark.con2")}
                   </li>
                 </ul>
               </div>
@@ -215,11 +215,11 @@ export default function ComparisonPage() {
         {/* ── Quick Reference Table ── */}
         <Card>
           <CardHeader>
-            <CardTitle>Technical Comparison</CardTitle>
+            <CardTitle>{t("education.comparison.content.technicalComparison.title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-3 gap-4 py-2 border-b font-semibold">
-              <div>Aspect</div>
+              <div>{t("education.comparison.content.technicalComparison.aspect")}</div>
               <div className="text-center text-blue-600 dark:text-blue-400">
                 zk-SNARK
               </div>
@@ -228,50 +228,50 @@ export default function ComparisonPage() {
               </div>
             </div>
             <ComparisonRow
-              label="Cryptographic Basis"
-              snark="Elliptic curve pairings"
-              stark="Hash functions"
+              label={t("education.comparison.content.technicalComparison.rows.cryptoBasis.label")}
+              snark={t("education.comparison.content.technicalComparison.rows.cryptoBasis.snark")}
+              stark={t("education.comparison.content.technicalComparison.rows.cryptoBasis.stark")}
               winner="stark"
             />
             <ComparisonRow
-              label="Trusted Setup"
-              snark="Required (per circuit)"
-              stark="Not required"
+              label={t("education.comparison.content.technicalComparison.rows.trustedSetup.label")}
+              snark={t("education.comparison.content.technicalComparison.rows.trustedSetup.snark")}
+              stark={t("education.comparison.content.technicalComparison.rows.trustedSetup.stark")}
               winner="stark"
             />
             <ComparisonRow
-              label="Proof Size"
-              snark="~200 bytes"
-              stark="~45 KB"
+              label={t("education.comparison.content.technicalComparison.rows.proofSize.label")}
+              snark={t("education.comparison.content.technicalComparison.rows.proofSize.snark")}
+              stark={t("education.comparison.content.technicalComparison.rows.proofSize.stark")}
               winner="snark"
             />
             <ComparisonRow
-              label="Verification Time"
-              snark="~10ms (constant)"
-              stark="~100ms (polylogarithmic)"
+              label={t("education.comparison.content.technicalComparison.rows.verificationTime.label")}
+              snark={t("education.comparison.content.technicalComparison.rows.verificationTime.snark")}
+              stark={t("education.comparison.content.technicalComparison.rows.verificationTime.stark")}
               winner="snark"
             />
             <ComparisonRow
-              label="Prover Complexity"
-              snark="O(n log n)"
-              stark="O(n polylog n)"
+              label={t("education.comparison.content.technicalComparison.rows.proverComplexity.label")}
+              snark={t("education.comparison.content.technicalComparison.rows.proverComplexity.snark")}
+              stark={t("education.comparison.content.technicalComparison.rows.proverComplexity.stark")}
             />
             <ComparisonRow
-              label="Verifier Complexity"
-              snark="O(1)"
-              stark="O(polylog n)"
+              label={t("education.comparison.content.technicalComparison.rows.verifierComplexity.label")}
+              snark={t("education.comparison.content.technicalComparison.rows.verifierComplexity.snark")}
+              stark={t("education.comparison.content.technicalComparison.rows.verifierComplexity.stark")}
               winner="snark"
             />
             <ComparisonRow
-              label="Quantum Resistance"
-              snark="No"
-              stark="Yes"
+              label={t("education.comparison.content.technicalComparison.rows.quantumResistance.label")}
+              snark={t("education.comparison.content.technicalComparison.rows.quantumResistance.snark")}
+              stark={t("education.comparison.content.technicalComparison.rows.quantumResistance.stark")}
               winner="stark"
             />
             <ComparisonRow
-              label="On-chain Gas Cost"
-              snark="~200K gas"
-              stark="~1M+ gas"
+              label={t("education.comparison.content.technicalComparison.rows.gasCost.label")}
+              snark={t("education.comparison.content.technicalComparison.rows.gasCost.snark")}
+              stark={t("education.comparison.content.technicalComparison.rows.gasCost.stark")}
               winner="snark"
             />
           </CardContent>
@@ -280,47 +280,43 @@ export default function ComparisonPage() {
         {/* ── Use Cases ── */}
         <Card>
           <CardHeader>
-            <CardTitle>Best Use Cases</CardTitle>
+            <CardTitle>{t("education.comparison.content.useCases.title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
                   <span className="h-3 w-3 rounded-full bg-blue-500" />
-                  Best for SNARKs
+                  {t("education.comparison.content.useCases.snark.heading")}
                 </h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="p-3 bg-muted rounded-lg">
                     <strong className="text-foreground">
-                      On-chain Verification
+                      {t("education.comparison.content.useCases.snark.onChain.title")}
                     </strong>
                     <br />
-                    When gas cost is the primary constraint (privacy protocols,
-                    credential verification, on-chain games)
+                    {t("education.comparison.content.useCases.snark.onChain.description")}
                   </li>
                   <li className="p-3 bg-muted rounded-lg">
                     <strong className="text-foreground">
-                      Privacy Applications
+                      {t("education.comparison.content.useCases.snark.privacy.title")}
                     </strong>
                     <br />
-                    Zcash, Tornado Cash model &mdash; where small proof size
-                    enables efficient private transactions
+                    {t("education.comparison.content.useCases.snark.privacy.description")}
                   </li>
                   <li className="p-3 bg-muted rounded-lg">
                     <strong className="text-foreground">
-                      Identity & Credentials
+                      {t("education.comparison.content.useCases.snark.identity.title")}
                     </strong>
                     <br />
-                    Prove properties about your identity (age, membership)
-                    without revealing the underlying data
+                    {t("education.comparison.content.useCases.snark.identity.description")}
                   </li>
                   <li className="p-3 bg-muted rounded-lg">
                     <strong className="text-foreground">
-                      Rich Tooling Needed
+                      {t("education.comparison.content.useCases.snark.tooling.title")}
                     </strong>
                     <br />
-                    Projects that need mature developer tools, audited
-                    libraries, and community support
+                    {t("education.comparison.content.useCases.snark.tooling.description")}
                   </li>
                 </ul>
               </div>
@@ -328,40 +324,36 @@ export default function ComparisonPage() {
               <div>
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
                   <span className="h-3 w-3 rounded-full bg-purple-500" />
-                  Best for STARKs
+                  {t("education.comparison.content.useCases.stark.heading")}
                 </h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="p-3 bg-muted rounded-lg">
                     <strong className="text-foreground">
-                      L2 Rollups
+                      {t("education.comparison.content.useCases.stark.rollups.title")}
                     </strong>
                     <br />
-                    StarkNet, StarkEx &mdash; batch thousands of transactions
-                    into a single proof posted to L1
+                    {t("education.comparison.content.useCases.stark.rollups.description")}
                   </li>
                   <li className="p-3 bg-muted rounded-lg">
                     <strong className="text-foreground">
-                      Large Computations
+                      {t("education.comparison.content.useCases.stark.largeComputation.title")}
                     </strong>
                     <br />
-                    Complex VM execution, ML inference verification, and
-                    computations with millions of constraints
+                    {t("education.comparison.content.useCases.stark.largeComputation.description")}
                   </li>
                   <li className="p-3 bg-muted rounded-lg">
                     <strong className="text-foreground">
-                      Long-term Security
+                      {t("education.comparison.content.useCases.stark.longTermSecurity.title")}
                     </strong>
                     <br />
-                    Systems that need to remain secure for decades, even against
-                    future quantum computers
+                    {t("education.comparison.content.useCases.stark.longTermSecurity.description")}
                   </li>
                   <li className="p-3 bg-muted rounded-lg">
                     <strong className="text-foreground">
-                      No Trust Required
+                      {t("education.comparison.content.useCases.stark.noTrust.title")}
                     </strong>
                     <br />
-                    Environments where any form of trusted setup is unacceptable
-                    (government, critical infrastructure)
+                    {t("education.comparison.content.useCases.stark.noTrust.description")}
                   </li>
                 </ul>
               </div>
@@ -372,48 +364,38 @@ export default function ComparisonPage() {
         {/* ── Future Convergence ── */}
         <Card>
           <CardHeader>
-            <CardTitle>The Future: Convergence</CardTitle>
+            <CardTitle>{t("education.comparison.content.future.title")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              The line between SNARKs and STARKs is blurring as researchers
-              develop hybrid approaches that combine the best of both worlds.
+              {t("education.comparison.content.future.intro")}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">STARK → SNARK Wrapping</h4>
+                <h4 className="font-semibold mb-2">{t("education.comparison.content.future.wrapping.title")}</h4>
                 <p className="text-sm text-muted-foreground">
-                  Generate a STARK proof for the computation, then wrap it in a
-                  SNARK for cheap on-chain verification. StarkNet already does
-                  this with SHARP.
+                  {t("education.comparison.content.future.wrapping.description")}
                 </p>
               </div>
               <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">Universal SNARKs</h4>
+                <h4 className="font-semibold mb-2">{t("education.comparison.content.future.universalSnarks.title")}</h4>
                 <p className="text-sm text-muted-foreground">
-                  Systems like PLONK and Halo 2 eliminate circuit-specific setup
-                  with a universal SRS, reducing the trusted setup burden.
+                  {t("education.comparison.content.future.universalSnarks.description")}
                 </p>
               </div>
               <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">Recursive Proofs</h4>
+                <h4 className="font-semibold mb-2">{t("education.comparison.content.future.recursiveProofs.title")}</h4>
                 <p className="text-sm text-muted-foreground">
-                  A proof that verifies another proof. This enables incremental
-                  verification and proof aggregation across both SNARK and STARK
-                  systems.
+                  {t("education.comparison.content.future.recursiveProofs.description")}
                 </p>
               </div>
             </div>
 
             <div className="p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg mt-4">
-              <h4 className="font-semibold mb-1">The Bottom Line</h4>
+              <h4 className="font-semibold mb-1">{t("education.comparison.content.future.bottomLine.title")}</h4>
               <p className="text-sm text-muted-foreground">
-                Neither SNARKs nor STARKs are universally &ldquo;better.&rdquo;
-                The right choice depends on your constraints: proof size, setup
-                trust model, quantum resistance, and computation scale. The
-                industry is converging toward hybrid solutions that leverage the
-                strengths of both systems.
+                {t("education.comparison.content.future.bottomLine.description")}
               </p>
             </div>
           </CardContent>

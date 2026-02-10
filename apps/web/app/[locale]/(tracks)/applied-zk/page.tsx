@@ -154,7 +154,7 @@ export default function AppliedZKPage() {
             {educationLinks.map((link, i) => (
               <motion.a
                 key={link.key}
-                href={`applied-zk/education/${link.slug}`}
+                href={`education/${link.slug}`}
                 className="flex items-center gap-2 rounded-lg border bg-card px-4 py-3 text-sm font-medium hover:bg-accent transition-colors"
                 variants={cardVariants}
                 initial="hidden"
@@ -170,7 +170,7 @@ export default function AppliedZKPage() {
             {visualizationLinks.map((link, i) => (
               <motion.a
                 key={link.key}
-                href={`applied-zk/visualization/${link.slug}`}
+                href={`visualization/${link.slug}`}
                 className="flex items-center gap-2 rounded-lg border bg-card px-4 py-3 text-sm font-medium hover:bg-accent transition-colors"
                 variants={cardVariants}
                 initial="hidden"
@@ -211,7 +211,7 @@ export default function AppliedZKPage() {
                     custom={i}
                   >
                     <a
-                      href={`applied-zk/demo/${demo.slug}`}
+                      href={`demo/${demo.slug}`}
                       className="block h-full"
                     >
                       <MagicCard className="relative h-full rounded-lg overflow-hidden">

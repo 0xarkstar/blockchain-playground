@@ -390,15 +390,429 @@
     "education": {
       "snark": {
         "title": "Understanding SNARKs",
-        "description": "Learn how Succinct Non-interactive Arguments of Knowledge work, from trusted setup to proof verification."
+        "description": "Learn how Succinct Non-interactive Arguments of Knowledge work, from trusted setup to proof verification.",
+        "content": {
+          "badge": "Education Module",
+          "heading": "zk-SNARKs: Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge",
+          "subtitle": "The most widely deployed zero-knowledge proof system in blockchain, powering Zcash, Tornado Cash, and numerous L2 solutions.",
+          "tabs": {
+            "overview": "Overview",
+            "howItWorks": "How It Works",
+            "trustedSetup": "Trusted Setup",
+            "tryIt": "Try It"
+          },
+          "overview": {
+            "whatIsTitle": "What is a zk-SNARK?",
+            "whatIsDescription": "A zk-SNARK (Zero-Knowledge Succinct Non-Interactive Argument of Knowledge) is a cryptographic proof that lets a prover convince a verifier that a statement is true without revealing any information beyond the validity of the statement itself. The acronym captures its key properties:",
+            "zeroKnowledge": {
+              "title": "Zero-Knowledge",
+              "description": "The verifier learns nothing about the secret witness \u2014 only that it exists and satisfies the given constraints."
+            },
+            "succinct": {
+              "title": "Succinct",
+              "description": "Proofs are tiny (~200 bytes for Groth16) and can be verified in milliseconds regardless of the complexity of the original computation."
+            },
+            "nonInteractive": {
+              "title": "Non-Interactive",
+              "description": "A single message from prover to verifier \u2014 no back-and-forth needed. This makes on-chain verification practical."
+            },
+            "argumentOfKnowledge": {
+              "title": "Argument of Knowledge",
+              "description": "The prover must actually \u201cknow\u201d the secret witness. Computationally, it is infeasible to forge a valid proof without the real witness."
+            },
+            "advantages": {
+              "title": "Advantages",
+              "description": "Why SNARKs are widely adopted in blockchain",
+              "item1": "Extremely small proof size (~200 bytes with Groth16)",
+              "item2": "Constant-time verification (~10ms) regardless of circuit complexity",
+              "item3": "Mature ecosystem: circom, snarkjs, Zcash, Ethereum support",
+              "item4": "Gas-efficient on-chain verification (~200k gas on Ethereum)"
+            },
+            "limitations": {
+              "title": "Limitations",
+              "description": "Trade-offs to consider when choosing SNARKs",
+              "item1": "Requires a trusted setup ceremony per circuit",
+              "item2": "Not quantum-resistant \u2014 relies on elliptic curve pairings",
+              "item3": "Circuit-specific: new setup needed for each different program",
+              "item4": "Toxic waste from setup must be securely destroyed"
+            }
+          },
+          "howItWorks": {
+            "pipelineTitle": "SNARK Pipeline: From Statement to Proof",
+            "pipelineDescription": "A SNARK proof goes through several mathematical transformations. Each step converts the computation into a form that is easier to prove and verify using elliptic curve cryptography.",
+            "step1": {
+              "title": "Write the Circuit (DSL)",
+              "description": "Express the computation as an arithmetic circuit using a domain-specific language like circom.",
+              "detail1": "Define private inputs (witness) and public inputs/outputs",
+              "detail2": "Build constraints using addition and multiplication gates",
+              "detail3": "The circuit is a DAG of arithmetic operations over a finite field"
+            },
+            "step2": {
+              "title": "Compile to R1CS",
+              "description": "The compiler converts the circuit into a Rank-1 Constraint System \u2014 a set of equations of the form A * B = C.",
+              "detail1": "Each constraint involves linear combinations of variables",
+              "detail2": "R1CS encodes the circuit as three matrices (A, B, C)",
+              "detail3": "A valid witness satisfies all constraints simultaneously"
+            },
+            "step3": {
+              "title": "Transform to QAP",
+              "description": "The R1CS is interpolated into polynomials via a Quadratic Arithmetic Program.",
+              "detail1": "Lagrange interpolation converts matrix rows into polynomials",
+              "detail2": "Checking all constraints reduces to checking a polynomial identity",
+              "detail3": "The key insight: polynomial identity testing is efficient via random evaluation"
+            },
+            "step4": {
+              "title": "Generate the Proof",
+              "description": "Using the proving key and the witness, compute elliptic curve points that encode the polynomial evaluations.",
+              "detail1": "The prover evaluates polynomials at a secret point from the setup",
+              "detail2": "Elliptic curve pairings enable verification without knowing the secret",
+              "detail3": "The final proof consists of just 3 group elements (~200 bytes in Groth16)"
+            },
+            "exampleTitle": "Concrete Example",
+            "example": {
+              "label1": "1. Circuit (circom)",
+              "label2": "2. R1CS Constraint",
+              "label3": "3. What Gets Proven"
+            }
+          },
+          "trustedSetup": {
+            "ceremonyTitle": "The Trusted Setup Ceremony",
+            "ceremonyDescription": "The trusted setup is the most controversial aspect of zk-SNARKs. It generates the proving key and verification key that the system needs, but the process produces \u201ctoxic waste\u201d that, if not destroyed, could be used to forge proofs.",
+            "whatHappens": {
+              "title": "What Happens",
+              "item1": "A random secret \u03c4 (tau) is generated",
+              "item2": "Powers of tau (\u03c4, \u03c4\u00b2, \u03c4\u00b3, ...) are computed",
+              "item3": "These are encoded as elliptic curve points",
+              "item4": "The result is the Structured Reference String (SRS)"
+            },
+            "toxicWaste": {
+              "title": "Toxic Waste",
+              "item1": "The raw value of \u03c4 must be destroyed",
+              "item2": "If anyone retains \u03c4, they can forge proofs",
+              "item3": "Multi-party ceremonies mitigate this risk",
+              "item4": "Only ONE honest participant is needed for security"
+            },
+            "powersOfTau": {
+              "title": "Powers of Tau Ceremony",
+              "description": "Modern trusted setups use multi-party computation (MPC) to distribute trust. The Zcash Sapling ceremony had 87 participants; Ethereum\u2019s KZG ceremony had over 140,000.",
+              "step1": {
+                "title": "Phase 1: Universal Powers of Tau",
+                "description": "Multiple participants each contribute randomness. Each one multiplies the previous result by their secret, then destroys it."
+              },
+              "step2": {
+                "title": "Secure Destruction",
+                "description": "Each participant securely deletes their random contribution. They may physically destroy the hardware used."
+              },
+              "step3": {
+                "title": "Phase 2: Circuit-Specific Setup",
+                "description": "The universal parameters are specialized for a particular circuit. This phase can also be a multi-party ceremony."
+              }
+            },
+            "securityGuarantee": {
+              "title": "1-of-N Security Guarantee",
+              "description": "The ceremony is secure as long as at least one participant honestly destroys their secret contribution. With thousands of participants across the world, it is extremely unlikely that every single one is colluding."
+            }
+          },
+          "tryIt": {
+            "demoTitle": "Interactive zk-SNARK Demo",
+            "whatHappenedTitle": "What Just Happened?",
+            "whatHappenedDescription": "This simplified demo illustrates the core concept of zero-knowledge proofs. In a real SNARK:",
+            "item1": "The proof is generated using elliptic curve cryptography, not simple arithmetic",
+            "item2": "The verifier cannot extract the secret from the proof \u2014 even with unlimited computing power (computational soundness)",
+            "item3": "Proofs can express far more complex statements (e.g., Sudoku solutions, credential checks, private transfers)",
+            "item4": "On-chain verification costs ~200k gas and runs in constant time via the EVM precompile for pairing checks"
+          }
+        }
       },
       "stark": {
         "title": "Understanding STARKs",
-        "description": "Explore Scalable Transparent Arguments of Knowledge — no trusted setup, hash-based security, quantum resistance."
+        "description": "Explore Scalable Transparent Arguments of Knowledge — no trusted setup, hash-based security, quantum resistance.",
+        "content": {
+          "badge": "Education Module",
+          "heading": "zk-STARKs: Scalable Transparent Arguments of Knowledge",
+          "subheading": "The next generation of zero-knowledge proofs — no trusted setup, quantum-resistant security, and better scaling for large computations.",
+          "tabs": {
+            "overview": "Overview",
+            "howItWorks": "How It Works",
+            "fri": "FRI Protocol",
+            "applications": "Applications"
+          },
+          "overview": {
+            "whatIsTitle": "What is a zk-STARK?",
+            "whatIsDescription": "A <strong>zk-STARK</strong> (Zero-Knowledge Scalable Transparent Argument of Knowledge) is a proof system invented by Eli Ben-Sasson and collaborators at StarkWare. STARKs solve two fundamental limitations of SNARKs: the need for a trusted setup and vulnerability to quantum computers.",
+            "scalableTitle": "Scalable",
+            "scalableDesc": "Proof generation time scales quasi-linearly with computation size, while verification time scales polylogarithmically. This means STARKs get relatively faster for larger programs.",
+            "transparentTitle": "Transparent",
+            "transparentDesc": "No trusted setup ceremony required. All randomness used in the proof is publicly verifiable, eliminating the \u201ctoxic waste\u201d problem entirely.",
+            "quantumResistantTitle": "Quantum Resistant",
+            "quantumResistantDesc": "STARKs rely only on collision-resistant hash functions (not elliptic curves), which are believed to resist quantum computer attacks.",
+            "minimalAssumptionsTitle": "Minimal Assumptions",
+            "minimalAssumptionsDesc": "Security rests on the existence of collision-resistant hash functions — one of the weakest and most well-studied cryptographic assumptions.",
+            "advantagesTitle": "Advantages",
+            "advantagesDesc": "Why STARKs are the future of proof systems",
+            "adv1": "No trusted setup — fully transparent verification",
+            "adv2": "Post-quantum secure (hash-based, no elliptic curves)",
+            "adv3": "Better asymptotic scaling for very large computations",
+            "adv4": "Prover time scales quasi-linearly: O(n log n)",
+            "tradeoffsTitle": "Trade-offs",
+            "tradeoffsDesc": "Where STARKs currently lag behind SNARKs",
+            "trade1": "Larger proof size (~45 KB vs ~200 bytes for Groth16)",
+            "trade2": "Slower on-chain verification (~100ms vs ~10ms)",
+            "trade3": "Higher gas cost for Ethereum L1 verification",
+            "trade4": "Ecosystem is younger with fewer developer tools"
+          },
+          "howItWorks": {
+            "pipelineTitle": "STARK Pipeline: From Execution Trace to Proof",
+            "pipelineDesc": "Instead of arithmetic circuits and R1CS, STARKs work with execution traces and algebraic constraints. The prover demonstrates that a sequence of computation steps satisfies given transition rules.",
+            "step1Title": "Algebraic Intermediate Representation (AIR)",
+            "step1Desc": "Express the computation as an execution trace with polynomial transition constraints.",
+            "step1Detail1": "An execution trace is a table where each row is a computation step",
+            "step1Detail2": "Transition constraints define rules between consecutive rows",
+            "step1Detail3": "Boundary constraints fix values at specific positions (e.g., initial state)",
+            "step2Title": "Polynomial Commitment",
+            "step2Desc": "Interpolate the execution trace columns into polynomials and commit to them.",
+            "step2Detail1": "Each column of the trace becomes a polynomial over a finite field",
+            "step2Detail2": "Transition constraints become polynomial identity checks",
+            "step2Detail3": "The composition polynomial combines all constraints into one check",
+            "step3Title": "FRI Protocol",
+            "step3Desc": "Use the Fast Reed-Solomon Interactive Oracle Proof to verify polynomial degree bounds.",
+            "step3Detail1": "FRI iteratively reduces the polynomial degree by half",
+            "step3Detail2": "Each round uses random challenges (via Fiat-Shamir in practice)",
+            "step3Detail3": "At the end, the polynomial should be a constant (degree 0)",
+            "step4Title": "Fiat-Shamir Transform",
+            "step4Desc": "Convert the interactive protocol into a non-interactive proof by deriving challenges from a hash function.",
+            "step4Detail1": "All verifier challenges are replaced by hash outputs",
+            "step4Detail2": "The prover computes the hash of the transcript so far",
+            "step4Detail3": "This makes the proof a single message (non-interactive)",
+            "exampleTitle": "Example: Fibonacci Verification",
+            "exampleDesc": "Suppose we want to prove we know the 100th Fibonacci number without revealing the full trace:",
+            "executionTraceLabel": "Execution Trace",
+            "transitionConstraintsLabel": "Transition Constraints"
+          },
+          "fri": {
+            "title": "FRI: Fast Reed-Solomon IOP of Proximity",
+            "description": "FRI is the core cryptographic protocol that makes STARKs work. It proves that a committed function is \u201cclose to\u201d a low-degree polynomial, which is the mathematical backbone for verifying computation integrity.",
+            "howFriWorksTitle": "How FRI Works",
+            "howFri1": "Start with a polynomial of degree d",
+            "howFri2": "Split into even and odd coefficients",
+            "howFri3": "Combine using a random challenge \u03b1",
+            "howFri4": "The result has degree d/2 — repeat until degree 0",
+            "whyTransparentTitle": "Why It's Transparent",
+            "whyTransparent1": "All challenges derived from public hash functions",
+            "whyTransparent2": "No secret parameters or trusted setup needed",
+            "whyTransparent3": "Anyone can verify the proof independently",
+            "whyTransparent4": "Security reduces to collision resistance of the hash",
+            "postQuantumTitle": "Post-Quantum Security",
+            "postQuantumDesc": "STARKs derive their security entirely from hash functions, which are believed to be resistant to quantum attacks. This is a significant advantage over SNARKs as quantum computing advances.",
+            "starkSecurityTitle": "STARK Security Basis",
+            "starkSecurity1": "Collision-resistant hash functions (SHA-256, Poseidon)",
+            "starkSecurity2": "No elliptic curve assumptions",
+            "starkSecurity3": "Grover's algorithm only halves hash security (128-bit \u2192 64-bit effective)",
+            "snarkVulnerabilityTitle": "SNARK Vulnerability",
+            "snarkVuln1": "Relies on elliptic curve discrete log problem",
+            "snarkVuln2": "Shor's algorithm can break EC crypto in polynomial time",
+            "snarkVuln3": "Would require migration to new proof systems",
+            "futureProofingTitle": "Future-Proofing",
+            "futureProofingDesc": "While practical quantum computers capable of breaking elliptic curves are still years away, choosing STARKs now provides a safety margin. Systems built on STARKs will not need to be migrated when quantum computing arrives.",
+            "reductionTitle": "FRI Reduction Walkthrough",
+            "reduceStep1Title": "Initial Polynomial (degree d)",
+            "reduceStep1Desc": "Commit to evaluations of polynomial P(x) of degree d over a large evaluation domain.",
+            "reduceStep2Title": "Split & Fold (degree d/2)",
+            "reduceStep2Desc": "Decompose P(x) = P_even(x\u00b2) + x\u00b7P_odd(x\u00b2). Combine: P'(x) = P_even(x) + \u03b1\u00b7P_odd(x) using random challenge \u03b1.",
+            "reduceStep3Title": "Repeat (degree d/4, d/8, ...)",
+            "reduceStep3Desc": "Each round halves the degree. After log(d) rounds, the polynomial should be a constant.",
+            "reduceStep4Title": "Final Check",
+            "reduceStep4Desc": "Verify that the final claimed polynomial is indeed constant. The verifier spot-checks consistency between layers."
+          },
+          "applications": {
+            "title": "Real-World STARK Applications",
+            "description": "STARKs power some of the most ambitious projects in the blockchain space, particularly in L2 scaling and verifiable computation.",
+            "starknetTitle": "StarkNet",
+            "starknetDesc": "A permissionless decentralized ZK-Rollup on Ethereum using STARK proofs.",
+            "starknetBadge1": "L2 Scaling",
+            "starknetBadge2": "Cairo",
+            "starknetBadge3": "Ethereum",
+            "starknet1": "General-purpose smart contracts via Cairo language",
+            "starknet2": "Validity proofs posted to Ethereum L1",
+            "starknet3": "Account abstraction built-in from day one",
+            "starkexTitle": "StarkEx",
+            "starkexDesc": "A SaaS scaling engine used by dYdX, Immutable X, and Sorare.",
+            "starkexBadge1": "dYdX",
+            "starkexBadge2": "Immutable X",
+            "starkexBadge3": "Sorare",
+            "starkex1": "Processes 600K+ trades per day on dYdX",
+            "starkex2": "Immutable X: gas-free NFT trading",
+            "starkex3": "Batch proofs aggregate thousands of transactions",
+            "midenTitle": "Polygon Miden",
+            "midenDesc": "A STARK-based rollup by Polygon focused on privacy and programmability.",
+            "midenBadge1": "Polygon",
+            "midenBadge2": "Privacy",
+            "midenBadge3": "Rollup",
+            "miden1": "Client-side proof generation for privacy",
+            "miden2": "Miden VM: a STARK-friendly virtual machine",
+            "miden3": "Concurrent transaction execution",
+            "riscZeroTitle": "RISC Zero",
+            "riscZeroDesc": "A general-purpose zkVM that proves RISC-V execution using STARKs.",
+            "riscZeroBadge1": "zkVM",
+            "riscZeroBadge2": "RISC-V",
+            "riscZeroBadge3": "Bonsai",
+            "riscZero1": "Write ZK programs in Rust, C, or any RISC-V language",
+            "riscZero2": "Bonsai network for remote proof generation",
+            "riscZero3": "No circuit writing required — prove any program",
+            "whenToUseTitle": "When to Use Each System",
+            "chooseStarksTitle": "Choose STARKs when:",
+            "chooseStarks1": "Large-scale computation (L2 rollups, VM execution)",
+            "chooseStarks2": "Post-quantum security is a requirement",
+            "chooseStarks3": "No trusted setup ceremony is acceptable",
+            "chooseStarks4": "Prover scalability matters more than proof size",
+            "chooseSnarksTitle": "Choose SNARKs when:",
+            "chooseSnarks1": "On-chain verification cost must be minimized",
+            "chooseSnarks2": "Small proof size is critical (e.g., on-chain storage)",
+            "chooseSnarks3": "Mature tooling is needed (circom, snarkjs, Hardhat)",
+            "chooseSnarks4": "Privacy applications (Zcash, Tornado Cash model)"
+          }
+        }
       },
       "comparison": {
         "title": "SNARK vs STARK",
-        "description": "Compare the two major zero-knowledge proof systems across key metrics and use cases."
+        "description": "Compare the two major zero-knowledge proof systems across key metrics and use cases.",
+        "content": {
+          "badge": "Education Module",
+          "heading": "SNARK vs STARK: A Comprehensive Comparison",
+          "subheading": "Understand the key differences between the two dominant zero-knowledge proof systems and when to use each.",
+          "stats": {
+            "snarkProofSize": "SNARK Proof Size (bytes)",
+            "starkProofSize": "STARK Proof Size (bytes)",
+            "snarkVerificationTime": "SNARK Verification Time",
+            "starkVerificationTime": "STARK Verification Time"
+          },
+          "quickOverview": {
+            "title": "Quick Overview",
+            "snark": {
+              "description": "Succinct Non-interactive Argument of Knowledge. Uses elliptic curve pairings for extremely compact proofs.",
+              "pro1": "Tiny proof size (~200 bytes)",
+              "pro2": "Fast verification (~10ms)",
+              "pro3": "Mature ecosystem (circom, snarkjs)",
+              "con1": "Requires trusted setup",
+              "con2": "Not quantum resistant"
+            },
+            "stark": {
+              "description": "Scalable Transparent Argument of Knowledge. Uses hash functions for transparent, post-quantum security.",
+              "pro1": "No trusted setup needed",
+              "pro2": "Quantum resistant",
+              "pro3": "Better scaling for large computations",
+              "con1": "Larger proof size (~45 KB)",
+              "con2": "Slower on-chain verification"
+            }
+          },
+          "technicalComparison": {
+            "title": "Technical Comparison",
+            "aspect": "Aspect",
+            "rows": {
+              "cryptoBasis": {
+                "label": "Cryptographic Basis",
+                "snark": "Elliptic curve pairings",
+                "stark": "Hash functions"
+              },
+              "trustedSetup": {
+                "label": "Trusted Setup",
+                "snark": "Required (per circuit)",
+                "stark": "Not required"
+              },
+              "proofSize": {
+                "label": "Proof Size",
+                "snark": "~200 bytes",
+                "stark": "~45 KB"
+              },
+              "verificationTime": {
+                "label": "Verification Time",
+                "snark": "~10ms (constant)",
+                "stark": "~100ms (polylogarithmic)"
+              },
+              "proverComplexity": {
+                "label": "Prover Complexity",
+                "snark": "O(n log n)",
+                "stark": "O(n polylog n)"
+              },
+              "verifierComplexity": {
+                "label": "Verifier Complexity",
+                "snark": "O(1)",
+                "stark": "O(polylog n)"
+              },
+              "quantumResistance": {
+                "label": "Quantum Resistance",
+                "snark": "No",
+                "stark": "Yes"
+              },
+              "gasCost": {
+                "label": "On-chain Gas Cost",
+                "snark": "~200K gas",
+                "stark": "~1M+ gas"
+              }
+            }
+          },
+          "useCases": {
+            "title": "Best Use Cases",
+            "snark": {
+              "heading": "Best for SNARKs",
+              "onChain": {
+                "title": "On-chain Verification",
+                "description": "When gas cost is the primary constraint (privacy protocols, credential verification, on-chain games)"
+              },
+              "privacy": {
+                "title": "Privacy Applications",
+                "description": "Zcash, Tornado Cash model \u2014 where small proof size enables efficient private transactions"
+              },
+              "identity": {
+                "title": "Identity & Credentials",
+                "description": "Prove properties about your identity (age, membership) without revealing the underlying data"
+              },
+              "tooling": {
+                "title": "Rich Tooling Needed",
+                "description": "Projects that need mature developer tools, audited libraries, and community support"
+              }
+            },
+            "stark": {
+              "heading": "Best for STARKs",
+              "rollups": {
+                "title": "L2 Rollups",
+                "description": "StarkNet, StarkEx \u2014 batch thousands of transactions into a single proof posted to L1"
+              },
+              "largeComputation": {
+                "title": "Large Computations",
+                "description": "Complex VM execution, ML inference verification, and computations with millions of constraints"
+              },
+              "longTermSecurity": {
+                "title": "Long-term Security",
+                "description": "Systems that need to remain secure for decades, even against future quantum computers"
+              },
+              "noTrust": {
+                "title": "No Trust Required",
+                "description": "Environments where any form of trusted setup is unacceptable (government, critical infrastructure)"
+              }
+            }
+          },
+          "future": {
+            "title": "The Future: Convergence",
+            "intro": "The line between SNARKs and STARKs is blurring as researchers develop hybrid approaches that combine the best of both worlds.",
+            "wrapping": {
+              "title": "STARK \u2192 SNARK Wrapping",
+              "description": "Generate a STARK proof for the computation, then wrap it in a SNARK for cheap on-chain verification. StarkNet already does this with SHARP."
+            },
+            "universalSnarks": {
+              "title": "Universal SNARKs",
+              "description": "Systems like PLONK and Halo 2 eliminate circuit-specific setup with a universal SRS, reducing the trusted setup burden."
+            },
+            "recursiveProofs": {
+              "title": "Recursive Proofs",
+              "description": "A proof that verifies another proof. This enables incremental verification and proof aggregation across both SNARK and STARK systems."
+            },
+            "bottomLine": {
+              "title": "The Bottom Line",
+              "description": "Neither SNARKs nor STARKs are universally \u201cbetter.\u201d The right choice depends on your constraints: proof size, setup trust model, quantum resistance, and computation scale. The industry is converging toward hybrid solutions that leverage the strengths of both systems."
+            }
+          }
+        }
       }
     },
     "visualization": {

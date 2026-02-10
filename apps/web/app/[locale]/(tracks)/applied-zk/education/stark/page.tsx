@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   Tabs,
   TabsContent,
@@ -27,11 +28,13 @@ import {
 } from "lucide-react";
 
 export default function StarkEducationPage() {
+  const t = useTranslations("appliedZk");
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <div className="mb-8">
         <Badge variant="secondary" className="mb-4">
-          Education Module
+          {t("education.stark.content.badge")}
         </Badge>
         <TextAnimate
           as="h1"
@@ -39,79 +42,68 @@ export default function StarkEducationPage() {
           animation="blurInUp"
           by="word"
         >
-          zk-STARKs: Scalable Transparent Arguments of Knowledge
+          {t("education.stark.content.heading")}
         </TextAnimate>
         <p className="text-muted-foreground text-lg">
-          The next generation of zero-knowledge proofs &mdash; no trusted setup,
-          quantum-resistant security, and better scaling for large computations.
+          {t("education.stark.content.subheading")}
         </p>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="how-it-works">How It Works</TabsTrigger>
-          <TabsTrigger value="fri">FRI Protocol</TabsTrigger>
-          <TabsTrigger value="applications">Applications</TabsTrigger>
+          <TabsTrigger value="overview">{t("education.stark.content.tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="how-it-works">{t("education.stark.content.tabs.howItWorks")}</TabsTrigger>
+          <TabsTrigger value="fri">{t("education.stark.content.tabs.fri")}</TabsTrigger>
+          <TabsTrigger value="applications">{t("education.stark.content.tabs.applications")}</TabsTrigger>
         </TabsList>
 
         {/* ── Overview Tab ── */}
         <TabsContent value="overview" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>What is a zk-STARK?</CardTitle>
+              <CardTitle>{t("education.stark.content.overview.whatIsTitle")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p>
-                A <strong>zk-STARK</strong> (Zero-Knowledge Scalable Transparent
-                Argument of Knowledge) is a proof system invented by Eli
-                Ben-Sasson and collaborators at StarkWare. STARKs solve two
-                fundamental limitations of SNARKs: the need for a trusted setup
-                and vulnerability to quantum computers.
+                {t.rich("education.stark.content.overview.whatIsDescription", {
+                  strong: (chunks) => <strong>{chunks}</strong>,
+                })}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <div className="p-4 bg-muted rounded-lg">
                   <h4 className="font-semibold flex items-center gap-2 mb-2">
                     <Zap className="h-4 w-4" />
-                    Scalable
+                    {t("education.stark.content.overview.scalableTitle")}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    Proof generation time scales quasi-linearly with computation
-                    size, while verification time scales polylogarithmically.
-                    This means STARKs get relatively faster for larger programs.
+                    {t("education.stark.content.overview.scalableDesc")}
                   </p>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <h4 className="font-semibold flex items-center gap-2 mb-2">
                     <Eye className="h-4 w-4" />
-                    Transparent
+                    {t("education.stark.content.overview.transparentTitle")}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    No trusted setup ceremony required. All randomness used in
-                    the proof is publicly verifiable, eliminating the
-                    &ldquo;toxic waste&rdquo; problem entirely.
+                    {t("education.stark.content.overview.transparentDesc")}
                   </p>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <h4 className="font-semibold flex items-center gap-2 mb-2">
                     <Shield className="h-4 w-4" />
-                    Quantum Resistant
+                    {t("education.stark.content.overview.quantumResistantTitle")}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    STARKs rely only on collision-resistant hash functions (not
-                    elliptic curves), which are believed to resist quantum
-                    computer attacks.
+                    {t("education.stark.content.overview.quantumResistantDesc")}
                   </p>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <h4 className="font-semibold flex items-center gap-2 mb-2">
                     <CheckCircle className="h-4 w-4" />
-                    Minimal Assumptions
+                    {t("education.stark.content.overview.minimalAssumptionsTitle")}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    Security rests on the existence of collision-resistant hash
-                    functions &mdash; one of the weakest and most well-studied
-                    cryptographic assumptions.
+                    {t("education.stark.content.overview.minimalAssumptionsDesc")}
                   </p>
                 </div>
               </div>
@@ -120,8 +112,8 @@ export default function StarkEducationPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ConceptCard
-              title="Advantages"
-              description="Why STARKs are the future of proof systems"
+              title={t("education.stark.content.overview.advantagesTitle")}
+              description={t("education.stark.content.overview.advantagesDesc")}
               icon={CheckCircle}
               highlight
               neonColors={{ firstColor: "#8b5cf6", secondColor: "#d946ef" }}
@@ -129,44 +121,44 @@ export default function StarkEducationPage() {
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
                   <span className="text-green-500 mt-0.5">+</span>
-                  <span>No trusted setup &mdash; fully transparent verification</span>
+                  <span>{t("education.stark.content.overview.adv1")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-green-500 mt-0.5">+</span>
-                  <span>Post-quantum secure (hash-based, no elliptic curves)</span>
+                  <span>{t("education.stark.content.overview.adv2")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-green-500 mt-0.5">+</span>
-                  <span>Better asymptotic scaling for very large computations</span>
+                  <span>{t("education.stark.content.overview.adv3")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-green-500 mt-0.5">+</span>
-                  <span>Prover time scales quasi-linearly: O(n log n)</span>
+                  <span>{t("education.stark.content.overview.adv4")}</span>
                 </li>
               </ul>
             </ConceptCard>
 
             <ConceptCard
-              title="Trade-offs"
-              description="Where STARKs currently lag behind SNARKs"
+              title={t("education.stark.content.overview.tradeoffsTitle")}
+              description={t("education.stark.content.overview.tradeoffsDesc")}
               icon={AlertTriangle}
             >
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-500 mt-0.5">!</span>
-                  <span>Larger proof size (~45 KB vs ~200 bytes for Groth16)</span>
+                  <span>{t("education.stark.content.overview.trade1")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-500 mt-0.5">!</span>
-                  <span>Slower on-chain verification (~100ms vs ~10ms)</span>
+                  <span>{t("education.stark.content.overview.trade2")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-500 mt-0.5">!</span>
-                  <span>Higher gas cost for Ethereum L1 verification</span>
+                  <span>{t("education.stark.content.overview.trade3")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-500 mt-0.5">!</span>
-                  <span>Ecosystem is younger with fewer developer tools</span>
+                  <span>{t("education.stark.content.overview.trade4")}</span>
                 </li>
               </ul>
             </ConceptCard>
@@ -179,15 +171,12 @@ export default function StarkEducationPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Code className="h-5 w-5" />
-                STARK Pipeline: From Execution Trace to Proof
+                {t("education.stark.content.howItWorks.pipelineTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="mb-6 text-muted-foreground">
-                Instead of arithmetic circuits and R1CS, STARKs work with
-                execution traces and algebraic constraints. The prover
-                demonstrates that a sequence of computation steps satisfies
-                given transition rules.
+                {t("education.stark.content.howItWorks.pipelineDesc")}
               </p>
             </CardContent>
           </Card>
@@ -195,42 +184,42 @@ export default function StarkEducationPage() {
           <div className="space-y-4">
             <StepCard
               stepNumber={1}
-              title="Algebraic Intermediate Representation (AIR)"
-              description="Express the computation as an execution trace with polynomial transition constraints."
+              title={t("education.stark.content.howItWorks.step1Title")}
+              description={t("education.stark.content.howItWorks.step1Desc")}
               details={[
-                "An execution trace is a table where each row is a computation step",
-                "Transition constraints define rules between consecutive rows",
-                "Boundary constraints fix values at specific positions (e.g., initial state)",
+                t("education.stark.content.howItWorks.step1Detail1"),
+                t("education.stark.content.howItWorks.step1Detail2"),
+                t("education.stark.content.howItWorks.step1Detail3"),
               ]}
             />
             <StepCard
               stepNumber={2}
-              title="Polynomial Commitment"
-              description="Interpolate the execution trace columns into polynomials and commit to them."
+              title={t("education.stark.content.howItWorks.step2Title")}
+              description={t("education.stark.content.howItWorks.step2Desc")}
               details={[
-                "Each column of the trace becomes a polynomial over a finite field",
-                "Transition constraints become polynomial identity checks",
-                "The composition polynomial combines all constraints into one check",
+                t("education.stark.content.howItWorks.step2Detail1"),
+                t("education.stark.content.howItWorks.step2Detail2"),
+                t("education.stark.content.howItWorks.step2Detail3"),
               ]}
             />
             <StepCard
               stepNumber={3}
-              title="FRI Protocol"
-              description="Use the Fast Reed-Solomon Interactive Oracle Proof to verify polynomial degree bounds."
+              title={t("education.stark.content.howItWorks.step3Title")}
+              description={t("education.stark.content.howItWorks.step3Desc")}
               details={[
-                "FRI iteratively reduces the polynomial degree by half",
-                "Each round uses random challenges (via Fiat-Shamir in practice)",
-                "At the end, the polynomial should be a constant (degree 0)",
+                t("education.stark.content.howItWorks.step3Detail1"),
+                t("education.stark.content.howItWorks.step3Detail2"),
+                t("education.stark.content.howItWorks.step3Detail3"),
               ]}
             />
             <StepCard
               stepNumber={4}
-              title="Fiat-Shamir Transform"
-              description="Convert the interactive protocol into a non-interactive proof by deriving challenges from a hash function."
+              title={t("education.stark.content.howItWorks.step4Title")}
+              description={t("education.stark.content.howItWorks.step4Desc")}
               details={[
-                "All verifier challenges are replaced by hash outputs",
-                "The prover computes the hash of the transcript so far",
-                "This makes the proof a single message (non-interactive)",
+                t("education.stark.content.howItWorks.step4Detail1"),
+                t("education.stark.content.howItWorks.step4Detail2"),
+                t("education.stark.content.howItWorks.step4Detail3"),
               ]}
               isLast
             />
@@ -240,18 +229,17 @@ export default function StarkEducationPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Layers className="h-5 w-5" />
-                Example: Fibonacci Verification
+                {t("education.stark.content.howItWorks.exampleTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <p className="text-muted-foreground">
-                  Suppose we want to prove we know the 100th Fibonacci number
-                  without revealing the full trace:
+                  {t("education.stark.content.howItWorks.exampleDesc")}
                 </p>
                 <div className="p-4 bg-muted rounded-lg font-mono text-sm">
                   <div className="text-muted-foreground mb-2">
-                    Execution Trace
+                    {t("education.stark.content.howItWorks.executionTraceLabel")}
                   </div>
                   <pre className="overflow-x-auto">{`Step | a    | b
 -----|------|------
@@ -264,7 +252,7 @@ export default function StarkEducationPage() {
                 </div>
                 <div className="p-4 bg-muted rounded-lg font-mono text-sm">
                   <div className="text-muted-foreground mb-2">
-                    Transition Constraints
+                    {t("education.stark.content.howItWorks.transitionConstraintsLabel")}
                   </div>
                   <pre className="overflow-x-auto">{`// For each row i (except last):
 a[i+1] = b[i]
@@ -285,38 +273,35 @@ b[0] = 1`}</pre>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Eye className="h-5 w-5 text-purple-500" />
-                FRI: Fast Reed-Solomon IOP of Proximity
+                {t("education.stark.content.fri.title")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p>
-                FRI is the core cryptographic protocol that makes STARKs work.
-                It proves that a committed function is &ldquo;close to&rdquo; a
-                low-degree polynomial, which is the mathematical backbone for
-                verifying computation integrity.
+                {t("education.stark.content.fri.description")}
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <div className="p-4 border rounded-lg border-purple-500/50 bg-purple-500/5">
                   <h4 className="font-semibold mb-2 text-purple-600 dark:text-purple-400">
-                    How FRI Works
+                    {t("education.stark.content.fri.howFriWorksTitle")}
                   </h4>
                   <ul className="text-sm space-y-2 text-muted-foreground">
-                    <li>- Start with a polynomial of degree d</li>
-                    <li>- Split into even and odd coefficients</li>
-                    <li>- Combine using a random challenge &alpha;</li>
-                    <li>- The result has degree d/2 &mdash; repeat until degree 0</li>
+                    <li>- {t("education.stark.content.fri.howFri1")}</li>
+                    <li>- {t("education.stark.content.fri.howFri2")}</li>
+                    <li>- {t("education.stark.content.fri.howFri3")}</li>
+                    <li>- {t("education.stark.content.fri.howFri4")}</li>
                   </ul>
                 </div>
                 <div className="p-4 border rounded-lg">
                   <h4 className="font-semibold mb-2">
-                    Why It&apos;s Transparent
+                    {t("education.stark.content.fri.whyTransparentTitle")}
                   </h4>
                   <ul className="text-sm space-y-2 text-muted-foreground">
-                    <li>- All challenges derived from public hash functions</li>
-                    <li>- No secret parameters or trusted setup needed</li>
-                    <li>- Anyone can verify the proof independently</li>
-                    <li>- Security reduces to collision resistance of the hash</li>
+                    <li>- {t("education.stark.content.fri.whyTransparent1")}</li>
+                    <li>- {t("education.stark.content.fri.whyTransparent2")}</li>
+                    <li>- {t("education.stark.content.fri.whyTransparent3")}</li>
+                    <li>- {t("education.stark.content.fri.whyTransparent4")}</li>
                   </ul>
                 </div>
               </div>
@@ -327,44 +312,39 @@ b[0] = 1`}</pre>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
-                Post-Quantum Security
+                {t("education.stark.content.fri.postQuantumTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">
-                STARKs derive their security entirely from hash functions, which
-                are believed to be resistant to quantum attacks. This is a
-                significant advantage over SNARKs as quantum computing advances.
+                {t("education.stark.content.fri.postQuantumDesc")}
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
-                  <h4 className="font-semibold mb-2">STARK Security Basis</h4>
+                  <h4 className="font-semibold mb-2">{t("education.stark.content.fri.starkSecurityTitle")}</h4>
                   <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>- Collision-resistant hash functions (SHA-256, Poseidon)</li>
-                    <li>- No elliptic curve assumptions</li>
-                    <li>- Grover&apos;s algorithm only halves hash security (128-bit → 64-bit effective)</li>
+                    <li>- {t("education.stark.content.fri.starkSecurity1")}</li>
+                    <li>- {t("education.stark.content.fri.starkSecurity2")}</li>
+                    <li>- {t("education.stark.content.fri.starkSecurity3")}</li>
                   </ul>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
-                  <h4 className="font-semibold mb-2">SNARK Vulnerability</h4>
+                  <h4 className="font-semibold mb-2">{t("education.stark.content.fri.snarkVulnerabilityTitle")}</h4>
                   <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>- Relies on elliptic curve discrete log problem</li>
-                    <li>- Shor&apos;s algorithm can break EC crypto in polynomial time</li>
-                    <li>- Would require migration to new proof systems</li>
+                    <li>- {t("education.stark.content.fri.snarkVuln1")}</li>
+                    <li>- {t("education.stark.content.fri.snarkVuln2")}</li>
+                    <li>- {t("education.stark.content.fri.snarkVuln3")}</li>
                   </ul>
                 </div>
               </div>
 
               <div className="p-4 bg-blue-500/10 rounded-lg mt-4">
                 <h4 className="font-semibold text-blue-600 dark:text-blue-400 mb-1">
-                  Future-Proofing
+                  {t("education.stark.content.fri.futureProofingTitle")}
                 </h4>
                 <p className="text-sm text-muted-foreground">
-                  While practical quantum computers capable of breaking
-                  elliptic curves are still years away, choosing STARKs now
-                  provides a safety margin. Systems built on STARKs will not
-                  need to be migrated when quantum computing arrives.
+                  {t("education.stark.content.fri.futureProofingDesc")}
                 </p>
               </div>
             </CardContent>
@@ -372,29 +352,29 @@ b[0] = 1`}</pre>
 
           <Card>
             <CardHeader>
-              <CardTitle>FRI Reduction Walkthrough</CardTitle>
+              <CardTitle>{t("education.stark.content.fri.reductionTitle")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <StepCard
                   stepNumber={1}
-                  title="Initial Polynomial (degree d)"
-                  description="Commit to evaluations of polynomial P(x) of degree d over a large evaluation domain."
+                  title={t("education.stark.content.fri.reduceStep1Title")}
+                  description={t("education.stark.content.fri.reduceStep1Desc")}
                 />
                 <StepCard
                   stepNumber={2}
-                  title="Split & Fold (degree d/2)"
-                  description="Decompose P(x) = P_even(x²) + x·P_odd(x²). Combine: P'(x) = P_even(x) + α·P_odd(x) using random challenge α."
+                  title={t("education.stark.content.fri.reduceStep2Title")}
+                  description={t("education.stark.content.fri.reduceStep2Desc")}
                 />
                 <StepCard
                   stepNumber={3}
-                  title="Repeat (degree d/4, d/8, ...)"
-                  description="Each round halves the degree. After log(d) rounds, the polynomial should be a constant."
+                  title={t("education.stark.content.fri.reduceStep3Title")}
+                  description={t("education.stark.content.fri.reduceStep3Desc")}
                 />
                 <StepCard
                   stepNumber={4}
-                  title="Final Check"
-                  description="Verify that the final claimed polynomial is indeed constant. The verifier spot-checks consistency between layers."
+                  title={t("education.stark.content.fri.reduceStep4Title")}
+                  description={t("education.stark.content.fri.reduceStep4Desc")}
                   isLast
                 />
               </div>
@@ -406,89 +386,103 @@ b[0] = 1`}</pre>
         <TabsContent value="applications" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Real-World STARK Applications</CardTitle>
+              <CardTitle>{t("education.stark.content.applications.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">
-                STARKs power some of the most ambitious projects in the
-                blockchain space, particularly in L2 scaling and verifiable
-                computation.
+                {t("education.stark.content.applications.description")}
               </p>
             </CardContent>
           </Card>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ConceptCard
-              title="StarkNet"
-              description="A permissionless decentralized ZK-Rollup on Ethereum using STARK proofs."
-              badges={["L2 Scaling", "Cairo", "Ethereum"]}
+              title={t("education.stark.content.applications.starknetTitle")}
+              description={t("education.stark.content.applications.starknetDesc")}
+              badges={[
+                t("education.stark.content.applications.starknetBadge1"),
+                t("education.stark.content.applications.starknetBadge2"),
+                t("education.stark.content.applications.starknetBadge3"),
+              ]}
             >
               <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>- General-purpose smart contracts via Cairo language</li>
-                <li>- Validity proofs posted to Ethereum L1</li>
-                <li>- Account abstraction built-in from day one</li>
+                <li>- {t("education.stark.content.applications.starknet1")}</li>
+                <li>- {t("education.stark.content.applications.starknet2")}</li>
+                <li>- {t("education.stark.content.applications.starknet3")}</li>
               </ul>
             </ConceptCard>
 
             <ConceptCard
-              title="StarkEx"
-              description="A SaaS scaling engine used by dYdX, Immutable X, and Sorare."
-              badges={["dYdX", "Immutable X", "Sorare"]}
+              title={t("education.stark.content.applications.starkexTitle")}
+              description={t("education.stark.content.applications.starkexDesc")}
+              badges={[
+                t("education.stark.content.applications.starkexBadge1"),
+                t("education.stark.content.applications.starkexBadge2"),
+                t("education.stark.content.applications.starkexBadge3"),
+              ]}
             >
               <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>- Processes 600K+ trades per day on dYdX</li>
-                <li>- Immutable X: gas-free NFT trading</li>
-                <li>- Batch proofs aggregate thousands of transactions</li>
+                <li>- {t("education.stark.content.applications.starkex1")}</li>
+                <li>- {t("education.stark.content.applications.starkex2")}</li>
+                <li>- {t("education.stark.content.applications.starkex3")}</li>
               </ul>
             </ConceptCard>
 
             <ConceptCard
-              title="Polygon Miden"
-              description="A STARK-based rollup by Polygon focused on privacy and programmability."
-              badges={["Polygon", "Privacy", "Rollup"]}
+              title={t("education.stark.content.applications.midenTitle")}
+              description={t("education.stark.content.applications.midenDesc")}
+              badges={[
+                t("education.stark.content.applications.midenBadge1"),
+                t("education.stark.content.applications.midenBadge2"),
+                t("education.stark.content.applications.midenBadge3"),
+              ]}
             >
               <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>- Client-side proof generation for privacy</li>
-                <li>- Miden VM: a STARK-friendly virtual machine</li>
-                <li>- Concurrent transaction execution</li>
+                <li>- {t("education.stark.content.applications.miden1")}</li>
+                <li>- {t("education.stark.content.applications.miden2")}</li>
+                <li>- {t("education.stark.content.applications.miden3")}</li>
               </ul>
             </ConceptCard>
 
             <ConceptCard
-              title="RISC Zero"
-              description="A general-purpose zkVM that proves RISC-V execution using STARKs."
-              badges={["zkVM", "RISC-V", "Bonsai"]}
+              title={t("education.stark.content.applications.riscZeroTitle")}
+              description={t("education.stark.content.applications.riscZeroDesc")}
+              badges={[
+                t("education.stark.content.applications.riscZeroBadge1"),
+                t("education.stark.content.applications.riscZeroBadge2"),
+                t("education.stark.content.applications.riscZeroBadge3"),
+              ]}
             >
               <ul className="text-sm space-y-1 text-muted-foreground">
-                <li>- Write ZK programs in Rust, C, or any RISC-V language</li>
-                <li>- Bonsai network for remote proof generation</li>
-                <li>- No circuit writing required &mdash; prove any program</li>
+                <li>- {t("education.stark.content.applications.riscZero1")}</li>
+                <li>- {t("education.stark.content.applications.riscZero2")}</li>
+                <li>- {t("education.stark.content.applications.riscZero3")}</li>
               </ul>
             </ConceptCard>
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle>When to Use Each System</CardTitle>
+              <CardTitle>{t("education.stark.content.applications.whenToUseTitle")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
-                  <h4 className="font-semibold mb-2">Choose STARKs when:</h4>
+                  <h4 className="font-semibold mb-2">{t("education.stark.content.applications.chooseStarksTitle")}</h4>
                   <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>- Large-scale computation (L2 rollups, VM execution)</li>
-                    <li>- Post-quantum security is a requirement</li>
-                    <li>- No trusted setup ceremony is acceptable</li>
-                    <li>- Prover scalability matters more than proof size</li>
+                    <li>- {t("education.stark.content.applications.chooseStarks1")}</li>
+                    <li>- {t("education.stark.content.applications.chooseStarks2")}</li>
+                    <li>- {t("education.stark.content.applications.chooseStarks3")}</li>
+                    <li>- {t("education.stark.content.applications.chooseStarks4")}</li>
                   </ul>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
-                  <h4 className="font-semibold mb-2">Choose SNARKs when:</h4>
+                  <h4 className="font-semibold mb-2">{t("education.stark.content.applications.chooseSnarksTitle")}</h4>
                   <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>- On-chain verification cost must be minimized</li>
-                    <li>- Small proof size is critical (e.g., on-chain storage)</li>
-                    <li>- Mature tooling is needed (circom, snarkjs, Hardhat)</li>
-                    <li>- Privacy applications (Zcash, Tornado Cash model)</li>
+                    <li>- {t("education.stark.content.applications.chooseSnarks1")}</li>
+                    <li>- {t("education.stark.content.applications.chooseSnarks2")}</li>
+                    <li>- {t("education.stark.content.applications.chooseSnarks3")}</li>
+                    <li>- {t("education.stark.content.applications.chooseSnarks4")}</li>
                   </ul>
                 </div>
               </div>

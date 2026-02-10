@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   Tabs,
   TabsContent,
@@ -28,11 +29,13 @@ import {
 } from "lucide-react";
 
 export default function SnarkEducationPage() {
+  const t = useTranslations("appliedZk");
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <div className="mb-8">
         <Badge variant="secondary" className="mb-4">
-          Education Module
+          {t("education.snark.content.badge")}
         </Badge>
         <TextAnimate
           as="h1"
@@ -40,78 +43,66 @@ export default function SnarkEducationPage() {
           animation="blurInUp"
           by="word"
         >
-          zk-SNARKs: Zero-Knowledge Succinct Non-Interactive Arguments of Knowledge
+          {t("education.snark.content.heading")}
         </TextAnimate>
         <p className="text-muted-foreground text-lg">
-          The most widely deployed zero-knowledge proof system in blockchain,
-          powering Zcash, Tornado Cash, and numerous L2 solutions.
+          {t("education.snark.content.subtitle")}
         </p>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="how-it-works">How It Works</TabsTrigger>
-          <TabsTrigger value="trusted-setup">Trusted Setup</TabsTrigger>
-          <TabsTrigger value="try-it">Try It</TabsTrigger>
+          <TabsTrigger value="overview">{t("education.snark.content.tabs.overview")}</TabsTrigger>
+          <TabsTrigger value="how-it-works">{t("education.snark.content.tabs.howItWorks")}</TabsTrigger>
+          <TabsTrigger value="trusted-setup">{t("education.snark.content.tabs.trustedSetup")}</TabsTrigger>
+          <TabsTrigger value="try-it">{t("education.snark.content.tabs.tryIt")}</TabsTrigger>
         </TabsList>
 
-        {/* ── Overview Tab ── */}
+        {/* -- Overview Tab -- */}
         <TabsContent value="overview" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>What is a zk-SNARK?</CardTitle>
+              <CardTitle>{t("education.snark.content.overview.whatIsTitle")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p>
-                A <strong>zk-SNARK</strong> (Zero-Knowledge Succinct
-                Non-Interactive Argument of Knowledge) is a cryptographic proof
-                that lets a prover convince a verifier that a statement is true
-                without revealing any information beyond the validity of the
-                statement itself. The acronym captures its key properties:
+                {t("education.snark.content.overview.whatIsDescription")}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <div className="p-4 bg-muted rounded-lg">
                   <h4 className="font-semibold flex items-center gap-2 mb-2">
                     <Lock className="h-4 w-4" />
-                    Zero-Knowledge
+                    {t("education.snark.content.overview.zeroKnowledge.title")}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    The verifier learns nothing about the secret witness &mdash;
-                    only that it exists and satisfies the given constraints.
+                    {t("education.snark.content.overview.zeroKnowledge.description")}
                   </p>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <h4 className="font-semibold flex items-center gap-2 mb-2">
                     <Zap className="h-4 w-4" />
-                    Succinct
+                    {t("education.snark.content.overview.succinct.title")}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    Proofs are tiny (~200 bytes for Groth16) and can be verified
-                    in milliseconds regardless of the complexity of the original
-                    computation.
+                    {t("education.snark.content.overview.succinct.description")}
                   </p>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <h4 className="font-semibold flex items-center gap-2 mb-2">
                     <Shield className="h-4 w-4" />
-                    Non-Interactive
+                    {t("education.snark.content.overview.nonInteractive.title")}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    A single message from prover to verifier &mdash; no
-                    back-and-forth needed. This makes on-chain verification
-                    practical.
+                    {t("education.snark.content.overview.nonInteractive.description")}
                   </p>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <h4 className="font-semibold flex items-center gap-2 mb-2">
                     <CheckCircle className="h-4 w-4" />
-                    Argument of Knowledge
+                    {t("education.snark.content.overview.argumentOfKnowledge.title")}
                   </h4>
                   <p className="text-sm text-muted-foreground">
-                    The prover must actually &ldquo;know&rdquo; the secret
-                    witness. Computationally, it is infeasible to forge a valid
-                    proof without the real witness.
+                    {t("education.snark.content.overview.argumentOfKnowledge.description")}
                   </p>
                 </div>
               </div>
@@ -120,8 +111,8 @@ export default function SnarkEducationPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ConceptCard
-              title="Advantages"
-              description="Why SNARKs are widely adopted in blockchain"
+              title={t("education.snark.content.overview.advantages.title")}
+              description={t("education.snark.content.overview.advantages.description")}
               icon={CheckCircle}
               highlight
               neonColors={{ firstColor: "#22c55e", secondColor: "#3b82f6" }}
@@ -129,64 +120,62 @@ export default function SnarkEducationPage() {
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
                   <span className="text-green-500 mt-0.5">+</span>
-                  <span>Extremely small proof size (~200 bytes with Groth16)</span>
+                  <span>{t("education.snark.content.overview.advantages.item1")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-green-500 mt-0.5">+</span>
-                  <span>Constant-time verification (~10ms) regardless of circuit complexity</span>
+                  <span>{t("education.snark.content.overview.advantages.item2")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-green-500 mt-0.5">+</span>
-                  <span>Mature ecosystem: circom, snarkjs, Zcash, Ethereum support</span>
+                  <span>{t("education.snark.content.overview.advantages.item3")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-green-500 mt-0.5">+</span>
-                  <span>Gas-efficient on-chain verification (~200k gas on Ethereum)</span>
+                  <span>{t("education.snark.content.overview.advantages.item4")}</span>
                 </li>
               </ul>
             </ConceptCard>
 
             <ConceptCard
-              title="Limitations"
-              description="Trade-offs to consider when choosing SNARKs"
+              title={t("education.snark.content.overview.limitations.title")}
+              description={t("education.snark.content.overview.limitations.description")}
               icon={AlertTriangle}
             >
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-500 mt-0.5">!</span>
-                  <span>Requires a trusted setup ceremony per circuit</span>
+                  <span>{t("education.snark.content.overview.limitations.item1")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-500 mt-0.5">!</span>
-                  <span>Not quantum-resistant &mdash; relies on elliptic curve pairings</span>
+                  <span>{t("education.snark.content.overview.limitations.item2")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-500 mt-0.5">!</span>
-                  <span>Circuit-specific: new setup needed for each different program</span>
+                  <span>{t("education.snark.content.overview.limitations.item3")}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-500 mt-0.5">!</span>
-                  <span>Toxic waste from setup must be securely destroyed</span>
+                  <span>{t("education.snark.content.overview.limitations.item4")}</span>
                 </li>
               </ul>
             </ConceptCard>
           </div>
         </TabsContent>
 
-        {/* ── How It Works Tab ── */}
+        {/* -- How It Works Tab -- */}
         <TabsContent value="how-it-works" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Code className="h-5 w-5" />
-                SNARK Pipeline: From Statement to Proof
+                {t("education.snark.content.howItWorks.pipelineTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="mb-6 text-muted-foreground">
-                A SNARK proof goes through several mathematical transformations.
-                Each step converts the computation into a form that is easier to
-                prove and verify using elliptic curve cryptography.
+                {t("education.snark.content.howItWorks.pipelineDescription")}
               </p>
             </CardContent>
           </Card>
@@ -194,42 +183,42 @@ export default function SnarkEducationPage() {
           <div className="space-y-4">
             <StepCard
               stepNumber={1}
-              title="Write the Circuit (DSL)"
-              description="Express the computation as an arithmetic circuit using a domain-specific language like circom."
+              title={t("education.snark.content.howItWorks.step1.title")}
+              description={t("education.snark.content.howItWorks.step1.description")}
               details={[
-                "Define private inputs (witness) and public inputs/outputs",
-                "Build constraints using addition and multiplication gates",
-                "The circuit is a DAG of arithmetic operations over a finite field",
+                t("education.snark.content.howItWorks.step1.detail1"),
+                t("education.snark.content.howItWorks.step1.detail2"),
+                t("education.snark.content.howItWorks.step1.detail3"),
               ]}
             />
             <StepCard
               stepNumber={2}
-              title="Compile to R1CS"
-              description="The compiler converts the circuit into a Rank-1 Constraint System &mdash; a set of equations of the form A * B = C."
+              title={t("education.snark.content.howItWorks.step2.title")}
+              description={t("education.snark.content.howItWorks.step2.description")}
               details={[
-                "Each constraint involves linear combinations of variables",
-                "R1CS encodes the circuit as three matrices (A, B, C)",
-                "A valid witness satisfies all constraints simultaneously",
+                t("education.snark.content.howItWorks.step2.detail1"),
+                t("education.snark.content.howItWorks.step2.detail2"),
+                t("education.snark.content.howItWorks.step2.detail3"),
               ]}
             />
             <StepCard
               stepNumber={3}
-              title="Transform to QAP"
-              description="The R1CS is interpolated into polynomials via a Quadratic Arithmetic Program."
+              title={t("education.snark.content.howItWorks.step3.title")}
+              description={t("education.snark.content.howItWorks.step3.description")}
               details={[
-                "Lagrange interpolation converts matrix rows into polynomials",
-                "Checking all constraints reduces to checking a polynomial identity",
-                "The key insight: polynomial identity testing is efficient via random evaluation",
+                t("education.snark.content.howItWorks.step3.detail1"),
+                t("education.snark.content.howItWorks.step3.detail2"),
+                t("education.snark.content.howItWorks.step3.detail3"),
               ]}
             />
             <StepCard
               stepNumber={4}
-              title="Generate the Proof"
-              description="Using the proving key and the witness, compute elliptic curve points that encode the polynomial evaluations."
+              title={t("education.snark.content.howItWorks.step4.title")}
+              description={t("education.snark.content.howItWorks.step4.description")}
               details={[
-                "The prover evaluates polynomials at a secret point from the setup",
-                "Elliptic curve pairings enable verification without knowing the secret",
-                "The final proof consists of just 3 group elements (~200 bytes in Groth16)",
+                t("education.snark.content.howItWorks.step4.detail1"),
+                t("education.snark.content.howItWorks.step4.detail2"),
+                t("education.snark.content.howItWorks.step4.detail3"),
               ]}
               isLast
             />
@@ -239,14 +228,14 @@ export default function SnarkEducationPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Calculator className="h-5 w-5" />
-                Concrete Example
+                {t("education.snark.content.howItWorks.exampleTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4 font-mono text-sm">
                 <div className="p-4 bg-muted rounded-lg">
                   <div className="text-muted-foreground mb-2">
-                    1. Circuit (circom)
+                    {t("education.snark.content.howItWorks.example.label1")}
                   </div>
                   <pre className="overflow-x-auto">{`signal private input x;
 signal output y;
@@ -254,14 +243,14 @@ y <== x * x;`}</pre>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <div className="text-muted-foreground mb-2">
-                    2. R1CS Constraint
+                    {t("education.snark.content.howItWorks.example.label2")}
                   </div>
                   <pre className="overflow-x-auto">{`x * x = y
 // With x=3, y=9: 3 * 3 = 9 ✓`}</pre>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <div className="text-muted-foreground mb-2">
-                    3. What Gets Proven
+                    {t("education.snark.content.howItWorks.example.label3")}
                   </div>
                   <pre className="overflow-x-auto">{`"I know a secret x such that x*x = 9"
 // Verifier only sees: y=9, proof π
@@ -272,42 +261,39 @@ y <== x * x;`}</pre>
           </Card>
         </TabsContent>
 
-        {/* ── Trusted Setup Tab ── */}
+        {/* -- Trusted Setup Tab -- */}
         <TabsContent value="trusted-setup" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5 text-yellow-500" />
-                The Trusted Setup Ceremony
+                {t("education.snark.content.trustedSetup.ceremonyTitle")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p>
-                The trusted setup is the most controversial aspect of zk-SNARKs.
-                It generates the proving key and verification key that the
-                system needs, but the process produces &ldquo;toxic waste&rdquo;
-                that, if not destroyed, could be used to forge proofs.
+                {t("education.snark.content.trustedSetup.ceremonyDescription")}
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                 <div className="p-4 border rounded-lg">
-                  <h4 className="font-semibold mb-2">What Happens</h4>
+                  <h4 className="font-semibold mb-2">{t("education.snark.content.trustedSetup.whatHappens.title")}</h4>
                   <ul className="text-sm space-y-2 text-muted-foreground">
-                    <li>- A random secret &tau; (tau) is generated</li>
-                    <li>- Powers of tau (&tau;, &tau;&sup2;, &tau;&sup3;, ...) are computed</li>
-                    <li>- These are encoded as elliptic curve points</li>
-                    <li>- The result is the Structured Reference String (SRS)</li>
+                    <li>- {t("education.snark.content.trustedSetup.whatHappens.item1")}</li>
+                    <li>- {t("education.snark.content.trustedSetup.whatHappens.item2")}</li>
+                    <li>- {t("education.snark.content.trustedSetup.whatHappens.item3")}</li>
+                    <li>- {t("education.snark.content.trustedSetup.whatHappens.item4")}</li>
                   </ul>
                 </div>
                 <div className="p-4 border rounded-lg border-yellow-500/50 bg-yellow-500/5">
                   <h4 className="font-semibold mb-2 text-yellow-600 dark:text-yellow-400">
-                    Toxic Waste
+                    {t("education.snark.content.trustedSetup.toxicWaste.title")}
                   </h4>
                   <ul className="text-sm space-y-2 text-muted-foreground">
-                    <li>- The raw value of &tau; must be destroyed</li>
-                    <li>- If anyone retains &tau;, they can forge proofs</li>
-                    <li>- Multi-party ceremonies mitigate this risk</li>
-                    <li>- Only ONE honest participant is needed for security</li>
+                    <li>- {t("education.snark.content.trustedSetup.toxicWaste.item1")}</li>
+                    <li>- {t("education.snark.content.trustedSetup.toxicWaste.item2")}</li>
+                    <li>- {t("education.snark.content.trustedSetup.toxicWaste.item3")}</li>
+                    <li>- {t("education.snark.content.trustedSetup.toxicWaste.item4")}</li>
                   </ul>
                 </div>
               </div>
@@ -316,87 +302,77 @@ y <== x * x;`}</pre>
 
           <Card>
             <CardHeader>
-              <CardTitle>Powers of Tau Ceremony</CardTitle>
+              <CardTitle>{t("education.snark.content.trustedSetup.powersOfTau.title")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">
-                Modern trusted setups use multi-party computation (MPC) to
-                distribute trust. The Zcash Sapling ceremony had 87
-                participants; Ethereum&apos;s KZG ceremony had over 140,000.
+                {t("education.snark.content.trustedSetup.powersOfTau.description")}
               </p>
               <div className="space-y-4">
                 <StepCard
                   stepNumber={1}
-                  title="Phase 1: Universal Powers of Tau"
-                  description="Multiple participants each contribute randomness. Each one multiplies the previous result by their secret, then destroys it."
+                  title={t("education.snark.content.trustedSetup.powersOfTau.step1.title")}
+                  description={t("education.snark.content.trustedSetup.powersOfTau.step1.description")}
                 />
                 <StepCard
                   stepNumber={2}
-                  title="Secure Destruction"
-                  description="Each participant securely deletes their random contribution. They may physically destroy the hardware used."
+                  title={t("education.snark.content.trustedSetup.powersOfTau.step2.title")}
+                  description={t("education.snark.content.trustedSetup.powersOfTau.step2.description")}
                 />
                 <StepCard
                   stepNumber={3}
-                  title="Phase 2: Circuit-Specific Setup"
-                  description="The universal parameters are specialized for a particular circuit. This phase can also be a multi-party ceremony."
+                  title={t("education.snark.content.trustedSetup.powersOfTau.step3.title")}
+                  description={t("education.snark.content.trustedSetup.powersOfTau.step3.description")}
                   isLast
                 />
               </div>
               <div className="p-4 bg-green-500/10 rounded-lg mt-4">
                 <h4 className="font-semibold text-green-600 dark:text-green-400 mb-1">
-                  1-of-N Security Guarantee
+                  {t("education.snark.content.trustedSetup.securityGuarantee.title")}
                 </h4>
                 <p className="text-sm text-muted-foreground">
-                  The ceremony is secure as long as at least one participant
-                  honestly destroys their secret contribution. With thousands of
-                  participants across the world, it is extremely unlikely that
-                  every single one is colluding.
+                  {t("education.snark.content.trustedSetup.securityGuarantee.description")}
                 </p>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        {/* ── Try It Tab ── */}
+        {/* -- Try It Tab -- */}
         <TabsContent value="try-it" className="space-y-6">
-          <SimpleProofDemo title="Interactive zk-SNARK Demo" />
+          <SimpleProofDemo title={t("education.snark.content.tryIt.demoTitle")} />
 
           <Card>
             <CardHeader>
-              <CardTitle>What Just Happened?</CardTitle>
+              <CardTitle>{t("education.snark.content.tryIt.whatHappenedTitle")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground">
-                This simplified demo illustrates the core concept of
-                zero-knowledge proofs. In a real SNARK:
+                {t("education.snark.content.tryIt.whatHappenedDescription")}
               </p>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
                   <span>
-                    The proof is generated using elliptic curve cryptography,
-                    not simple arithmetic
+                    {t("education.snark.content.tryIt.item1")}
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
                   <span>
-                    The verifier cannot extract the secret from the proof &mdash;
-                    even with unlimited computing power (computational soundness)
+                    {t("education.snark.content.tryIt.item2")}
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
                   <span>
-                    Proofs can express far more complex statements (e.g.,
-                    Sudoku solutions, credential checks, private transfers)
+                    {t("education.snark.content.tryIt.item3")}
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
                   <span>
-                    On-chain verification costs ~200k gas and runs in constant
-                    time via the EVM precompile for pairing checks
+                    {t("education.snark.content.tryIt.item4")}
                   </span>
                 </li>
               </ul>
