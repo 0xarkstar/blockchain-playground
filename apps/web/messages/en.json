@@ -12,16 +12,34 @@
     "connectWallet": "Connect Wallet",
     "darkMode": "Dark Mode",
     "lightMode": "Light Mode",
-    "language": "Language"
+    "language": "Language",
+    "progress": {
+      "completed": "Completed",
+      "of": "of",
+      "markComplete": "Mark Complete",
+      "markedComplete": "Completed!",
+      "stepOf": "Step {current} of {total}"
+    },
+    "nav": {
+      "previous": "Previous",
+      "next": "Next",
+      "backToTrack": "Back to {track}",
+      "startLearning": "Start Learning",
+      "continueLearning": "Continue Learning"
+    }
   },
   "home": {
     "hero": {
       "title": "Learn Blockchain by Doing",
-      "description": "Master blockchain concepts through interactive demos, live visualizations, and hands-on smart contract deployment."
+      "description": "Master blockchain concepts through interactive demos, live visualizations, and hands-on smart contract deployment.",
+      "cta": "Start Learning",
+      "ctaContinue": "Continue: {demo}"
     },
     "tracks": {
       "title": "Learning Tracks",
-      "description": "Choose your learning path"
+      "description": "Choose your learning path",
+      "startHere": "Start Here",
+      "trackNumber": "Track {number}"
     }
   },
   "tracks": {

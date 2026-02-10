@@ -9,14 +9,8 @@ import {
   Moon,
   Languages,
   Home,
-  Box,
-  Coins,
-  Code,
-  Diamond,
-  Lock,
   Menu,
   Search,
-  ShieldCheck,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -33,16 +27,8 @@ import {
 } from "../ui/dropdown-menu";
 import { Link } from "../../i18n/navigation";
 import { CommandPalette } from "./command-palette";
-
-const trackNavItems = [
-  { key: "home", href: "/", icon: Home },
-  { key: "fundamentals", href: "/fundamentals", icon: Box },
-  { key: "defi", href: "/defi", icon: Coins },
-  { key: "solidity", href: "/solidity", icon: Code },
-  { key: "tokens", href: "/tokens", icon: Diamond },
-  { key: "zk", href: "/zk", icon: Lock },
-  { key: "appliedZk", href: "/applied-zk", icon: ShieldCheck },
-] as const;
+import { TrackProgressBar } from "../shared/track-progress-bar";
+import { tracks } from "../../lib/tracks/registry";
 
 export function AppShellLayout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -64,9 +50,19 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
 
   const pathWithoutLocale = pathname.replace(/^\/(en|ko)/, "") || "/";
 
+  const navItems = [
+    { key: "home" as const, href: "/" as const, icon: Home, trackKey: null },
+    ...tracks.map((track) => ({
+      key: track.key as string,
+      href: track.href as string,
+      icon: track.icon,
+      trackKey: track.key,
+    })),
+  ];
+
   const navContent = (
     <nav className="flex flex-col gap-1">
-      {trackNavItems.map((item) => {
+      {navItems.map((item) => {
         const isActive =
           item.href === "/"
             ? pathWithoutLocale === "/"
@@ -83,8 +79,15 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
               }`}
             >
               <item.icon className="h-4 w-4" />
-              {t(item.key)}
+              <span className="flex-1">
+                {item.key === "home" ? t("home") : t(item.key)}
+              </span>
             </Link>
+            {item.trackKey && (
+              <div className="px-3 pb-1">
+                <TrackProgressBar trackKey={item.trackKey} />
+              </div>
+            )}
             {isActive && item.key === "appliedZk" && (
               <div className="ml-7 flex flex-col gap-1">
                 <Link

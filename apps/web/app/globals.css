@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --color-background: oklch(1 0 0);
@@ -112,15 +112,6 @@
   --color-sidebar-accent-foreground: oklch(0.985 0 0);
   --color-sidebar-border: oklch(0.269 0 0);
   --color-sidebar-ring: oklch(0.439 0 0);
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }
 
 @layer base {
