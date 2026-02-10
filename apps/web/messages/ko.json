@@ -377,6 +377,14 @@
       "sealedAuction": {
         "title": "비밀 입찰 경매",
         "description": "ZK 범위 증명이 있는 커밋-리빌 경매. 비밀리에 입찰하고 유효 범위 내임을 증명합니다."
+      },
+      "proofAnimation": {
+        "title": "증명 애니메이션",
+        "description": "ZK 증명 생명주기를 관찰합니다: 위트니스 생성, 증명 생성, 검증 — 단계별 애니메이션."
+      },
+      "circuitVisualization": {
+        "title": "회로 시각화",
+        "description": "ZK 회로 구조를 인터랙티브하게 탐색합니다 — 신호, 제약 조건, 템플릿을 노드 그래프로 렌더링."
       }
     },
     "education": {

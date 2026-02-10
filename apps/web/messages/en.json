@@ -377,6 +377,14 @@
       "sealedAuction": {
         "title": "Sealed Bid Auction",
         "description": "Commit-reveal auction with ZK range proofs. Bid secretly and prove your bid is within valid bounds."
+      },
+      "proofAnimation": {
+        "title": "Proof Animation",
+        "description": "Watch the ZK proof lifecycle: witness generation, proof creation, and verification — animated step by step."
+      },
+      "circuitVisualization": {
+        "title": "Circuit Visualization",
+        "description": "Explore ZK circuit structure interactively — signals, constraints, and templates rendered as a node graph."
       }
     },
     "education": {
