@@ -336,6 +336,7 @@ export function MastermindDemo() {
                     variant="ghost"
                     size="icon"
                     onClick={() => setShowSecret((s) => !s)}
+                    aria-label={showSecret ? "Hide secret code" : "Show secret code"}
                   >
                     {showSecret ? (
                       <EyeOff className="h-4 w-4" />
@@ -488,7 +489,7 @@ export function MastermindDemo() {
                         />
                       ))}
                       {g.verified && (
-                        <Check className="h-3 w-3 text-green-500 ml-1" />
+                        <Check className="h-3 w-3 text-green-500 dark:text-green-400 ml-1" />
                       )}
                     </div>
                   </div>
@@ -502,7 +503,7 @@ export function MastermindDemo() {
             <div className="relative rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950">
               <ShineBorder shineColor={["#22c55e", "#16a34a"]} />
               <div className="flex flex-col items-center gap-2">
-                <Check className="h-8 w-8 text-green-600" />
+                <Check className="h-8 w-8 text-green-600 dark:text-green-400" />
                 <p className="font-bold text-green-700 dark:text-green-300">
                   Code Cracked in {guesses.length} guess
                   {guesses.length > 1 ? "es" : ""}!
@@ -547,9 +548,9 @@ export function MastermindDemo() {
                   disabled={phase === "verifying"}
                   className={
                     verificationResult === true
-                      ? "bg-green-600 hover:bg-green-700"
+                      ? "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
                       : verificationResult === false
-                        ? "bg-red-600 hover:bg-red-700"
+                        ? "bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
                         : ""
                   }
                 >

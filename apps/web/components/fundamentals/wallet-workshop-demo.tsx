@@ -210,7 +210,7 @@ export function WalletWorkshopDemo() {
           </Button>
 
           {mnemonic && (
-            <div className="rounded-lg border border-border bg-zinc-900 p-4">
+            <div className="rounded-lg border border-border bg-zinc-900 dark:bg-zinc-800 dark:ring-1 dark:ring-zinc-700 p-4">
               <div className="flex items-center justify-between mb-1">
                 <p className="text-xs text-muted-foreground">
                   Mnemonic Phrase ({mnemonic.split(" ").length} words)
@@ -219,10 +219,11 @@ export function WalletWorkshopDemo() {
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8"
+                  aria-label="Copy mnemonic"
                   onClick={handleCopyMnemonic}
                 >
                   {copied ? (
-                    <Check className="h-3.5 w-3.5 text-teal-500" />
+                    <Check className="h-3.5 w-3.5 text-teal-500 dark:text-teal-400" />
                   ) : (
                     <Copy className="h-3.5 w-3.5" />
                   )}
@@ -256,8 +257,9 @@ export function WalletWorkshopDemo() {
               Derivation path: m/44&apos;/60&apos;/0&apos;/0/index
             </p>
             <div>
-              <Label>Number of Accounts</Label>
+              <Label htmlFor="wallet-account-count">Number of Accounts</Label>
               <Input
+                id="wallet-account-count"
                 type="number"
                 value={accountCount}
                 onChange={(e) => setAccountCount(Number(e.target.value))}
@@ -275,7 +277,7 @@ export function WalletWorkshopDemo() {
                   <p className="text-xs text-muted-foreground">
                     Master Seed
                   </p>
-                  <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all" style={{ fontSize: "0.6rem" }}>
+                  <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all text-[0.6rem]">
                     <code>{walletInfo.seed.slice(0, 64)}...</code>
                   </pre>
                 </div>
@@ -296,7 +298,7 @@ export function WalletWorkshopDemo() {
                           <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">{account.path}</code>
                         </TableCell>
                         <TableCell>
-                          <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: "0.7rem" }}>
+                          <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.7rem]">
                             {account.address}
                           </code>
                         </TableCell>

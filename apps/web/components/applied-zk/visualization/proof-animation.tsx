@@ -216,7 +216,7 @@ export function ProofAnimation() {
                     <div className="flex items-center gap-2 mb-1">
                       <h4 className="font-semibold">{t(step.nameKey)}</h4>
                       {status === "complete" && (
-                        <Badge variant="secondary" className="text-green-600 bg-green-500/10">
+                        <Badge variant="secondary" className="text-green-600 dark:text-green-400 bg-green-500/10">
                           {t("status.complete")}
                         </Badge>
                       )}
@@ -255,7 +255,7 @@ export function ProofAnimation() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="p-6 bg-green-500/10 rounded-lg text-center"
               >
-                <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                <CheckCircle className="h-12 w-12 text-green-500 dark:text-green-400 mx-auto mb-4" />
                 <h4 className="font-semibold text-lg text-green-700 dark:text-green-300 mb-2">
                   {t("proofVerified.title")}
                 </h4>

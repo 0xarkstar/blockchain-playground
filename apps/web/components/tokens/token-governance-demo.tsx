@@ -151,15 +151,17 @@ export function TokenGovernanceDemo() {
           </Table>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Address</Label>
+              <Label htmlFor="tok-gov-address">Address</Label>
               <Input
+                id="tok-gov-address"
                 value={powerAddr}
                 onChange={(e) => setPowerAddr(e.target.value)}
               />
             </div>
             <div>
-              <Label>Power</Label>
+              <Label htmlFor="tok-gov-power">Power</Label>
               <Input
+                id="tok-gov-power"
                 type="number"
                 value={powerAmount}
                 onChange={(e) => setPowerAmount(Number(e.target.value) || 0)}
@@ -178,15 +180,17 @@ export function TokenGovernanceDemo() {
           <p className="text-sm font-semibold">Delegate</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>From</Label>
+              <Label htmlFor="tok-gov-delFrom">From</Label>
               <Input
+                id="tok-gov-delFrom"
                 value={delegateFrom}
                 onChange={(e) => setDelegateFrom(e.target.value)}
               />
             </div>
             <div>
-              <Label>To (self = undelegate)</Label>
+              <Label htmlFor="tok-gov-delTo">To (self = undelegate)</Label>
               <Input
+                id="tok-gov-delTo"
                 value={delegateTo}
                 onChange={(e) => setDelegateTo(e.target.value)}
               />
@@ -202,8 +206,9 @@ export function TokenGovernanceDemo() {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-semibold">Time & Proposals</p>
           <div>
-            <Label>Current Time</Label>
+            <Label htmlFor="tok-gov-time">Current Time</Label>
             <Input
+              id="tok-gov-time"
               type="number"
               value={currentTime}
               onChange={(e) => setCurrentTime(Number(e.target.value) || 0)}
@@ -211,23 +216,26 @@ export function TokenGovernanceDemo() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Title</Label>
+              <Label htmlFor="tok-gov-propTitle">Title</Label>
               <Input
+                id="tok-gov-propTitle"
                 value={proposalTitle}
                 onChange={(e) => setProposalTitle(e.target.value)}
               />
             </div>
             <div>
-              <Label>Proposer</Label>
+              <Label htmlFor="tok-gov-proposer">Proposer</Label>
               <Input
+                id="tok-gov-proposer"
                 value={proposalCreator}
                 onChange={(e) => setProposalCreator(e.target.value)}
               />
             </div>
           </div>
           <div>
-            <Label>Description</Label>
+            <Label htmlFor="tok-gov-propDesc">Description</Label>
             <Input
+              id="tok-gov-propDesc"
               value={proposalDesc}
               onChange={(e) => setProposalDesc(e.target.value)}
             />
@@ -243,8 +251,9 @@ export function TokenGovernanceDemo() {
           <p className="text-sm font-semibold">Vote</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>Proposal ID</Label>
+              <Label htmlFor="tok-gov-voteProposalId">Proposal ID</Label>
               <Input
+                id="tok-gov-voteProposalId"
                 type="number"
                 value={voteProposalId}
                 onChange={(e) => setVoteProposalId(Number(e.target.value) || 0)}
@@ -252,21 +261,22 @@ export function TokenGovernanceDemo() {
               />
             </div>
             <div>
-              <Label>Voter</Label>
+              <Label htmlFor="tok-gov-voter">Voter</Label>
               <Input
+                id="tok-gov-voter"
                 value={voter}
                 onChange={(e) => setVoter(e.target.value)}
               />
             </div>
             <div>
-              <Label>Choice</Label>
+              <Label htmlFor="tok-gov-choice">Choice</Label>
               <Select
                 value={voteChoice}
                 onValueChange={(v) =>
                   setVoteChoice(v as "for" | "against" | "abstain")
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger id="tok-gov-choice">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -373,7 +383,6 @@ export function TokenGovernanceDemo() {
               }))}
               xKey="proposal"
               yKeys={["For", "Against", "Abstain"]}
-              colors={["#40c057", "#fa5252", "#868e96"]}
               grouped
               height={250}
             />

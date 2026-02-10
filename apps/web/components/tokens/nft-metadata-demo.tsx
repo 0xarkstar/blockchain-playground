@@ -81,23 +81,26 @@ export function NFTMetadataDemo() {
           <p className="text-sm font-semibold">NFT Metadata</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Name</Label>
+              <Label htmlFor="tok-meta-name">Name</Label>
               <Input
+                id="tok-meta-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div>
-              <Label>Image URI</Label>
+              <Label htmlFor="tok-meta-image">Image URI</Label>
               <Input
+                id="tok-meta-image"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               />
             </div>
           </div>
           <div>
-            <Label>Description</Label>
+            <Label htmlFor="tok-meta-desc">Description</Label>
             <textarea
+              id="tok-meta-desc"
               className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -105,8 +108,9 @@ export function NFTMetadataDemo() {
             />
           </div>
           <div>
-            <Label>External URL (optional)</Label>
+            <Label htmlFor="tok-meta-extUrl">External URL (optional)</Label>
             <Input
+              id="tok-meta-extUrl"
               value={externalUrl}
               onChange={(e) => setExternalUrl(e.target.value)}
             />
@@ -171,15 +175,17 @@ export function NFTMetadataDemo() {
           <p className="text-sm font-semibold">Token URI</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Base URI</Label>
+              <Label htmlFor="tok-meta-baseUri">Base URI</Label>
               <Input
+                id="tok-meta-baseUri"
                 value={baseUri}
                 onChange={(e) => setBaseUri(e.target.value)}
               />
             </div>
             <div>
-              <Label>Token ID</Label>
+              <Label htmlFor="tok-meta-tokenId">Token ID</Label>
               <Input
+                id="tok-meta-tokenId"
                 value={tokenId}
                 onChange={(e) => setTokenId(e.target.value)}
               />

@@ -104,9 +104,10 @@ export function AirdropSetupPanel({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-6 w-6 text-red-500 hover:text-red-700"
+                        className="h-6 w-6 text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                         onClick={() => onRemoveAddress(addr.id)}
                         disabled={addresses.length <= 2}
+                        aria-label="Remove address"
                       >
                         <Trash2 className="h-3 w-3" />
                       </Button>
@@ -129,6 +130,7 @@ export function AirdropSetupPanel({
                 size="icon"
                 onClick={onAddAddress}
                 disabled={!newAddress.trim()}
+                aria-label="Add address"
               >
                 <Plus className="h-3.5 w-3.5" />
               </Button>

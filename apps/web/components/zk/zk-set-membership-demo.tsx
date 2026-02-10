@@ -13,6 +13,7 @@ import {
 import { Alert, AlertDescription } from "../ui/alert";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
@@ -224,9 +225,9 @@ export function ZKSetMembershipDemo() {
             <div className="flex flex-col gap-4">
               <p className="text-sm font-semibold">Prove Membership</p>
               <div>
-                <label className="text-sm font-medium">I am...</label>
+                <Label htmlFor="zk-setmember-select">I am...</Label>
                 <Select value={selectedMember} onValueChange={(v) => setSelectedMember(v)}>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger id="zk-setmember-select" className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

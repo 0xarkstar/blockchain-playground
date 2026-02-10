@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect } from "react"
 import { motion, useMotionTemplate, useMotionValue } from "motion/react"
+import { useTheme } from "next-themes"
 
 import { cn } from "@lib/utils"
 
@@ -19,11 +20,14 @@ export function MagicCard({
   children,
   className,
   gradientSize = 200,
-  gradientColor = "#262626",
+  gradientColor,
   gradientOpacity = 0.8,
   gradientFrom = "#9E7AFF",
   gradientTo = "#FE8BBB",
 }: MagicCardProps) {
+  const { resolvedTheme } = useTheme()
+  const effectiveGradientColor =
+    gradientColor ?? (resolvedTheme === "dark" ? "#d4d4d4" : "#262626")
   const mouseX = useMotionValue(-gradientSize)
   const mouseY = useMotionValue(-gradientSize)
   const reset = useCallback(() => {
@@ -92,7 +96,7 @@ export function MagicCard({
         className="pointer-events-none absolute inset-px rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
           background: useMotionTemplate`
-            radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px, ${gradientColor}, transparent 100%)
+            radial-gradient(${gradientSize}px circle at ${mouseX}px ${mouseY}px, ${effectiveGradientColor}, transparent 100%)
           `,
           opacity: gradientOpacity,
         }}

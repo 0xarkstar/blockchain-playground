@@ -79,15 +79,17 @@ export function NFTMarketplaceDemo() {
           <p className="text-sm font-semibold">List NFT</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <Label>Seller</Label>
+              <Label htmlFor="tok-mkt-seller">Seller</Label>
               <Input
+                id="tok-mkt-seller"
                 value={listSeller}
                 onChange={(e) => setListSeller(e.target.value)}
               />
             </div>
             <div>
-              <Label>Token ID</Label>
+              <Label htmlFor="tok-mkt-tokenId">Token ID</Label>
               <Input
+                id="tok-mkt-tokenId"
                 type="number"
                 value={listTokenId}
                 onChange={(e) => setListTokenId(Number(e.target.value) || 0)}
@@ -95,8 +97,9 @@ export function NFTMarketplaceDemo() {
               />
             </div>
             <div>
-              <Label>Price (ETH)</Label>
+              <Label htmlFor="tok-mkt-price">Price (ETH)</Label>
               <Input
+                id="tok-mkt-price"
                 type="number"
                 value={listPrice}
                 onChange={(e) => setListPrice(Number(e.target.value) || 0)}
@@ -105,8 +108,9 @@ export function NFTMarketplaceDemo() {
               />
             </div>
             <div>
-              <Label>Royalty %</Label>
+              <Label htmlFor="tok-mkt-royalty">Royalty %</Label>
               <Input
+                id="tok-mkt-royalty"
                 type="number"
                 value={listRoyalty}
                 onChange={(e) => setListRoyalty(Number(e.target.value) || 0)}
@@ -166,15 +170,17 @@ export function NFTMarketplaceDemo() {
           <p className="text-sm font-semibold">Buy / Cancel</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Buyer</Label>
+              <Label htmlFor="tok-mkt-buyer">Buyer</Label>
               <Input
+                id="tok-mkt-buyer"
                 value={buyBuyer}
                 onChange={(e) => setBuyBuyer(e.target.value)}
               />
             </div>
             <div>
-              <Label>Listing ID</Label>
+              <Label htmlFor="tok-mkt-buyListingId">Listing ID</Label>
               <Input
+                id="tok-mkt-buyListingId"
                 type="number"
                 value={buyListingId}
                 onChange={(e) => setBuyListingId(Number(e.target.value) || 0)}
@@ -189,15 +195,17 @@ export function NFTMarketplaceDemo() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Caller</Label>
+              <Label htmlFor="tok-mkt-cancelCaller">Caller</Label>
               <Input
+                id="tok-mkt-cancelCaller"
                 value={cancelCaller}
                 onChange={(e) => setCancelCaller(e.target.value)}
               />
             </div>
             <div>
-              <Label>Listing ID</Label>
+              <Label htmlFor="tok-mkt-cancelListingId">Listing ID</Label>
               <Input
+                id="tok-mkt-cancelListingId"
                 type="number"
                 value={cancelId}
                 onChange={(e) => setCancelId(Number(e.target.value) || 0)}

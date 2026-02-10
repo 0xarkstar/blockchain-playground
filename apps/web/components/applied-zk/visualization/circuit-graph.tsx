@@ -211,7 +211,7 @@ export function CircuitGraph() {
       <div className="flex items-center gap-4">
         <div className="flex-1">
           <Select value={selectedCircuit} onValueChange={onCircuitChange}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger id="circuit-graph-select" className="w-[200px]">
               <SelectValue placeholder={t("circuitSelect.placeholder")} />
             </SelectTrigger>
             <SelectContent>

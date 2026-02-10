@@ -410,6 +410,7 @@ export function SealedAuctionDemo() {
                     variant="ghost"
                     size="icon"
                     onClick={() => setShowBid((s) => !s)}
+                    aria-label={showBid ? "Hide bid" : "Show bid"}
                   >
                     {showBid ? (
                       <EyeOff className="h-4 w-4" />
@@ -548,9 +549,9 @@ export function SealedAuctionDemo() {
                     disabled={phase === "verifying"}
                     className={
                       verificationResult === true
-                        ? "bg-green-600 hover:bg-green-700"
+                        ? "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
                         : verificationResult === false
-                          ? "bg-red-600 hover:bg-red-700"
+                          ? "bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
                           : ""
                     }
                   >

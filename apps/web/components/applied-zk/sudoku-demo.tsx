@@ -349,6 +349,7 @@ export function SudokuDemo() {
                       size="sm"
                       onClick={() => setShowSolution(!showSolution)}
                       title={showSolution ? "Hide solution" : "Show solution"}
+                      aria-label={showSolution ? "Hide solution" : "Show solution"}
                     >
                       {showSolution ? (
                         <EyeOff className="h-4 w-4" />
@@ -556,9 +557,9 @@ export function SudokuDemo() {
                       disabled={phase === "verifying"}
                       className={
                         verificationResult === true
-                          ? "bg-green-600 hover:bg-green-700"
+                          ? "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
                           : verificationResult === false
-                            ? "bg-red-600 hover:bg-red-700"
+                            ? "bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
                             : ""
                       }
                     >

@@ -58,10 +58,10 @@ export function ContractInteractionsDemo() {
                 <Badge
                   className={
                     callType === "call"
-                      ? "bg-blue-600 text-white"
+                      ? "bg-blue-600 dark:bg-blue-500 text-white"
                       : callType === "delegatecall"
-                        ? "bg-violet-600 text-white"
-                        : "bg-cyan-600 text-white"
+                        ? "bg-violet-600 dark:bg-violet-500 text-white"
+                        : "bg-cyan-600 dark:bg-cyan-500 text-white"
                   }
                 >
                   {callType.toUpperCase()}
@@ -101,23 +101,26 @@ export function ContractInteractionsDemo() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>From (caller)</Label>
+              <Label htmlFor="sol-interact-from">From (caller)</Label>
               <Input
+                id="sol-interact-from"
                 value={from}
                 onChange={(e) => setFrom(e.target.value)}
               />
             </div>
             <div>
-              <Label>To (target)</Label>
+              <Label htmlFor="sol-interact-to">To (target)</Label>
               <Input
+                id="sol-interact-to"
                 value={to}
                 onChange={(e) => setTo(e.target.value)}
               />
             </div>
           </div>
           <div>
-            <Label>Value (wei)</Label>
+            <Label htmlFor="sol-interact-value">Value (wei)</Label>
             <Input
+              id="sol-interact-value"
               type="number"
               value={value}
               onChange={(e) => setValue(Number(e.target.value) || 0)}

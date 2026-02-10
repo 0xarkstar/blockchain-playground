@@ -565,9 +565,9 @@ export function PrivateClubDemo() {
                   disabled={phase === "verifying"}
                   className={
                     accessGranted === true
-                      ? "bg-green-600 hover:bg-green-700"
+                      ? "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
                       : accessGranted === false
-                        ? "bg-red-600 hover:bg-red-700"
+                        ? "bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
                         : ""
                   }
                 >
@@ -598,9 +598,9 @@ export function PrivateClubDemo() {
               )}
               <div className="flex items-center gap-2">
                 {accessGranted ? (
-                  <Check className="h-5 w-5 text-green-600" />
+                  <Check className="h-5 w-5 text-green-600 dark:text-green-400" />
                 ) : (
-                  <X className="h-5 w-5 text-red-600" />
+                  <X className="h-5 w-5 text-red-600 dark:text-red-400" />
                 )}
                 <div>
                   <p className="text-sm font-medium">

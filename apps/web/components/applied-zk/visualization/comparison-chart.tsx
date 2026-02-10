@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import { useTheme } from "next-themes";
 import { Card, CardContent, CardHeader, CardTitle } from "@components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@components/ui/tabs";
 import { useTranslations } from "next-intl";
@@ -26,6 +27,8 @@ type ChartType = "bar" | "radar";
 export function ComparisonChart() {
   const t = useTranslations("visualization.comparison");
   const tCategories = useTranslations("visualization.comparisonCategories");
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const barChartRef = useRef<SVGSVGElement>(null);
   const [chartType, setChartType] = useState<ChartType>("bar");
   const [mounted, setMounted] = useState(false);
@@ -94,7 +97,7 @@ export function ComparisonChart() {
       .attr("x", 0)
       .attr("height", y1.bandwidth())
       .attr("width", 0)
-      .attr("fill", (d) => (d.key === "snark" ? "#3b82f6" : "#8b5cf6"))
+      .attr("fill", (d) => (d.key === "snark" ? (isDark ? "#60a5fa" : "#3b82f6") : (isDark ? "#a78bfa" : "#8b5cf6")))
       .attr("rx", 4)
       .transition()
       .duration(800)
@@ -138,8 +141,8 @@ export function ComparisonChart() {
       .attr("transform", `translate(${width + margin.left + 20}, ${margin.top})`);
 
     const legendData = [
-      { label: "zk-SNARK", color: "#3b82f6" },
-      { label: "zk-STARK", color: "#8b5cf6" },
+      { label: "zk-SNARK", color: isDark ? "#60a5fa" : "#3b82f6" },
+      { label: "zk-STARK", color: isDark ? "#a78bfa" : "#8b5cf6" },
     ];
 
     legend
@@ -160,7 +163,7 @@ export function ComparisonChart() {
           .attr("fill", "currentColor")
           .text((d) => d.label);
       });
-  }, [mounted, chartType, comparisonData]);
+  }, [mounted, chartType, comparisonData, isDark]);
 
   if (!mounted) {
     return (

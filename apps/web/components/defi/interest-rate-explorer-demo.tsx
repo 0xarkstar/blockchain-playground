@@ -73,13 +73,13 @@ export function InterestRateExplorerDemo() {
           <div className="flex items-center gap-4">
             <p className="text-sm">
               Borrow Rate:{" "}
-              <span className="font-semibold text-red-600">
+              <span className="font-semibold text-red-600 dark:text-red-400">
                 {currentRates.borrowRate.toFixed(2)}%
               </span>
             </p>
             <p className="text-sm">
               Supply Rate:{" "}
-              <span className="font-semibold text-green-600">
+              <span className="font-semibold text-green-600 dark:text-green-400">
                 {currentRates.supplyRate.toFixed(2)}%
               </span>
             </p>
@@ -92,8 +92,9 @@ export function InterestRateExplorerDemo() {
           <p className="text-sm font-semibold">Model Parameters (%)</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Base Rate</Label>
+              <Label htmlFor="defi-rate-base">Base Rate</Label>
               <Input
+                id="defi-rate-base"
                 type="number"
                 value={baseRate}
                 onChange={(e) => setBaseRate(Number(e.target.value) || 0)}
@@ -102,8 +103,9 @@ export function InterestRateExplorerDemo() {
               />
             </div>
             <div>
-              <Label>Slope 1 (below kink)</Label>
+              <Label htmlFor="defi-rate-slope1">Slope 1 (below kink)</Label>
               <Input
+                id="defi-rate-slope1"
                 type="number"
                 value={slope1}
                 onChange={(e) => setSlope1(Number(e.target.value) || 0)}
@@ -114,8 +116,9 @@ export function InterestRateExplorerDemo() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Slope 2 (above kink)</Label>
+              <Label htmlFor="defi-rate-slope2">Slope 2 (above kink)</Label>
               <Input
+                id="defi-rate-slope2"
                 type="number"
                 value={slope2}
                 onChange={(e) => setSlope2(Number(e.target.value) || 0)}
@@ -124,8 +127,9 @@ export function InterestRateExplorerDemo() {
               />
             </div>
             <div>
-              <Label>Kink Point</Label>
+              <Label htmlFor="defi-rate-kink">Kink Point</Label>
               <Input
+                id="defi-rate-kink"
                 type="number"
                 value={kink}
                 onChange={(e) =>
@@ -137,8 +141,9 @@ export function InterestRateExplorerDemo() {
             </div>
           </div>
           <div>
-            <Label>Reserve Factor</Label>
+            <Label htmlFor="defi-rate-reserve">Reserve Factor</Label>
             <Input
+              id="defi-rate-reserve"
               type="number"
               value={reserveFactor}
               onChange={(e) => setReserveFactor(Number(e.target.value) || 0)}
@@ -160,7 +165,6 @@ export function InterestRateExplorerDemo() {
             }))}
             xKey="utilization"
             yKeys={["borrowRate", "supplyRate"]}
-            colors={["#fa5252", "#40c057"]}
             height={280}
           />
           <p className="text-xs text-muted-foreground text-center">

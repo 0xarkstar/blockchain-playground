@@ -109,7 +109,7 @@ function ChainVisualDiagram({
                 }}
               >
                 <Badge
-                  className={`w-full justify-center text-xs mb-0.5 ${v?.valid ? "bg-green-600 text-white" : "bg-red-600 text-white"}`}
+                  className={`w-full justify-center text-xs mb-0.5 ${v?.valid ? "bg-green-600 dark:bg-green-500 text-white" : "bg-red-600 dark:bg-red-500 text-white"}`}
                 >
                   #{block.index}
                 </Badge>
@@ -241,12 +241,12 @@ export function ChainIntegrityDemo() {
                       </Badge>
                       <div className="flex items-center gap-1">
                         {!v?.hashValid && (
-                          <Badge className="bg-red-600 text-white text-xs">
+                          <Badge className="bg-red-600 dark:bg-red-500 text-white text-xs">
                             Hash Invalid
                           </Badge>
                         )}
                         {!v?.linkValid && (
-                          <Badge className="bg-red-600 text-white text-xs">
+                          <Badge className="bg-red-600 dark:bg-red-500 text-white text-xs">
                             Link Broken
                           </Badge>
                         )}
@@ -258,8 +258,7 @@ export function ChainIntegrityDemo() {
                         Hash
                       </p>
                       <code
-                        className="rounded bg-muted px-1.5 py-0.5 font-mono break-all"
-                        style={{ fontSize: "0.6rem" }}
+                        className="rounded bg-muted px-1.5 py-0.5 font-mono break-all text-[0.6rem]"
                       >
                         {block.hash.slice(0, 20)}...
                       </code>
@@ -269,8 +268,7 @@ export function ChainIntegrityDemo() {
                         Prev Hash
                       </p>
                       <code
-                        className="rounded bg-muted px-1.5 py-0.5 font-mono break-all"
-                        style={{ fontSize: "0.6rem" }}
+                        className="rounded bg-muted px-1.5 py-0.5 font-mono break-all text-[0.6rem]"
                       >
                         {block.header.previousHash.slice(0, 20)}...
                       </code>
@@ -288,7 +286,7 @@ export function ChainIntegrityDemo() {
                       <Button
                         size="sm"
                         variant="outline"
-                        className="text-red-600 border-red-600 hover:bg-red-50"
+                        className="text-red-600 dark:text-red-400 border-red-600 dark:border-red-400 hover:bg-red-50 dark:hover:bg-red-950"
                         onClick={() => handleTamper(i)}
                       >
                         Tamper Block

@@ -129,22 +129,25 @@ export function ZKRollupDemo() {
           </p>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label>From</Label>
+              <Label htmlFor="zk-rollup-from">From</Label>
               <Input
+                id="zk-rollup-from"
                 value={txFrom}
                 onChange={(e) => setTxFrom(e.target.value)}
               />
             </div>
             <div>
-              <Label>To</Label>
+              <Label htmlFor="zk-rollup-to">To</Label>
               <Input
+                id="zk-rollup-to"
                 value={txTo}
                 onChange={(e) => setTxTo(e.target.value)}
               />
             </div>
             <div>
-              <Label>Amount</Label>
+              <Label htmlFor="zk-rollup-amount">Amount</Label>
               <Input
+                id="zk-rollup-amount"
                 type="number"
                 value={txAmount}
                 onChange={(e) => setTxAmount(Number(e.target.value) || 0)}
@@ -226,8 +229,9 @@ export function ZKRollupDemo() {
             Gas Compression Analysis
           </p>
           <div>
-            <Label>Batch size (transactions)</Label>
+            <Label htmlFor="zk-rollup-batchsize">Batch size (transactions)</Label>
             <Input
+              id="zk-rollup-batchsize"
               type="number"
               value={batchSize}
               onChange={(e) => setBatchSize(Number(e.target.value) || 1)}
@@ -286,7 +290,6 @@ export function ZKRollupDemo() {
             ]}
             xKey="type"
             yKeys={["gas"]}
-            colors={["#fa5252", "#40c057"]}
             height={200}
           />
         </div>

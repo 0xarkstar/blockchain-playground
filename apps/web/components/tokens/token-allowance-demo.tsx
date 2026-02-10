@@ -75,15 +75,17 @@ export function TokenAllowanceDemo() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Spender</Label>
+              <Label htmlFor="tok-allow-spender">Spender</Label>
               <Input
+                id="tok-allow-spender"
                 value={approveSpender}
                 onChange={(e) => setApproveSpender(e.target.value)}
               />
             </div>
             <div>
-              <Label>Amount</Label>
+              <Label htmlFor="tok-allow-amount">Amount</Label>
               <Input
+                id="tok-allow-amount"
                 type="number"
                 value={approveAmount}
                 onChange={(e) => setApproveAmount(Number(e.target.value) || 0)}
@@ -104,29 +106,33 @@ export function TokenAllowanceDemo() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <Label>Spender</Label>
+              <Label htmlFor="tok-allow-tfSpender">Spender</Label>
               <Input
+                id="tok-allow-tfSpender"
                 value={tfSpender}
                 onChange={(e) => setTfSpender(e.target.value)}
               />
             </div>
             <div>
-              <Label>From</Label>
+              <Label htmlFor="tok-allow-tfFrom">From</Label>
               <Input
+                id="tok-allow-tfFrom"
                 value={tfFrom}
                 onChange={(e) => setTfFrom(e.target.value)}
               />
             </div>
             <div>
-              <Label>To</Label>
+              <Label htmlFor="tok-allow-tfTo">To</Label>
               <Input
+                id="tok-allow-tfTo"
                 value={tfTo}
                 onChange={(e) => setTfTo(e.target.value)}
               />
             </div>
             <div>
-              <Label>Amount</Label>
+              <Label htmlFor="tok-allow-tfAmount">Amount</Label>
               <Input
+                id="tok-allow-tfAmount"
                 type="number"
                 value={tfAmount}
                 onChange={(e) => setTfAmount(Number(e.target.value) || 0)}

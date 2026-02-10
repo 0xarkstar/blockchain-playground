@@ -93,8 +93,9 @@ export function SimpleSwapDemo() {
           <p className="text-sm font-semibold">Pool Reserves</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Token A Reserve</Label>
+              <Label htmlFor="defi-swap-reserveA">Token A Reserve</Label>
               <Input
+                id="defi-swap-reserveA"
                 type="number"
                 value={reserveA}
                 onChange={(e) => setReserveA(Number(e.target.value) || 0)}
@@ -102,8 +103,9 @@ export function SimpleSwapDemo() {
               />
             </div>
             <div>
-              <Label>Token B Reserve</Label>
+              <Label htmlFor="defi-swap-reserveB">Token B Reserve</Label>
               <Input
+                id="defi-swap-reserveB"
                 type="number"
                 value={reserveB}
                 onChange={(e) => setReserveB(Number(e.target.value) || 0)}
@@ -127,8 +129,9 @@ export function SimpleSwapDemo() {
           </Tabs>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Amount In</Label>
+              <Label htmlFor="defi-swap-amountIn">Amount In</Label>
               <Input
+                id="defi-swap-amountIn"
                 type="number"
                 value={amountIn}
                 onChange={(e) => setAmountIn(Number(e.target.value) || 0)}
@@ -136,8 +139,9 @@ export function SimpleSwapDemo() {
               />
             </div>
             <div>
-              <Label>Fee Rate (%)</Label>
+              <Label htmlFor="defi-swap-feeRate">Fee Rate (%)</Label>
               <Input
+                id="defi-swap-feeRate"
                 type="number"
                 value={feeRate}
                 onChange={(e) => setFeeRate(Number(e.target.value) || 0)}

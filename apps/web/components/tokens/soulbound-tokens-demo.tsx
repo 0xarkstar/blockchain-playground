@@ -84,22 +84,25 @@ export function SoulboundTokensDemo() {
           <p className="text-sm font-semibold">Issue SBT Credential</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>Recipient</Label>
+              <Label htmlFor="tok-sbt-recipient">Recipient</Label>
               <Input
+                id="tok-sbt-recipient"
                 value={mintTo}
                 onChange={(e) => setMintTo(e.target.value)}
               />
             </div>
             <div>
-              <Label>Credential Type</Label>
+              <Label htmlFor="tok-sbt-credType">Credential Type</Label>
               <Input
+                id="tok-sbt-credType"
                 value={credentialType}
                 onChange={(e) => setCredentialType(e.target.value)}
               />
             </div>
             <div>
-              <Label>Issuer</Label>
+              <Label htmlFor="tok-sbt-issuer">Issuer</Label>
               <Input
+                id="tok-sbt-issuer"
                 value={issuer}
                 onChange={(e) => setIssuer(e.target.value)}
               />
@@ -116,22 +119,25 @@ export function SoulboundTokensDemo() {
           <p className="text-sm font-semibold">Try Transfer (should fail)</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>From</Label>
+              <Label htmlFor="tok-sbt-txFrom">From</Label>
               <Input
+                id="tok-sbt-txFrom"
                 value={transferFrom}
                 onChange={(e) => setTransferFrom(e.target.value)}
               />
             </div>
             <div>
-              <Label>To</Label>
+              <Label htmlFor="tok-sbt-txTo">To</Label>
               <Input
+                id="tok-sbt-txTo"
                 value={transferTo}
                 onChange={(e) => setTransferTo(e.target.value)}
               />
             </div>
             <div>
-              <Label>Token ID</Label>
+              <Label htmlFor="tok-sbt-txTokenId">Token ID</Label>
               <Input
+                id="tok-sbt-txTokenId"
                 value={transferTokenId}
                 onChange={(e) => setTransferTokenId(e.target.value)}
               />

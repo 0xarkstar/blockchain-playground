@@ -257,7 +257,7 @@ export function ConsensusPlaygroundDemo() {
                   {node.id}
                 </p>
                 {node.isLeader && (
-                  <Badge className="text-xs bg-yellow-600 text-white">
+                  <Badge className="text-xs bg-yellow-600 dark:bg-yellow-500 text-white">
                     Leader
                   </Badge>
                 )}

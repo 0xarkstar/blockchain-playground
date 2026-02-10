@@ -110,7 +110,7 @@ export function InteractiveDemo({
 
         {completed ? (
           <div className="text-center py-8">
-            <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+            <CheckCircle className="h-12 w-12 text-green-500 dark:text-green-400 mx-auto mb-4" />
             <h4 className="font-semibold text-lg">Demo Complete</h4>
             <p className="text-muted-foreground">
               You&apos;ve walked through all the steps. Press reset to try again.

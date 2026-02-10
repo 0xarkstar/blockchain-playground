@@ -386,7 +386,7 @@ export function StateExplorerDemo() {
               <p className="text-xs text-muted-foreground">
                 Code Hash (keccak256 of contract bytecode)
               </p>
-              <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all" style={{ fontSize: "0.7rem" }}>
+              <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all text-[0.7rem]">
                 <code>{account.codeHash}</code>
               </pre>
             </div>
@@ -395,7 +395,7 @@ export function StateExplorerDemo() {
               <p className="text-xs text-muted-foreground">
                 Storage Root (Merkle Patricia Trie root of contract storage)
               </p>
-              <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all" style={{ fontSize: "0.7rem" }}>
+              <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all text-[0.7rem]">
                 <code>{account.storageRoot}</code>
               </pre>
             </div>

@@ -88,15 +88,17 @@ export function ERC721MinterDemo() {
           <p className="text-sm font-semibold">Mint NFT</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>To</Label>
+              <Label htmlFor="tok-721-to">To</Label>
               <Input
+                id="tok-721-to"
                 value={mintTo}
                 onChange={(e) => setMintTo(e.target.value)}
               />
             </div>
             <div>
-              <Label>Name</Label>
+              <Label htmlFor="tok-721-name">Name</Label>
               <Input
+                id="tok-721-name"
                 value={nftName}
                 onChange={(e) => setNftName(e.target.value)}
               />
@@ -104,15 +106,17 @@ export function ERC721MinterDemo() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Description</Label>
+              <Label htmlFor="tok-721-desc">Description</Label>
               <Input
+                id="tok-721-desc"
                 value={nftDesc}
                 onChange={(e) => setNftDesc(e.target.value)}
               />
             </div>
             <div>
-              <Label>Image URI</Label>
+              <Label htmlFor="tok-721-image">Image URI</Label>
               <Input
+                id="tok-721-image"
                 value={nftImage}
                 onChange={(e) => setNftImage(e.target.value)}
               />
@@ -129,22 +133,25 @@ export function ERC721MinterDemo() {
           <p className="text-sm font-semibold">Transfer NFT</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>From</Label>
+              <Label htmlFor="tok-721-txFrom">From</Label>
               <Input
+                id="tok-721-txFrom"
                 value={transferFromAddr}
                 onChange={(e) => setTransferFromAddr(e.target.value)}
               />
             </div>
             <div>
-              <Label>To</Label>
+              <Label htmlFor="tok-721-txTo">To</Label>
               <Input
+                id="tok-721-txTo"
                 value={transferToAddr}
                 onChange={(e) => setTransferToAddr(e.target.value)}
               />
             </div>
             <div>
-              <Label>Token ID</Label>
+              <Label htmlFor="tok-721-txTokenId">Token ID</Label>
               <Input
+                id="tok-721-txTokenId"
                 value={transferTokenId}
                 onChange={(e) => setTransferTokenId(e.target.value)}
               />

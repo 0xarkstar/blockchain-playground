@@ -41,6 +41,13 @@ const DARK_COLORS = [
   "#f06595", // pink.4
 ];
 
+const TOOLTIP_STYLE: React.CSSProperties = {
+  backgroundColor: "var(--color-card)",
+  border: "1px solid var(--color-border)",
+  color: "var(--color-foreground)",
+  borderRadius: "var(--radius-md, 0.375rem)",
+};
+
 interface BaseChartProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any[];
@@ -87,10 +94,10 @@ export function SimpleLineChart({
   return (
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey={xKey} />
-        <YAxis />
-        <Tooltip />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+        <XAxis dataKey={xKey} tick={{ fill: "var(--color-muted-foreground)" }} stroke="var(--color-border)" />
+        <YAxis tick={{ fill: "var(--color-muted-foreground)" }} stroke="var(--color-border)" />
+        <Tooltip contentStyle={TOOLTIP_STYLE} />
         <Legend />
         {yKeys.map((key, i) => (
           <Line
@@ -120,10 +127,10 @@ export function SimpleBarChart({
   return (
     <ResponsiveContainer width="100%" height={height}>
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey={xKey} />
-        <YAxis />
-        <Tooltip />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+        <XAxis dataKey={xKey} tick={{ fill: "var(--color-muted-foreground)" }} stroke="var(--color-border)" />
+        <YAxis tick={{ fill: "var(--color-muted-foreground)" }} stroke="var(--color-border)" />
+        <Tooltip contentStyle={TOOLTIP_STYLE} />
         <Legend />
         {yKeys.map((key, i) => (
           <Bar
@@ -163,7 +170,7 @@ export function SimplePieChart({
             <Cell key={`cell-${i}`} fill={getColor(colors, i, isDark)} />
           ))}
         </Pie>
-        <Tooltip />
+        <Tooltip contentStyle={TOOLTIP_STYLE} />
         <Legend />
       </PieChart>
     </ResponsiveContainer>
@@ -182,10 +189,10 @@ export function SimpleAreaChart({
   return (
     <ResponsiveContainer width="100%" height={height}>
       <AreaChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey={xKey} />
-        <YAxis />
-        <Tooltip />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+        <XAxis dataKey={xKey} tick={{ fill: "var(--color-muted-foreground)" }} stroke="var(--color-border)" />
+        <YAxis tick={{ fill: "var(--color-muted-foreground)" }} stroke="var(--color-border)" />
+        <Tooltip contentStyle={TOOLTIP_STYLE} />
         <Legend />
         {yKeys.map((key, i) => (
           <Area

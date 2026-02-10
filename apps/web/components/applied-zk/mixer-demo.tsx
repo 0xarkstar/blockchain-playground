@@ -303,7 +303,7 @@ export function MixerDemo() {
         <div className="flex flex-col gap-4">
           {/* Educational Disclaimer */}
           <Alert className="border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950">
-            <AlertTriangle className="h-4 w-4 text-yellow-600" />
+            <AlertTriangle className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
             <AlertDescription className="text-yellow-800 dark:text-yellow-200">
               <strong>Educational Only.</strong> This demo illustrates
               mixer/pool cryptographic concepts. It does not handle real funds
@@ -373,6 +373,7 @@ export function MixerDemo() {
                     variant="ghost"
                     size="icon"
                     onClick={() => setShowSecrets((s) => !s)}
+                    aria-label={showSecrets ? "Hide secrets" : "Show secrets"}
                   >
                     {showSecrets ? (
                       <EyeOff className="h-4 w-4" />
@@ -534,9 +535,9 @@ export function MixerDemo() {
                         disabled={phase === "verifying"}
                         className={
                           verificationResult === true
-                            ? "bg-green-600 hover:bg-green-700"
+                            ? "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
                             : verificationResult === false
-                              ? "bg-red-600 hover:bg-red-700"
+                              ? "bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
                               : ""
                         }
                       >
@@ -570,9 +571,9 @@ export function MixerDemo() {
               )}
               <div className="flex items-center gap-2">
                 {verificationResult ? (
-                  <Check className="h-5 w-5 text-green-600" />
+                  <Check className="h-5 w-5 text-green-600 dark:text-green-400" />
                 ) : (
-                  <X className="h-5 w-5 text-red-600" />
+                  <X className="h-5 w-5 text-red-600 dark:text-red-400" />
                 )}
                 <p className="text-sm font-medium">
                   {verificationResult

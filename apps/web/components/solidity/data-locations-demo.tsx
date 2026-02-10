@@ -195,25 +195,25 @@ export function DataLocationsDemo() {
           <p className="text-sm font-semibold">Data Location Overview</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="rounded-lg border border-border bg-red-50 dark:bg-red-950 p-3 text-center">
-              <Badge className="bg-red-600 text-white mb-1">Storage</Badge>
+              <Badge className="bg-red-600 dark:bg-red-500 text-white mb-1">Storage</Badge>
               <p className="text-xs">Persistent on-chain</p>
               <p className="text-xs font-semibold">20,000 gas (write)</p>
               <p className="text-xs text-muted-foreground">State variables</p>
             </div>
             <div className="rounded-lg border border-border bg-blue-50 dark:bg-blue-950 p-3 text-center">
-              <Badge className="bg-blue-600 text-white mb-1">Memory</Badge>
+              <Badge className="bg-blue-600 dark:bg-blue-500 text-white mb-1">Memory</Badge>
               <p className="text-xs">Temporary, mutable</p>
               <p className="text-xs font-semibold">3 gas (read/write)</p>
               <p className="text-xs text-muted-foreground">Local ref types</p>
             </div>
             <div className="rounded-lg border border-border bg-green-50 dark:bg-green-950 p-3 text-center">
-              <Badge className="bg-green-600 text-white mb-1">Calldata</Badge>
+              <Badge className="bg-green-600 dark:bg-green-500 text-white mb-1">Calldata</Badge>
               <p className="text-xs">Read-only input</p>
               <p className="text-xs font-semibold">4-16 gas/byte</p>
               <p className="text-xs text-muted-foreground">Function params</p>
             </div>
             <div className="rounded-lg border border-border bg-yellow-50 dark:bg-yellow-950 p-3 text-center">
-              <Badge className="bg-yellow-600 text-white mb-1">Stack</Badge>
+              <Badge className="bg-yellow-600 dark:bg-yellow-500 text-white mb-1">Stack</Badge>
               <p className="text-xs">Cheapest, limited</p>
               <p className="text-xs font-semibold">2-3 gas</p>
               <p className="text-xs text-muted-foreground">Value types</p>
@@ -239,9 +239,9 @@ export function DataLocationsDemo() {
             ))}
           </div>
           <div>
-            <Label>Data Type</Label>
+            <Label htmlFor="sol-dataloc-type">Data Type</Label>
             <Select value={dataType} onValueChange={(v) => setDataType(v)}>
-              <SelectTrigger>
+              <SelectTrigger id="sol-dataloc-type">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

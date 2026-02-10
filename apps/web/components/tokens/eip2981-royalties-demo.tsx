@@ -46,8 +46,9 @@ export function EIP2981RoyaltiesDemo() {
           <p className="text-sm font-semibold">Configuration</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>Sale Price (ETH)</Label>
+              <Label htmlFor="tok-royalty-salePrice">Sale Price (ETH)</Label>
               <Input
+                id="tok-royalty-salePrice"
                 type="number"
                 value={salePrice}
                 onChange={(e) => setSalePrice(Number(e.target.value) || 0)}
@@ -56,8 +57,9 @@ export function EIP2981RoyaltiesDemo() {
               />
             </div>
             <div>
-              <Label>Royalty %</Label>
+              <Label htmlFor="tok-royalty-percent">Royalty %</Label>
               <Input
+                id="tok-royalty-percent"
                 type="number"
                 value={royaltyPercent}
                 onChange={(e) => setRoyaltyPercent(Number(e.target.value) || 0)}
@@ -67,8 +69,9 @@ export function EIP2981RoyaltiesDemo() {
               />
             </div>
             <div>
-              <Label>Platform Fee %</Label>
+              <Label htmlFor="tok-royalty-platformFee">Platform Fee %</Label>
               <Input
+                id="tok-royalty-platformFee"
                 type="number"
                 value={platformFeePercent}
                 onChange={(e) => setPlatformFeePercent(Number(e.target.value) || 0)}
@@ -173,7 +176,6 @@ export function EIP2981RoyaltiesDemo() {
             ]}
             nameKey="recipient"
             valueKey="amount"
-            colors={["#40c057", "#7950f2", "#fd7e14"]}
             height={250}
           />
         </div>

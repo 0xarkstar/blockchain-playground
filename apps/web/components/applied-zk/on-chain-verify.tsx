@@ -125,7 +125,7 @@ export function OnChainVerify({
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold">Solidity Calldata</p>
-            <Button variant="ghost" size="icon" onClick={handleCopy}>
+            <Button variant="ghost" size="icon" onClick={handleCopy} aria-label="Copy calldata">
               {copied ? (
                 <Check className="h-4 w-4" />
               ) : (
@@ -173,7 +173,7 @@ export function OnChainVerify({
               className="font-mono text-sm"
             />
             {explorerUrl && (
-              <Button variant="ghost" size="icon" asChild>
+              <Button variant="ghost" size="icon" asChild aria-label="Open block explorer">
                 <a
                   href={explorerUrl}
                   target="_blank"

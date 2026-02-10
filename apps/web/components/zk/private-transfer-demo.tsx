@@ -91,15 +91,17 @@ export function PrivateTransferDemo() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Owner</Label>
+              <Label htmlFor="zk-transfer-owner">Owner</Label>
               <Input
+                id="zk-transfer-owner"
                 value={mintOwner}
                 onChange={(e) => setMintOwner(e.target.value)}
               />
             </div>
             <div>
-              <Label>Value</Label>
+              <Label htmlFor="zk-transfer-value">Value</Label>
               <Input
+                id="zk-transfer-value"
                 type="number"
                 value={mintValue}
                 onChange={(e) => setMintValue(Number(e.target.value) || 0)}
@@ -177,15 +179,17 @@ export function PrivateTransferDemo() {
             </p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label>Recipient</Label>
+                <Label htmlFor="zk-transfer-recipient">Recipient</Label>
                 <Input
+                  id="zk-transfer-recipient"
                   value={recipient}
                   onChange={(e) => setRecipient(e.target.value)}
                 />
               </div>
               <div>
-                <Label>Amount</Label>
+                <Label htmlFor="zk-transfer-amount">Amount</Label>
                 <Input
+                  id="zk-transfer-amount"
                   type="number"
                   value={sendAmount}
                   onChange={(e) => setSendAmount(Number(e.target.value) || 0)}

@@ -55,7 +55,6 @@ export function ImpermanentLossDemo() {
             data={ilCurveData}
             xKey="ratio"
             yKeys={["ilPercent"]}
-            colors={["#fa5252"]}
             height={250}
           />
           <p className="text-xs text-muted-foreground text-center">
@@ -69,11 +68,12 @@ export function ImpermanentLossDemo() {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-semibold">Initial Position (50/50 Pool)</p>
           <div>
-            <Label>Total Position Value (USD)</Label>
+            <Label htmlFor="defi-il-position">Total Position Value (USD)</Label>
             <p className="text-xs text-muted-foreground mb-1">
               Automatically split equally between Token A and Token B
             </p>
             <Input
+              id="defi-il-position"
               type="number"
               value={totalValue}
               onChange={(e) => setTotalValue(Number(e.target.value) || 0)}
@@ -156,7 +156,7 @@ export function ImpermanentLossDemo() {
               <TableRow>
                 <TableCell>Difference (LP - HODL)</TableCell>
                 <TableCell className="text-right">
-                  <span className={`font-semibold ${result.difference < 0 ? "text-red-600" : "text-green-600"}`}>
+                  <span className={`font-semibold ${result.difference < 0 ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`}>
                     $
                     {result.difference.toLocaleString(undefined, {
                       minimumFractionDigits: 2,
@@ -168,7 +168,7 @@ export function ImpermanentLossDemo() {
               <TableRow>
                 <TableCell>Impermanent Loss</TableCell>
                 <TableCell className="text-right">
-                  <span className="font-semibold text-red-600">
+                  <span className="font-semibold text-red-600 dark:text-red-400">
                     {result.ilPercent.toFixed(2)}%
                   </span>
                 </TableCell>

@@ -378,13 +378,15 @@ export function PrivateAirdropDemo() {
                         Generated
                       </Badge>
                     </div>
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setProofExpanded(!proofExpanded)}
-                      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground h-auto p-0"
                     >
                       {proofExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
                       {proofExpanded ? "Hide" : "Show"} proof data
-                    </button>
+                    </Button>
                     {proofExpanded && (
                       <pre className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono max-h-32">
                         <code>
@@ -415,9 +417,9 @@ export function PrivateAirdropDemo() {
                       disabled={phase === "verifying"}
                       className={
                         verificationResult === true
-                          ? "bg-green-600 hover:bg-green-700"
+                          ? "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
                           : verificationResult === false
-                            ? "bg-red-600 hover:bg-red-700"
+                            ? "bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
                             : ""
                       }
                     >

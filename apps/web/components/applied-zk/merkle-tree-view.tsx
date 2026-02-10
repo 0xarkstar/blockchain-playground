@@ -43,6 +43,7 @@ export function MerkleTreeView({
                 size="icon"
                 onClick={() => handleCopy(merkleRoot, "root")}
                 title={copiedField === "root" ? "Copied" : "Copy"}
+                aria-label="Copy to clipboard"
               >
                 {copiedField === "root" ? (
                   <Check className="h-4 w-4" />

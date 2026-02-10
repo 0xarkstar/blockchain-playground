@@ -86,8 +86,9 @@ export function ZKConceptsDemo() {
           </p>
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <Label>Rounds</Label>
+              <Label htmlFor="zk-concepts-rounds">Rounds</Label>
               <Input
+                id="zk-concepts-rounds"
                 type="number"
                 value={numRounds}
                 onChange={(e) => setNumRounds(Number(e.target.value) || 1)}
@@ -103,7 +104,7 @@ export function ZKConceptsDemo() {
                 setSimulation(simulateAliBabaCave(true, numRounds));
               }}
               variant={hasSecret ? "default" : "secondary"}
-              className={hasSecret ? "bg-green-600 hover:bg-green-700 text-white" : ""}
+              className={hasSecret ? "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white" : ""}
             >
               Prover Knows Secret
             </Button>
@@ -113,7 +114,7 @@ export function ZKConceptsDemo() {
                 setSimulation(simulateAliBabaCave(false, numRounds));
               }}
               variant={!hasSecret ? "default" : "secondary"}
-              className={!hasSecret ? "bg-red-600 hover:bg-red-700 text-white" : ""}
+              className={!hasSecret ? "bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white" : ""}
             >
               Prover is Cheating
             </Button>
@@ -281,9 +282,9 @@ export function ZKConceptsDemo() {
                     </TableCell>
                     <TableCell>
                       {round.success ? (
-                        <Check className="h-4 w-4 text-green-600" />
+                        <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
                       ) : (
-                        <X className="h-4 w-4 text-red-600" />
+                        <X className="h-4 w-4 text-red-600 dark:text-red-400" />
                       )}
                     </TableCell>
                   </TableRow>

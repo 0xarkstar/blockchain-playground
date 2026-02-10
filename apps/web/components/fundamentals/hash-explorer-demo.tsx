@@ -70,11 +70,12 @@ export function HashExplorerDemo() {
   const inputPanel = (
     <div className="flex flex-col gap-4">
       <div>
-        <Label>Input Text</Label>
+        <Label htmlFor="hash-explorer-input">Input Text</Label>
         <p className="text-xs text-muted-foreground mb-1">
           Type anything — see how the hash changes instantly
         </p>
         <Input
+          id="hash-explorer-input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
@@ -99,9 +100,10 @@ export function HashExplorerDemo() {
           <Button
             variant="ghost"
             size="icon"
+            aria-label="Copy to clipboard"
             onClick={handleCopy}
           >
-            {copied ? <Check className="h-4 w-4 text-teal-500" /> : <Copy className="h-4 w-4" />}
+            {copied ? <Check className="h-4 w-4 text-teal-500 dark:text-teal-400" /> : <Copy className="h-4 w-4" />}
           </Button>
         </div>
         <div className="flex items-center gap-1 mt-1">
@@ -121,8 +123,7 @@ export function HashExplorerDemo() {
               {algo}
             </p>
             <pre
-              className="rounded-lg bg-muted p-3 overflow-x-auto break-all"
-              style={{ fontSize: "0.65rem" }}
+              className="rounded-lg bg-muted p-3 overflow-x-auto break-all text-[0.65rem]"
             >
               <code>{hashes[algo]}</code>
             </pre>
@@ -156,18 +157,20 @@ export function HashExplorerDemo() {
         </p>
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <Label>Original Input</Label>
+            <Label htmlFor="hash-explorer-original">Original Input</Label>
             <Input
+              id="hash-explorer-original"
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
           </div>
           <div>
-            <Label>Modified Input</Label>
+            <Label htmlFor="hash-explorer-compare">Modified Input</Label>
             <p className="text-xs text-muted-foreground mb-1">
               Change one character to see the avalanche effect
             </p>
             <Input
+              id="hash-explorer-compare"
               value={compareInput}
               onChange={(e) => setCompareInput(e.target.value)}
             />
@@ -178,8 +181,8 @@ export function HashExplorerDemo() {
           <Badge
             className={
               avalanche.diffPercent > 40
-                ? "bg-green-600 text-white"
-                : "bg-orange-500 text-white"
+                ? "bg-green-600 dark:bg-green-500 text-white"
+                : "bg-orange-500 dark:bg-orange-400 text-white"
             }
           >
             {avalanche.diffPercent.toFixed(1)}% bits changed

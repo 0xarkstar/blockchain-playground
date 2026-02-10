@@ -56,8 +56,9 @@ export function RangeProofDemo() {
           <p className="text-sm font-semibold">Configure</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>{`Value (range: 0 to ${maxValue})`}</Label>
+              <Label htmlFor="zk-range-value">{`Value (range: 0 to ${maxValue})`}</Label>
               <Input
+                id="zk-range-value"
                 type="number"
                 value={value}
                 onChange={(e) => setValue(Number(e.target.value) ?? 0)}
@@ -66,8 +67,9 @@ export function RangeProofDemo() {
               />
             </div>
             <div>
-              <Label>Bit width (n)</Label>
+              <Label htmlFor="zk-range-bits">Bit width (n)</Label>
               <Input
+                id="zk-range-bits"
                 type="number"
                 value={numBits}
                 onChange={(e) => setNumBits(Number(e.target.value) || 1)}

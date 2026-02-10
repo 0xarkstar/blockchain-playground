@@ -88,22 +88,25 @@ export function ERC20CreatorDemo() {
           <p className="text-sm font-semibold">Token Configuration</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>Name</Label>
+              <Label htmlFor="tok-erc20-name">Name</Label>
               <Input
+                id="tok-erc20-name"
                 value={tokenName}
                 onChange={(e) => setTokenName(e.target.value)}
               />
             </div>
             <div>
-              <Label>Symbol</Label>
+              <Label htmlFor="tok-erc20-symbol">Symbol</Label>
               <Input
+                id="tok-erc20-symbol"
                 value={tokenSymbol}
                 onChange={(e) => setTokenSymbol(e.target.value)}
               />
             </div>
             <div>
-              <Label>Decimals</Label>
+              <Label htmlFor="tok-erc20-decimals">Decimals</Label>
               <Input
+                id="tok-erc20-decimals"
                 type="number"
                 value={decimals}
                 onChange={(e) => setDecimals(Number(e.target.value) || 0)}
@@ -123,15 +126,17 @@ export function ERC20CreatorDemo() {
           <p className="text-sm font-semibold">Mint</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>To</Label>
+              <Label htmlFor="tok-erc20-mintTo">To</Label>
               <Input
+                id="tok-erc20-mintTo"
                 value={mintTo}
                 onChange={(e) => setMintTo(e.target.value)}
               />
             </div>
             <div>
-              <Label>Amount</Label>
+              <Label htmlFor="tok-erc20-mintAmount">Amount</Label>
               <Input
+                id="tok-erc20-mintAmount"
                 type="number"
                 value={mintAmount}
                 onChange={(e) => setMintAmount(Number(e.target.value) || 0)}
@@ -150,15 +155,17 @@ export function ERC20CreatorDemo() {
           <p className="text-sm font-semibold">Burn</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>From</Label>
+              <Label htmlFor="tok-erc20-burnFrom">From</Label>
               <Input
+                id="tok-erc20-burnFrom"
                 value={burnFrom}
                 onChange={(e) => setBurnFrom(e.target.value)}
               />
             </div>
             <div>
-              <Label>Amount</Label>
+              <Label htmlFor="tok-erc20-burnAmount">Amount</Label>
               <Input
+                id="tok-erc20-burnAmount"
                 type="number"
                 value={burnAmount}
                 onChange={(e) => setBurnAmount(Number(e.target.value) || 0)}
@@ -177,22 +184,25 @@ export function ERC20CreatorDemo() {
           <p className="text-sm font-semibold">Transfer</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>From</Label>
+              <Label htmlFor="tok-erc20-txFrom">From</Label>
               <Input
+                id="tok-erc20-txFrom"
                 value={transferFrom}
                 onChange={(e) => setTransferFrom(e.target.value)}
               />
             </div>
             <div>
-              <Label>To</Label>
+              <Label htmlFor="tok-erc20-txTo">To</Label>
               <Input
+                id="tok-erc20-txTo"
                 value={transferTo}
                 onChange={(e) => setTransferTo(e.target.value)}
               />
             </div>
             <div>
-              <Label>Amount</Label>
+              <Label htmlFor="tok-erc20-txAmount">Amount</Label>
               <Input
+                id="tok-erc20-txAmount"
                 type="number"
                 value={transferAmount}
                 onChange={(e) => setTransferAmount(Number(e.target.value) || 0)}

@@ -289,7 +289,7 @@ export function MerkleProofDemo() {
                   <TableCell>{i}</TableCell>
                   <TableCell>{item}</TableCell>
                   <TableCell>
-                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: "0.6rem" }}>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.6rem]">
                       {tree?.leaves[i]?.hash.slice(0, 16)}...
                     </code>
                   </TableCell>
@@ -306,8 +306,9 @@ export function MerkleProofDemo() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-red-600"
+                        className="h-8 w-8 text-red-600 dark:text-red-400"
                         onClick={() => handleRemoveItem(i)}
+                        aria-label="Remove item"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </Button>
@@ -350,7 +351,7 @@ export function MerkleProofDemo() {
               <p className="text-xs text-muted-foreground">
                 Leaf Hash
               </p>
-              <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all" style={{ fontSize: "0.7rem" }}>
+              <pre className="rounded-lg bg-muted p-3 overflow-x-auto break-all text-[0.7rem]">
                 <code>{proof.leaf}</code>
               </pre>
             </div>
@@ -364,7 +365,7 @@ export function MerkleProofDemo() {
                   <Badge variant="secondary">
                     {s.position}
                   </Badge>
-                  <code className="rounded bg-muted px-1.5 py-0.5 font-mono break-all" style={{ fontSize: "0.6rem" }}>
+                  <code className="rounded bg-muted px-1.5 py-0.5 font-mono break-all text-[0.6rem]">
                     {s.hash.slice(0, 24)}...
                   </code>
                 </div>

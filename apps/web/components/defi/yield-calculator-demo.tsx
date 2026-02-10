@@ -79,8 +79,9 @@ export function YieldCalculatorDemo() {
           <p className="text-sm font-semibold">Parameters</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Principal</Label>
+              <Label htmlFor="defi-yield-principal">Principal</Label>
               <Input
+                id="defi-yield-principal"
                 type="number"
                 value={principal}
                 onChange={(e) => setPrincipal(Number(e.target.value) || 0)}
@@ -88,8 +89,9 @@ export function YieldCalculatorDemo() {
               />
             </div>
             <div>
-              <Label>APR (%)</Label>
+              <Label htmlFor="defi-yield-apr">APR (%)</Label>
               <Input
+                id="defi-yield-apr"
                 type="number"
                 value={apr}
                 onChange={(e) => setApr(Number(e.target.value) || 0)}
@@ -165,7 +167,7 @@ export function YieldCalculatorDemo() {
                     })}
                   </TableCell>
                   <TableCell className="text-right">
-                    <span className="text-green-600">
+                    <span className="text-green-600 dark:text-green-400">
                       +$
                       {row.totalReturn.toLocaleString(undefined, {
                         maximumFractionDigits: 2,
@@ -196,7 +198,6 @@ export function YieldCalculatorDemo() {
               }))}
             xKey="strategy"
             yKeys={["totalReturn"]}
-            colors={["#40c057"]}
             height={220}
           />
           <p className="text-xs text-muted-foreground text-center">

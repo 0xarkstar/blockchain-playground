@@ -105,15 +105,17 @@ export function ERC1155MultiTokenDemo() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>To</Label>
+              <Label htmlFor="tok-1155-mintTo">To</Label>
               <Input
+                id="tok-1155-mintTo"
                 value={mintTo}
                 onChange={(e) => setMintTo(e.target.value)}
               />
             </div>
             <div>
-              <Label>Token ID</Label>
+              <Label htmlFor="tok-1155-mintTokenId">Token ID</Label>
               <Input
+                id="tok-1155-mintTokenId"
                 type="number"
                 value={mintTokenId}
                 onChange={(e) => setMintTokenId(Number(e.target.value) || 0)}
@@ -121,8 +123,9 @@ export function ERC1155MultiTokenDemo() {
               />
             </div>
             <div>
-              <Label>Amount</Label>
+              <Label htmlFor="tok-1155-mintAmount">Amount</Label>
               <Input
+                id="tok-1155-mintAmount"
                 type="number"
                 value={mintAmount}
                 onChange={(e) => setMintAmount(Number(e.target.value) || 0)}
@@ -132,8 +135,9 @@ export function ERC1155MultiTokenDemo() {
             </div>
           </div>
           <div>
-            <Label>URI (optional)</Label>
+            <Label htmlFor="tok-1155-mintUri">URI (optional)</Label>
             <Input
+              id="tok-1155-mintUri"
               value={mintUri}
               onChange={(e) => setMintUri(e.target.value)}
               placeholder="ipfs://..."
@@ -150,22 +154,25 @@ export function ERC1155MultiTokenDemo() {
           <p className="text-sm font-semibold">Transfer</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <Label>From</Label>
+              <Label htmlFor="tok-1155-tfFrom">From</Label>
               <Input
+                id="tok-1155-tfFrom"
                 value={tfFrom}
                 onChange={(e) => setTfFrom(e.target.value)}
               />
             </div>
             <div>
-              <Label>To</Label>
+              <Label htmlFor="tok-1155-tfTo">To</Label>
               <Input
+                id="tok-1155-tfTo"
                 value={tfTo}
                 onChange={(e) => setTfTo(e.target.value)}
               />
             </div>
             <div>
-              <Label>Token ID</Label>
+              <Label htmlFor="tok-1155-tfTokenId">Token ID</Label>
               <Input
+                id="tok-1155-tfTokenId"
                 type="number"
                 value={tfTokenId}
                 onChange={(e) => setTfTokenId(Number(e.target.value) || 0)}
@@ -173,8 +180,9 @@ export function ERC1155MultiTokenDemo() {
               />
             </div>
             <div>
-              <Label>Amount</Label>
+              <Label htmlFor="tok-1155-tfAmount">Amount</Label>
               <Input
+                id="tok-1155-tfAmount"
                 type="number"
                 value={tfAmount}
                 onChange={(e) => setTfAmount(Number(e.target.value) || 0)}

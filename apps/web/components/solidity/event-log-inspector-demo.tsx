@@ -108,8 +108,9 @@ export function EventLogInspectorDemo() {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-semibold">Event Definition</p>
           <div>
-            <Label>Event Name</Label>
+            <Label htmlFor="sol-event-name">Event Name</Label>
             <Input
+              id="sol-event-name"
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
             />
@@ -120,12 +121,12 @@ export function EventLogInspectorDemo() {
           {params.map((param, i) => (
             <div key={param.id} className="flex items-end gap-2">
               <div className="w-[130px]">
-                <Label>Type</Label>
+                <Label htmlFor={`sol-event-type-${i}`}>Type</Label>
                 <Select
                   value={param.type}
                   onValueChange={(v) => updateParam(i, "type", v)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger id={`sol-event-type-${i}`}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -138,33 +139,37 @@ export function EventLogInspectorDemo() {
                 </Select>
               </div>
               <div className="w-[100px]">
-                <Label>Name</Label>
+                <Label htmlFor={`sol-event-pname-${i}`}>Name</Label>
                 <Input
+                  id={`sol-event-pname-${i}`}
                   value={param.name}
                   onChange={(e) => updateParam(i, "name", e.target.value)}
                 />
               </div>
               <div className="flex-1">
-                <Label>Value</Label>
+                <Label htmlFor={`sol-event-pvalue-${i}`}>Value</Label>
                 <Input
+                  id={`sol-event-pvalue-${i}`}
                   value={param.value}
                   onChange={(e) => updateParam(i, "value", e.target.value)}
                 />
               </div>
               <div className="flex items-center gap-2 pb-1">
                 <Switch
+                  id={`sol-event-indexed-${i}`}
                   checked={param.indexed}
                   onCheckedChange={(checked) =>
                     updateParam(i, "indexed", checked)
                   }
                   disabled={!param.indexed && indexedCount >= 3}
                 />
-                <Label className="text-xs">Indexed</Label>
+                <Label htmlFor={`sol-event-indexed-${i}`} className="text-xs">Indexed</Label>
               </div>
               <Button
                 size="sm"
                 variant="ghost"
-                className="text-red-500 hover:text-red-700"
+                aria-label="Remove parameter"
+                className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                 onClick={() => removeParam(i)}
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -189,8 +194,8 @@ export function EventLogInspectorDemo() {
                     {log.topicDescriptions[i]}
                   </p>
                   <code
-                    className="rounded bg-muted px-1.5 py-0.5 font-mono"
-                    style={{ fontSize: 11, wordBreak: "break-all" }}
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px]"
+                    style={{ wordBreak: "break-all" }}
                   >
                     {topic}
                   </code>
@@ -205,8 +210,8 @@ export function EventLogInspectorDemo() {
                 Data (non-indexed ABI-encoded)
               </p>
               <pre
-                className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono"
-                style={{ fontSize: 11, wordBreak: "break-all" }}
+                className="rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono text-[11px]"
+                style={{ wordBreak: "break-all" }}
               >
                 <code>
                   {log.data || "0x (empty — all params are indexed)"}
@@ -273,12 +278,12 @@ export function EventLogInspectorDemo() {
             >
               <div className="rounded-lg border border-border bg-blue-50 dark:bg-blue-950 p-2">
                 <div className="flex items-center gap-1">
-                  <Badge className="text-xs bg-blue-600 text-white">
+                  <Badge className="text-xs bg-blue-600 dark:bg-blue-500 text-white">
                     topic[0]
                   </Badge>
                   <p className="text-xs font-semibold">Event Signature Hash</p>
                 </div>
-                <code className="font-mono" style={{ fontSize: 10 }}>
+                <code className="font-mono text-[10px]">
                   {log.topics[0]?.slice(0, 20)}...
                 </code>
               </div>
@@ -290,7 +295,7 @@ export function EventLogInspectorDemo() {
                     className="rounded-lg border border-border bg-green-50 dark:bg-green-950 p-2"
                   >
                     <div className="flex items-center gap-1">
-                      <Badge className="text-xs bg-green-600 text-white">
+                      <Badge className="text-xs bg-green-600 dark:bg-green-500 text-white">
                         topic[{i + 1}]
                       </Badge>
                       <p className="text-xs font-semibold">

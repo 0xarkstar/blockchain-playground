@@ -85,8 +85,9 @@ export function GasOptimizerDemo() {
             ))}
           </div>
           <div>
-            <Label>{countLabel}</Label>
+            <Label htmlFor="sol-gas-count">{countLabel}</Label>
             <Input
+              id="sol-gas-count"
               type="number"
               value={count}
               onChange={(e) => setCount(Number(e.target.value) || 1)}
@@ -110,7 +111,6 @@ export function GasOptimizerDemo() {
             ]}
             xKey="label"
             yKeys={["unoptimized", "optimized"]}
-            colors={["#fa5252", "#40c057"]}
             grouped
             height={200}
           />
@@ -120,7 +120,7 @@ export function GasOptimizerDemo() {
                 <p className="text-xs text-muted-foreground">
                   {comparison.unoptimized.label}
                 </p>
-                <p className="text-xl font-bold text-red-500">
+                <p className="text-xl font-bold text-red-500 dark:text-red-400">
                   {comparison.unoptimized.totalGas.toLocaleString()}
                 </p>
                 <p className="text-xs text-muted-foreground">gas</p>
@@ -131,7 +131,7 @@ export function GasOptimizerDemo() {
                 <p className="text-xs text-muted-foreground">
                   {comparison.optimized.label}
                 </p>
-                <p className="text-xl font-bold text-green-500">
+                <p className="text-xl font-bold text-green-500 dark:text-green-400">
                   {comparison.optimized.totalGas.toLocaleString()}
                 </p>
                 <p className="text-xs text-muted-foreground">gas</p>
@@ -159,7 +159,7 @@ export function GasOptimizerDemo() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex flex-col gap-1">
-            <p className="text-xs font-semibold text-red-500">
+            <p className="text-xs font-semibold text-red-500 dark:text-red-400">
               Unoptimized Breakdown
             </p>
             <Table>
@@ -192,7 +192,7 @@ export function GasOptimizerDemo() {
         </div>
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex flex-col gap-1">
-            <p className="text-xs font-semibold text-green-500">
+            <p className="text-xs font-semibold text-green-500 dark:text-green-400">
               Optimized Breakdown
             </p>
             <Table>

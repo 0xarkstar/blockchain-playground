@@ -37,8 +37,9 @@ export function VotingBooth({
           and your vote is valid, without revealing which voter you are.
         </p>
         <div>
-          <Label>Proposal</Label>
+          <Label htmlFor="azk-voting-proposal">Proposal</Label>
           <Input
+            id="azk-voting-proposal"
             value="Should the DAO fund the ZK education initiative?"
             readOnly
           />
@@ -47,30 +48,32 @@ export function VotingBooth({
           Your Vote:
         </p>
         <div className="flex items-center gap-0 rounded-lg border border-border overflow-hidden">
-          <button
+          <Button
             type="button"
-            className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
+            variant={voteChoice === "yes" ? "default" : "secondary"}
+            className={`flex-1 rounded-none ${
               voteChoice === "yes"
-                ? "bg-primary text-primary-foreground"
+                ? ""
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
             onClick={() => onVoteChoiceChange("yes")}
             disabled={phase !== "registered"}
           >
             Yes
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
-            className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
+            variant={voteChoice === "no" ? "default" : "secondary"}
+            className={`flex-1 rounded-none ${
               voteChoice === "no"
-                ? "bg-primary text-primary-foreground"
+                ? ""
                 : "bg-muted text-muted-foreground hover:bg-muted/80"
             }`}
             onClick={() => onVoteChoiceChange("no")}
             disabled={phase !== "registered"}
           >
             No
-          </button>
+          </Button>
         </div>
         {progressMessage && (
           <div className="flex items-center gap-1">

@@ -86,8 +86,9 @@ export function AbiEncoderDemo() {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-semibold">Function Definition</p>
           <div>
-            <Label>Function Name</Label>
+            <Label htmlFor="sol-abi-funcname">Function Name</Label>
             <Input
+              id="sol-abi-funcname"
               value={funcName}
               onChange={(e) => setFuncName(e.target.value)}
             />
@@ -96,12 +97,12 @@ export function AbiEncoderDemo() {
           {params.map((param, i) => (
             <div key={param.id} className="flex items-end gap-2">
               <div className="w-[130px]">
-                <Label>Type</Label>
+                <Label htmlFor={`sol-abi-type-${i}`}>Type</Label>
                 <Select
                   value={param.type}
                   onValueChange={(v) => updateParam(i, "type", v)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger id={`sol-abi-type-${i}`}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -114,15 +115,17 @@ export function AbiEncoderDemo() {
                 </Select>
               </div>
               <div className="w-[120px]">
-                <Label>Name</Label>
+                <Label htmlFor={`sol-abi-name-${i}`}>Name</Label>
                 <Input
+                  id={`sol-abi-name-${i}`}
                   value={param.name}
                   onChange={(e) => updateParam(i, "name", e.target.value)}
                 />
               </div>
               <div className="flex-1">
-                <Label>Value</Label>
+                <Label htmlFor={`sol-abi-value-${i}`}>Value</Label>
                 <Input
+                  id={`sol-abi-value-${i}`}
                   value={param.value}
                   onChange={(e) => updateParam(i, "value", e.target.value)}
                 />
@@ -130,7 +133,8 @@ export function AbiEncoderDemo() {
               <Button
                 size="sm"
                 variant="ghost"
-                className="text-red-500 hover:text-red-700"
+                aria-label="Remove parameter"
+                className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                 onClick={() => removeParam(i)}
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -180,8 +184,7 @@ export function AbiEncoderDemo() {
                       word {i}
                     </Badge>
                     <code
-                      className="rounded bg-muted px-1.5 py-0.5 font-mono flex-1"
-                      style={{ fontSize: 11 }}
+                      className="rounded bg-muted px-1.5 py-0.5 font-mono flex-1 text-[11px]"
                     >
                       {encoded}
                     </code>
@@ -192,9 +195,8 @@ export function AbiEncoderDemo() {
 
             <p className="text-xs font-semibold">Full Calldata (Color-Coded)</p>
             <div
-              className="rounded-lg border border-border bg-card p-2 font-mono"
+              className="rounded-lg border border-border bg-card p-2 font-mono text-[11px]"
               style={{
-                fontSize: 11,
                 wordBreak: "break-all",
                 lineHeight: 1.8,
               }}

@@ -75,8 +75,9 @@ export function SchnorrProtocolDemo() {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-semibold">Run Protocol</p>
           <div>
-            <Label>Number of rounds</Label>
+            <Label htmlFor="zk-schnorr-rounds">Number of rounds</Label>
             <Input
+              id="zk-schnorr-rounds"
               type="number"
               value={numRounds}
               onChange={(e) => setNumRounds(Number(e.target.value) || 1)}

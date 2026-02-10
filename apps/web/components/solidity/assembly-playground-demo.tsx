@@ -179,7 +179,7 @@ export function AssemblyPlaygroundDemo() {
           <p className="text-sm font-semibold">Instructions</p>
           <div className="flex items-center gap-2">
             <Select value={newOpcode} onValueChange={(v) => setNewOpcode(v)}>
-              <SelectTrigger className="flex-1">
+              <SelectTrigger id="assembly-opcode-select" className="flex-1">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -244,7 +244,8 @@ export function AssemblyPlaygroundDemo() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="text-red-500 hover:text-red-700"
+                      aria-label="Remove instruction"
+                      className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                       onClick={() => removeInstruction(i)}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
@@ -266,7 +267,7 @@ export function AssemblyPlaygroundDemo() {
             </Button>
             <Button
               size="sm"
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white"
               onClick={runAll}
             >
               <Play className="h-4 w-4 mr-1" />
@@ -278,7 +279,7 @@ export function AssemblyPlaygroundDemo() {
             </Button>
             <Badge variant="secondary">Gas: {state.gasUsed}</Badge>
             {state.error && (
-              <Badge className="bg-red-600 text-white">{state.error}</Badge>
+              <Badge className="bg-red-600 dark:bg-red-500 text-white">{state.error}</Badge>
             )}
           </div>
         </div>
@@ -296,7 +297,7 @@ export function AssemblyPlaygroundDemo() {
                   <Badge variant="outline" className="text-xs">
                     {stackEntries.length - 1 - i}
                   </Badge>
-                  <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 11 }}>
+                  <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px]">
                     {val.toString()}
                   </code>
                 </div>
@@ -327,7 +328,7 @@ export function AssemblyPlaygroundDemo() {
                         </code>
                       </TableCell>
                       <TableCell>
-                        <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 10 }}>
+                        <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]">
                           {val}
                         </code>
                       </TableCell>
@@ -361,7 +362,7 @@ export function AssemblyPlaygroundDemo() {
                         </code>
                       </TableCell>
                       <TableCell>
-                        <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 10 }}>
+                        <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]">
                           {val}
                         </code>
                       </TableCell>
@@ -384,7 +385,6 @@ export function AssemblyPlaygroundDemo() {
               data={stackHeightData}
               xKey="step"
               yKeys={["height"]}
-              colors={["#7950f2"]}
               height={200}
             />
             <p className="text-xs text-muted-foreground text-center">

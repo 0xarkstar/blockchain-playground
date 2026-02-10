@@ -132,7 +132,7 @@ export function ProxyPatternsDemo() {
           <p className="text-sm text-muted-foreground">{info.description}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-1">
-              <p className="text-xs font-semibold text-green-600">Pros</p>
+              <p className="text-xs font-semibold text-green-600 dark:text-green-400">Pros</p>
               {info.pros.map((pro, i) => (
                 <p key={i} className="text-xs">
                   + {pro}
@@ -140,7 +140,7 @@ export function ProxyPatternsDemo() {
               ))}
             </div>
             <div className="flex flex-col gap-1">
-              <p className="text-xs font-semibold text-red-600">Cons</p>
+              <p className="text-xs font-semibold text-red-600 dark:text-red-400">Cons</p>
               {info.cons.map((con, i) => (
                 <p key={i} className="text-xs">
                   - {con}
@@ -156,19 +156,21 @@ export function ProxyPatternsDemo() {
           <p className="text-sm font-semibold">Upgrade Simulation</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>Admin</Label>
-              <Input value={state.admin} readOnly className="bg-muted" />
+              <Label htmlFor="sol-proxy-admin">Admin</Label>
+              <Input id="sol-proxy-admin" value={state.admin} readOnly className="bg-muted" />
             </div>
             <div>
-              <Label>Caller</Label>
+              <Label htmlFor="sol-proxy-caller">Caller</Label>
               <Input
+                id="sol-proxy-caller"
                 value={caller}
                 onChange={(e) => setCaller(e.target.value)}
               />
             </div>
             <div>
-              <Label>New Implementation</Label>
+              <Label htmlFor="sol-proxy-newimpl">New Implementation</Label>
               <Input
+                id="sol-proxy-newimpl"
                 value={newImpl}
                 onChange={(e) => setNewImpl(e.target.value)}
               />
@@ -288,8 +290,8 @@ export function ProxyPatternsDemo() {
                 <TableCell>Implementation</TableCell>
                 <TableCell>
                   <code
-                    className="rounded bg-muted px-1.5 py-0.5 font-mono"
-                    style={{ fontSize: 10, wordBreak: "break-all" }}
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]"
+                    style={{ wordBreak: "break-all" }}
                   >
                     {slots.implementation}
                   </code>
@@ -299,8 +301,8 @@ export function ProxyPatternsDemo() {
                 <TableCell>Admin</TableCell>
                 <TableCell>
                   <code
-                    className="rounded bg-muted px-1.5 py-0.5 font-mono"
-                    style={{ fontSize: 10, wordBreak: "break-all" }}
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]"
+                    style={{ wordBreak: "break-all" }}
                   >
                     {slots.admin}
                   </code>
@@ -310,8 +312,8 @@ export function ProxyPatternsDemo() {
                 <TableCell>Beacon</TableCell>
                 <TableCell>
                   <code
-                    className="rounded bg-muted px-1.5 py-0.5 font-mono"
-                    style={{ fontSize: 10, wordBreak: "break-all" }}
+                    className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px]"
+                    style={{ wordBreak: "break-all" }}
                   >
                     {slots.beacon}
                   </code>

@@ -29,8 +29,9 @@ export function FlashLoanDemo() {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-semibold">Flash Loan Parameters</p>
           <div>
-            <Label>Borrow Amount</Label>
+            <Label htmlFor="defi-flash-borrow">Borrow Amount</Label>
             <Input
+              id="defi-flash-borrow"
               type="number"
               value={borrowAmount}
               onChange={(e) => setBorrowAmount(Number(e.target.value) || 0)}
@@ -38,8 +39,9 @@ export function FlashLoanDemo() {
             />
           </div>
           <div>
-            <Label>Protocol Fee (%)</Label>
+            <Label htmlFor="defi-flash-fee">Protocol Fee (%)</Label>
             <Input
+              id="defi-flash-fee"
               type="number"
               value={feeRate}
               onChange={(e) => setFeeRate(Number(e.target.value) || 0)}
@@ -49,8 +51,9 @@ export function FlashLoanDemo() {
             />
           </div>
           <div>
-            <Label>Arbitrage Profit (before fee)</Label>
+            <Label htmlFor="defi-flash-profit">Arbitrage Profit (before fee)</Label>
             <Input
+              id="defi-flash-profit"
               type="number"
               value={arbitrageProfit}
               onChange={(e) => setArbitrageProfit(Number(e.target.value) || 0)}
@@ -140,7 +143,7 @@ export function FlashLoanDemo() {
               <TableRow>
                 <TableCell>Net Profit</TableCell>
                 <TableCell className="text-right">
-                  <span className={`font-semibold ${result.profit > 0 ? "text-green-600" : "text-red-600"}`}>
+                  <span className={`font-semibold ${result.profit > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
                     $
                     {result.profit.toLocaleString(undefined, {
                       maximumFractionDigits: 2,

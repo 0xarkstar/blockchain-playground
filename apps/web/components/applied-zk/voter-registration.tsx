@@ -95,6 +95,7 @@ export function VoterRegistration({
                         className="h-6 w-6"
                         onClick={() => handleCopy(voter.commitmentHex)}
                         title={copiedHex === voter.commitmentHex ? "Copied" : "Copy"}
+                        aria-label="Copy to clipboard"
                       >
                         {copiedHex === voter.commitmentHex ? (
                           <Check className="h-3 w-3" />

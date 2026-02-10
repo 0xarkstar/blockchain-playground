@@ -79,12 +79,12 @@ export function LiquidationSimulatorDemo() {
     : "∞";
 
   const hfColorClass = result.liquidatable
-    ? "text-red-600"
+    ? "text-red-600 dark:text-red-400"
     : result.healthFactor < 1.2
-      ? "text-orange-600"
+      ? "text-orange-600 dark:text-orange-400"
       : result.healthFactor < 1.5
-        ? "text-yellow-600"
-        : "text-green-600";
+        ? "text-yellow-600 dark:text-yellow-400"
+        : "text-green-600 dark:text-green-400";
 
   const hfBadgeClass = result.liquidatable
     ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
@@ -123,8 +123,9 @@ export function LiquidationSimulatorDemo() {
           <p className="text-sm font-semibold">Position Setup</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Initial Collateral Price</Label>
+              <Label htmlFor="defi-liq-initPrice">Initial Collateral Price</Label>
               <Input
+                id="defi-liq-initPrice"
                 type="number"
                 value={initialPrice}
                 onChange={(e) => setInitialPrice(Number(e.target.value) || 0)}
@@ -132,8 +133,9 @@ export function LiquidationSimulatorDemo() {
               />
             </div>
             <div>
-              <Label>Collateral Amount</Label>
+              <Label htmlFor="defi-liq-colAmount">Collateral Amount</Label>
               <Input
+                id="defi-liq-colAmount"
                 type="number"
                 value={collateralAmount}
                 onChange={(e) => setCollateralAmount(Number(e.target.value) || 0)}
@@ -144,8 +146,9 @@ export function LiquidationSimulatorDemo() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Debt Amount (USD)</Label>
+              <Label htmlFor="defi-liq-debtAmount">Debt Amount (USD)</Label>
               <Input
+                id="defi-liq-debtAmount"
                 type="number"
                 value={debtAmount}
                 onChange={(e) => setDebtAmount(Number(e.target.value) || 0)}
@@ -153,8 +156,9 @@ export function LiquidationSimulatorDemo() {
               />
             </div>
             <div>
-              <Label>Liquidation Threshold</Label>
+              <Label htmlFor="defi-liq-liqThreshold">Liquidation Threshold</Label>
               <Input
+                id="defi-liq-liqThreshold"
                 type="number"
                 value={liquidationThreshold}
                 onChange={(e) => setLiquidationThreshold(Number(e.target.value) || 0)}
@@ -165,8 +169,9 @@ export function LiquidationSimulatorDemo() {
             </div>
           </div>
           <div>
-            <Label>Liquidation Bonus (%)</Label>
+            <Label htmlFor="defi-liq-bonus">Liquidation Bonus (%)</Label>
             <Input
+              id="defi-liq-bonus"
               type="number"
               value={liquidationBonus}
               onChange={(e) => setLiquidationBonus(Number(e.target.value) || 0)}
@@ -276,7 +281,7 @@ export function LiquidationSimulatorDemo() {
               <TableRow>
                 <TableCell>Liquidation Trigger Price</TableCell>
                 <TableCell className="text-right">
-                  <span className="font-semibold text-red-600">
+                  <span className="font-semibold text-red-600 dark:text-red-400">
                     ${result.liqPrice.toFixed(2)}
                   </span>
                 </TableCell>
@@ -311,7 +316,7 @@ export function LiquidationSimulatorDemo() {
                   <TableRow>
                     <TableCell>Liquidation Bonus (Liquidator Profit)</TableCell>
                     <TableCell className="text-right">
-                      <span className="font-semibold text-green-600">
+                      <span className="font-semibold text-green-600 dark:text-green-400">
                         ${result.bonusValue.toFixed(2)}
                       </span>
                     </TableCell>

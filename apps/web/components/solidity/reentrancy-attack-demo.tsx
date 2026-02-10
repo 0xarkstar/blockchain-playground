@@ -74,8 +74,9 @@ export function ReentrancyAttackDemo() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>Victim Balance (ETH)</Label>
+              <Label htmlFor="sol-reentry-victim">Victim Balance (ETH)</Label>
               <Input
+                id="sol-reentry-victim"
                 type="number"
                 value={victimBalance}
                 onChange={(e) => setVictimBalance(Number(e.target.value) || 0)}
@@ -83,8 +84,9 @@ export function ReentrancyAttackDemo() {
               />
             </div>
             <div>
-              <Label>Attacker Deposit (ETH)</Label>
+              <Label htmlFor="sol-reentry-deposit">Attacker Deposit (ETH)</Label>
               <Input
+                id="sol-reentry-deposit"
                 type="number"
                 value={attackerDeposit}
                 onChange={(e) => setAttackerDeposit(Number(e.target.value) || 1)}
@@ -93,8 +95,9 @@ export function ReentrancyAttackDemo() {
             </div>
             {defense === "vulnerable" && (
               <div>
-                <Label>Max Reentrancy Depth</Label>
+                <Label htmlFor="sol-reentry-depth">Max Reentrancy Depth</Label>
                 <Input
+                  id="sol-reentry-depth"
                   type="number"
                   value={maxDepth}
                   onChange={(e) => setMaxDepth(Number(e.target.value) || 1)}
@@ -112,7 +115,7 @@ export function ReentrancyAttackDemo() {
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold">Result</p>
             <Badge
-              className={`text-sm px-3 py-1 ${simulation.attackSuccessful ? "bg-red-600 text-white" : "bg-green-600 text-white"}`}
+              className={`text-sm px-3 py-1 ${simulation.attackSuccessful ? "bg-red-600 dark:bg-red-500 text-white" : "bg-green-600 dark:bg-green-500 text-white"}`}
             >
               {simulation.attackSuccessful
                 ? "ATTACK SUCCESSFUL"
@@ -208,8 +211,8 @@ export function ReentrancyAttackDemo() {
                       <Badge
                         className={`text-xs ${
                           i === simulation.totalReentrancyDepth - 1
-                            ? "bg-red-600 text-white"
-                            : "bg-orange-600 text-white"
+                            ? "bg-red-600 dark:bg-red-500 text-white"
+                            : "bg-orange-600 dark:bg-orange-500 text-white"
                         }`}
                       >
                         Depth {i + 1}
@@ -239,15 +242,15 @@ export function ReentrancyAttackDemo() {
                     <Badge
                       className={`text-xs ${
                         frame.status === "reverted"
-                          ? "bg-red-600 text-white"
+                          ? "bg-red-600 dark:bg-red-500 text-white"
                           : frame.status === "success"
-                            ? "bg-green-600 text-white"
-                            : "bg-yellow-600 text-white"
+                            ? "bg-green-600 dark:bg-green-500 text-white"
+                            : "bg-yellow-600 dark:bg-yellow-500 text-white"
                       }`}
                     >
                       {frame.status}
                     </Badge>
-                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 11 }}>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px]">
                       {frame.caller} → {frame.target}.{frame.functionName}()
                     </code>
                     {frame.ethValue > 0 && (

@@ -117,7 +117,7 @@ export function AccessControlDemo() {
           <p className="text-sm font-semibold">Role Hierarchy</p>
           <div className="rounded-lg border border-border bg-muted p-4 text-center">
             <div className="flex flex-col gap-1 items-center">
-              <Badge className="bg-red-600 text-white text-sm px-3 py-1">
+              <Badge className="bg-red-600 dark:bg-red-500 text-white text-sm px-3 py-1">
                 DEFAULT_ADMIN
               </Badge>
               <p className="text-xs text-muted-foreground">
@@ -126,14 +126,14 @@ export function AccessControlDemo() {
               <div className="flex items-start gap-8 justify-center mt-2">
                 <div className="flex flex-col items-center gap-1">
                   <p className="text-xs text-muted-foreground">|</p>
-                  <Badge className="bg-violet-600 text-white">MINTER</Badge>
+                  <Badge className="bg-violet-600 dark:bg-violet-500 text-white">MINTER</Badge>
                   <p className="text-xs text-muted-foreground">
                     can mint tokens
                   </p>
                 </div>
                 <div className="flex flex-col items-center gap-1">
                   <p className="text-xs text-muted-foreground">|</p>
-                  <Badge className="bg-orange-600 text-white">PAUSER</Badge>
+                  <Badge className="bg-orange-600 dark:bg-orange-500 text-white">PAUSER</Badge>
                   <p className="text-xs text-muted-foreground">
                     can pause contract
                   </p>
@@ -191,27 +191,29 @@ export function AccessControlDemo() {
           <p className="text-sm font-semibold">Role Management</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Caller (msg.sender)</Label>
+              <Label htmlFor="sol-access-caller">Caller (msg.sender)</Label>
               <Input
+                id="sol-access-caller"
                 value={caller}
                 onChange={(e) => setCaller(e.target.value)}
               />
             </div>
             <div>
-              <Label>Target Account</Label>
+              <Label htmlFor="sol-access-target">Target Account</Label>
               <Input
+                id="sol-access-target"
                 value={targetAccount}
                 onChange={(e) => setTargetAccount(e.target.value)}
               />
             </div>
           </div>
           <div>
-            <Label>Role</Label>
+            <Label htmlFor="sol-access-role">Role</Label>
             <Select
               value={selectedRole}
               onValueChange={(v) => setSelectedRole(v)}
             >
-              <SelectTrigger>
+              <SelectTrigger id="sol-access-role">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -226,28 +228,28 @@ export function AccessControlDemo() {
           <div className="flex items-center gap-2">
             <Button
               size="sm"
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white"
               onClick={handleGrant}
             >
               Grant
             </Button>
             <Button
               size="sm"
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white"
               onClick={handleRevoke}
             >
               Revoke
             </Button>
             <Button
               size="sm"
-              className="bg-yellow-600 hover:bg-yellow-700 text-white"
+              className="bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600 text-white"
               onClick={handleRenounce}
             >
               Renounce
             </Button>
             <Button
               size="sm"
-              className="bg-violet-600 hover:bg-violet-700 text-white"
+              className="bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600 text-white"
               onClick={handleTransfer}
             >
               Transfer Ownership
@@ -261,19 +263,20 @@ export function AccessControlDemo() {
           <p className="text-sm font-semibold">Function Access Check</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Caller</Label>
+              <Label htmlFor="sol-access-checkcaller">Caller</Label>
               <Input
+                id="sol-access-checkcaller"
                 value={checkCaller}
                 onChange={(e) => setCheckCaller(e.target.value)}
               />
             </div>
             <div>
-              <Label>Required Role</Label>
+              <Label htmlFor="sol-access-checkrole">Required Role</Label>
               <Select
                 value={checkRole}
                 onValueChange={(v) => setCheckRole(v)}
               >
-                <SelectTrigger>
+                <SelectTrigger id="sol-access-checkrole">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

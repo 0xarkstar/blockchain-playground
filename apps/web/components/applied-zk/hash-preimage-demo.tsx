@@ -239,11 +239,12 @@ export function HashPreimageDemo() {
                     Step 1: Enter Secret
                   </p>
                   <div>
-                    <Label>Secret number</Label>
+                    <Label htmlFor="azk-hashpreimage-secret">Secret number</Label>
                     <p className="text-xs text-muted-foreground mb-1">
                       The value you want to prove knowledge of without revealing it
                     </p>
                     <Input
+                      id="azk-hashpreimage-secret"
                       value={secretInput}
                       onChange={(e) => setSecretInput(e.target.value)}
                       placeholder="Enter a number"
@@ -278,7 +279,7 @@ export function HashPreimageDemo() {
                       <pre className="flex-1 rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
                         <code>{truncateHex(poseidonHash, 16)}</code>
                       </pre>
-                      <Button variant="ghost" size="icon" onClick={handleCopy} title={copied ? "Copied" : "Copy"}>
+                      <Button variant="ghost" size="icon" onClick={handleCopy} title={copied ? "Copied" : "Copy"} aria-label="Copy to clipboard">
                         {copied ? (
                           <Check className="h-4 w-4" />
                         ) : (
@@ -329,13 +330,15 @@ export function HashPreimageDemo() {
                         Generated
                       </Badge>
                     </div>
-                    <button
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setProofExpanded(!proofExpanded)}
-                      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground h-auto p-0"
                     >
                       {proofExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
                       {proofExpanded ? "Hide" : "Show"} proof data
-                    </button>
+                    </Button>
                     {proofExpanded && (
                       <div className="flex flex-col gap-1">
                         <p className="text-xs font-medium">
@@ -408,9 +411,9 @@ export function HashPreimageDemo() {
                       disabled={phase === "verifying"}
                       className={
                         verificationResult === true
-                          ? "bg-green-600 hover:bg-green-700"
+                          ? "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
                           : verificationResult === false
-                            ? "bg-red-600 hover:bg-red-700"
+                            ? "bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
                             : ""
                       }
                     >

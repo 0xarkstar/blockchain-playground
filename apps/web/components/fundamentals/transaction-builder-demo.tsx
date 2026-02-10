@@ -232,7 +232,8 @@ export function TransactionBuilderDemo() {
       <div className="flex items-center gap-2">
         {steps.map((step, i) => (
           <div key={i} className="flex items-center gap-2">
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setActiveStep(i)}
               className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
                 activeStep === i
@@ -246,7 +247,7 @@ export function TransactionBuilderDemo() {
                 {i + 1}
               </span>
               <span className="hidden sm:inline">{step.label}</span>
-            </button>
+            </Button>
             {i < steps.length - 1 && (
               <div className="h-px w-4 bg-border" />
             )}
@@ -259,16 +260,18 @@ export function TransactionBuilderDemo() {
         <div className="rounded-lg border border-border bg-card p-4 mt-4">
           <div className="flex flex-col gap-4">
             <div>
-              <Label>Recipient Address</Label>
+              <Label htmlFor="tx-recipient">Recipient Address</Label>
               <Input
+                id="tx-recipient"
                 placeholder="0x..."
                 value={to}
                 onChange={(e) => setTo(e.target.value)}
               />
             </div>
             <div>
-              <Label>Value (ETH)</Label>
+              <Label htmlFor="tx-value">Value (ETH)</Label>
               <Input
+                id="tx-value"
                 type="number"
                 value={value}
                 onChange={(e) => setValue(Number(e.target.value))}

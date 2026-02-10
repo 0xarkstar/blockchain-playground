@@ -129,7 +129,7 @@ export function StorageLayoutDemo() {
               value={newType}
               onValueChange={(v) => setNewType(v as SolidityStorageType)}
             >
-              <SelectTrigger className="w-[150px]">
+              <SelectTrigger id="storage-variable-type" className="w-[150px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -176,7 +176,8 @@ export function StorageLayoutDemo() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-red-500 hover:text-red-700"
+                      aria-label="Remove variable"
+                      className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
                       onClick={() => removeVariable(i)}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
@@ -260,7 +261,6 @@ export function StorageLayoutDemo() {
               data={efficiencyPieData}
               nameKey="name"
               valueKey="value"
-              colors={["#40c057", "#868e96"]}
               height={200}
             />
             <p className="text-xs text-muted-foreground text-center">

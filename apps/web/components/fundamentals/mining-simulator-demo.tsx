@@ -147,7 +147,7 @@ export function MiningSimulatorDemo() {
           </Button>
         ) : (
           <Button
-            className="bg-red-600 hover:bg-red-700"
+            className="bg-red-600 dark:bg-red-500 hover:bg-red-700 dark:hover:bg-red-600"
             onClick={handleStop}
           >
             <Square className="h-4 w-4 mr-2" />
@@ -164,7 +164,7 @@ export function MiningSimulatorDemo() {
                 Mining Progress
               </p>
               {stats.found && (
-                <Badge className="bg-green-600 text-white">
+                <Badge className="bg-green-600 dark:bg-green-500 text-white">
                   Block Found!
                 </Badge>
               )}

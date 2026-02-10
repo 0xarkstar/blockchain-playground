@@ -73,15 +73,17 @@ export function TokenVestingDemo() {
           <p className="text-sm font-semibold">Vesting Configuration</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>Beneficiary</Label>
+              <Label htmlFor="tok-vest-beneficiary">Beneficiary</Label>
               <Input
+                id="tok-vest-beneficiary"
                 value={beneficiary}
                 onChange={(e) => setBeneficiary(e.target.value)}
               />
             </div>
             <div>
-              <Label>Total Amount</Label>
+              <Label htmlFor="tok-vest-totalAmount">Total Amount</Label>
               <Input
+                id="tok-vest-totalAmount"
                 type="number"
                 value={totalAmount}
                 onChange={(e) => setTotalAmount(Number(e.target.value) || 0)}
@@ -89,12 +91,12 @@ export function TokenVestingDemo() {
               />
             </div>
             <div>
-              <Label>Type</Label>
+              <Label htmlFor="tok-vest-type">Type</Label>
               <Select
                 value={vestingType}
                 onValueChange={(v) => setVestingType(v as VestingType)}
               >
-                <SelectTrigger>
+                <SelectTrigger id="tok-vest-type">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -107,8 +109,9 @@ export function TokenVestingDemo() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <Label>Start Time</Label>
+              <Label htmlFor="tok-vest-startTime">Start Time</Label>
               <Input
+                id="tok-vest-startTime"
                 type="number"
                 value={startTime}
                 onChange={(e) => setStartTime(Number(e.target.value) || 0)}
@@ -116,8 +119,9 @@ export function TokenVestingDemo() {
               />
             </div>
             <div>
-              <Label>Cliff Duration</Label>
+              <Label htmlFor="tok-vest-cliffDur">Cliff Duration</Label>
               <Input
+                id="tok-vest-cliffDur"
                 type="number"
                 value={cliffDuration}
                 onChange={(e) => setCliffDuration(Number(e.target.value) || 0)}
@@ -125,8 +129,9 @@ export function TokenVestingDemo() {
               />
             </div>
             <div>
-              <Label>Total Duration</Label>
+              <Label htmlFor="tok-vest-totalDur">Total Duration</Label>
               <Input
+                id="tok-vest-totalDur"
                 type="number"
                 value={totalDuration}
                 onChange={(e) => setTotalDuration(Number(e.target.value) || 0)}
@@ -144,8 +149,9 @@ export function TokenVestingDemo() {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-semibold">Time Control</p>
           <div>
-            <Label>Current Time</Label>
+            <Label htmlFor="tok-vest-currentTime">Current Time</Label>
             <Input
+              id="tok-vest-currentTime"
               type="number"
               value={currentTime}
               onChange={(e) => setCurrentTime(Number(e.target.value) || 0)}

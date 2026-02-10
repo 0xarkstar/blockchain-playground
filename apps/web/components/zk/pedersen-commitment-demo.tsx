@@ -100,8 +100,9 @@ export function PedersenCommitmentDemo() {
           <p className="text-sm font-semibold">Create Commitment</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Value (v)</Label>
+              <Label htmlFor="zk-pedersen-value">Value (v)</Label>
               <Input
+                id="zk-pedersen-value"
                 type="number"
                 value={value}
                 onChange={(e) => setValue(Number(e.target.value) || 0)}
@@ -110,8 +111,9 @@ export function PedersenCommitmentDemo() {
               />
             </div>
             <div>
-              <Label>Randomness (r)</Label>
+              <Label htmlFor="zk-pedersen-randomness">Randomness (r)</Label>
               <Input
+                id="zk-pedersen-randomness"
                 type="number"
                 value={randomness}
                 onChange={(e) => setRandomness(Number(e.target.value) || 0)}
@@ -156,8 +158,9 @@ export function PedersenCommitmentDemo() {
             <p className="text-sm font-semibold mt-4">Verify</p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label>Value</Label>
+                <Label htmlFor="zk-pedersen-verify-value">Value</Label>
                 <Input
+                  id="zk-pedersen-verify-value"
                   type="number"
                   value={verifyVal}
                   onChange={(e) => setVerifyVal(Number(e.target.value) || 0)}
@@ -166,8 +169,9 @@ export function PedersenCommitmentDemo() {
                 />
               </div>
               <div>
-                <Label>Randomness</Label>
+                <Label htmlFor="zk-pedersen-verify-rand">Randomness</Label>
                 <Input
+                  id="zk-pedersen-verify-rand"
                   type="number"
                   value={verifyRand}
                   onChange={(e) => setVerifyRand(Number(e.target.value) || 0)}
@@ -306,20 +310,20 @@ export function PedersenCommitmentDemo() {
           </p>
           <div className="grid grid-cols-4 gap-4">
             <div>
-              <Label>v1</Label>
-              <Input type="number" value={v1} onChange={(e) => setV1(Number(e.target.value) || 0)} min={0} max={10} />
+              <Label htmlFor="zk-pedersen-v1">v1</Label>
+              <Input id="zk-pedersen-v1" type="number" value={v1} onChange={(e) => setV1(Number(e.target.value) || 0)} min={0} max={10} />
             </div>
             <div>
-              <Label>r1</Label>
-              <Input type="number" value={r1} onChange={(e) => setR1(Number(e.target.value) || 0)} min={0} max={10} />
+              <Label htmlFor="zk-pedersen-r1">r1</Label>
+              <Input id="zk-pedersen-r1" type="number" value={r1} onChange={(e) => setR1(Number(e.target.value) || 0)} min={0} max={10} />
             </div>
             <div>
-              <Label>v2</Label>
-              <Input type="number" value={v2} onChange={(e) => setV2(Number(e.target.value) || 0)} min={0} max={10} />
+              <Label htmlFor="zk-pedersen-v2">v2</Label>
+              <Input id="zk-pedersen-v2" type="number" value={v2} onChange={(e) => setV2(Number(e.target.value) || 0)} min={0} max={10} />
             </div>
             <div>
-              <Label>r2</Label>
-              <Input type="number" value={r2} onChange={(e) => setR2(Number(e.target.value) || 0)} min={0} max={10} />
+              <Label htmlFor="zk-pedersen-r2">r2</Label>
+              <Input id="zk-pedersen-r2" type="number" value={r2} onChange={(e) => setR2(Number(e.target.value) || 0)} min={0} max={10} />
             </div>
           </div>
           <Button variant="secondary" className="bg-violet-100 text-violet-800 hover:bg-violet-200 dark:bg-violet-900 dark:text-violet-300" onClick={handleHomomorphic}>

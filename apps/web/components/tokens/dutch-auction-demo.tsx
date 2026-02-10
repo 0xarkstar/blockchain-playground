@@ -82,15 +82,17 @@ export function DutchAuctionDemo() {
           <p className="text-sm font-semibold">Auction Configuration</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Seller</Label>
+              <Label htmlFor="tok-auction-seller">Seller</Label>
               <Input
+                id="tok-auction-seller"
                 value={seller}
                 onChange={(e) => setSeller(e.target.value)}
               />
             </div>
             <div>
-              <Label>Token ID</Label>
+              <Label htmlFor="tok-auction-tokenId">Token ID</Label>
               <Input
+                id="tok-auction-tokenId"
                 type="number"
                 value={tokenId}
                 onChange={(e) => setTokenId(Number(e.target.value) || 0)}
@@ -100,8 +102,9 @@ export function DutchAuctionDemo() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Start Price</Label>
+              <Label htmlFor="tok-auction-startPrice">Start Price</Label>
               <Input
+                id="tok-auction-startPrice"
                 type="number"
                 value={startPrice}
                 onChange={(e) => setStartPrice(Number(e.target.value) || 0)}
@@ -110,8 +113,9 @@ export function DutchAuctionDemo() {
               />
             </div>
             <div>
-              <Label>End Price</Label>
+              <Label htmlFor="tok-auction-endPrice">End Price</Label>
               <Input
+                id="tok-auction-endPrice"
                 type="number"
                 value={endPrice}
                 onChange={(e) => setEndPrice(Number(e.target.value) || 0)}
@@ -122,16 +126,18 @@ export function DutchAuctionDemo() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Start Time</Label>
+              <Label htmlFor="tok-auction-startTime">Start Time</Label>
               <Input
+                id="tok-auction-startTime"
                 type="number"
                 value={startTime}
                 onChange={(e) => setStartTime(Number(e.target.value) || 0)}
               />
             </div>
             <div>
-              <Label>Duration</Label>
+              <Label htmlFor="tok-auction-duration">Duration</Label>
               <Input
+                id="tok-auction-duration"
                 type="number"
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value) || 0)}
@@ -150,16 +156,18 @@ export function DutchAuctionDemo() {
           <p className="text-sm font-semibold">Bid</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Current Time</Label>
+              <Label htmlFor="tok-auction-currentTime">Current Time</Label>
               <Input
+                id="tok-auction-currentTime"
                 type="number"
                 value={currentTime}
                 onChange={(e) => setCurrentTime(Number(e.target.value) || 0)}
               />
             </div>
             <div>
-              <Label>Buyer</Label>
+              <Label htmlFor="tok-auction-buyer">Buyer</Label>
               <Input
+                id="tok-auction-buyer"
                 value={buyer}
                 onChange={(e) => setBuyer(e.target.value)}
               />
@@ -264,7 +272,6 @@ export function DutchAuctionDemo() {
             }))}
             xKey="time"
             yKeys={["price"]}
-            colors={["#fa5252"]}
             height={280}
           />
         </div>

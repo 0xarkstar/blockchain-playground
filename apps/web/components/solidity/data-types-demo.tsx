@@ -72,7 +72,7 @@ export function DataTypesDemo() {
           <p className="text-sm font-semibold">Input</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <Label>Solidity Type</Label>
+              <Label htmlFor="sol-datatypes-type">Solidity Type</Label>
               <Select
                 value={selectedType}
                 onValueChange={(v) => {
@@ -81,7 +81,7 @@ export function DataTypesDemo() {
                   setInputValue(info?.defaultValue ?? "0");
                 }}
               >
-                <SelectTrigger>
+                <SelectTrigger id="sol-datatypes-type">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -94,8 +94,9 @@ export function DataTypesDemo() {
               </Select>
             </div>
             <div>
-              <Label>Value</Label>
+              <Label htmlFor="sol-datatypes-value">Value</Label>
               <Input
+                id="sol-datatypes-value"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />
@@ -140,7 +141,7 @@ export function DataTypesDemo() {
                 <TableRow>
                   <TableCell>Min</TableCell>
                   <TableCell className="text-right">
-                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 11 }}>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px]">
                       {typeInfo.min.length > 40
                         ? typeInfo.min.slice(0, 20) + "..."
                         : typeInfo.min}
@@ -150,7 +151,7 @@ export function DataTypesDemo() {
                 <TableRow>
                   <TableCell>Max</TableCell>
                   <TableCell className="text-right">
-                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono" style={{ fontSize: 11 }}>
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px]">
                       {typeInfo.max.length > 40
                         ? typeInfo.max.slice(0, 20) + "..."
                         : typeInfo.max}
@@ -181,8 +182,8 @@ export function DataTypesDemo() {
                   <TableCell>Padded (32 bytes)</TableCell>
                   <TableCell className="text-right">
                     <code
-                      className="rounded bg-muted px-1.5 py-0.5 font-mono"
-                      style={{ fontSize: 11, wordBreak: "break-all" }}
+                      className="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px]"
+                      style={{ wordBreak: "break-all" }}
                     >
                       {encoded.paddedHex}
                     </code>
@@ -214,7 +215,6 @@ export function DataTypesDemo() {
             data={sizeChartData}
             xKey="type"
             yKeys={["bytes"]}
-            colors={["#7950f2"]}
             height={220}
           />
           <p className="text-xs text-muted-foreground text-center">

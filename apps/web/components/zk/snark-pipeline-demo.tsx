@@ -51,8 +51,9 @@ export function SNARKPipelineDemo() {
             Configure
           </p>
           <div>
-            <Label>Arithmetic expression</Label>
+            <Label htmlFor="zk-snark-expression">Arithmetic expression</Label>
             <Input
+              id="zk-snark-expression"
               value={expression}
               onChange={(e) => {
                 setExpression(e.target.value);
@@ -62,16 +63,16 @@ export function SNARKPipelineDemo() {
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label>x</Label>
-              <Input type="number" value={xVal} onChange={(e) => setXVal(Number(e.target.value) || 0)} min={0} max={22} />
+              <Label htmlFor="zk-snark-x">x</Label>
+              <Input id="zk-snark-x" type="number" value={xVal} onChange={(e) => setXVal(Number(e.target.value) || 0)} min={0} max={22} />
             </div>
             <div>
-              <Label>y</Label>
-              <Input type="number" value={yVal} onChange={(e) => setYVal(Number(e.target.value) || 0)} min={0} max={22} />
+              <Label htmlFor="zk-snark-y">y</Label>
+              <Input id="zk-snark-y" type="number" value={yVal} onChange={(e) => setYVal(Number(e.target.value) || 0)} min={0} max={22} />
             </div>
             <div>
-              <Label>z</Label>
-              <Input type="number" value={zVal} onChange={(e) => setZVal(Number(e.target.value) || 0)} min={0} max={22} />
+              <Label htmlFor="zk-snark-z">z</Label>
+              <Input id="zk-snark-z" type="number" value={zVal} onChange={(e) => setZVal(Number(e.target.value) || 0)} min={0} max={22} />
             </div>
           </div>
           <Button variant="secondary" onClick={handleRun}>

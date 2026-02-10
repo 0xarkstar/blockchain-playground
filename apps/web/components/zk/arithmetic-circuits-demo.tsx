@@ -88,9 +88,9 @@ export function ArithmeticCircuitsDemo() {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-semibold">Expression</p>
           <div>
-            <Label>Preset</Label>
+            <Label htmlFor="zk-circuits-preset">Preset</Label>
             <Select onValueChange={handlePresetChange}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger id="zk-circuits-preset" className="w-full">
                 <SelectValue placeholder="Choose a preset..." />
               </SelectTrigger>
               <SelectContent>
@@ -103,11 +103,12 @@ export function ArithmeticCircuitsDemo() {
             </Select>
           </div>
           <div>
-            <Label>Custom expression</Label>
+            <Label htmlFor="zk-circuits-expression">Custom expression</Label>
             <p className="text-xs text-muted-foreground mb-1">
               Operators: + * ( ) — Variables: a-z — Constants: 0-9
             </p>
             <Input
+              id="zk-circuits-expression"
               value={expression}
               onChange={(e) => {
                 setExpression(e.target.value);
@@ -201,8 +202,9 @@ export function ArithmeticCircuitsDemo() {
           <div className="grid grid-cols-2 gap-4">
             {Array.from(variables).map((v) => (
               <div key={v}>
-                <Label>{v}</Label>
+                <Label htmlFor={`zk-circuits-var-${v}`}>{v}</Label>
                 <Input
+                  id={`zk-circuits-var-${v}`}
                   type="number"
                   value={inputValues[v] ?? 0}
                   onChange={(e) =>

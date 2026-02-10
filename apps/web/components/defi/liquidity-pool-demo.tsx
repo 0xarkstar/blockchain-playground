@@ -96,8 +96,9 @@ export function LiquidityPoolDemo() {
           <p className="text-sm font-semibold">Current Pool State</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Token A Reserve</Label>
+              <Label htmlFor="defi-lp-reserveA">Token A Reserve</Label>
               <Input
+                id="defi-lp-reserveA"
                 type="number"
                 value={reserveA}
                 onChange={(e) => setReserveA(Number(e.target.value) || 0)}
@@ -105,8 +106,9 @@ export function LiquidityPoolDemo() {
               />
             </div>
             <div>
-              <Label>Token B Reserve</Label>
+              <Label htmlFor="defi-lp-reserveB">Token B Reserve</Label>
               <Input
+                id="defi-lp-reserveB"
                 type="number"
                 value={reserveB}
                 onChange={(e) => setReserveB(Number(e.target.value) || 0)}
@@ -115,8 +117,9 @@ export function LiquidityPoolDemo() {
             </div>
           </div>
           <div>
-            <Label>Total LP Supply</Label>
+            <Label htmlFor="defi-lp-supply">Total LP Supply</Label>
             <Input
+              id="defi-lp-supply"
               type="number"
               value={totalSupply}
               onChange={(e) => setTotalSupply(Number(e.target.value) || 0)}
@@ -142,8 +145,9 @@ export function LiquidityPoolDemo() {
             <p className="text-sm font-semibold">Add Liquidity</p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label>Token A Amount</Label>
+                <Label htmlFor="defi-lp-amountA">Token A Amount</Label>
                 <Input
+                  id="defi-lp-amountA"
                   type="number"
                   value={amountA}
                   onChange={(e) => setAmountA(Number(e.target.value) || 0)}
@@ -151,8 +155,9 @@ export function LiquidityPoolDemo() {
                 />
               </div>
               <div>
-                <Label>Token B Amount</Label>
+                <Label htmlFor="defi-lp-amountB">Token B Amount</Label>
                 <Input
+                  id="defi-lp-amountB"
                   type="number"
                   value={amountB}
                   onChange={(e) => setAmountB(Number(e.target.value) || 0)}
@@ -199,8 +204,9 @@ export function LiquidityPoolDemo() {
           <div className="flex flex-col gap-4">
             <p className="text-sm font-semibold">Remove Liquidity</p>
             <div>
-              <Label>LP Tokens to Burn</Label>
+              <Label htmlFor="defi-lp-burnAmount">LP Tokens to Burn</Label>
               <Input
+                id="defi-lp-burnAmount"
                 type="number"
                 value={lpAmount}
                 onChange={(e) => setLpAmount(Number(e.target.value) || 0)}

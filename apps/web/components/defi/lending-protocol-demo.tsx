@@ -20,11 +20,11 @@ import {
 import { EducationPanel } from "../../components/shared";
 
 function healthColor(hf: number): string {
-  if (hf >= 2) return "text-green-600";
-  if (hf >= 1.5) return "text-lime-600";
-  if (hf >= 1.1) return "text-yellow-600";
-  if (hf >= 1) return "text-orange-600";
-  return "text-red-600";
+  if (hf >= 2) return "text-green-600 dark:text-green-400";
+  if (hf >= 1.5) return "text-lime-600 dark:text-lime-400";
+  if (hf >= 1.1) return "text-yellow-600 dark:text-yellow-400";
+  if (hf >= 1) return "text-orange-600 dark:text-orange-400";
+  return "text-red-600 dark:text-red-400";
 }
 
 function healthBadgeClass(hf: number): string {
@@ -96,8 +96,9 @@ export function LendingProtocolDemo() {
           <p className="text-sm font-semibold">Collateral</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Amount (tokens)</Label>
+              <Label htmlFor="defi-lend-colAmount">Amount (tokens)</Label>
               <Input
+                id="defi-lend-colAmount"
                 type="number"
                 value={collateralAmount}
                 onChange={(e) => setCollateralAmount(Number(e.target.value) || 0)}
@@ -106,8 +107,9 @@ export function LendingProtocolDemo() {
               />
             </div>
             <div>
-              <Label>Price (USD)</Label>
+              <Label htmlFor="defi-lend-colPrice">Price (USD)</Label>
               <Input
+                id="defi-lend-colPrice"
                 type="number"
                 value={collateralPrice}
                 onChange={(e) => setCollateralPrice(Number(e.target.value) || 0)}
@@ -125,8 +127,9 @@ export function LendingProtocolDemo() {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-semibold">Borrow</p>
           <div>
-            <Label>Borrow Amount (USD)</Label>
+            <Label htmlFor="defi-lend-borrowAmount">Borrow Amount (USD)</Label>
             <Input
+              id="defi-lend-borrowAmount"
               type="number"
               value={borrowAmount}
               onChange={(e) => setBorrowAmount(Number(e.target.value) || 0)}
@@ -134,8 +137,9 @@ export function LendingProtocolDemo() {
             />
           </div>
           <div>
-            <Label>Liquidation Threshold</Label>
+            <Label htmlFor="defi-lend-liqThreshold">Liquidation Threshold</Label>
             <Input
+              id="defi-lend-liqThreshold"
               type="number"
               value={liquidationThreshold}
               onChange={(e) => setLiquidationThreshold(Number(e.target.value) || 0)}
@@ -196,7 +200,7 @@ export function LendingProtocolDemo() {
               <TableRow>
                 <TableCell>Liquidation Price</TableCell>
                 <TableCell className="text-right">
-                  <span className="font-semibold text-red-600">
+                  <span className="font-semibold text-red-600 dark:text-red-400">
                     ${result.liqPrice.toFixed(2)}
                   </span>
                 </TableCell>

@@ -83,8 +83,9 @@ export function R1CSQAPDemo() {
         <div className="flex flex-col gap-4">
           <p className="text-sm font-semibold">Expression</p>
           <div>
-            <Label>Arithmetic expression</Label>
+            <Label htmlFor="zk-r1cs-expression">Arithmetic expression</Label>
             <Input
+              id="zk-r1cs-expression"
               value={expression}
               onChange={(e) => {
                 setExpression(e.target.value);
@@ -94,16 +95,16 @@ export function R1CSQAPDemo() {
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label>x</Label>
-              <Input type="number" value={xVal} onChange={(e) => setXVal(Number(e.target.value) || 0)} min={0} max={22} />
+              <Label htmlFor="zk-r1cs-x">x</Label>
+              <Input id="zk-r1cs-x" type="number" value={xVal} onChange={(e) => setXVal(Number(e.target.value) || 0)} min={0} max={22} />
             </div>
             <div>
-              <Label>y</Label>
-              <Input type="number" value={yVal} onChange={(e) => setYVal(Number(e.target.value) || 0)} min={0} max={22} />
+              <Label htmlFor="zk-r1cs-y">y</Label>
+              <Input id="zk-r1cs-y" type="number" value={yVal} onChange={(e) => setYVal(Number(e.target.value) || 0)} min={0} max={22} />
             </div>
             <div>
-              <Label>z</Label>
-              <Input type="number" value={zVal} onChange={(e) => setZVal(Number(e.target.value) || 0)} min={0} max={22} />
+              <Label htmlFor="zk-r1cs-z">z</Label>
+              <Input id="zk-r1cs-z" type="number" value={zVal} onChange={(e) => setZVal(Number(e.target.value) || 0)} min={0} max={22} />
             </div>
           </div>
           <Button variant="secondary" onClick={handleRun}>
@@ -178,7 +179,6 @@ export function R1CSQAPDemo() {
                 })}
                 xKey="x"
                 yKeys={["A(x)", "B(x)", "C(x)"]}
-                colors={["#228be6", "#fa5252", "#40c057"]}
                 height={250}
               />
             )}

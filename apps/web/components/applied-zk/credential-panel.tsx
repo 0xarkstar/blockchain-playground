@@ -62,8 +62,9 @@ export function CredentialPanel({
           </p>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label>Birth Year</Label>
+              <Label htmlFor="azk-credential-birth-year">Birth Year</Label>
               <Input
+                id="azk-credential-birth-year"
                 type="number"
                 value={birthYear}
                 onChange={(e) => {
@@ -76,8 +77,9 @@ export function CredentialPanel({
               />
             </div>
             <div>
-              <Label>Birth Month</Label>
+              <Label htmlFor="azk-credential-birth-month">Birth Month</Label>
               <Input
+                id="azk-credential-birth-month"
                 type="number"
                 value={birthMonth}
                 onChange={(e) => {
@@ -90,8 +92,9 @@ export function CredentialPanel({
               />
             </div>
             <div>
-              <Label>Birth Day</Label>
+              <Label htmlFor="azk-credential-birth-day">Birth Day</Label>
               <Input
+                id="azk-credential-birth-day"
                 type="number"
                 value={birthDay}
                 onChange={(e) => {
@@ -105,11 +108,12 @@ export function CredentialPanel({
             </div>
           </div>
           <div>
-            <Label>Minimum Age Threshold</Label>
+            <Label htmlFor="azk-credential-min-age">Minimum Age Threshold</Label>
             <p className="text-xs text-muted-foreground mb-1">
               The age requirement to prove (e.g., 18 for adult content, 21 for alcohol)
             </p>
             <Input
+              id="azk-credential-min-age"
               type="number"
               value={minAge}
               onChange={(e) => {
@@ -149,7 +153,7 @@ export function CredentialPanel({
               <pre className="flex-1 rounded-lg bg-muted p-3 text-sm overflow-x-auto font-mono">
                 <code>{truncateHex(identityCommitment, 16)}</code>
               </pre>
-              <Button variant="ghost" size="icon" onClick={handleCopy} title={copied ? "Copied" : "Copy"}>
+              <Button variant="ghost" size="icon" onClick={handleCopy} title={copied ? "Copied" : "Copy"} aria-label="Copy to clipboard">
                 {copied ? (
                   <Check className="h-4 w-4" />
                 ) : (

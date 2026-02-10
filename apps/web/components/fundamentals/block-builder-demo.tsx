@@ -42,7 +42,7 @@ function BlockchainVisual({ block }: { block: Block }) {
       <div className="flex gap-0 flex-nowrap overflow-x-auto">
         {/* Genesis block */}
         <div
-          className="rounded-lg border border-gray-400 bg-card p-3"
+          className="rounded-lg border border-gray-400 dark:border-gray-600 bg-card p-3"
           style={{ minWidth: 160 }}
         >
           <Badge variant="secondary" className="mb-1 text-xs">
@@ -79,7 +79,7 @@ function BlockchainVisual({ block }: { block: Block }) {
           className="rounded-lg border-2 border-green-500 bg-card p-3"
           style={{ minWidth: 160 }}
         >
-          <Badge className="mb-1 text-xs bg-green-600">
+          <Badge className="mb-1 text-xs bg-green-600 dark:bg-green-500">
             Block #{block.index}
           </Badge>
           <p className="text-xs text-muted-foreground">

@@ -66,8 +66,9 @@ export function ArbitrageSimulatorDemo() {
               )}
             </div>
             <div>
-              <Label>Token Price (USD)</Label>
+              <Label htmlFor="defi-arb-priceA">Token Price (USD)</Label>
               <Input
+                id="defi-arb-priceA"
                 type="number"
                 value={priceA}
                 onChange={(e) => setPriceA(Number(e.target.value) || 0)}
@@ -94,8 +95,9 @@ export function ArbitrageSimulatorDemo() {
               )}
             </div>
             <div>
-              <Label>Token Price (USD)</Label>
+              <Label htmlFor="defi-arb-priceB">Token Price (USD)</Label>
               <Input
+                id="defi-arb-priceB"
                 type="number"
                 value={priceB}
                 onChange={(e) => setPriceB(Number(e.target.value) || 0)}
@@ -112,8 +114,9 @@ export function ArbitrageSimulatorDemo() {
           <p className="text-sm font-semibold">Trade Parameters</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Trade Amount (USD)</Label>
+              <Label htmlFor="defi-arb-tradeAmount">Trade Amount (USD)</Label>
               <Input
+                id="defi-arb-tradeAmount"
                 type="number"
                 value={tradeAmount}
                 onChange={(e) => setTradeAmount(Number(e.target.value) || 0)}
@@ -121,8 +124,9 @@ export function ArbitrageSimulatorDemo() {
               />
             </div>
             <div>
-              <Label>Gas Cost (USD)</Label>
+              <Label htmlFor="defi-arb-gasCost">Gas Cost (USD)</Label>
               <Input
+                id="defi-arb-gasCost"
                 type="number"
                 value={gasCost}
                 onChange={(e) => setGasCost(Number(e.target.value) || 0)}
@@ -176,7 +180,7 @@ export function ArbitrageSimulatorDemo() {
               <TableRow>
                 <TableCell>Net Profit</TableCell>
                 <TableCell className="text-right">
-                  <span className={`font-semibold ${result.profitable ? "text-green-600" : "text-red-600"}`}>
+                  <span className={`font-semibold ${result.profitable ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
                     ${result.profitAfterGas.toFixed(2)}
                   </span>
                 </TableCell>

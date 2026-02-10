@@ -111,8 +111,9 @@ export function OraclePriceFeedDemo() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-7 w-7 text-red-600"
+                      className="h-7 w-7 text-red-600 dark:text-red-400"
                       onClick={() => removeSnapshot(i)}
+                      aria-label="Remove snapshot"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
@@ -146,7 +147,6 @@ export function OraclePriceFeedDemo() {
               data={priceChartData}
               xKey="time"
               yKeys={["price", "TWAP", "upper", "lower"]}
-              colors={["#228be6", "#fab005", "#fa5252", "#fa5252"]}
               height={250}
             />
             <p className="text-xs text-muted-foreground text-center">
@@ -161,8 +161,9 @@ export function OraclePriceFeedDemo() {
           <p className="text-sm font-semibold">Configuration</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Deviation Threshold (%)</Label>
+              <Label htmlFor="defi-oracle-threshold">Deviation Threshold (%)</Label>
               <Input
+                id="defi-oracle-threshold"
                 type="number"
                 value={deviationThreshold}
                 onChange={(e) => setDeviationThreshold(Number(e.target.value) || 0)}
@@ -171,8 +172,9 @@ export function OraclePriceFeedDemo() {
               />
             </div>
             <div>
-              <Label>Heartbeat Interval (s)</Label>
+              <Label htmlFor="defi-oracle-heartbeat">Heartbeat Interval (s)</Label>
               <Input
+                id="defi-oracle-heartbeat"
                 type="number"
                 value={heartbeatInterval}
                 onChange={(e) => setHeartbeatInterval(Number(e.target.value) || 0)}

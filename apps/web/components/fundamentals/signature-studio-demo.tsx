@@ -15,6 +15,7 @@ import { OnChainSection } from "../shared/on-chain-section";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 function CopyableCode({ value }: { value: string }) {
@@ -27,16 +28,17 @@ function CopyableCode({ value }: { value: string }) {
 
   return (
     <div className="flex items-center gap-1">
-      <pre className="rounded-lg bg-muted p-3 overflow-x-auto flex-1 break-all" style={{ fontSize: "0.7rem" }}>
+      <pre className="rounded-lg bg-muted p-3 overflow-x-auto flex-1 break-all text-[0.7rem]">
         <code>{value}</code>
       </pre>
       <Button
         variant="ghost"
         size="icon"
         className="h-8 w-8"
+        aria-label="Copy to clipboard"
         onClick={handleCopy}
       >
-        {copied ? <Check className="h-3.5 w-3.5 text-teal-500" /> : <Copy className="h-3.5 w-3.5" />}
+        {copied ? <Check className="h-3.5 w-3.5 text-teal-500 dark:text-teal-400" /> : <Copy className="h-3.5 w-3.5" />}
       </Button>
     </div>
   );
@@ -129,9 +131,10 @@ export function SignatureStudioDemo() {
             Step 2: Sign a Message
           </p>
           <div>
-            <Label>Message</Label>
-            <textarea
-              className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            <Label htmlFor="signature-message">Message</Label>
+            <Textarea
+              id="signature-message"
+              className="min-h-[60px]"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={2}
@@ -158,22 +161,25 @@ export function SignatureStudioDemo() {
             Step 3: Verify Signature
           </p>
           <div>
-            <Label>Message</Label>
+            <Label htmlFor="signature-verify-msg">Message</Label>
             <Input
+              id="signature-verify-msg"
               value={verifyMsg}
               onChange={(e) => setVerifyMsg(e.target.value)}
             />
           </div>
           <div>
-            <Label>Signature (hex)</Label>
+            <Label htmlFor="signature-verify-sig">Signature (hex)</Label>
             <Input
+              id="signature-verify-sig"
               value={verifySig}
               onChange={(e) => setVerifySig(e.target.value)}
             />
           </div>
           <div>
-            <Label>Public Key (hex)</Label>
+            <Label htmlFor="signature-verify-pubkey">Public Key (hex)</Label>
             <Input
+              id="signature-verify-pubkey"
               value={verifyPubKey}
               onChange={(e) => setVerifyPubKey(e.target.value)}
             />

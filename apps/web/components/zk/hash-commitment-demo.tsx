@@ -100,9 +100,9 @@ export function HashCommitmentDemo() {
               />
             </div>
             <div>
-              <Label>Hash scheme</Label>
+              <Label htmlFor="zk-hashcommit-scheme">Hash scheme</Label>
               <Select value={scheme} onValueChange={(v) => setScheme(v as HashScheme)}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger id="zk-hashcommit-scheme" className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -134,16 +134,18 @@ export function HashCommitmentDemo() {
             <div className="flex flex-col gap-4">
               <p className="text-sm font-semibold">Phase 2: Reveal</p>
               <div>
-                <Label>Reveal secret</Label>
+                <Label htmlFor="zk-hashcommit-reveal-secret">Reveal secret</Label>
                 <Input
+                  id="zk-hashcommit-reveal-secret"
                   value={revealSecret}
                   onChange={(e) => setRevealSecret(e.target.value)}
                   placeholder="Enter the original secret"
                 />
               </div>
               <div>
-                <Label>Reveal nonce</Label>
+                <Label htmlFor="zk-hashcommit-reveal-nonce">Reveal nonce</Label>
                 <Input
+                  id="zk-hashcommit-reveal-nonce"
                   value={revealNonce}
                   onChange={(e) => setRevealNonce(e.target.value)}
                   placeholder="Enter the original nonce"

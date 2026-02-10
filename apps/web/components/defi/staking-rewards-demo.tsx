@@ -104,8 +104,9 @@ export function StakingRewardsDemo() {
           <p className="text-sm font-semibold">Staking Parameters</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Stake Amount</Label>
+              <Label htmlFor="defi-stake-amount">Stake Amount</Label>
               <Input
+                id="defi-stake-amount"
                 type="number"
                 value={stakeAmount}
                 onChange={(e) => setStakeAmount(Number(e.target.value) || 0)}
@@ -113,8 +114,9 @@ export function StakingRewardsDemo() {
               />
             </div>
             <div>
-              <Label>Total Pool Staked</Label>
+              <Label htmlFor="defi-stake-pool">Total Pool Staked</Label>
               <Input
+                id="defi-stake-pool"
                 type="number"
                 value={totalStaked}
                 onChange={(e) => setTotalStaked(Number(e.target.value) || 0)}
@@ -123,8 +125,9 @@ export function StakingRewardsDemo() {
             </div>
           </div>
           <div>
-            <Label>Reward Rate (APR %)</Label>
+            <Label htmlFor="defi-stake-rate">Reward Rate (APR %)</Label>
             <Input
+              id="defi-stake-rate"
               type="number"
               value={rewardRate}
               onChange={(e) => setRewardRate(Number(e.target.value) || 0)}
@@ -194,7 +197,7 @@ export function StakingRewardsDemo() {
                   <TableCell className="text-right">{row.apy.toFixed(2)}%</TableCell>
                   <TableCell className="text-right">{row.finalValue.toFixed(2)}</TableCell>
                   <TableCell className="text-right">
-                    <span className="font-semibold text-green-600">
+                    <span className="font-semibold text-green-600 dark:text-green-400">
                       {row.rewards.toFixed(2)}
                     </span>
                   </TableCell>
@@ -212,7 +215,6 @@ export function StakingRewardsDemo() {
             data={rewardGrowthData}
             xKey="month"
             yKeys={["simple", "daily"]}
-            colors={["#228be6", "#40c057"]}
             height={250}
           />
           <p className="text-xs text-muted-foreground text-center">
