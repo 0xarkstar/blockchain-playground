@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import {
   ResponsiveContainer,
   LineChart,
@@ -18,7 +19,7 @@ import {
   Cell,
 } from "recharts";
 
-const DEFAULT_COLORS = [
+const LIGHT_COLORS = [
   "#228be6", // blue.6
   "#fa5252", // red.6
   "#40c057", // green.6
@@ -27,6 +28,17 @@ const DEFAULT_COLORS = [
   "#fd7e14", // orange.6
   "#15aabf", // cyan.6
   "#e64980", // pink.6
+];
+
+const DARK_COLORS = [
+  "#4dabf7", // blue.4 (brighter)
+  "#ff6b6b", // red.4
+  "#69db7c", // green.4
+  "#ffd43b", // yellow.4
+  "#9775fa", // violet.4
+  "#ffa94d", // orange.4
+  "#3bc9db", // cyan.4
+  "#f06595", // pink.4
 ];
 
 interface BaseChartProps {
@@ -51,8 +63,15 @@ interface BarChartComponentProps extends CartesianChartProps {
   grouped?: boolean;
 }
 
-function getColor(colors: string[] | undefined, index: number): string {
-  const palette = colors && colors.length > 0 ? colors : DEFAULT_COLORS;
+function getColor(
+  colors: string[] | undefined,
+  index: number,
+  isDark: boolean,
+): string {
+  if (colors && colors.length > 0) {
+    return colors[index % colors.length];
+  }
+  const palette = isDark ? DARK_COLORS : LIGHT_COLORS;
   return palette[index % palette.length];
 }
 
@@ -63,6 +82,8 @@ export function SimpleLineChart({
   colors,
   height = 300,
 }: CartesianChartProps) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   return (
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data}>
@@ -76,7 +97,7 @@ export function SimpleLineChart({
             key={key}
             type="monotone"
             dataKey={key}
-            stroke={getColor(colors, i)}
+            stroke={getColor(colors, i, isDark)}
             strokeWidth={2}
             dot={false}
           />
@@ -94,6 +115,8 @@ export function SimpleBarChart({
   height = 300,
   grouped = false,
 }: BarChartComponentProps) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   return (
     <ResponsiveContainer width="100%" height={height}>
       <BarChart data={data}>
@@ -106,7 +129,7 @@ export function SimpleBarChart({
           <Bar
             key={key}
             dataKey={key}
-            fill={getColor(colors, i)}
+            fill={getColor(colors, i, isDark)}
             stackId={grouped ? undefined : "stack"}
           />
         ))}
@@ -122,6 +145,8 @@ export function SimplePieChart({
   colors,
   height = 300,
 }: PieChartProps) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   return (
     <ResponsiveContainer width="100%" height={height}>
       <PieChart>
@@ -135,7 +160,7 @@ export function SimplePieChart({
           label
         >
           {data.map((_, i) => (
-            <Cell key={`cell-${i}`} fill={getColor(colors, i)} />
+            <Cell key={`cell-${i}`} fill={getColor(colors, i, isDark)} />
           ))}
         </Pie>
         <Tooltip />
@@ -152,6 +177,8 @@ export function SimpleAreaChart({
   colors,
   height = 300,
 }: CartesianChartProps) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   return (
     <ResponsiveContainer width="100%" height={height}>
       <AreaChart data={data}>
@@ -165,8 +192,8 @@ export function SimpleAreaChart({
             key={key}
             type="monotone"
             dataKey={key}
-            stroke={getColor(colors, i)}
-            fill={getColor(colors, i)}
+            stroke={getColor(colors, i, isDark)}
+            fill={getColor(colors, i, isDark)}
             fillOpacity={0.3}
           />
         ))}

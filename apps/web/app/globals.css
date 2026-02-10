@@ -131,3 +131,18 @@
     @apply bg-background text-foreground;
   }
 }
+
+:root {
+  --viz-blue: hsl(217.2 91.2% 59.8%);
+  --viz-green: hsl(142.1 76.2% 36.3%);
+  --viz-purple: hsl(263.4 70% 50.4%);
+  --viz-yellow: hsl(47.9 95.8% 53.1%);
+  --viz-orange: hsl(24.6 95% 53.1%);
+}
+.dark {
+  --viz-blue: hsl(217.2 91.2% 69.8%);
+  --viz-green: hsl(142.1 76.2% 50.3%);
+  --viz-purple: hsl(263.4 70% 63.4%);
+  --viz-yellow: hsl(47.9 95.8% 63.1%);
+  --viz-orange: hsl(24.6 95% 63.1%);
+}

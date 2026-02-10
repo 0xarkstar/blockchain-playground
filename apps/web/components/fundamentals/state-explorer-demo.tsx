@@ -51,8 +51,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="100"
             height="30"
             rx="6"
-            fill="hsl(263.4 70% 50.4% / 0.15)"
-            stroke="hsl(263.4 70% 50.4%)"
+            style={{ fill: "var(--viz-purple)", fillOpacity: 0.15, stroke: "var(--viz-purple)" }}
             strokeWidth="2"
           />
           <text
@@ -83,8 +82,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="180"
             height="30"
             rx="4"
-            fill="hsl(217.2 91.2% 59.8% / 0.15)"
-            stroke="hsl(217.2 91.2% 59.8% / 0.5)"
+            style={{ fill: "var(--viz-blue)", fillOpacity: 0.15, stroke: "var(--viz-blue)", strokeOpacity: 0.5 }}
             strokeWidth="1.5"
           />
           <text
@@ -121,8 +119,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="60"
             height="44"
             rx="4"
-            fill="hsl(142.1 76.2% 36.3% / 0.15)"
-            stroke="hsl(142.1 76.2% 36.3% / 0.5)"
+            style={{ fill: "var(--viz-green)", fillOpacity: 0.15, stroke: "var(--viz-green)", strokeOpacity: 0.5 }}
             strokeWidth="1"
           />
           <text
@@ -153,8 +150,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="60"
             height="44"
             rx="4"
-            fill="hsl(47.9 95.8% 53.1% / 0.15)"
-            stroke="hsl(47.9 95.8% 53.1% / 0.5)"
+            style={{ fill: "var(--viz-yellow)", fillOpacity: 0.15, stroke: "var(--viz-yellow)", strokeOpacity: 0.5 }}
             strokeWidth="1"
           />
           <text
@@ -185,8 +181,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="60"
             height="44"
             rx="4"
-            fill="hsl(24.6 95% 53.1% / 0.15)"
-            stroke="hsl(24.6 95% 53.1% / 0.5)"
+            style={{ fill: "var(--viz-orange)", fillOpacity: 0.15, stroke: "var(--viz-orange)", strokeOpacity: 0.5 }}
             strokeWidth="1"
           />
           <text
@@ -248,7 +243,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             y1="154"
             x2="185"
             y2="175"
-            stroke="hsl(24.6 95% 53.1% / 0.3)"
+            style={{ stroke: "var(--viz-orange)", strokeOpacity: 0.3 }}
             strokeWidth="1"
             strokeDasharray="3 2"
           />
@@ -258,8 +253,7 @@ function StateTrieVisual({ account }: { account: AccountState }) {
             width="80"
             height="26"
             rx="4"
-            fill="hsl(24.6 95% 53.1% / 0.08)"
-            stroke="hsl(24.6 95% 53.1% / 0.3)"
+            style={{ fill: "var(--viz-orange)", fillOpacity: 0.08, stroke: "var(--viz-orange)", strokeOpacity: 0.3 }}
             strokeWidth="1"
             strokeDasharray="3 2"
           />

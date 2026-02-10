@@ -44,7 +44,7 @@ export function HashAvalancheVisualizer({
                     height: cellSize,
                     backgroundColor: diffSet.has(i)
                       ? "hsl(var(--destructive))"
-                      : "hsl(142.1 76.2% 36.3%)",
+                      : "var(--viz-green)",
                     opacity: diffSet.has(i) ? 1 : 0.3,
                     borderRadius: 1,
                   }}
@@ -75,7 +75,7 @@ export function HashAvalancheVisualizer({
             style={{
               width: 12,
               height: 12,
-              backgroundColor: "hsl(142.1 76.2% 36.3%)",
+              backgroundColor: "var(--viz-green)",
               opacity: 0.3,
             }}
           />

@@ -67,11 +67,11 @@ function NodeNetworkVisual({ nodes }: { nodes: ConsensusNode[] }) {
             let strokeColor = "hsl(var(--muted-foreground) / 0.3)";
 
             if (node.isLeader) {
-              fillColor = "hsl(47.9 95.8% 53.1% / 0.15)";
-              strokeColor = "hsl(47.9 95.8% 53.1%)";
+              fillColor = "color-mix(in srgb, var(--viz-yellow) 15%, transparent)";
+              strokeColor = "var(--viz-yellow)";
             } else if (node.status === "accepted") {
-              fillColor = "hsl(142.1 76.2% 36.3% / 0.15)";
-              strokeColor = "hsl(142.1 76.2% 36.3%)";
+              fillColor = "color-mix(in srgb, var(--viz-green) 15%, transparent)";
+              strokeColor = "var(--viz-green)";
             } else if (node.status === "rejected") {
               fillColor = "hsl(var(--destructive) / 0.15)";
               strokeColor = "hsl(var(--destructive))";
@@ -85,7 +85,7 @@ function NodeNetworkVisual({ nodes }: { nodes: ConsensusNode[] }) {
                     cy={pos.y}
                     r={nodeRadius + 6}
                     fill="none"
-                    stroke="hsl(47.9 95.8% 53.1% / 0.5)"
+                    style={{ stroke: "color-mix(in srgb, var(--viz-yellow) 50%, transparent)" }}
                     strokeWidth="2"
                     strokeDasharray="4 2"
                   />

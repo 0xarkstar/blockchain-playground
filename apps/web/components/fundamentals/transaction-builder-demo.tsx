@@ -29,8 +29,7 @@ function TransactionFlowDiagram({
             width="70"
             height="60"
             rx="8"
-            fill="hsl(217.2 91.2% 59.8% / 0.15)"
-            stroke="hsl(217.2 91.2% 59.8%)"
+            style={{ fill: "var(--viz-blue)", fillOpacity: 0.15, stroke: "var(--viz-blue)" }}
             strokeWidth="2"
           />
           <text
@@ -74,16 +73,15 @@ function TransactionFlowDiagram({
             width="70"
             height="100"
             rx="8"
-            fill={
-              txData
-                ? "hsl(142.1 76.2% 36.3% / 0.15)"
-                : "hsl(var(--muted))"
-            }
-            stroke={
-              txData
-                ? "hsl(142.1 76.2% 36.3%)"
-                : "hsl(var(--muted-foreground) / 0.3)"
-            }
+            style={{
+              fill: txData
+                ? "var(--viz-green)"
+                : "hsl(var(--muted))",
+              fillOpacity: txData ? 0.15 : undefined,
+              stroke: txData
+                ? "var(--viz-green)"
+                : "hsl(var(--muted-foreground) / 0.3)",
+            }}
             strokeWidth="2"
           />
           <text
@@ -168,8 +166,7 @@ function TransactionFlowDiagram({
             width="70"
             height="60"
             rx="8"
-            fill="hsl(24.6 95% 53.1% / 0.15)"
-            stroke="hsl(24.6 95% 53.1%)"
+            style={{ fill: "var(--viz-orange)", fillOpacity: 0.15, stroke: "var(--viz-orange)" }}
             strokeWidth="2"
           />
           <text

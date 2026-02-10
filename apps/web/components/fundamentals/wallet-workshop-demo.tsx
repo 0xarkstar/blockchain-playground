@@ -51,8 +51,7 @@ function KeyDerivationTree({ walletInfo }: { walletInfo: HDWalletInfo }) {
             width={120}
             height={30}
             rx={6}
-            fill="hsl(263.4 70% 50.4% / 0.15)"
-            stroke="hsl(263.4 70% 50.4%)"
+            style={{ fill: "var(--viz-purple)", fillOpacity: 0.15, stroke: "var(--viz-purple)" }}
             strokeWidth="2"
           />
           <text
@@ -83,8 +82,7 @@ function KeyDerivationTree({ walletInfo }: { walletInfo: HDWalletInfo }) {
             width={140}
             height={26}
             rx={4}
-            fill="hsl(217.2 91.2% 59.8% / 0.15)"
-            stroke="hsl(217.2 91.2% 59.8% / 0.5)"
+            style={{ fill: "var(--viz-blue)", fillOpacity: 0.15, stroke: "var(--viz-blue)", strokeOpacity: 0.5 }}
             strokeWidth="1.5"
           />
           <text
@@ -124,8 +122,7 @@ function KeyDerivationTree({ walletInfo }: { walletInfo: HDWalletInfo }) {
                   width={treeWidth / 2 - 55}
                   height={24}
                   rx={4}
-                  fill="hsl(142.1 76.2% 36.3% / 0.15)"
-                  stroke="hsl(142.1 76.2% 36.3% / 0.5)"
+                  style={{ fill: "var(--viz-green)", fillOpacity: 0.15, stroke: "var(--viz-green)", strokeOpacity: 0.5 }}
                   strokeWidth="1"
                 />
                 <text

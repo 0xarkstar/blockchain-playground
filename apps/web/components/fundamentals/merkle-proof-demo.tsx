@@ -88,12 +88,13 @@ function MerkleTreeVisual({
                         y1={py}
                         x2={getNodeX(leftChildPos, childLevel.length)}
                         y2={getNodeY(levelIdx - 1)}
-                        stroke={
-                          isOnProofPath(node.hash) &&
-                          isOnProofPath(childLevel[leftChildPos].hash)
-                            ? "hsl(217.2 91.2% 59.8%)"
-                            : "hsl(var(--muted-foreground) / 0.3)"
-                        }
+                        style={{
+                          stroke:
+                            isOnProofPath(node.hash) &&
+                            isOnProofPath(childLevel[leftChildPos].hash)
+                              ? "var(--viz-blue)"
+                              : "hsl(var(--muted-foreground) / 0.3)",
+                        }}
                         strokeWidth={
                           isOnProofPath(node.hash) &&
                           isOnProofPath(childLevel[leftChildPos].hash)
@@ -108,12 +109,13 @@ function MerkleTreeVisual({
                         y1={py}
                         x2={getNodeX(rightChildPos, childLevel.length)}
                         y2={getNodeY(levelIdx - 1)}
-                        stroke={
-                          isOnProofPath(node.hash) &&
-                          isOnProofPath(childLevel[rightChildPos].hash)
-                            ? "hsl(217.2 91.2% 59.8%)"
-                            : "hsl(var(--muted-foreground) / 0.3)"
-                        }
+                        style={{
+                          stroke:
+                            isOnProofPath(node.hash) &&
+                            isOnProofPath(childLevel[rightChildPos].hash)
+                              ? "var(--viz-blue)"
+                              : "hsl(var(--muted-foreground) / 0.3)",
+                        }}
                         strokeWidth={
                           isOnProofPath(node.hash) &&
                           isOnProofPath(childLevel[rightChildPos].hash)
@@ -136,24 +138,26 @@ function MerkleTreeVisual({
               const onPath = isOnProofPath(node.hash);
 
               let fill = "hsl(var(--muted))";
+              let fillOpacity: number | undefined;
               let stroke = "hsl(var(--muted-foreground) / 0.3)";
+              let strokeOpacity: number | undefined;
               const textFill = "hsl(var(--foreground))";
 
               if (isSelected) {
-                fill = "hsl(142.1 76.2% 36.3% / 0.15)";
-                stroke = "hsl(142.1 76.2% 36.3%)";
+                fill = "var(--viz-green)";
+                fillOpacity = 0.15;
+                stroke = "var(--viz-green)";
               } else if (onPath) {
-                fill = "hsl(217.2 91.2% 59.8% / 0.15)";
-                stroke = "hsl(217.2 91.2% 59.8%)";
+                fill = "var(--viz-blue)";
+                fillOpacity = 0.15;
+                stroke = "var(--viz-blue)";
               }
 
               if (levelIdx === totalLevels - 1) {
-                fill = onPath
-                  ? "hsl(217.2 91.2% 59.8% / 0.2)"
-                  : "hsl(263.4 70% 50.4% / 0.15)";
-                stroke = onPath
-                  ? "hsl(217.2 91.2% 59.8%)"
-                  : "hsl(263.4 70% 50.4% / 0.5)";
+                fill = onPath ? "var(--viz-blue)" : "var(--viz-purple)";
+                fillOpacity = onPath ? 0.2 : 0.15;
+                stroke = onPath ? "var(--viz-blue)" : "var(--viz-purple)";
+                strokeOpacity = onPath ? undefined : 0.5;
               }
 
               return (
@@ -164,8 +168,7 @@ function MerkleTreeVisual({
                     width={nodeWidth}
                     height={nodeHeight}
                     rx={4}
-                    fill={fill}
-                    stroke={stroke}
+                    style={{ fill, fillOpacity, stroke, strokeOpacity }}
                     strokeWidth={isSelected || onPath ? 2 : 1}
                   />
                   <text

@@ -342,7 +342,7 @@ export function TokenGovernanceDemo() {
                         {againstPct > 15 ? `Against ${p.votesAgainst}` : ""}
                       </div>
                       <div
-                        className="bg-gray-400 flex items-center justify-center text-xs text-white font-medium"
+                        className="bg-gray-400 dark:bg-gray-600 flex items-center justify-center text-xs text-white font-medium"
                         style={{ width: `${abstainPct}%` }}
                       >
                         {abstainPct > 15 ? `Abstain ${p.votesAbstain}` : ""}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useTheme } from "next-themes";
 import { Info } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -27,6 +28,7 @@ import {
 } from "../../lib/tokens/erc721";
 
 export function ERC721MinterDemo() {
+  const { resolvedTheme } = useTheme();
   const [state, setState] = useState<ERC721State>(() =>
     createERC721("CryptoArt", "CART"),
   );
@@ -174,7 +176,7 @@ export function ERC721MinterDemo() {
                     key={id}
                     className="rounded-lg border border-border p-3"
                     style={{
-                      background: `linear-gradient(135deg, hsl(${hue}, 60%, 85%), hsl(${(hue + 40) % 360}, 50%, 75%))`,
+                      background: `linear-gradient(135deg, hsl(${hue}, 60%, ${resolvedTheme === "dark" ? 35 : 85}%), hsl(${(hue + 40) % 360}, 50%, ${resolvedTheme === "dark" ? 45 : 75}%))`,
                     }}
                   >
                     <div className="flex flex-col items-center gap-1">

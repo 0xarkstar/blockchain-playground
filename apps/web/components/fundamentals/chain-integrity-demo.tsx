@@ -59,12 +59,12 @@ function ChainLinkArrow({ broken }: { broken: boolean }) {
               y1="12"
               x2="26"
               y2="12"
-              stroke="hsl(142.1 76.2% 36.3%)"
+              style={{ stroke: "var(--viz-green)" }}
               strokeWidth="2"
             />
             <polygon
               points="26,6 36,12 26,18"
-              fill="hsl(142.1 76.2% 36.3%)"
+              style={{ fill: "var(--viz-green)" }}
             />
           </>
         )}
@@ -100,7 +100,7 @@ function ChainVisualDiagram({
                 style={{
                   minWidth: 100,
                   borderColor: v?.valid
-                    ? "hsl(142.1 76.2% 36.3%)"
+                    ? "var(--viz-green)"
                     : "hsl(var(--destructive))",
                   borderWidth: v?.valid ? 1 : 2,
                   backgroundColor: v?.valid

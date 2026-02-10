@@ -64,12 +64,12 @@ function BlockchainVisual({ block }: { block: Block }) {
               y1="12"
               x2="30"
               y2="12"
-              stroke="hsl(217.2 91.2% 59.8%)"
+              style={{ stroke: "var(--viz-blue)" }}
               strokeWidth="2"
             />
             <polygon
               points="30,6 40,12 30,18"
-              fill="hsl(217.2 91.2% 59.8%)"
+              style={{ fill: "var(--viz-blue)" }}
             />
           </svg>
         </div>
