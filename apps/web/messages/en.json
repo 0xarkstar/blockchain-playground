@@ -416,6 +416,132 @@
       }
     }
   },
+  "visualization": {
+    "circuit": {
+      "circuitSelect": { "placeholder": "Select a circuit" },
+      "legend": {
+        "title": "Legend",
+        "inputSignal": "Input Signal",
+        "outputSignal": "Output Signal",
+        "intermediateSignal": "Intermediate Signal",
+        "constraint": "Constraint",
+        "templateComponent": "Template Component"
+      },
+      "nodeInfo": {
+        "selectedNode": "Selected Node",
+        "visibility": "Visibility"
+      }
+    },
+    "circuits": {
+      "multiplier": {
+        "name": "Multiplier",
+        "description": "Simple multiplication circuit: a × b = c"
+      },
+      "rangeCheck": {
+        "name": "Range Check",
+        "description": "Verify a number is within N bits using binary decomposition"
+      },
+      "voting": {
+        "name": "Anonymous Voting",
+        "description": "Verify membership and cast a vote without revealing identity"
+      }
+    },
+    "circuitNodes": {
+      "decomposeToBits": "Decompose value into binary bits",
+      "binaryCheck": "Ensure each bit is 0 or 1",
+      "hashIdentity": "Hash identity secret with Poseidon",
+      "verifyMembership": "Verify Merkle tree membership",
+      "nullifierHash": "Generate unique nullifier hash",
+      "binaryVote": "Ensure vote is binary (0 or 1)"
+    },
+    "proof": {
+      "pipelineTitle": "Proof Pipeline",
+      "buttons": {
+        "start": "Start",
+        "pause": "Pause",
+        "resume": "Resume",
+        "restart": "Restart"
+      },
+      "steps": {
+        "input": { "name": "Prepare Inputs", "description": "Gather and validate circuit inputs" },
+        "witness": { "name": "Compute Witness", "description": "Calculate all intermediate signals" },
+        "proof": { "name": "Generate Proof", "description": "Create the zero-knowledge proof" },
+        "verify": { "name": "Verify Proof", "description": "Validate the proof against public inputs" }
+      },
+      "status": {
+        "complete": "Complete",
+        "inProgress": "In Progress"
+      },
+      "proofVerified": {
+        "title": "Proof Verified!",
+        "description": "The zero-knowledge proof was successfully verified."
+      }
+    },
+    "proofStats": {
+      "proofSize": "Proof Size",
+      "verificationTime": "Verification Time",
+      "proofGeneration": "Proof Generation",
+      "publicSignals": "Public Signals"
+    },
+    "comparison": {
+      "chartTitle": "SNARK vs STARK Comparison",
+      "loadingChart": "Loading chart...",
+      "barChart": "Bar Chart",
+      "radarChart": "Radar Chart",
+      "chartNote": "Values are normalized for comparison. Higher is better for each metric.",
+      "detailedComparison": "Detailed Comparison",
+      "tableHeaders": {
+        "aspect": "Aspect",
+        "snark": "zk-SNARK",
+        "stark": "zk-STARK"
+      }
+    },
+    "comparisonCategories": {
+      "proofSize": "Proof Size",
+      "verificationTime": "Verification Time",
+      "proverTime": "Prover Time",
+      "setupRequired": "Trusted Setup",
+      "quantumSafe": "Quantum Safe"
+    },
+    "comparisonTable": {
+      "proofSize": {
+        "aspect": "Proof Size",
+        "snark": "~200 bytes",
+        "stark": "~45 KB",
+        "description": "Size of the generated proof data"
+      },
+      "verificationTime": {
+        "aspect": "Verification Time",
+        "snark": "~10 ms",
+        "stark": "~100 ms",
+        "description": "Time to verify a proof on-chain"
+      },
+      "proverTime": {
+        "aspect": "Prover Time",
+        "snark": "Slower",
+        "stark": "Faster",
+        "description": "Time to generate the proof"
+      },
+      "trustedSetup": {
+        "aspect": "Trusted Setup",
+        "snark": "Required",
+        "stark": "Not Required",
+        "description": "Whether a trusted ceremony is needed"
+      },
+      "quantumResistance": {
+        "aspect": "Quantum Resistance",
+        "snark": "Not Resistant",
+        "stark": "Resistant",
+        "description": "Security against quantum computers"
+      },
+      "ecosystemMaturity": {
+        "aspect": "Ecosystem Maturity",
+        "snark": "Mature",
+        "stark": "Growing",
+        "description": "Tooling, libraries, and adoption level"
+      }
+    }
+  },
   "nav": {
     "home": "Home",
     "fundamentals": "Fundamentals",

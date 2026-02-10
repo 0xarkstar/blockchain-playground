@@ -416,6 +416,132 @@
       }
     }
   },
+  "visualization": {
+    "circuit": {
+      "circuitSelect": { "placeholder": "회로 선택" },
+      "legend": {
+        "title": "범례",
+        "inputSignal": "입력 신호",
+        "outputSignal": "출력 신호",
+        "intermediateSignal": "중간 신호",
+        "constraint": "제약 조건",
+        "templateComponent": "템플릿 컴포넌트"
+      },
+      "nodeInfo": {
+        "selectedNode": "선택된 노드",
+        "visibility": "가시성"
+      }
+    },
+    "circuits": {
+      "multiplier": {
+        "name": "곱셈기",
+        "description": "간단한 곱셈 회로: a × b = c"
+      },
+      "rangeCheck": {
+        "name": "범위 검사",
+        "description": "이진 분해를 사용하여 숫자가 N비트 이내인지 검증"
+      },
+      "voting": {
+        "name": "익명 투표",
+        "description": "신원을 공개하지 않고 멤버십을 확인하고 투표"
+      }
+    },
+    "circuitNodes": {
+      "decomposeToBits": "값을 이진 비트로 분해",
+      "binaryCheck": "각 비트가 0 또는 1인지 확인",
+      "hashIdentity": "포세이돈으로 신원 비밀을 해시",
+      "verifyMembership": "머클 트리 멤버십 검증",
+      "nullifierHash": "고유 널리파이어 해시 생성",
+      "binaryVote": "투표가 이진값(0 또는 1)인지 확인"
+    },
+    "proof": {
+      "pipelineTitle": "증명 파이프라인",
+      "buttons": {
+        "start": "시작",
+        "pause": "일시정지",
+        "resume": "재개",
+        "restart": "다시 시작"
+      },
+      "steps": {
+        "input": { "name": "입력 준비", "description": "회로 입력을 수집하고 검증합니다" },
+        "witness": { "name": "위트니스 계산", "description": "모든 중간 신호를 계산합니다" },
+        "proof": { "name": "증명 생성", "description": "영지식 증명을 생성합니다" },
+        "verify": { "name": "증명 검증", "description": "공개 입력에 대해 증명을 검증합니다" }
+      },
+      "status": {
+        "complete": "완료",
+        "inProgress": "진행 중"
+      },
+      "proofVerified": {
+        "title": "증명 검증 완료!",
+        "description": "영지식 증명이 성공적으로 검증되었습니다."
+      }
+    },
+    "proofStats": {
+      "proofSize": "증명 크기",
+      "verificationTime": "검증 시간",
+      "proofGeneration": "증명 생성",
+      "publicSignals": "공개 신호"
+    },
+    "comparison": {
+      "chartTitle": "SNARK vs STARK 비교",
+      "loadingChart": "차트 로딩 중...",
+      "barChart": "막대 차트",
+      "radarChart": "레이더 차트",
+      "chartNote": "비교를 위해 정규화된 값입니다. 각 지표에서 높을수록 좋습니다.",
+      "detailedComparison": "상세 비교",
+      "tableHeaders": {
+        "aspect": "항목",
+        "snark": "zk-SNARK",
+        "stark": "zk-STARK"
+      }
+    },
+    "comparisonCategories": {
+      "proofSize": "증명 크기",
+      "verificationTime": "검증 시간",
+      "proverTime": "증명자 시간",
+      "setupRequired": "신뢰 설정",
+      "quantumSafe": "양자 안전"
+    },
+    "comparisonTable": {
+      "proofSize": {
+        "aspect": "증명 크기",
+        "snark": "~200 바이트",
+        "stark": "~45 KB",
+        "description": "생성된 증명 데이터의 크기"
+      },
+      "verificationTime": {
+        "aspect": "검증 시간",
+        "snark": "~10 ms",
+        "stark": "~100 ms",
+        "description": "온체인에서 증명을 검증하는 데 걸리는 시간"
+      },
+      "proverTime": {
+        "aspect": "증명자 시간",
+        "snark": "느림",
+        "stark": "빠름",
+        "description": "증명을 생성하는 데 걸리는 시간"
+      },
+      "trustedSetup": {
+        "aspect": "신뢰 설정",
+        "snark": "필요",
+        "stark": "불필요",
+        "description": "신뢰할 수 있는 설정 행사가 필요한지 여부"
+      },
+      "quantumResistance": {
+        "aspect": "양자 내성",
+        "snark": "내성 없음",
+        "stark": "내성 있음",
+        "description": "양자 컴퓨터에 대한 보안성"
+      },
+      "ecosystemMaturity": {
+        "aspect": "생태계 성숙도",
+        "snark": "성숙",
+        "stark": "성장 중",
+        "description": "도구, 라이브러리, 채택 수준"
+      }
+    }
+  },
   "nav": {
     "home": "홈",
     "fundamentals": "기초",
