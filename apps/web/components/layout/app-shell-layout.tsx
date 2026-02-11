@@ -139,11 +139,11 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
                   <span className="sr-only">Toggle navigation</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[250px] p-0">
+              <SheetContent side="left" className="w-[80vw] max-w-[280px] p-0">
                 <SheetTitle className="px-4 pt-4 text-lg font-bold">
                   Blockchain Playground
                 </SheetTitle>
-                <div className="p-3">{navContent}</div>
+                <div className="p-3 overflow-y-auto flex-1">{navContent}</div>
               </SheetContent>
             </Sheet>
             <Link href="/" className="text-lg font-bold no-underline text-foreground sm:hidden">
@@ -152,11 +152,26 @@ export function AppShellLayout({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-1">
+            {/* Desktop: search with shortcut hint */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCmdOpen(true)}
+              aria-label="Search demos"
+              className="hidden sm:inline-flex gap-1.5"
+            >
+              <Search className="h-4 w-4" />
+              <kbd className="pointer-events-none select-none rounded border bg-muted px-1.5 text-[10px] font-medium text-muted-foreground">
+                ⌘K
+              </kbd>
+            </Button>
+            {/* Mobile: icon only */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setCmdOpen(true)}
               aria-label="Search demos"
+              className="sm:hidden"
             >
               <Search className="h-4 w-4" />
             </Button>

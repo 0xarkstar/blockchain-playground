@@ -118,3 +118,19 @@ Fix: `@theme inline` → `@theme`. Now all semantic classes respond to .dark cla
 - [2026-02-10] P1 COMPLETE — charts.tsx axis/grid dark mode, magic-card theme-aware gradient, 16 icon dark: variants, 16 a11y fixes
 - [2026-02-10] P2 COMPLETE — Build PASS, 532 tests PASS, 0 remaining dark mode / a11y issues
 - [2026-02-10] **DARK MODE V2 PIPELINE COMPLETE** — 79 files changed, root cause fixed
+
+## UI/UX Improvement Pipeline (2026-02-11)
+
+| Phase | Status | Agents | Notes |
+|-------|--------|--------|-------|
+| P1 Zone A | COMPLETE | p-impl-A | Shared infrastructure (6/7 items) |
+| P1 Zone B | COMPLETE | p-impl-B | track-page-layout.tsx + track pages + framer-motion migration |
+| P1 Zone C | COMPLETE | p-test-writer | 2 test files, 6 new tests |
+| P2 Verify | COMPLETE | team-lead | Build PASS, 538 tests PASS, 0 lint errors |
+
+- [2026-02-11] UI/UX improvement pipeline started — P1 Zone A first
+- [2026-02-11] P1 Zone A COMPLETE — globals.css, registry.ts, demo-layout, demo-page-wrapper, demo-nav-footer, app-shell-layout
+- [2026-02-11] P1 Zone B COMPLETE — track-page-layout.tsx [NEW], 6 track pages simplified, 12 framer-motion→motion/react, dep removed
+- [2026-02-11] P1 Zone C COMPLETE — track-page-layout.test.ts + no-framer-motion.test.ts (6 tests)
+- [2026-02-11] P2 COMPLETE — Build PASS, 538 tests PASS, 0 lint errors
+- [2026-02-11] **UI/UX IMPROVEMENT PIPELINE COMPLETE**

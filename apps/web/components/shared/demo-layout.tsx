@@ -2,6 +2,7 @@
 
 import { type ReactNode } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { difficultyColors } from "../../lib/tracks/registry";
 
 interface DemoLayoutProps {
   title?: string;
@@ -14,12 +15,6 @@ interface DemoLayoutProps {
   detailsContent?: ReactNode;
   onChainContent?: ReactNode;
 }
-
-const difficultyColors: Record<string, string> = {
-  beginner: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
-  intermediate: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-  advanced: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
-};
 
 export function DemoLayout({
   title,
@@ -71,7 +66,7 @@ export function DemoLayout({
 
       {hasTabs ? (
         <Tabs defaultValue="interactive">
-          <TabsList>
+          <TabsList className="overflow-x-auto">
             <TabsTrigger value="interactive">Interactive</TabsTrigger>
             {learnContent && <TabsTrigger value="learn">Learn</TabsTrigger>}
             {detailsContent && <TabsTrigger value="details">Details</TabsTrigger>}

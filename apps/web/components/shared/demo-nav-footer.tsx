@@ -45,11 +45,11 @@ export function DemoNavFooter({ trackKey, currentSlug }: DemoNavFooterProps) {
         {prev ? (
           <Link
             href={`${track!.href}/demo/${prev.slug}`}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors min-w-0 max-w-[40%]"
           >
-            <ChevronLeft className="h-4 w-4" />
-            <span className="hidden sm:inline">{tNav("previous")}:</span>
-            <span>{tDemo(`demos.${prev.key}.title`)}</span>
+            <ChevronLeft className="h-4 w-4 shrink-0" />
+            <span className="hidden sm:inline shrink-0">{tNav("previous")}:</span>
+            <span className="truncate">{tDemo(`demos.${prev.key}.title`)}</span>
           </Link>
         ) : (
           <div />
@@ -75,11 +75,11 @@ export function DemoNavFooter({ trackKey, currentSlug }: DemoNavFooterProps) {
         {next ? (
           <Link
             href={`${track!.href}/demo/${next.slug}`}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors min-w-0 max-w-[40%]"
           >
-            <span>{tDemo(`demos.${next.key}.title`)}</span>
-            <span className="hidden sm:inline">:{tNav("next")}</span>
-            <ChevronRight className="h-4 w-4" />
+            <span className="truncate">{tDemo(`demos.${next.key}.title`)}</span>
+            <span className="hidden sm:inline shrink-0">:{tNav("next")}</span>
+            <ChevronRight className="h-4 w-4 shrink-0" />
           </Link>
         ) : (
           <div />

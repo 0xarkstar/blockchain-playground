@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import confetti from "canvas-confetti";
 import { Check, X } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";

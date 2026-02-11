@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Badge } from "../ui/badge";
 import { DemoBreadcrumb } from "./demo-breadcrumb";
 import { DemoNavFooter } from "./demo-nav-footer";
-import { getTrackByKey, difficultyColors } from "../../lib/tracks/registry";
+import { getTrackByKey, difficultyColors, onChainBadgeColor } from "../../lib/tracks/registry";
 import { useProgress } from "../../lib/tracks/use-progress";
 
 interface DemoPageWrapperProps {
@@ -49,7 +49,7 @@ export function DemoPageWrapper({
             {demo.onChain && (
               <Badge
                 variant="secondary"
-                className="bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300"
+                className={onChainBadgeColor}
               >
                 On-Chain
               </Badge>

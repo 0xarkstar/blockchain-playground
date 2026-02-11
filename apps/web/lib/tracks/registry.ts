@@ -287,6 +287,9 @@ export const themeIconColors = {
   advanced: "bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-400",
 } as const;
 
+export const onChainBadgeColor =
+  "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300" as const;
+
 export const trackBadgeColors: Record<string, string> = {
   blue: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
   green: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",

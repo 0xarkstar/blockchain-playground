@@ -12,7 +12,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import confetti from "canvas-confetti";
 import { ProgressPipeline } from "../shared";
 import { EducationPanel } from "../shared";
