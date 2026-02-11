@@ -32,6 +32,6 @@ describe("No framer-motion imports", () => {
 
   it("framer-motion should not be in package.json dependencies", async () => {
     const pkg = await import("../package.json");
-    expect(pkg.dependencies["framer-motion"]).toBeUndefined();
+    expect("framer-motion" in (pkg.dependencies as Record<string, unknown>)).toBe(false);
   });
 });

@@ -24,6 +24,8 @@ export function DemoNavFooter({ trackKey, currentSlug }: DemoNavFooterProps) {
   const idx = getDemoIndex(trackKey, currentSlug);
   const total = track ? track.demos.length : 0;
 
+  if (!track) return null;
+
   const handleMarkComplete = () => {
     if (completed) return;
     markComplete(trackKey, currentSlug);
@@ -44,7 +46,7 @@ export function DemoNavFooter({ trackKey, currentSlug }: DemoNavFooterProps) {
       <div className="flex items-center justify-between gap-4">
         {prev ? (
           <Link
-            href={`${track!.href}/demo/${prev.slug}`}
+            href={`${track.href}/demo/${prev.slug}`}
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors min-w-0 max-w-[40%]"
           >
             <ChevronLeft className="h-4 w-4 shrink-0" />
@@ -74,7 +76,7 @@ export function DemoNavFooter({ trackKey, currentSlug }: DemoNavFooterProps) {
 
         {next ? (
           <Link
-            href={`${track!.href}/demo/${next.slug}`}
+            href={`${track.href}/demo/${next.slug}`}
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors min-w-0 max-w-[40%]"
           >
             <span className="truncate">{tDemo(`demos.${next.key}.title`)}</span>

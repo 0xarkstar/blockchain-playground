@@ -3,6 +3,7 @@
 import { motion, type Variants } from "motion/react";
 import { useTranslations } from "next-intl";
 import { BookOpen, Zap, GitCompare, CircuitBoard, Play } from "lucide-react";
+import { Link } from "../../../../i18n/navigation";
 import { TrackPageLayout } from "../../../../components/shared/track-page-layout";
 
 const educationLinks = [
@@ -39,36 +40,44 @@ export default function AppliedZKPage() {
       </h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {educationLinks.map((link, i) => (
-          <motion.a
+          <Link
             key={link.key}
-            href={`education/${link.slug}`}
+            href={`/applied-zk/education/${link.slug}`}
             className="flex items-center gap-2 rounded-lg border bg-card px-4 py-3 text-sm font-medium hover:bg-accent transition-colors"
-            variants={cardVariants}
-            initial="hidden"
-            animate="visible"
-            custom={i}
           >
-            <link.icon className="h-4 w-4 text-violet-500 shrink-0" />
-            <span className="truncate">
-              {t(`education.${link.key}.title`)}
-            </span>
-          </motion.a>
+            <motion.div
+              className="flex items-center gap-2 w-full"
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              custom={i}
+            >
+              <link.icon className="h-4 w-4 text-violet-500 shrink-0" />
+              <span className="truncate">
+                {t(`education.${link.key}.title`)}
+              </span>
+            </motion.div>
+          </Link>
         ))}
         {visualizationLinks.map((link, i) => (
-          <motion.a
+          <Link
             key={link.key}
-            href={`visualization/${link.slug}`}
+            href={`/applied-zk/visualization/${link.slug}`}
             className="flex items-center gap-2 rounded-lg border bg-card px-4 py-3 text-sm font-medium hover:bg-accent transition-colors"
-            variants={cardVariants}
-            initial="hidden"
-            animate="visible"
-            custom={i + educationLinks.length}
           >
-            <link.icon className="h-4 w-4 text-indigo-500 shrink-0" />
-            <span className="truncate">
-              {t(`visualization.${link.key}.title`)}
-            </span>
-          </motion.a>
+            <motion.div
+              className="flex items-center gap-2 w-full"
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              custom={i + educationLinks.length}
+            >
+              <link.icon className="h-4 w-4 text-indigo-500 shrink-0" />
+              <span className="truncate">
+                {t(`visualization.${link.key}.title`)}
+              </span>
+            </motion.div>
+          </Link>
         ))}
       </div>
     </div>

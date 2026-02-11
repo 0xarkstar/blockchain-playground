@@ -42,9 +42,11 @@ export function TrackPageLayout({
   trackKey,
   extraSections,
 }: TrackPageLayoutProps) {
-  const track = getTrackByKey(trackKey)!;
-  const t = useTranslations(track.i18nNamespace);
+  const track = getTrackByKey(trackKey);
+  const t = useTranslations(track?.i18nNamespace ?? "fundamentals");
   const { isComplete } = useProgress();
+
+  if (!track) return null;
 
   const firstIncompleteIdx = track.demos.findIndex(
     (d) => !isComplete(trackKey, d.slug),
